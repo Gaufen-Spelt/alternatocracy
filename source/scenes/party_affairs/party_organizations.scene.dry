@@ -29,7 +29,7 @@ go-to: media
 @welfare
 choose-if: resources > 1
 unavailable-subtitle: Not enough resources.
-subtitle: -2 resources
+subtitle: -2 resources. [? if not black_thursday_seen: Currently, our members considers this as worthless spending. ?]
 on-arrival: resources -= 2; workers_aid += 1; unemployed_spd += 2*(1 - dissent); unemployed_spd += 2+(unemployed / 7) + (workers_aid / 2) if unemployed > 10 and workers_aid > 0
 
 We have increased funding to Workers' Welfare. [? if black_thursday_seen > 0 : In an age of economic crisis, this will be helpful for improving our standing among the unemployed. ?]
@@ -38,15 +38,17 @@ We have increased funding to Workers' Welfare. [? if black_thursday_seen > 0 : I
 choose-if: resources > 0
 unavailable-subtitle: Not enough resources.
 subtitle: -1 resources
-on-arrival: resources -= 1; cultural_organizations += 1; left_dissent -= 6; center_dissent -= 6; labor_dissent -= 6; reformist_dissent -= 6; neorevisionist_dissent -= 6
+on-arrival: resources -= 1; cultural_organizations += 1; left_dissent -= 6; center_dissent -= 6; labor_dissent -= 6; reformist_dissent -= 6; neorevisionist_dissent -= 6; z_relation -= 2 if historical_mode; ddp_relation -= 1 if historical_mode
 
 It is not enough for the SPD to solely be a political party. The Worker Singer's League, Worker's Sports, and our schools and libraries are crucial to our members' lives. Funding these organizations makes our members more committed to the party, even when our policies might not be to their liking.
 
 [? if sa_strength > 500 : However, it feels frivolous to spend on sports and choirs when the fascists are murdering us in the streets. ?]
 
+[? if historical_mode: The Zentrum and DDP condemn our attempts at militarizing Reichsbanner units, fearing socialist domination. ?]
+
 @youth
-choose-if: resources > 0
-unavailable-subtitle: Not enough resources.
+choose-if: resources > 0 and left_strength + neorevisionist_strength > 50
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?] [? if left_strength + neorevisionist_strength + (center_strength / 3) <= 50: Currently, our radical currents are too weak to convince our old leadership. ?]
 subtitle: -1 resources
 on-arrival: resources -= 1; rb_strength += 50; rb_militancy += 0.02; young_socialists += 1; left_strength += 5; neorevisionist_strength += 5; radicalization += 1;
 
