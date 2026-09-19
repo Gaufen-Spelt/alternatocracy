@@ -89,6 +89,7 @@ We are continuing to invest in our radio stations. Both commercial and political
 @radio_open
 title: We must set the direction of the radio.
 subtitle: How should we use the radio?
+view-if: radio > 0
 
 We can command Arbeiter- Radio- Bund (ARB) what to translate and which message should they display to tens of thousands of workers and white collars. How should we proceed?
 
