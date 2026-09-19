@@ -11,6 +11,7 @@ go-to: menu
 @menu
 
 = Finances
+new-page: true
 
 We can control our finances and funds of our party here.
 
@@ -37,12 +38,14 @@ How should we treat workers?
 @increase_dues_w
 choose-if: workers_dues < 5
 on-arrival: workers_dues += 1; workers_spd -= 1 * workers_dues; left_dissent += 2 * workers_dues; labor_dissent += 2 * workers_dues
+go-to: workers
 
 We have increased dues of workers to [+ workers_dues +]. Workers are unhappy about this.
 
 @decrease_dues_w
 choose-if: workers_dues > 0
 on-arrival: workers_dues -= 1; workers_spd += 2; left_dissent -= 5; center_dissent -= 2; labor_dissent -= 4; reformist_dissent -= 2
+go-to: workers
 
 We have decreased dues of workers to [+ workers_dues +]. Nobody is gonna reward us for it, however our grassroot members are energized.
 
@@ -60,12 +63,14 @@ How should we treat the new middle class?
 @increase_dues_nm
 choose-if: new_middle_dues < 5
 on-arrival: new_middle_dues += 1; new_middle_spd -= 2 * new_middle_dues; center_dissent += 2 * new_middle_dues; reformist_dissent += 2 * new_middle_dues
+go-to: new_middle
 
 We have increased dues of the new middle class to [+ new_middle_dues +]. As the non socialist class, it causes defections amongst their rows.
 
 @decrease_dues_nm
 choose-if: new_middle_dues > 0
 on-arrival: new_middle_dues -= 1; new_middle_spd += 2; center_dissent -= 5; left_dissent -= 2; reformist_dissent -= 4; labor_dissent -= 2
+go-to: new_middle
 
 We have decreased dues of the new middle class to [+ new_middle_dues +].
 
@@ -83,12 +88,14 @@ How should we treat the old middle class?
 @increase_dues_om
 choose-if: old_middle_dues < 5
 on-arrival: old_middle_dues += 1; old_middle_spd -= 1 * old_middle_dues; center_dissent += 2 * old_middle_dues
+go-to: old_middle
 
 We have increased dues of the old middle class to [+ old_middle_dues +]. The old middle class is unhappy about this, already being most conservative class.
 
 @decrease_dues_om
 choose-if: old_middle_dues > 0
 on-arrival: old_middle_dues -= 1; old_middle_spd += 2; center_dissent -= 5; reformist_dissent -= 4
+go-to: old_middle
 
 We have decreased dues of the old middle class to [+ old_middle_dues +].
 
@@ -106,12 +113,14 @@ How should we treat the rural population?
 @increase_dues_r
 choose-if: rural_dues < 5
 on-arrival: rural_dues += 1; rural_spd -= 1 * rural_dues
+go-to: rural
 
 We have increased dues of the rural population to [+ rural_dues +]. The rural members are unhappy about this and are defecting to Landvolks.
 
 @decrease_dues_r
 choose-if: rural_dues > 0
 on-arrival: rural_dues -= 1; rural_spd += 2; center_dissent -= 2
+go-to: rural
 
 We have decreased dues of the rural population to [+ rural_dues +].
 
@@ -129,11 +138,13 @@ How should we treat the unemployed?
 @increase_dues_u
 choose-if: unemployed_dues < 5
 on-arrival: unemployed_dues += 1; unemployed_spd -= 3 * unemployed_dues; left_dissent += 2 * unemployed_dues
+go-to: unemployed
 
 We have increased dues of the unemployed to [+ unemployed_dues +]. Already unemployed, they are much susceptible to the dues increases.
 
 @decrease_dues_u
 choose-if: unemployed_dues > 0
 on-arrival: unemployed_dues -= 1; unemployed_spd += 6; left_dissent -= 5; labor_dissent -= 2; center_dissent -= 2
+go-to: unemployed
 
 We have decreased dues of the unemployed to [+ unemployed_dues +]. We benefit the most from lowest dues for unemployed members due to their vulnerable status.
