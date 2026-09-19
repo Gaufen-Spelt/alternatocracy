@@ -21,6 +21,7 @@ Herein contains relevant information about the government and politics of the Ge
 - @backSpecialScene: Exit library.
 
 @government
+go-to: menu
 
 The German Republic, called by some of our detractors as the "Weimar Republic", is a parliamentary republic with a somewhat weak president and a strong parliament, called the Reichstag. The Reichstag is responsible for governing, while the President has a largely ceremonial role but also has some important governing responsibilities.
 
@@ -64,11 +65,13 @@ Germany is divided into a number of states, each of which have their own governm
 
 @huh
 on-arrival: sandbox = 1
-go-to: government
+view-if: sandbox = 0
+go-to: weimar_timeline
 
 @unhuh
 on-arrival: sandbox = 0
-go-to: government
+view-if: sandbox = 1
+go-to: weimar_timeline
 
 @curr_gov
 go-to: cabinet if spd_in_government; menu if not spd_in_government
