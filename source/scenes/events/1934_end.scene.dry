@@ -2,9 +2,8 @@ title: A New Day in Germany
 subtitle: Has democracy finally triumphed?
 tags: event
 priority: 3
-view-if: hindenburg_dead = 1 and president != "Hitler" and president != "Göring" and president != "Seldte"
+view-if: year >= 1935 and president != "Hitler" and president != "Göring" and president != "Seldte"
 max-visits: 1
-view-if: year >= 1935
 on-arrival: {!
 !}
 new-page: true
