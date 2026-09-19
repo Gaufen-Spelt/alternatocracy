@@ -3,17 +3,19 @@ new-page: true
 on-arrival: {!
 
 // 1. update dates
-    // Roll over to next month when 4+ weeks pass
+if (Q.month_actions >= 1) {
+    Q.time += 1;
+    Q.month_actions = 0;
+    Q.weeks += 2;
     if (Q.weeks >= 4) {
-        Q.weeks -= 4;
         Q.month += 1;
-        
-        if (Q.month >= 13) {
-            Q.month = 1;
-            Q.year += 1;
-            if (Q.historical_mode) {
-                Q.resources += 2;
-            }
+        Q.weeks = 0;
+    }
+    if (Q.month >= 13) {
+        Q.month = 1;
+        Q.year += 1;
+        if (Q.historical_mode) {
+            Q.resources += 3;
         }
     }
     // decrement timers
@@ -514,7 +516,7 @@ if (typeof window !== "undefined" && window.generateBar) {
 !}
 go-to: events_choice if has_event = 1; main if has_event = 0 and difficulty == 0; main.main_easy if has_event = 0 and difficulty < 0; main.main_historical if difficulty >= 2; main.main_hard if difficulty == 1
 
-= [+ month: monther +], [+ month : month +] [+ year +]
+= [+ weeks: monther +], [+ month : month +] [+ year +]
 
 @events_choice
 
