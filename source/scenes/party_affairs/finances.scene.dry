@@ -19,7 +19,7 @@ We can control our finances and funds of our party here.
 - @old_middle
 - @rural
 - @unemployed
-- @easy_drawcard
+- @easy_discard
 
 @workers
 subtitle: Current dues: [+ workers_dues +] / 5
