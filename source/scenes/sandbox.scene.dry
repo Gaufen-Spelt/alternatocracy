@@ -1230,7 +1230,6 @@ Moderate plan adopted
 [+ m +] m of anything, so parties.
 
 - @sandbox_menu: Back to menu
-- @all-variables: Back to variables
 
 @miscellanious_austria
 
@@ -1259,4 +1258,3 @@ Austrian Government: [? if austria_govt = 1: CS and GDVP-LB coalition ?] [? if a
 Reparations progress completed? (maximal 4): [+ reparations_negotiation +]
 
 - @sandbox_menu: Back to menu
-- @all-variables: Back to variables
