@@ -14,9 +14,15 @@ if (Q.month_actions >= 1) {
     if (Q.month >= 13) {
         Q.month = 1;
         Q.year += 1;
-        if (Q.historical_mode) {
-            Q.resources += 3;
-        }
+        Q.workers_income = math.round((Q.workers_spd * Q.workers_dues * (1 - Q.labor_dissent / 100) * 0.55) / 10)
+        Q.unemployed_income = math.round((Q.unemployed_spd * Q.unemployed_dues * (1 - Q.left_dissent / 100) * 0.30) / 10)
+        Q.new_middle_income = math.round((Q.new_middle_spd * Q.new_middle_dues * (1 - Q.labor_dissent / 100) * 0.175) / 10)
+        Q.old_middle_income = math.round((Q.old_middle_spd * Q.old_middle_dues * (1 - Q.reformist_dissent / 100) * 0.05) / 10)
+        Q.rural_income = math.round((Q.rural_spd * Q.rural_dues * (1 - Q.reformist_dissent / 100) * 0.05) / 10)
+
+        Q.resources = Q.resources + Q.workers_income + Q.unemployed_income + Q.new_middle_income + Q.old_middle_income + Q.rural_income
+
+        Q.income_summary = "Workers: +" + Q.workers_income + ", Unemployed: +" + Q.unemployed_income + ", New Middle: +" + Q.new_middle_income + ", Old Middle: +" + Q.old_middle_income + ", Rural: +" + Q.rural_income
     }
     // decrement timers
     for (timer of Q.timers) {
@@ -478,6 +484,7 @@ if (Q.dissent < 0) {
 } else if (Q.dissent > 0.95) {
     Q.dissent = 0.95;
 }
+
 
 
 
