@@ -1,6 +1,6 @@
 title: Finances & Fundraising.
 new-page: true
-view-if: fundraising_timer <= 0 and (not historical_mode)
+view-if: fundraising_timer <= 0
 on-arrival: fundraising_timer = 6; month_actions += 1
 frequency: 300
 is-card: true
@@ -12,14 +12,14 @@ go-to: menu
 
 = Finances
 
-We can control our finances and funds there. 
+We can control our finances and funds of our party here.
 
 - @workers
 - @new_middle
 - @old_middle
 - @rural
 - @unemployed
-- @menu: Back
+- @easy_drawcard
 
 @workers
 subtitle: Current dues: [+ workers_dues +] / 5
@@ -33,6 +33,105 @@ How should we treat workers?
 - @menu: Back
 
 @increase_dues_w
-on-arrival: workers_dues += 1; workers_spd -= 1 * workers_dues; left_dissent += 2 * workers_dues
+choose-if: workers_dues < 5
+on-arrival: workers_dues += 1; workers_spd -= 1 * workers_dues; left_dissent += 2 * workers_dues; labor_dissent += 2 * workers_dues
 
 We have increased dues of workers to [+ workers_dues +]. Workers are unhappy about this.
+
+@decrease_dues_w
+choose-if: workers_dues > 0
+on-arrival: workers_dues -= 1; workers_spd += 2; left_dissent -= 5; center_dissent -= 2; labor_dissent -= 4; reformist_dissent -= 2
+
+We have decreased dues of workers to [+ workers_dues +]. Nobody is gonna reward us for it, however our grassroot members are energized.
+
+@new_middle
+subtitle: Current dues: [+ new_middle_dues +] / 5
+
+= New Middle Class
+
+How should we treat the new middle class?
+
+- @increase_dues_nm: Increase dues of new middle class
+- @decrease_dues_nm: Decrease dues of new middle class
+- @menu: Back
+
+@increase_dues_nm
+choose-if: new_middle_dues < 5
+on-arrival: new_middle_dues += 1; new_middle_spd -= 2 * new_middle_dues; center_dissent += 2 * new_middle_dues; reformist_dissent += 2 * new_middle_dues
+
+We have increased dues of the new middle class to [+ new_middle_dues +]. As the non socialist class, it causes defections amongst their rows.
+
+@decrease_dues_nm
+choose-if: new_middle_dues > 0
+on-arrival: new_middle_dues -= 1; new_middle_spd += 2; center_dissent -= 5; left_dissent -= 2; reformist_dissent -= 4; labor_dissent -= 2
+
+We have decreased dues of the new middle class to [+ new_middle_dues +].
+
+@old_middle
+subtitle: Current dues: [+ old_middle_dues +] / 5
+
+= Old Middle Class
+
+How should we treat the old middle class?
+
+- @increase_dues_om: Increase dues of old middle class
+- @decrease_dues_om: Decrease dues of old middle class
+- @menu: Back
+
+@increase_dues_om
+choose-if: old_middle_dues < 5
+on-arrival: old_middle_dues += 1; old_middle_spd -= 1 * old_middle_dues; center_dissent += 2 * old_middle_dues
+
+We have increased dues of the old middle class to [+ old_middle_dues +]. The old middle class is unhappy about this, already being most conservative class.
+
+@decrease_dues_om
+choose-if: old_middle_dues > 0
+on-arrival: old_middle_dues -= 1; old_middle_spd += 2; center_dissent -= 5; reformist_dissent -= 4
+
+We have decreased dues of the old middle class to [+ old_middle_dues +].
+
+@rural
+subtitle: Current dues: [+ rural_dues +] / 5
+
+= Rural
+
+How should we treat the rural population?
+
+- @increase_dues_r: Increase dues of rural population
+- @decrease_dues_r: Decrease dues of rural population
+- @menu: Back
+
+@increase_dues_r
+choose-if: rural_dues < 5
+on-arrival: rural_dues += 1; rural_spd -= 1 * rural_dues
+
+We have increased dues of the rural population to [+ rural_dues +]. The rural members are unhappy about this and are defecting to Landvolks.
+
+@decrease_dues_r
+choose-if: rural_dues > 0
+on-arrival: rural_dues -= 1; rural_spd += 2; center_dissent -= 2
+
+We have decreased dues of the rural population to [+ rural_dues +].
+
+@unemployed
+subtitle: Current dues: [+ unemployed_dues +] / 5
+
+= Unemployed
+
+How should we treat the unemployed?
+
+- @increase_dues_u: Increase dues of the unemployed
+- @decrease_dues_u: Decrease dues of the unemployed
+- @menu: Back
+
+@increase_dues_u
+choose-if: unemployed_dues < 5
+on-arrival: unemployed_dues += 1; unemployed_spd -= 3 * unemployed_dues; left_dissent += 2 * unemployed_dues
+
+We have increased dues of the unemployed to [+ unemployed_dues +]. Already unemployed, they are much susceptible to the dues increases.
+
+@decrease_dues_u
+choose-if: unemployed_dues > 0
+on-arrival: unemployed_dues -= 1; unemployed_spd += 6; left_dissent -= 5; labor_dissent -= 2; center_dissent -= 2
+
+We have decreased dues of the unemployed to [+ unemployed_dues +]. We benefit the most from lowest dues for unemployed members due to their vulnerable status.
