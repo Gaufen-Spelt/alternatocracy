@@ -16,3 +16,11 @@ Currently, nobody has incentive to use anything but dissent reducer and welfare 
 Media thing should use no resource however double timer of party organizations.
 
 Rb option removed.
+
+
+
+Media: 
+
+nothingburger card. how can I expand it's purpose? 
+
+I need to read the book.
