@@ -39,6 +39,11 @@ max-cards: 6
 
 [? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
 
+- @party
+- @govt
+- #advisor
+- @shuffle_leadership_pinned
+
 @main_historical
 set-bg: img/map_2.jpg
 is-hand: true
@@ -57,6 +62,10 @@ max-cards: 2
 
 [? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
 
+- @party
+- @govt
+- #advisor
+- @shuffle_leadership_pinned
 
 @main_hard
 set-bg: img/map_2.jpg
