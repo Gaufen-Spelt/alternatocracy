@@ -3,12 +3,12 @@ new-page: true
 go-to: post_event if started = 1; start_menu if started = 0
 
 @start_menu
-new-page: true
 go-to: start_menu_2
 
 = Weimar History: An Alternate Perspective
 
 @start_menu_2
+new-page: true
 on-arrival: started = 0
 
 - @start: Start game
