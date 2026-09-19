@@ -32,7 +32,6 @@ The President is elected by a national direct vote, in two rounds. The second ro
 Germany is divided into a number of states, each of which have their own governments with some responsibilities. By far the largest and most important state is Prussia.
 
 @weimar_timeline
-go-to: menu
 
 = Timeline of the SPD and the Republic (until 1928)
 
@@ -59,6 +58,18 @@ go-to: menu
 **1925**:  President Friedrich Ebert dies, and new presidential elections are held, leading to the narrow election of Paul von Hindenburg in the second round. Hindenburg is a war hero and a right-wing reactionary. The SPD adopts the Heidelberg Program as its party platform. The Locarno Treaties are signed, which confirmed Germany's post-war western borders.
 
 **1926**: A referendum on the expropriation of the princes, supported by the SPD and KPD, fails.
+
+- @huh: Sandbox?
+- @unhuh: Unsandbox
+- @menu: Back
+
+@huh
+on-arrival: sandbox = 1
+go-to: government
+
+@unhuh
+on-arrival: sandbox = 0
+go-to: government
 
 @curr_gov
 go-to: cabinet if spd_in_government; menu if not spd_in_government
