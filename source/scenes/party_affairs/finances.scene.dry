@@ -9,9 +9,9 @@ tags: party_affairs
 go-to: menu
 
 @menu
+new-page: true
 
 = Finances
-new-page: true
 
 We can control our finances and funds of our party here.
 
