@@ -23,4 +23,8 @@ Media:
 
 nothingburger card. how can I expand it's purpose? 
 
-I need to read the book.
+I need to read the book. Added directions.
+
+---
+
+I will delete fundraising and replace with passive effect and merger with media, named now media & finances.
