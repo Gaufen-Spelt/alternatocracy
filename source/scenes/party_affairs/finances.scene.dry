@@ -1,0 +1,38 @@
+title: Finances & Fundraising.
+new-page: true
+view-if: fundraising_timer <= 0 and (not historical_mode)
+on-arrival: fundraising_timer = 6; month_actions += 1
+frequency: 300
+is-card: true
+card-image: img/poster_2.jpg
+tags: party_affairs
+go-to: menu
+
+@menu
+
+= Finances
+
+We can control our finances and funds there. 
+
+- @workers
+- @new_middle
+- @old_middle
+- @rural
+- @unemployed
+- @menu: Back
+
+@workers
+subtitle: Current dues: [+ workers_dues +] / 5
+
+= Workers
+
+How should we treat workers?
+
+- @increase_dues_w: Increase dues of workers
+- @decrease_dues_w: Decrease dues of workers
+- @menu: Back
+
+@increase_dues_w
+on-arrival: workers_dues += 1; workers_spd -= 1 * workers_dues; left_dissent += 2 * workers_dues
+
+We have increased dues of workers to [+ workers_dues +]. Workers are unhappy about this.
