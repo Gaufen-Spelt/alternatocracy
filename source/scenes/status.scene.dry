@@ -54,6 +54,7 @@ Reichstag composition:
 {!<span class="tooltip-text" title="National-Socialist German Worker's Party (Nazis)">NSDAP</span>!}: [+ nsdap_r +]%
 # 1928: 9, 1930: 10
 Others: [+ other_r +]%
+BVP: [+ bvp_r +]%
 
 [? if spd_in_government = 1 : Budget: [+ budget +] ?]
 
@@ -87,6 +88,8 @@ Economic growth: [+ economic_growth_2 +]%
 {!<span class="tooltip-text" title="German National People's Party">DNVP</span>!}: [+ dnvp_relation : relationships +]
 
 {!<span class="tooltip-text" title="National-Socialist German Worker's Party (Nazis)">NSDAP</span>!}: [+ nsdap_relation : relationships +]
+
+BVP: [+ bvp_relation: relationships +]
 
 = Internal Factions of the SPD
 
@@ -162,7 +165,9 @@ SPD: [+ spd_votes +]%
 
 [? if sapd_formed: SAPD: [+ sapd_votes +]% ?]
 
-Z + BVP: [+ z_votes +]%
+Z: [+ z_votes +]%
+
+BVP: [+ bvp_votes +]%
 
 KPD: [+ kpd_votes +]%
 
@@ -191,3 +196,7 @@ Unemployed: SPD: [+ unemployed_spd_display +]%, Z: [+ unemployed_z_display +]%, 
 Catholics: SPD: [+ catholics_spd_display +]%, Z: [+ catholics_z_display +]%, KPD: [+ catholics_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ catholics_ddp_display +]%, DVP: [+ catholics_dvp_display +]%; DNVP: [+ catholics_dnvp_display +]%, NSDAP: [+ catholics_nsdap_display +]%, Others: [+ catholics_other_display +]% [? if sapd_formed: SAPD: [+ catholics_sapd_display +]% ?]
 
 Support for the Republic: [+ pro_republic_disp +]%
+
+Support for the Nationalism: [+ nationalism_disp +]%
+
+Support for the Socialism: [+ socialism_disp +]%
