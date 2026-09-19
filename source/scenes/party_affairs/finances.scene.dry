@@ -14,11 +14,11 @@ go-to: menu
 
 We can control our finances and funds of our party here.
 
-- @workers
-- @new_middle
-- @old_middle
-- @rural
-- @unemployed
+- @workers: Workers
+- @new_middle: New Middle
+- @old_middle: Old Middle
+- @rural: Rural
+- @unemployed: Unemployed
 - @easy_discard
 
 @workers
