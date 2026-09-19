@@ -313,8 +313,233 @@ go-to: eg_menu
 
 We have helped to form a European Union to bring peace and prosperity to the continent. Time will tell how effective it will be.
 
+{!<style>
+/* Base Achievement Card */
+.ach { 
+  display: flex; 
+  align-items: stretch; 
+  padding: 0; 
+  margin: 0 0 6px 0; 
+  border: 1px solid rgba(0,0,0,0.15); 
+  border-radius: 4px; 
+  overflow: hidden; 
+  background: rgba(20, 20, 20, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+.ach-icon-box { 
+  width: 64px; 
+  height: auto; 
+  min-height: 64px; 
+  flex-shrink: 0; 
+  display: flex; 
+  align-items: stretch; 
+  justify-content: stretch; 
+  overflow: hidden; 
+}
+.ach-icon-box img.ach-icon { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
+.ach-body { 
+  flex: 1; 
+  padding: 10px 14px; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  gap: 3px; 
+  min-width: 0; 
+}
+.ach-title { font-weight: bold; line-height: 1.25; }
+.ach-title strong { font-weight: bold; }
+.ach-subtitle { font-size: 0.88em; font-weight: normal; opacity: 0.85; line-height: 1.35; }
+
+/* Status Badges */
+.ach-new { 
+  font-size: 0.72em; 
+  background: #E3000F; 
+  color: white; 
+  padding: 1px 6px; 
+  border-radius: 3px; 
+  margin-left: 6px; 
+  vertical-align: middle; 
+  font-weight: bold;
+}
+
+/* Category Specific Styles */
+.ach-red { background: rgba(227, 0, 15, 0.1); }
+.ach-red .ach-icon-box { background: rgba(227, 0, 15, 0.25); }
+
+/* Horizon Themes */
+.ach-end {
+  background: rgba(28, 18, 12, 0.88);
+  border-color: rgba(212, 160, 23, 0.4);
+  box-shadow: 0 0 12px rgba(212, 140, 20, 0.3);
+  color: #e8dfd5;
+}
+.ach-end .ach-icon-box { background: linear-gradient(135deg, rgba(60, 35, 15, 0.7), rgba(212, 160, 23, 0.3)); }
+.ach-end .ach-title strong { color: #f0c060; text-shadow: 0 0 8px rgba(212, 160, 23, 0.5); }
+
+.ach-glitch {
+  background: rgba(6, 10, 20, 0.92);
+  border-color: #00e5ff;
+  clip-path: polygon(0 0, 95% 0, 100% 15%, 100% 100%, 5% 100%, 0 85%);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+  color: #d0f0ff;
+}
+.ach-glitch .ach-icon-box { background: linear-gradient(135deg, rgba(0, 100, 220, 0.4), rgba(0, 230, 255, 0.15)); }
+.ach-glitch .ach-title strong { color: #00e5ff; text-shadow: 0 0 8px rgba(0, 229, 255, 0.8); }
+
+.ach-fatamorgana {
+  background: rgba(14, 12, 18, 0.85);
+  border-color: rgba(212, 91, 22, 0.35);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+  color: #e0d8e8;
+}
+.ach-fatamorgana .ach-icon-box { background: linear-gradient(135deg, rgba(48, 18, 58, 0.6), rgba(212, 91, 22, 0.35)); }
+.ach-fatamorgana .ach-title strong { color: #f0a050; text-shadow: 0 0 8px rgba(212, 91, 22, 0.4); }
+
+.ach-wessel {
+  background: rgba(18, 6, 8, 0.90);
+  border-color: rgba(255, 70, 0, 0.45);
+  box-shadow: 0 0 14px rgba(255, 80, 0, 0.5);
+  color: rgb(240, 210, 200);
+}
+.ach-wessel .ach-icon-box { background: linear-gradient(135deg, rgba(230, 40, 0, 0.5), rgba(255, 200, 0, 0.3)); }
+.ach-wessel .ach-title strong { color: rgb(255, 190, 40); text-shadow: 0 0 8px rgba(255, 80, 0, 0.6); }
+
+.ach-sanctuary {
+  background: rgba(20, 20, 20, 0.85);
+  border-color: rgba(0, 200, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.2);
+}
+.ach-sanctuary .ach-icon-box { background: linear-gradient(135deg, rgba(255, 0, 80, 0.25), rgba(0, 200, 255, 0.25)); }
+
+
+
+/* Hitlerubicon */
+/* Hitlerubicon */
+.ach-uhrbremst {
+  background: linear-gradient(135deg, rgba(40, 8, 8, 0.95), rgba(20, 4, 4, 0.95));
+  border: 1px solid rgba(180, 30, 20, 0.6);
+  box-shadow: 0 0 18px rgba(180, 20, 10, 0.45), inset 0 0 20px rgba(0, 0, 0, 0.6);
+  color: #e8d8d0;
+  animation: uhrbremst-pulse 3.5s ease-in-out infinite;
+}
+.ach-uhrbremst .ach-icon-box { 
+  background: linear-gradient(135deg, rgba(60, 10, 10, 0.9), rgba(120, 30, 10, 0.4)); 
+}
+.ach-uhrbremst .ach-icon-box img.ach-icon {
+  filter: sepia(30%) saturate(180%) hue-rotate(-10deg) brightness(0.85);
+}
+.ach-uhrbremst .ach-title strong { 
+  color: #e8580c; 
+  text-shadow: 0 0 10px rgba(220, 50, 10, 0.7);
+}
+.ach-uhrbremst .ach-subtitle {
+  color: #b89890;
+}
+
+div.ach.ach-locked.ach-locked-hitler {
+  background-color: #1a1212 !important;
+  border-color: rgba(180, 30, 30, 0.3) !important;
+  color: #c4b5b5 !important;
+}
+div.ach.ach-locked.ach-locked-hitler .ach-icon-box { 
+  background: #281a1a !important; 
+}
+div.ach.ach-locked.ach-locked-hitler .ach-icon-box img.ach-icon { 
+  filter: grayscale(100%) contrast(120%) opacity(0.35) !important; 
+}
+div.ach.ach-locked.ach-locked-hitler .ach-title strong { 
+  color: #d8aaaa !important; 
+}
+div.ach.ach-locked.ach-locked-hitler .ach-subtitle { 
+  color: #9e8888 !important; 
+}
+
+
+
+
+
+
+
+
+/* Zweite Runde */
+.ach-zweiteRunde {
+  background: linear-gradient(135deg, rgba(35, 5, 5, 0.92), rgba(60, 15, 8, 0.88));
+  border: 1px solid rgba(200, 40, 20, 0.5);
+  box-shadow: 0 0 16px rgba(200, 30, 10, 0.4), inset 0 0 18px rgba(0, 0, 0, 0.5);
+  color: #e8d5c8;
+}
+.ach-zweiteRunde .ach-icon-box {
+  background: linear-gradient(135deg, rgba(90, 15, 10, 0.7), rgba(200, 60, 10, 0.35));
+}
+.ach-zweiteRunde .ach-icon-box img.ach-icon {
+  filter: sepia(20%) saturate(200%) hue-rotate(-15deg) brightness(0.9);
+}
+.ach-zweiteRunde .ach-title strong {
+  color: #ff6a2b;
+  text-shadow: 0 0 10px rgba(220, 60, 10, 0.7);
+}
+.ach-zweiteRunde .ach-subtitle {
+  color: #c9a89a;
+}
+
+div.ach.ach-locked.ach-locked-zweiteRunde {
+  background-color: #1a1210 !important;
+  border-color: rgba(180, 40, 20, 0.3) !important;
+  color: #c4b0a8 !important;
+}
+div.ach.ach-locked.ach-locked-zweiteRunde .ach-icon-box {
+  background: #281c18 !important;
+}
+div.ach.ach-locked.ach-locked-zweiteRunde .ach-icon-box img.ach-icon {
+  filter: grayscale(100%) contrast(120%) opacity(0.35) !important;
+}
+div.ach.ach-locked.ach-locked-zweiteRunde .ach-title strong {
+  color: #d8a898 !important;
+}
+div.ach.ach-locked.ach-locked-zweiteRunde .ach-subtitle {
+  color: #9e8a80 !important;
+}
+
+
+
+
+
+
+
+/* Universal Locked State */
+div.ach.ach-locked,
+div.ach.ach-locked.ach-red,
+div.ach.ach-locked.ach-end,
+div.ach.ach-locked.ach-glitch,
+div.ach.ach-locked.ach-fatamorgana,
+div.ach.ach-locked.ach-wessel,
+div.ach.ach-locked.ach-sanctuary {
+  background-color: #2a2a2e !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+  color: #d4d4de !important;
+}
+div.ach.ach-locked .ach-icon-box { background: #3a3a3f !important; }
+div.ach.ach-locked .ach-icon-box img.ach-icon { filter: grayscale(100%) opacity(0.5) !important; }
+div.ach.ach-locked .ach-body,
+div.ach.ach-locked .ach-body * { color: #d4d4de !important; }
+div.ach.ach-locked .ach-title strong { color: #eaeaf2 !important; text-shadow: none !important; }
+div.ach.ach-locked .ach-subtitle { color: #b0b0be !important; opacity: 1 !important; }
+
+h1, h2, h3 { margin-bottom: 12px; margin-top: 20px; }
+.ach-section { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+</style>!}
+
+
 @achievements
 title: Achievements
+view-if: achievement_game_completed == 1
 tags: endings
 go-to: eg_menu if started == 1; root.start_menu_2 if started == 0
 
@@ -728,3 +953,4 @@ go-to: eg_menu if started == 1; root.start_menu_2 if started == 0
 
 @end_game
 game-over: true
+
