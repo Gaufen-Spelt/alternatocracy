@@ -1,4 +1,4 @@
-title: Finances & Fundraising.
+title: Finances & Fundraising
 new-page: true
 view-if: fundraising_timer <= 0
 on-arrival: fundraising_timer = 6; month_actions += 1
