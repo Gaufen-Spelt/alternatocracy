@@ -1084,14 +1084,6 @@ go-to: technical
 
 
 
-@all-variables
-
-- @leadership: Leadership
-- @miscellanious_austria: Austria and event statuses
-- @spd: SPD info; Campaigning variables.
-- @governmentvar: Government variables
-- @sandbox_menu: Back
-
 @governmentvar
 
 AGRARIAN:
