@@ -3,19 +3,17 @@ new-page: true
 on-arrival: {!
 
 // 1. update dates
-if (Q.month_actions >= 1) {
-    Q.time += 1;
-    Q.month_actions = 0;
-    Q.weeks += 2;
+    // Roll over to next month when 4+ weeks pass
     if (Q.weeks >= 4) {
+        Q.weeks -= 4;
         Q.month += 1;
-        Q.weeks = 0;
-    }
-    if (Q.month >= 13) {
-        Q.month = 1;
-        Q.year += 1;
-        if (Q.historical_mode) {
-            Q.resources += 3;
+        
+        if (Q.month >= 13) {
+            Q.month = 1;
+            Q.year += 1;
+            if (Q.historical_mode) {
+                Q.resources += 2;
+            }
         }
     }
     // decrement timers
