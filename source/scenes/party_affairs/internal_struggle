@@ -3,3 +3,19 @@ subtitle: Our currents are fighting for domination.
 tags: party_affairs
 is-card: true
 view-if: ideologimus_timer <= 0
+card-image: img/poster_1.png
+new-page: true
+
+= Internal power struggle
+
+Our currents are fighting for the control over the party. Which way should we support?
+
+Left - Supports revolutionary course, reconciliation with KPD and class war against bourgeiouisie.
+
+Center - Supports middle course, insisting that the conditions of revolution must come.
+
+Labor - Pragmatic unionists, advocating for uncompromissive stance on rights of workers.
+
+Reformist - Pragmatic reformists, advocating for the governance to push forward socialist policies and eventual transition of economy.
+
+[? if neorevisionism: Neorevisionism - Supports the militant republicanism to save the republic from the claws of extremism and seeks to limit it by any means given. ?]
