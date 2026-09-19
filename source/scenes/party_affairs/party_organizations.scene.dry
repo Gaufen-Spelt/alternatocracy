@@ -29,7 +29,7 @@ go-to: media
 @welfare
 choose-if: resources > 1
 unavailable-subtitle: Not enough resources.
-subtitle: -2 resources. [? if not black_thursday_seen: Currently, our members considers this as worthless spending. ?]
+subtitle: -2 resources. [? if not black_thursday_seen: Currently, our members consider this as worthless spending. ?]
 on-arrival: resources -= 2; workers_aid += 1; unemployed_spd += 2*(1 - dissent); unemployed_spd += 2+(unemployed / 7) + (workers_aid / 2) if unemployed > 10 and workers_aid > 0
 
 We have increased funding to Workers' Welfare. [? if black_thursday_seen > 0 : In an age of economic crisis, this will be helpful for improving our standing among the unemployed. ?]
