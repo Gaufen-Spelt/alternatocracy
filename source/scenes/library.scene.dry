@@ -64,7 +64,9 @@ Germany is divided into a number of states, each of which have their own governm
 - @menu: Back
 
 @huh
-on-arrival: sandbox = 1
+on-arrival: sandbox = 1; {!
+window.updateSandboxLink();
+!}
 view-if: sandbox = 0
 go-to: weimar_timeline
 
