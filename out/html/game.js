@@ -50,6 +50,21 @@
     }
   };
 
+    window.updateSandboxLink = function() {
+    var sandboxLink = document.getElementById('sandbox-link');
+    if (!sandboxLink) return;
+    var sandbox = window.dendryUI.dendryEngine.state.qualities.sandbox;
+    sandboxLink.style.display = (sandbox === 1) ? 'inline' : 'none';
+  };
+
+  window.showSandbox = function() {
+      if (window.dendryUI.dendryEngine.state.sceneId.startsWith('sandbox')) {
+          window.dendryUI.dendryEngine.goToScene('backSpecialScene');
+      } else {
+          window.dendryUI.dendryEngine.goToScene('sandbox');
+      }
+  };
+
   // TODO: update audio displays
   window.updateAudio = function(song) {
       var now_playing = document.getElementById('currently_playing');
