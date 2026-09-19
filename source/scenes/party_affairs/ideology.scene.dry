@@ -1,7 +1,11 @@
-title: Our ideological stance?
-tags: matter
-on-arrival: old_ideology = ideology
-subtitle: <img class="face-image" style="width:20%;height:auto;" src="img/arbeiterbew.jpg" alt="Ideologies">
+title: Questions of Ideology
+new-page: true
+is-card: true
+tags: party_affairs
+view-if: ideology_timer = 0
+on-arrival: month_actions += 1; old_ideology = ideology; ideology_timer = 24
+card-image: img/arbeiterbew.jpg
+#subtitle: Setting the party's ideological direction.
 
 = Questions of Ideology
 
