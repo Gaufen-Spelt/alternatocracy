@@ -99,18 +99,18 @@ if (Q.kpd_r >= Q.spd_r && Q.kpd_r >= Q.nsdap_r) {
 }
 
 // coalitions
-Q.weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r - 3;
-Q.grand_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r;
-Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r;
-Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + Q.other_r + Q.dnvp_r;
-Q.right_coalition = Q.z_r + Q.dvp_r + Q.other_r + Q.dnvp_r;
+Q.weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r;
+Q.grand_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r + Q.bvp_r;
+Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
+Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r;
+Q.right_coalition = Q.z_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r;
 Q.far_right_coalition = Q.dnvp_r + Q.nsdap_r;
 Q.left_coalition = Q.spd_r + Q.kpd_r + Q.sapd_r;
 // this is an absurd concept lol
 Q.popular_front_coalition = Q.spd_r + Q.kpd_r + Q.z_r + Q.ddp_r - 3 + Q.sapd_r;
 Q.anti_democratic_coalition = Q.kpd_r + Q.nsdap_r + Q.dnvp_r;
 // aka everyone except nazi, kpd, dnvp
-Q.neo_weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r;
+Q.neo_weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
 // Hitler + Right-wing parties (only comes into effect if you've alienated Z too badly)
 Q.hitler_right_coalition = Q.z_r + Q.dnvp_r + Q.nsdap_r;
 // Progressive coalition isn't going to be implemented as a distinct coalition but it's the coalition that lets you pass improved women's rights/gay rights
@@ -216,13 +216,13 @@ data = data.concat([
         "id": "z",
         "legend": "Center",
         "name": "Center",
-        "seats": Math.round((Q.z_r - 3)*5),
+        "seats": Math.round(Q.z_r*5),
     },
     {
         "id": "bvp",
         "legend": "BVP",
         "name": "BVP",
-        "seats": Math.round(3*5),
+        "seats": Math.round(Q.bvp_r * 5),
     },
     {
         "id": "dvp",
@@ -283,9 +283,9 @@ go-to: coalition_menu
 
 {!<tr><td><div class="box" style='background-color:#DCCA4A'> </div> !} [+ ddp_name +]: {!</td><td>!} [+ ddp_r +]% {!</td><td>!} [+ str_change_ddp +] {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#000'> </div> !} Z: {!</td><td>!} [+ z_minus_bvp_r +]% {!</td><td>!} [+ str_change_z +] {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#000'> </div> !} Z: {!</td><td>!} [+ z_r +]% {!</td><td>!} [+ str_change_z +] {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#69A2BE'> </div> !} BVP: {!</td><td>!} 3% {!</td><td>!} 0 {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#69A2BE'> </div> !} BVP: {!</td><td>!} [+ bvp_r +] {!</td><td>!} [+ str_change_bvp +] {!</td></tr>!}
 
 {!<tr><td><div class="box" style='background-color:#D5AC27'> </div> !} DVP: {!</td><td>!} [+ dvp_r +]% {!</td><td>!} [+ str_change_dvp +] {!</td></tr>!}
  
