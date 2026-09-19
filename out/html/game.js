@@ -274,8 +274,9 @@
   };
 
   window.onDisplayContent = function() {
-      window.updateSidebar();
-  };
+    window.updateSidebar();
+    window.updateSandboxLink();
+};
 
   /*
    * This function copied from the code for Infinite Space Battle Simulator
@@ -335,7 +336,8 @@
   }
 
   window.onload = function() {
-    window.dendryUI.loadSettings({show_portraits: false});
+    window.dendryUI.loadSettings({show_portraits: true});
+    window.updateSandboxLink();
     if (window.dendryUI.dark_mode) {
         document.body.classList.add('dark-mode');
     }
