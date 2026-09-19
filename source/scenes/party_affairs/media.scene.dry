@@ -100,13 +100,13 @@ We can command Arbeiter- Radio- Bund (ARB) what to translate and which message s
 @radical
 choose-if: reformist_strength + labor_strength + neorevisionist_strength < 50 and not peoples_party
 unavailable-subtitle: [? if reformist_strength + labor_strength + neorevisionist_strength >= 50: Reformists have persuaded us from pursuing this direction. ?] [? if peoples_party: We have declared ourselves as the party of the people. We can't pursue this policy whatsover. ?]
-on-arrival: message_radio = "radical"; workers_spd += 3*(1 - dissent); new_middle_spd -= 3; new_middle_spd += 2 if spd_votes >= socialism / 2; workers_spd += 2 if spd_votes >= socialism / 2; socialism += 3; reformist_dissent += 5; left_dissent -= 5; left_strength += 5
+on-arrival: message_radio = "radical"; workers_spd += 3*(1 - dissent); new_middle_spd -= 3; new_middle_spd += 2 if spd_votes >= socialism / 2; workers_spd += 2 if spd_votes >= socialism / 2; socialism += 3; reformist_dissent += 5; left_dissent -= 5; left_strength += 5; media_timer = 8
 
 We have pursued the policy of class struggle against capitalism. This is counterintuitive as the main users of radio are considered white collars, but perhaps something can be done?
 
 @reformist
 choose-if: left_strength + center_strength < 50
 unavailable-subtitle: [? if left_strength + center_strength >= 50: Radicals have persuaded us from pursuing this direction. ?]
-on-arrival: message_radio = "reformist"; new_middle_spd += 3*(1-dissent); old_middle_spd += 1*(1-dissent); workers_spd += 2*(0.5-dissent); workers_spd -= 1*(socialism*0.05) if socialism / 2 >= spd_votes; socialism -= 2; pro_republic += 3; reformist_strength += 5; reformist_dissent -= 5; left_dissent += 5; peoples_party_progress += 1
+on-arrival: message_radio = "reformist"; new_middle_spd += 3*(1-dissent); old_middle_spd += 1*(1-dissent); workers_spd += 2*(0.5-dissent); workers_spd -= 1*(socialism*0.05) if socialism / 2 >= spd_votes; socialism -= 2; pro_republic += 3; reformist_strength += 5; reformist_dissent -= 5; left_dissent += 5; peoples_party_progress += 1; media_timer = 8
 
 We have translated reformist message with the purpose of awakening class consciousness amongst white collars, at the cost of dropping openly socialist rhetoric.
