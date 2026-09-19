@@ -10,6 +10,7 @@ tags: party_affairs
 
 Whether or not we are in an electoral campaign, the party is always trying to broaden its voter base. Who should we focus our campaign efforts on?
 
+- @leaflet: Spread the leafleats across the streets of the Reich.
 - @workers: The urban working class, our traditional support base.
 - @new_middle: The "new middle class" of government employees and white-collar workers.
 - @old_middle: The "old middle class" of small independent businessmen and artisans.
@@ -19,11 +20,17 @@ Whether or not we are in an electoral campaign, the party is always trying to br
 - @root: We either don't want to or cannot campaign right now.
 - @easy_discard
 
+@leaflet
+subtitle: Free, however, what is to be expected from bare minimum?
+on-arrival: workers_spd += 2*(1-dissent); unemployed_spd += 1*(1-dissent); new_middle_spd += 1*(1-dissent) if peoples_party; old_middle_spd += 1*(1-dissent) if peoples_party; rural_spd += 1*(1-dissent) if peoples_party; catholics_spd += 1*(1-dissent) if peoples_party
+
+We have put leaflets on the streets in the hope someone would pick it up. Whether it's effective or not, it's better to do it than not to.
+
 @workers
 subtitle: -1 resources
 choose-if: resources >= 1
 unavailable-subtitle: Not enough resources.
-on-arrival: workers_spd += 6*(1-dissent); workers_spd -= 2 if unemployed >= 15; workers_spd -= 2 if unemployed >= 25; workers_spd += 6*(1-dissent) if wtb_adopted = 1; resources -= 1; workers_spd += 3*(1-dissent) if nationalization_progress >= 1;
+on-arrival: workers_spd += 7*(1-dissent); workers_spd -= 2 if unemployed >= 15; workers_spd -= 2 if unemployed >= 25; workers_spd += 6*(1-dissent) if wtb_adopted = 1; resources -= 1; workers_spd += 3*(1-dissent) if nationalization_progress >= 1;
 
 We have increased our campaigning among the workers. [? if unemployed >= 15: The high levels of unemployment make our campaign more difficult. ?][? if wtb_adopted = 1 : Adopting the WTB plan gives us a new rallying point around which to attract workers. ?]
 
