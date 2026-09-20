@@ -5,11 +5,11 @@ go-to: post_event if started = 1; start_menu if started = 0
 @start_menu
 go-to: start_menu_2
 
-= Weimar History: An Alternate Perspective
-
 @start_menu_2
 new-page: true
 on-arrival: started = 0
+
+= Weimar History: An Alternate Perspective
 
 - @start: Start game
 - @election_simulation: Election simulation
@@ -606,13 +606,13 @@ Q.stampfer_advisor = 0; // Friedrich Stampfer
 set-bg: img/map_2.jpg
 new-page: true
 
-> *"Such a general development cannot be attributed to the false tactics of any single party or to the mistakes of individual leaders. On the contrary, the conduct of individual leaders is determined largely by the sentiments of the people as a whole. It would be erroneous, however, to regard the sentiments of the moment as reflecting the natural make-up and character of the people. They are merely the consequence of the special circumstances which have brought about this profound degradation of the entire nation."*
+> *"Weimar Germany speaks to us in other ways as well, perhaps most often as a warning sign. This was a society battered by economic crisis and unrelenting political conflict. World War I cast its long shadow over the entire history of the republic. However much present-day economists and historians have revised the notion that the Versailles Peace Treaty placed excessive financial burdens on Germany, Germans of the time were convinced that they had been unjustly treated by the victors of World War I. Many were quick to blame the Allies and, following the stab-in-the-back legend, Jews and socialists at home for every subsequent disaster that ensued: civil unrest, hyperinflation, depression, bankruptcies, and any other kind of misery one can imagine. Weimar Germany conjures up fears of what can happen when there is simply no societal consensus on how to move forward and every minor difference becomes a cause of existential political battles, when assassinations and street fights run rampant and minorities become the easy scapegoats of antidemocratic forces. It is a warning sign because we all know how it ended: **REDACTED**."*
 
- - Karl Kautsky, *Hitlerism and Social Democracy*, 1934
+>> Weitz Eric D, Weimar Germany.
 
 This is a game of alternate history. While historical accuracy is a major concern, keep in mind that this is a *game*, and that any divergence from actual events will necessarily have to involve some element of make-believe. Nevertheless, please let the author know if there are any glaring mistakes.
 
-For more information on the politics and government of the German Republic, see the "Library" page on the top left. If this is your first time playing the game, it is strongly recommended that you read at least some of this information.
+And remember, any deviations present here do not represent original game's spirit. This version is going to be less spd-centric if it's to show the whole theather...
 
 - @1928_easy: Begin (easy difficulty)
 - @1928_main: Begin (normal difficulty)
@@ -621,7 +621,7 @@ For more information on the politics and government of the German Republic, see 
 - @start_menu_2: Back
 
 @1928_easy
-on-arrival: difficulty = -1; resources = 4; dues = 3; rb_strength = 2500; kpd_relation = 29; z_relation = 54; dvp_relation = 49; budget = 5;
+on-arrival: difficulty = -1; resources = 4; dues = 3; rb_strength = 2300; kpd_relation = 26; z_relation = 50; dvp_relation = 40; budget = 5;
 go-to: 1928_main
 
 @1928_hard
