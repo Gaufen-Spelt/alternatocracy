@@ -6,7 +6,7 @@ view-if: (year = next_election_year and month >= next_election_month) or (year >
 on-departure: month_actions += 1; in_election = 0; next_election_year = next_election_year + 4; n_elections += 1; next_election_time = time + 48; papen_chancellor_timer = 4; hindenburg_dismissal_timer = 6;
 set-jump: post_election_1928
 face-image: img/Rothe_Wahlen_1903.jpg
-on-arrival: dvp_in_government = 0; spd_in_government = 0; z_in_government = 0; ddp_in_government = 0; bvp_in_government = 0; dnvp_in_government = 0; nsdap_in_government = 0; kpd_in_government = 0
+on-arrival: dvp_in_government = 0; spd_in_government = 0; z_in_government = 0; ddp_in_government = 0; bvp_in_government = 0; dnvp_in_government = 0; nsdap_in_government = 0; kpd_in_government = 0; hilferding_resign = 0
 
 # TODO: should there be an image?
 
