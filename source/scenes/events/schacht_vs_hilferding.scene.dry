@@ -20,11 +20,13 @@ view-if: investigate_far_right >= 1
 go-to: weak if investigate_far_right >= 1 and investigate_corruption < 1; dvp_oppose if investigate_far_right >= 1 and investigate_corruption >= 1 and dvp_in_government and dvp_relation < 50; nice if investigate_far_right >= 1 and investigate_corruption >= 1 and ((not dvp_in_government) or (dvp_in_government and dvp_relation >= 50))
 
 @weak
+
 We expose to the public Schacht's dealings with the Nazis. However, our exposure was not as effective as it seemed and business interests have pushed to remove us.
 
 - @hilferding_resign: There is simply no other option.
 
 @dvp_oppose
+
 We expose to the public Schacht's dealings with the Nazis. However, DVP stepped against us, arguing that Schacht's wrongdoings are merely overblown or are simply fallacious. Perhaps, DVP is right on their own.
 
 - @hilferding_resign: There is simply no other option.
