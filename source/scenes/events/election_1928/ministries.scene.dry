@@ -67,10 +67,10 @@ Gustav Radbruch of the SPD has been appointed Justice Minister.
 
 @foreign
 title: Foreign Ministry
-subtitle: This is usually the domain of Gustav Stresemann of the DVP.
-unavailable-subtitle: [? if leverage < 10: We do not have enough leverage. ?] [? if not stresemann_dead and dvp_in_government >= 1: Stresemann barely got his party into the government, why would we sabotage Stresemann and Curtius. ?]
+subtitle: [? if not stresemann_dead: This is usually the domain of Gustav Stresemann of the DVP. Should we even consider sabotaging Stresemann's attempts of bringing DVP into the coalition? ?] The Foreign Ministry controls foreign affairs. 
+unavailable-subtitle: [? if leverage < 10: We do not have enough leverage. ?]
 tags: mins_1928
-choose-if: leverage >= 10 and (stresemann_dead >= 1 and dvp_in_government >= 1)
+choose-if: leverage >= 10
 view-if: foreign_minister_party != "SPD"
 on-arrival: leverage -= 10; foreign_minister_party = "SPD"; foreign_minister = "Breitscheid"
 go-to: ministries
@@ -108,6 +108,7 @@ Julius Leber of the SPD has been appointed Reichswehr Minister.
 title: No more ministries.
 subtitle: [? if leverage >= 10 : We still have some more leverage to gain ministries. ?][? if leverage < 10 : We do not have much leverage left. ?]
 tags: mins_1928
+on-arrival: dvp_relation -= 10 if dvp_in_government and foreign_minister_party = "SPD" and stresemann_dead <= 0; coalition_dissent += 1 if dvp_in_government and foreign_minister_party = "SPD" and stresemann_dead <= 0
 
 This coalition arrangement is tolerable to all.
 
