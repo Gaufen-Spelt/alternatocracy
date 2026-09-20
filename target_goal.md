@@ -4,6 +4,7 @@
 4. Add new content.
 5. Images. DONE
 6. Party Card reworks.
+7. Decimal polling numbers. Current reichstag seats on different part. Reichstag element.
 
 
 
