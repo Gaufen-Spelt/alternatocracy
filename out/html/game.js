@@ -227,11 +227,133 @@
     }
   };
 
+
+  // Party name -> color mapping.
+
+window.partyColors = {
+  'SPD': '#E3000F',
+  'DNVP': '#003366',
+  'Zentrum': '#000000',
+  'KPD': '#8B0000',
+  'DVP': '#4B0082',
+  'DDP': '#FFD700',
+  'WP': '#8B4513',
+  'BVP': '#4682B4',
+  'NSDAP': '#8B5A00',
+  'CNBLP': '#556B2F',
+  'DBP': '#A0522D',
+  'VRP': '#B22222'
+};
+
+// Tooltip content for each party.
+
+window.partyInfo = {
+  'SPD': 'SPD',
+  'DNVP': 'DNVP',
+  'Zentrum': 'Zentrum',
+  'KPD': 'KPD',
+  'DVP': 'DVP',
+  'DDP': 'DDP',
+  'WP': 'WP',
+  'BVP': 'BVP',
+  'NSDAP': 'NSDAP',
+  'CNBLP': 'CNBLP',
+  'DBP': 'DBP',
+  'VRP': 'VRP'
+};
+
+// Wraps recognized party abbreviations in colored, tooltip-triggering spans.
+window.colorizePartyNames = function(text) {
+    var parties = Object.keys(window.partyColors);
+    // Sort longest-first so e.g. "DVP" doesn't clip inside "DDVP"-like edge cases
+    parties.sort(function(a, b) { return b.length - a.length; });
+
+    parties.forEach(function(party) {
+        var color = window.partyColors[party];
+        // \b word boundaries so we don't match inside other words
+        var regex = new RegExp('\\b(' + party.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b', 'g');
+        text = text.replace(regex, function(match) {
+            return '<span class="party-highlight" style="color:' + color +
+                   ';font-weight:bold;cursor:pointer;" ' +
+                   'onclick="window.showPartyTooltip(event, \'' + party + '\')">' +
+                   match + '</span>';
+        });
+    });
+    return text;
+};
+
+  window.showPartyTooltip = function(evt, party) {
+    evt.stopPropagation();
+    window.hidePartyTooltip(); // remove any existing one first
+
+    var info = window.partyInfo[party] || 'No details available.';
+    var color = window.partyColors[party] || '#333';
+
+    var tooltip = document.createElement('div');
+    tooltip.id = 'party-tooltip';
+    tooltip.style.position = 'fixed';
+    tooltip.style.width = '220px';
+    tooltip.style.minHeight = '220px';
+    tooltip.style.backgroundColor = '#fff';
+    tooltip.style.border = '3px solid ' + color;
+    tooltip.style.borderRadius = '4px';
+    tooltip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+    tooltip.style.padding = '12px';
+    tooltip.style.zIndex = '10000';
+    tooltip.style.fontSize = '0.9em';
+    tooltip.style.color = '#111';
+    tooltip.style.overflowY = 'auto';
+
+    // Position near the click, keeping it on-screen
+    var x = evt.clientX;
+    var y = evt.clientY;
+    var maxX = window.innerWidth - 240;
+    var maxY = window.innerHeight - 240;
+    tooltip.style.left = Math.min(x, maxX) + 'px';
+    tooltip.style.top = Math.min(y, maxY) + 'px';
+
+    var title = document.createElement('div');
+    title.style.fontWeight = 'bold';
+    title.style.color = color;
+    title.style.marginBottom = '8px';
+    title.style.borderBottom = '1px solid #ccc';
+    title.style.paddingBottom = '4px';
+    title.textContent = party;
+
+    var body = document.createElement('div');
+    body.textContent = info;
+
+    var closeBtn = document.createElement('div');
+    closeBtn.textContent = '✕';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.top = '6px';
+    closeBtn.style.right = '10px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.fontWeight = 'bold';
+    closeBtn.onclick = window.hidePartyTooltip;
+
+    tooltip.appendChild(closeBtn);
+    tooltip.appendChild(title);
+    tooltip.appendChild(body);
+    document.body.appendChild(tooltip);
+
+    // Close if clicking anywhere else
+    setTimeout(function() {
+        document.addEventListener('click', window.hidePartyTooltip, { once: true });
+    }, 0);
+};
+
+window.hidePartyTooltip = function() {
+    var existing = document.getElementById('party-tooltip');
+    if (existing) {
+        existing.parentNode.removeChild(existing);
+    }
+};
   
   // This function allows you to modify the text before it's displayed.
   // E.g. wrapping chat-like messages in spans.
   window.displayText = function(text) {
-      return text;
+    return window.colorizePartyNames(text);
   };
 
   // This function allows you to do something in response to signals.
