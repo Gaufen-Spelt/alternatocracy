@@ -267,6 +267,23 @@ if (window && d3) {
     parliament.exit.toCenter(false).bigToSmall(true);
     d3.select("#reichstag").datum(data).call(parliament);
 }
+
+Q.partyData = [
+    { id: "kpd",   name: "KPD",       seats: Math.round(Q.kpd_r*5),   color: "#8B0000", show: true },
+];
+if (Q.sapd_formed && Q.sapd_r) {
+    Q.partyData.push({ id: "sapd", name: "SAPD", seats: Math.round(Q.sapd_r*5), color: "#C40000", show: true });
+}
+Q.partyData = Q.partyData.concat([
+    { id: "spd",   name: "SPD",        seats: Math.round(Q.spd_r*5),   color: "#E3000F", show: true },
+    { id: "ddp",   name: Q.ddp_name,   seats: Math.round(Q.ddp_r*5),   color: "#DCCA4A", show: true },
+    { id: "z",     name: "Center",     seats: Math.round(Q.z_r*5),     color: "#111111", show: true },
+    { id: "bvp",   name: "BVP",        seats: Math.round(Q.bvp_r*5),   color: "#69A2BE", show: true },
+    { id: "dvp",   name: "DVP",        seats: Math.round(Q.dvp_r*5),   color: "#D5AC27", show: true },
+    { id: "other", name: "Other",      seats: Math.round(Q.other_r*5), color: "#a0a0a0", show: true },
+    { id: "dnvp",  name: "DNVP",       seats: Math.round(Q.dnvp_r*5),  color: "#3F7BC1", show: true },
+    { id: "nsdap", name: "NSDAP",      seats: Math.round(Q.nsdap_r*5), color: "#954B00", show: true },
+]);
 !}
 go-to: coalition_menu
 
