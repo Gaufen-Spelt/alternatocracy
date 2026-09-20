@@ -257,27 +257,25 @@ BVP: [+ bvp_r +]%
 
 = Projected election results
 
-(if the election were to be held now):
+SPD: [+ spd_votes_display +]%
 
-SPD: [+ spd_votes +]%
+[? if sapd_formed: SAPD: [+ sapd_votes_display +]% ?]
 
-[? if sapd_formed: SAPD: [+ sapd_votes +]% ?]
+Z: [+ z_votes_display +]%
 
-Z: [+ z_votes +]%
+BVP: [+ bvp_votes_display +]%
 
-BVP: [+ bvp_votes +]%
+KPD: [+ kpd_votes_display +]%
 
-KPD: [+ kpd_votes +]%
+[? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ ddp_votes_display +]%
 
-[? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ ddp_votes +]%
+DVP: [+ dvp_votes_display +]%
 
-DVP: [+ dvp_votes +]%
+DNVP: [+ dnvp_votes_display +]%
 
-DNVP: [+ dnvp_votes +]%
+NSDAP: [+ nsdap_votes_display +]%
 
-NSDAP: [+ nsdap_votes +]%
-
-Others: [+ other_votes +]%
+Others: [+ other_votes_display +]%
 
 **Detailed results for each demographic**
 
