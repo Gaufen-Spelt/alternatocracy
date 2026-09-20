@@ -9,20 +9,9 @@ new-page: true
 
 Juchacz is the founder of the Worker's Welfare, our mutual aid organization; her experiences as a single mother in poverty led her to socialism. She is the most senior woman among the SPD leadership, who is often treated as the "go-to" when the predominantly male leadership sought out womens' voices.
 
-- @emergency_fundraising
 - @welfare
 - @organizing_women
 - @root: Return to main
-
-@emergency_fundraising
-title: Emergency Fundraising
-subtitle: An emergency infusion of resources.
-view-if: difficulty < 1
-choose-if: advisor_action_timer = 0
-unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
-on-arrival: advisor_action_timer = 6; resources += dues
-
-We have gained +[+ dues +] resources.
 
 @welfare
 title: Support Workers' Welfare, our mutual aid organization.
