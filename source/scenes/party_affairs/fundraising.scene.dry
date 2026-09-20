@@ -1,7 +1,7 @@
 title: Finances & Fundraising
 new-page: true
 view-if: fundraising_timer <= 0
-on-arrival: fundraising_timer = 6; month_actions += 1
+on-arrival: fundraising_timer = 6
 frequency: 300
 is-card: true
 card-image: img/poster_2.jpg
@@ -22,6 +22,7 @@ We can control our finances and funds of our party here.
 - @old_middle: Old Middle
 - @rural: Rural
 - @unemployed: Unemployed
+- @root: Leave
 - @easy_discard
 
 @workers
