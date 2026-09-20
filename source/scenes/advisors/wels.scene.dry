@@ -11,7 +11,6 @@ Wels is the long-time chairman of the SPD. He is a gifted organizer and a member
 
 - @clear_agenda
 - @party_discipline
-- @emergency_fundraising
 - @snap_election
 - @root: Return to main
 
@@ -39,16 +38,6 @@ unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +
 on-arrival: advisor_action_timer = 6; left_dissent -= 5; labor_dissent -= 10; center_dissent -= 10; reformist_dissent -= 10; neorevisionist_dissent -= 5
 
 We have enforced party discipline to reduce dissent across all factions.
-
-@emergency_fundraising
-title: Emergency Fundraising
-view-if: difficulty < 1
-subtitle: An emergency infusion of resources.
-choose-if: advisor_action_timer = 0
-unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
-on-arrival: advisor_action_timer = 6; resources += dues
-
-We have gained +[+ dues +] resources.
 
 @snap_election
 title: Snap Election
