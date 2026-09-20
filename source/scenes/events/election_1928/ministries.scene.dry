@@ -68,9 +68,9 @@ Gustav Radbruch of the SPD has been appointed Justice Minister.
 @foreign
 title: Foreign Ministry
 subtitle: This is usually the domain of Gustav Stresemann of the DVP.
-unavailable-subtitle: We do not have enough leverage.
+unavailable-subtitle: [? if leverage < 10: We do not have enough leverage. ?] [? if not stresemann_dead and dvp_in_government >= 1: Stresemann barely got his party into the government, why would we sabotage Stresemann and Curtius. ?]
 tags: mins_1928
-choose-if: leverage >= 10 
+choose-if: leverage >= 10 and (stresemann_dead >= 1 and dvp_in_government >= 1)
 view-if: foreign_minister_party != "SPD"
 on-arrival: leverage -= 10; foreign_minister_party = "SPD"; foreign_minister = "Breitscheid"
 go-to: ministries
