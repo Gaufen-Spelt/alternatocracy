@@ -234,32 +234,34 @@ window.partyColors = {
   'SPD': '#E3000F',
   'DNVP': '#003366',
   'Zentrum': '#000000',
+  'Z': '#000000',
   'KPD': '#8B0000',
-  'DVP': '#4B0082',
+  'DVP': '#B8860B',
   'DDP': '#FFD700',
   'WP': '#8B4513',
   'BVP': '#4682B4',
   'NSDAP': '#8B5A00',
   'CNBLP': '#556B2F',
   'DBP': '#A0522D',
-  'VRP': '#B22222'
+  'VRP': '#2F4F4F'
 };
 
 // Tooltip content for each party.
 
 window.partyInfo = {
-  'SPD': 'SPD',
-  'DNVP': 'DNVP',
-  'Zentrum': 'Zentrum',
-  'KPD': 'KPD',
-  'DVP': 'DVP',
-  'DDP': 'DDP',
-  'WP': 'WP',
-  'BVP': 'BVP',
-  'NSDAP': 'NSDAP',
-  'CNBLP': 'CNBLP',
-  'DBP': 'DBP',
-  'VRP': 'VRP'
+  'SPD': 'Social Democratic Party of Germany',
+  'DNVP': 'German National People\'s Party',
+  'Zentrum': 'Centre Party',
+  'Z': 'Centre Party',
+  'KPD': 'Communist Party of Germany',
+  'DVP': 'German People\'s Party',
+  'DDP': 'German Democratic Party',
+  'WP': 'Reich Party of the German Middle Class',
+  'BVP': 'Bavarian People\'s Party',
+  'NSDAP': 'National Socialist German Workers\' Party',
+  'CNBLP': 'Christian-National Peasants\' and Farmers\' Party',
+  'DBP': 'German Farmers\' Party',
+  'VRP': 'Reich Party for Civil Rights and Deflation'
 };
 
 // Wraps recognized party abbreviations in colored, tooltip-triggering spans.
