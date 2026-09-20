@@ -27,15 +27,13 @@ SPD position: [? if spd_toleration : toleration ?][? if spd_in_government : in g
 
 [? if spd_in_government and (in_left_front or in_popular_front): KPD coalition dissent: [+ kpd_coalition_dissent : coalition_dissent +] ?]
 
-Internal dissent: [+ dissent_percent : dissent +]
-
 = Government
 
-President: [+ president +] ([ president_party +])
+President: [+ president +] ([+ president_party +])
 
 Chancellor: [+ chancellor +] ([+ chancellor_party +])
 
-if spd_in_government = 1 : Budget: [+ budget +]
+Budget: [+ budget +]
 
 Next election: [+ next_election_month : month +] [+ next_election_year +]
 
@@ -43,7 +41,7 @@ Next election: [+ next_election_month : month +] [+ next_election_year +]
 
 Inflation: [+ inflation_2 +]%
 
-[? if black_thursday_seen = 1 : Unemployment: [+ unemployed_2 +]% ?]
+Unemployment: [+ unemployed_2 +]%
 
 Economic growth: [+ economic_growth_2 +]%
 
@@ -71,6 +69,8 @@ Economic growth: [+ economic_growth_2 +]%
 BVP: [+ bvp_relation: relationships +]
 
 = Internal Factions of the SPD
+
+Internal dissent: [+ dissent_percent : dissent +]
 
 {!<span class="tooltip-text" title="The Left is interested in radical, transformative policies and cooperation with the KPD.">Left</span>!} strength: [+ left_strength : strength +], dissent: [+ left_dissent : dissent +]
 
