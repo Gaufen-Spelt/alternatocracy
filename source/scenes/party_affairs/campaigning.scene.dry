@@ -3,7 +3,7 @@ new-page: true
 on-arrival: month_actions += 1
 is-card: true
 card-image: img/flags.jpg
-frequency: 100
+frequency: 50
 tags: party_affairs
 
 = Campaigning
@@ -22,7 +22,7 @@ Whether or not we are in an electoral campaign, the party is always trying to br
 
 @leaflet
 subtitle: Free, however, what is to be expected from bare minimum?
-on-arrival: workers_spd += 2*(1-dissent); unemployed_spd += 1*(1-dissent); new_middle_spd += 1*(1-dissent) if peoples_party; old_middle_spd += 1*(1-dissent) if peoples_party; rural_spd += 1*(1-dissent) if peoples_party; catholics_spd += 1*(1-dissent) if peoples_party
+on-arrival: workers_spd += 1*(1-dissent); unemployed_spd += 1*(1-dissent); new_middle_spd += 1*(1-dissent) if peoples_party; old_middle_spd += 1*(1-dissent) if peoples_party; rural_spd += 1*(1-dissent) if peoples_party; catholics_spd += 1*(1-dissent) if peoples_party
 
 We have put leaflets on the streets in the hope someone would pick it up. Whether it's effective or not, it's better to do it than not to.
 
@@ -30,7 +30,7 @@ We have put leaflets on the streets in the hope someone would pick it up. Whethe
 subtitle: -1 resources
 choose-if: resources >= 1
 unavailable-subtitle: Not enough resources.
-on-arrival: workers_spd += 7*(1-dissent); workers_spd -= 2 if unemployed >= 15; workers_spd -= 2 if unemployed >= 25; workers_spd += 6*(1-dissent) if wtb_adopted = 1; resources -= 1; workers_spd += 3*(1-dissent) if nationalization_progress >= 1;
+on-arrival: workers_spd += 5*(1-dissent); workers_spd -= 2 if unemployed >= 15; workers_spd -= 2 if unemployed >= 25; workers_spd += 6*(1-dissent) if wtb_adopted = 1; resources -= 1; workers_spd += 3*(1-dissent) if nationalization_progress >= 1;
 
 We have increased our campaigning among the workers. [? if unemployed >= 15: The high levels of unemployment make our campaign more difficult. ?][? if wtb_adopted = 1 : Adopting the WTB plan gives us a new rallying point around which to attract workers. ?]
 
