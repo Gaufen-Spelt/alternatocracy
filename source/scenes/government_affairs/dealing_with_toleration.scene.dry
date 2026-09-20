@@ -53,7 +53,7 @@ Unfortunately, our negotiations have met with failure. The center-right parties 
 
 @urge_paramilitary
 title: Urge the coalition and the chancellor [+ chancellor +] to act against the paramilitaris.
-choose-if: (sa_strength >= 700 or sa_militancy >= 0.25 or nsdap_votes >= 25) or not dnvp_in_government or (z_relation + dvp_relation >= 50) or (rb_strength * rb_militancy < 500) of (rfb_strength * rfb_militancy < 0.20)
+choose-if: (sa_strength >= 700 or sa_militancy >= 0.25 or nsdap_votes >= 25) or not dnvp_in_government or (z_relation + dvp_relation >= 50) or (rb_strength * rb_militancy < 500) or (rfb_strength * rfb_militancy < 0.20)
 unavailable-subtitle: [? if sa_strength < 700 or sa_militancy < 0.25 or nsdap_votes < 25: SA does not threaten them to justify them acting against it.?] [? if dnvp_in_government: As part of the coalition, DNVP will not allow suppression of far right paramilitaries. ?] [? if z_relation + dvp_relation < 50: Coalition is too unwilling to listen to us. ?] [? if rb_strength * rb_militancy > 500: Coalition believes that we are hypocritical, pointing at the militarized Reichsbanner to consider attacking far right, keeping the counterweight. ?] [? if rfb_strength * rfb_militancy > 0.20: Coalition believes that there must be counterweight against the RFB, communist threat on far left. ?]
 on-arrival: dnvp_relation -= 5; nsdap_relation -= 10; z_relation -= 3; dvp_relation -= 5; ddp_relation += 2; kpd_relation += 2; sa_strength -= 50; sa_strength -= 50 if z_relation > 60; sa_militancy *= 0.99; sa_militancy *= 0.95 if z_relation > 60; sh_strength -= 50 if sh_strength > 700; sh_militancy *= 0.95 if sh_militancy >= 0.20; sa_banned = 1; sh_banned = 1 if sh_strength + sh_militancy > 300
 
