@@ -411,6 +411,8 @@ if (Q.pro_republic >= 100) {
 }
 // re-calculate party support
 // calculate normalized class voting for the achievements
+var decimal_factor = Math.pow(10, Q.use_decimals || 0);
+
 for (var c of Q.classes) {
     var class_votes = 0;
     for (var party of Q.parties) {
@@ -421,7 +423,7 @@ for (var c of Q.classes) {
     }
     for (var party of Q.parties) {
         Q[c + '_' + party + '_normalized'] = 100*Q[c+'_'+party]/class_votes;
-        Q[c + '_' + party + '_display'] = Math.round(100*Q[c+'_'+party]/class_votes);
+        Q[c + '_' + party + '_display'] = Math.round(decimal_factor*100*Q[c+'_'+party]/class_votes)/decimal_factor;
     }
 }
 // calculate support for each of the parties
@@ -442,9 +444,8 @@ for (var party of Q.parties) {
 for (var party of Q.parties) {
     Q[party+'_normalized'] = Q[party + '_support']/total_support;
     Q[party+'_votes'] = Math.round(Q[party+'_normalized']*100);
-    Q[party+'_votes_display'] = Math.round(Q[party+'_normalized']*100);
+    Q[party+'_votes_display'] = Math.round(decimal_factor*Q[party+'_normalized']*100)/decimal_factor;
 }
-
 
 // set faction strength/dissent to 0
 for (var c of Q.factions) {
