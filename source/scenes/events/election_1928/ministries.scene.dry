@@ -32,9 +32,9 @@ Carl Severing of the SPD has been appointed Interior Minister.
 @finance
 title: Finance Ministry
 subtitle: The Finance Ministry controls the government budget and taxes.
-unavailable-subtitle: We do not have enough leverage.
+unavailable-subtitle: [? if leverage < 10: We do not have enough leverage. ?] [? if hilferding_resign = 1: Hilferding has been ousted, we can't return back the Finance Ministry. ?]
 tags: mins_1928
-choose-if: leverage >= 10 
+choose-if: leverage >= 10 and hilferding_resign != 1
 view-if: finance_minister_party != "SPD"
 on-arrival: leverage -= 10; finance_minister_party = "SPD"; finance_minister = "Hilferding"
 go-to: ministries
