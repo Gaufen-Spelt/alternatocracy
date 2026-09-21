@@ -1,7 +1,7 @@
 title: Judiciary Reform
 new-page: true
 is-card: true
-view-if: spd_in_government = 1 and justice_minister_party = "SPD" and judiciary_timer = 0
+view-if: spd_in_government = 1 and justice_minister_party = "SPD" and judiciary_timer = 0 and full_reform != 1
 on-arrival: month_actions += 1; judiciary_timer += 6
 card-image: img/portraits/RadbruchGustav.jpg
 tags: govt_affairs, cabinet
@@ -11,24 +11,37 @@ tags: govt_affairs, cabinet
 The Judiciary is one of the most reactionary components of the government, along with the military. Many jurists have held office since the days of the Emperor. They give violent fascists like Adolf Hitler laughably light sentences, while ruthlessly persecuting leftists and pacifists for lesser crimes.
 
 [? if judicial_reform <= 0 : There is great demand in our membership for reforming the judiciary, although this may bring us into a collision course with our coalition allies. ?]
-[? if judicial_reform == 1 : We have started on the path to judicial reform. While some of the most antideluvian and biased justices have been replaced, many still remain. More should be done. ?]
-[? if judicial_reform >= 2 : We have successfully reformed the judiciary, to some extent. At the very least, the courts will not actively obstruct our attempts to prosecute crimes committed by the far-right. ?]
+[? if judicial_reform >= 0 and judicial_reform < 6: We have started on the path to judicial reform. While some of the most antideluvian and biased justices have been replaced, many still remain. More should be done. ?]
+[? if judicial_reform >= 6 and judicial_reform < 10: We have started on the path to judicial reform. Majority of the judiciary are now much fairer in their judgments and at least are not right wing biased anymore. More should be done. ?]
+[? if judicial_reform >= 10 and full_reform >= 1: We have successfully reformed the judiciary, to some extent. At the very least, the courts will not actively obstruct our attempts to prosecute crimes committed by the far-right. ?]
 
+- @full_reform: Reform the judiciary definitely.
 - @reform: Carry out substantial judicial reforms.
 - @minor_reforms: Carry out minor judicial reforms.
 - @as_is: Leave the judiciary as it is.
 - @easy_discard
 - @cancel_advisor_action
 
+@full_reform
+subtitle: -2 budget
+unavailable-subtitle: Not enough budget.
+choose-if: budget >= 2 
+view-if: full_reform = 0 and judicial_reform >= 10
+on-arrival: full_reform = 1; budget -= 2; democratization += 2; coalition_dissent += 1 if in_grand_coalition == 1; workers_spd += 10*(1-dissent) if democratization >= 3; new_middle += 5; old_middle += 5; pro_republic += 10*(1-dissent); coalition_dissent += 1 if historical_mode
+
+We have fully restructurized judiciary to our tide, barring nationalists and monarchists from influencing this system. We have achieved the great victory in republicanization of post-imperial system!
+
 @reform
 subtitle: -1 budget
 unavailable-subtitle: Not enough budget.
 choose-if: budget >= 1
+view-if: full_reform = 0
 on-arrival: budget -= 1; democratization += 2; coalition_dissent += 1 if in_grand_coalition == 1; workers_spd += 5*(1-dissent) if democratization >= 3; judicial_reform += 2; pro_republic += 5*(1-dissent); coup_progress += 1; coalition_dissent += 1 if historical_mode
 
 We investigate jurists who have shown themselves to have biased or corrupt behavior, and try to remove them, replacing them with more democratically-oriented jurists. This obviously raises quite a great deal of ire in conservative circles, including within our coalition. 
 
 @minor_reforms
+view-if: full_reform = 0
 on-arrival: democratization += 1; workers_spd += 3*(1-dissent) if democratization >= 3; judicial_reform += 1; pro_republic += 3*(1-dissent); judiciary_timer += 6
 
 We try to remove the most obviously biased and corrupt jurists, while leaving most of the system intact. It is slow work reforming the judiciary.
