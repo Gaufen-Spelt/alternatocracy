@@ -95,7 +95,15 @@ We can command Arbeiter- Radio- Bund (ARB) what to translate and which message s
 
 - @radical: We should push for class struggle!
 - @reformist: We should push for reformism!
+- @consciousness: We should spread the class consciousness amongst the white collar workers!
 - @menu: Back
+
+@consciousness
+subtitle: sus WIP
+view-if: 1 == 0
+choose-if: ideology != "left" and ideology != "centrist" and socialism > spd_votes and peoples_party_progress >= 1
+
+Undone
 
 @radical
 choose-if: reformist_strength + labor_strength + neorevisionist_strength < 50 and not peoples_party
