@@ -9,6 +9,12 @@ if (Q.advisor_action_timer <= 0) {
 } else {
     Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
 }
+
+if (Q.fundraiser_timer == 1) {
+    Q.pinnedCardsDescription += '\n- next fundraiser in 1 month';
+} else {
+    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' months.';
+}
 !}
 max-cards: 4
 
