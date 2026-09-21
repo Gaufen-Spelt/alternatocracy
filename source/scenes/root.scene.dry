@@ -556,7 +556,7 @@ Q.sh_ban_timer = 0;
 Q.kpd_ultimatum_timer = 0;
 Q.march_on_berlin_timer = 0;
 Q.hindenburg_dismissal_timer = 0;
-Q.fundraiser_timer = 48;
+Q.fundraiser_timer = 24;
 
 // all the initial advisors are centrists.
 Q.wels_advisor = 1; // Otto Wels
