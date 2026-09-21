@@ -11,18 +11,23 @@ if (Q.month_actions >= 1) {
         Q.month += 1;
         Q.weeks = 0;
     }
+    Q.fundraiser_timer -= 1;
     if (Q.month >= 13) {
         Q.month = 1;
         Q.year += 1;
-        Q.workers_income = Math.round((Q.workers_spd * Q.workers_dues * (1 - Q.labor_dissent / 100) * 0.70) / 10)
-        Q.unemployed_income = Math.round((Q.unemployed_spd * Q.unemployed_dues * (1 - Q.left_dissent / 100) * 0.50) / 10)
-        Q.new_middle_income = Math.round((Q.new_middle_spd * Q.new_middle_dues * (1 - Q.labor_dissent / 100) * 0.290) / 10)
-        Q.old_middle_income = Math.round((Q.old_middle_spd * Q.old_middle_dues * (1 - Q.reformist_dissent / 100) * 0.05) / 10)
-        Q.rural_income = Math.round((Q.rural_spd * Q.rural_dues * (1 - Q.reformist_dissent / 100) * 0.05) / 10)
+    }
+    if (Q.fundraiser_timer <= 0) {
+        Q.workers_income = Math.round((Q.workers_spd * Q.workers_dues * (1 - Q.labor_dissent / 100) * 0.40) / 10)
+        Q.unemployed_income = Math.round((Q.unemployed_spd * Q.unemployed_dues * (1 - Q.left_dissent / 100) * 0.35) / 10)
+        Q.new_middle_income = Math.round((Q.new_middle_spd * Q.new_middle_dues * (1 - Q.labor_dissent / 100) * 0.35) / 10)
+        Q.old_middle_income = Math.round((Q.old_middle_spd * Q.old_middle_dues * (1 - Q.reformist_dissent / 100) * 0.15) / 10)
+        Q.rural_income = Math.round((Q.rural_spd * Q.rural_dues * (1 - Q.reformist_dissent / 100) * 0.20) / 10)
 
         Q.resources += Q.workers_income + Q.unemployed_income + Q.new_middle_income + Q.old_middle_income + Q.rural_income
 
-        Q.income_summary = "Workers: +" + Q.workers_income + ", Unemployed: +" + Q.unemployed_income + ", New Middle: +" + Q.new_middle_income + ", Old Middle: +" + Q.old_middle_income + ", Rural: +" + Q.rural_income
+        Q.income_summary = "Workers: +" + Q.workers_income + ", Unemployed: +" + Q.unemployed_income + ", New Middle: +" + Q.new_middle_income + ", Old Middle: +" + Q.old_middle_income + ", Rural: +" + Q.rural_income;
+
+        Q.fundraiser_timer = 24;
     }
     // decrement timers
     for (timer of Q.timers) {
