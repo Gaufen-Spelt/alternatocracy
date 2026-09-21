@@ -29,3 +29,39 @@ I need to read the book. Added directions.
 ---
 
 I will delete fundraising and replace with passive effect and merger with media, named now media & finances.
+
+
+
+
+
+
+
+Junkers and reactionaries:
+
+how to break their power?:
+
+Gradualist way:
+
+Junkers:
+
+Promote socialism.
+
+Expand on rural populace as SPD.
+
+Fund small farmers.
+
+DNVP low polling.
+
+Reactionaries:
+
+Reform military.
+
+Reform policies.
+
+Reform judiciary.
+
+Forceful:
+
+Form left government to forcefully do this.
+
+Let KPD terrorize rural.
