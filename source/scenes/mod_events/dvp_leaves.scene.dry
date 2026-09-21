@@ -1,0 +1,12 @@
+title: DVP leaves the coalition!
+subtitle: They grew impatient over our policies!
+tags: event
+view-if: dvp_in_government and spd_in_government and dvp_relation < 20
+max-visits: 1
+new-page: true
+
+= DVP leaves the Grand Coalition!
+
+With our disagreements heightened to the point of no return, DVP has declared they would leave the coalition!
+
+Disgrace for them, but perhaps, our coalition faces the collapse. Even with majority, BVP won't agree to remain in coalition without bourgeouise counterweight.
