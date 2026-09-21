@@ -1,0 +1,70 @@
+title: Internal Struggle
+subtitle: Our currents are fighting for domination.
+tags: party_affairs
+is-card: true
+view-if: ideologimus_timer <= 0
+card-image: img/parteitag.jpeg
+new-page: true
+
+= Internal power struggle
+
+Our currents are fighting for the control over the party. Which way should we support?
+
+Left - Supports revolutionary course, reconciliation with KPD and class war against bourgeiouisie.
+
+Center - Supports middle course, insisting that the conditions of revolution must come.
+
+Labor - Pragmatic unionists, advocating for uncompromissive stance on rights of workers.
+
+Reformist - Pragmatic reformists, advocating for the governance to push forward socialist policies and eventual transition of economy.
+
+[? if neorevisionism: Neorevisionism - Supports the militant republicanism to save the republic from the claws of extremism and seeks to limit it by any means given. ?]
+
+- @left
+- @center
+- @labor
+- @reformist
+- @neorevisionist
+- @root: Leave.
+- @easy_discard
+
+@left
+title: Support the **Left**.
+subtitle: Revolutionary course is the only way.
+on-arrival: left_strength += 9; left_dissent -= 5; radicalization += 1; democratization += 1; reformist_strength -= 5; reformist_dissent += 5; labor_dissent += 5; neorevisionist_dissent += 7
+
+We have supported the leftist course, for bourgeouisie is the main threat. Reformists, laborites [? if neorevisionism: and neorevisionists ?] are mad at our decision to support the leftists.
+
+@center
+title: Support the **Center**.
+subtitle: The middle course demands patience.
+on-arrival: center_strength += 9; center_dissent -= 5; left_strength -= 5; left_dissent += 3; reformist_dissent += 3; labor_dissent += 3; neorevisionist_dissent += 3
+
+We have supported the centrist course, insisting that revolution cannot be rushed. Leftists, reformists, laborites [? if neorevisionism: and neorevisionists ?] are mad at our decision to support the centrists.
+
+@labor
+title: Support **Labor**.
+subtitle: The workers' rights come first.
+on-arrival: labor_strength += 9; labor_dissent -= 5; left_dissent -= 2; center_strength -= 5; center_dissent += 5; left_dissent += 5
+
+We have supported the labor unionists, for the rights of workers cannot wait. Centrists and leftists are mad at our decision to support the laborites.
+
+@reformist
+title: Support the **Reformists**.
+subtitle: Gradual transition through governance.
+on-arrival: reformist_strength += 9; reformist_dissent -= 5; democratization += 1; left_strength -= 5; left_dissent += 5; center_dissent += 5; neorevisionist_dissent -= 2
+
+We have supported the reformist course, trusting governance to carry socialism forward step by step. Leftists and centrists are mad at our decision to support the reformists.
+
+@neorevisionist
+title: Support the **Neorevisionists**.
+subtitle: The republic must be saved from all extremes.
+view-if: neorevisionism
+on-arrival: neorevisionist_strength += 9; neorevisionist_dissent -= 5; democratization += 2; radicalization -= 1; left_strength -= 5; left_dissent += 7; center_dissent += 5
+
+We have supported the neorevisionist course, favoring militant republicanism over any extreme. Leftists and centrists are mad at our decision to support the neorevisionists.
+
+@root
+title: Leave.
+
+We have chosen not to intervene in the internal struggle, for now.
