@@ -1,0 +1,34 @@
+title: DVP Reform Congress
+subtitle: Stresemannites attempt to reform the party, the last breath.
+tags: event
+view-if: year == 1929 and month == 2
+new-page: true
+max-visits: 1
+
+= DVP Reform Congress
+
+Frustrated by the industrialists of the DVP, Stresemann, with the help of Otto Thiel's package of reform, moved to push back against Scholz's faction and if possible, finally materialize the *People's Party* that Stresemann has been talking about for so long.
+
+Will he succeed?
+
+- @gg: It does not matter what he does.
+- @push: Stresemann succeeds...
+
+@gg
+title: It does not matter what he does.
+view-if: dvp_in_government = 0 or dvp_relation < 35
+subtitle: It certainly did not.
+on-arrival: dvp_party_leader = "Scholz"; dvp_relation -= 5
+
+Scholz has struck down Stresemann's reforms and gained the upper ground, restricting his influence within party. Stresemann's dominance is over and it will mean nothing good for us in the following next months.
+
+- @root: DVP was and always will be mere puppet of industrial interests. 
+
+@push
+subtitle: Stresemann has succeeded in his reform attempt.
+view-if: dvp_in_government and dvp_relation >= 35
+on-arrival: dvp_relation += 5; coalition_dissent -= 1 if coalition_dissent < 2
+
+Stresemann has barely pushed his reform, aimed at increasing the representation of the white collar unions, almost certainly aimed at limiting power of industrialists. We have noticed some increase in relationships.
+
+- @root: DVP, no matter the presentation, will always remain firsthand - industrial vehicle.
