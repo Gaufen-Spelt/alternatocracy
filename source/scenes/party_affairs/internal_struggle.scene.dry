@@ -5,6 +5,7 @@ is-card: true
 view-if: ideologimus_timer <= 0
 card-image: img/parteitag.jpeg
 new-page: true
+on-arrival: ideologimus_timer = 12
 
 = Internal power struggle
 
