@@ -14,7 +14,7 @@ The Nazi SA is planning a march through Altona, a working-class neighborhood of 
 - @allow_no_police: Allow the march without a police presence.
 
 @ban_march
-choose-if: judicial_reform >= 2
+choose-if: judicial_reform >= 6
 unavailable-subtitle: The judiciary would not allow us to ban the protest, because of free speech.
 on-arrival: sa_strength -= 10
 
