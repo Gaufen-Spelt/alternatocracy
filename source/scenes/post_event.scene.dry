@@ -11,7 +11,6 @@ if (Q.month_actions >= 1) {
         Q.month += 1;
         Q.weeks = 0;
     }
-    Q.fundraiser_timer -= 1;
     if (Q.month >= 13) {
         Q.month = 1;
         Q.year += 1;
