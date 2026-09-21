@@ -39,6 +39,20 @@ Q.new_middle_income = 0;
 Q.unemployed_income = 0;
 Q.workers_income = 0;
 
+//Progress accounts for how much is the progress reached towards activating reaction from right.
+//Threshold here means where it should activate.
+// Timer now is constant event unless Reaction is taken down.
+Q.reaction_progress = 0;
+Q.reaction_threshold = 5;
+Q.reaction_timer = 0;
+
+
+
+
+
+
+
+
 // 0 = normal difficulty, 1 = hard mode, 2 = hard mode no saves
 Q.difficulty = 0;
 Q.historical_mode = 0;
@@ -498,7 +512,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'education_science', 'curriculum',
             // events
             'emergency_cuts', 'unemployment_insurance',
-            'sa_ban', 'sh_ban', 'papen_chancellor',
+            'sa_ban', 'sh_ban', 'papen_chancellor', 'reaction',
             'kpd_policy', 'kpd_ultimatum', 'popular_front_dispute',
             'high_inflation', 'banking_crisis', 'march_on_berlin',
             'understanding_enemy', 'schleichers_schemes',
