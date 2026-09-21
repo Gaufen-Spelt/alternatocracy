@@ -3,7 +3,7 @@ new-page: true
 view-if: inter_party_relationships_timer <= 0
 tags: party_affairs
 is-card: true
-on-arrival: month_actions += 1; inter_party_relationships_timer = 12;
+on-arrival: month_actions += 1; inter_party_relationships_timer = 18;
 card-image: img/weimar_coalition_2.jpg
 #subtitle: Building relations with the other political parties of Germany.
 
