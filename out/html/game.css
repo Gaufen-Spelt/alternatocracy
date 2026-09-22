@@ -167,12 +167,16 @@ body.focus-mode-expanded #content {
    into the grid. The sidebar is placed RIGHT via grid-area: sidebar.
    ===================================================================== */
 #tools_wrapper {
+  grid-area: sidebar;
   position: static;
   width: auto;
   max-width: none;
   left: auto;
   right: auto;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .tools {
