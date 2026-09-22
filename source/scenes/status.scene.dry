@@ -2,18 +2,7 @@ title: Status
 new-page: true
 is-special: true
 on-arrival: {!
-const inGov = Object.keys(Q)
-  .filter(key => key.endsWith("_in_government") && Q[key] == 1)
-  .map(key => key.replace("_in_government", "").toUpperCase());
 
-Q.parties_in_government_display = inGov.length > 0
-  ? inGov.join(", ")
-  : "None";
-
-var tolDisplay = (Q.tolerating_parties && Q.tolerating_parties.length > 0)
-  ? Q.tolerating_parties.map(function(p){ return p.toUpperCase(); }).join(", ")
-  : "None";
-Q.tolerating_parties_display = tolDisplay;
 
 if (Q.peoples_party >= 1) {
     Q.spd_status = "People's Party";
