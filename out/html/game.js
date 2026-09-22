@@ -374,7 +374,7 @@ window.hidePartyTooltip = function() {
   };
 
   // TODO: have some code for tabbed sidebar browsing.
-  window.updateSidebar = function() {
+window.updateSidebar = function() {
   $('#qualities').empty();
   var scene = dendryUI.game.scenes[window.statusTab];
   dendryUI.dendryEngine._runActions(scene.onArrival);
@@ -384,7 +384,61 @@ window.hidePartyTooltip = function() {
   if (scene.onDisplay) {
       dendryUI.dendryEngine._runActions(scene.onDisplay);
   }
-  };
+
+  if (window.statusTab === 'status') {
+      var Q = dendryUI.dendryEngine.state.qualities;
+      var qualitiesEl = document.getElementById('qualities');
+      var paragraphs = qualitiesEl.querySelectorAll('p');
+
+      function attachPortrait(name, textPrefix, rowClass, imgClass) {
+          if (!name) return;
+          var para = Array.prototype.find.call(paragraphs, function(p) {
+              return p.textContent.trim().indexOf(textPrefix) === 0;
+          });
+          if (!para) return;
+
+          para.classList.add(rowClass);
+          var slug = name.toString().toLowerCase().replace(/\s+/g, '_');
+          var portrait = document.createElement('img');
+          portrait.className = imgClass;
+          portrait.onerror = function() { portrait.src = 'img/portraits/profile/default.png'; };
+          portrait.src = 'img/portraits/profile/' + slug + '.png';
+          para.appendChild(portrait);
+      }
+
+      var _lastFlagSlug = null;
+
+      function attachFlag(slug, textPrefix, rowClass, imgClass) {
+          if (!slug) return;
+          var para = Array.prototype.find.call(paragraphs, function(p) {
+              return p.textContent.trim().indexOf(textPrefix) === 0;
+          });
+          if (!para) return;
+
+          para.classList.add(rowClass);
+
+          if (slug === _lastFlagSlug) {
+              var existing = para.querySelector('.' + imgClass);
+              if (existing) return;
+          }
+          _lastFlagSlug = slug;
+
+          var existing = para.querySelector('.' + imgClass);
+          if (existing) existing.remove();
+
+          var flagImg = document.createElement('img');
+          flagImg.className = imgClass;
+          flagImg.onerror = function() { flagImg.src = 'img/flags/weimar.png'; };
+          flagImg.src = 'img/flags/' + slug + '.png';
+          para.appendChild(flagImg);
+      }
+
+      attachFlag(Q.flag_slug, 'Flag:', 'country-name-row', 'status-flag');
+      attachPortrait(Q.president, 'President:', 'president-row', 'status-portrait');
+      attachPortrait(Q.chancellor, 'Chancellor:', 'chancellor-row', 'chancellor-portrait');
+      attachPortrait(Q.spd_party_leader, 'SPD Leadership:', 'spdleader-row', 'spdleader-portrait');
+  }
+};
 
   window.changeTab = function(newTab, tabId) {
       if (tabId == 'poll_tab' && dendryUI.dendryEngine.state.qualities.historical_mode) {
