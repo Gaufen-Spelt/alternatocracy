@@ -476,6 +476,11 @@ a.card:focus .card-tooltip, a.card:hover .card-tooltip {
 }
 
 
+.flag-label-hidden {
+  display: none;
+}
+
+
 
 
 /*
