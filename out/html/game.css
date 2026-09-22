@@ -410,75 +410,93 @@ a.card:focus .card-tooltip, a.card:hover .card-tooltip {
   position: absolute;
 }
 
-/* Unlike cards, face images can have different sizes. */
+
+
+
+
+/* =====================================================================
+   FACE FIGURE
+   ===================================================================== */
 .face-figure {
-  /*vertical-align: top;*/
   display: inline-block;
   border: 5px solid var(--card-border-color);
   float: left;
   max-width: 35%;
-  /*max-height: 180px;*/
   margin-right: 1em;
   margin-bottom: 0.5em;
   overflow: hidden;
 }
+
 .face-img {
-  /*max-width: 150px;*/
   vertical-align: bottom;
   object-fit: cover;
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-
-
-
-
-
-/* Status sidebar portrait/flag rows */
-.president-row,
-.chancellor-row,
-.ministerpresident-row,
-.spdleader-row {
+.president-row {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-indent: 0;
+  padding-right: 90px;
+  min-height: 90px; 
 }
 
-.status-portrait,
-.chancellor-portrait,
-.ministerpresident-portrait,
-.spdleader-portrait {
-  width: 48px;
-  height: 48px;
+.status-portrait {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 90px;
   object-fit: cover;
   border: 2px solid var(--card-border-color);
-  border-radius: 4px;
-  margin-left: 0.5em;
-  flex-shrink: 0;
 }
 
-.country-name-row {
+.chancellor-row {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-indent: 0;
+  padding-right: 90px;
+  min-height: 90px;
 }
+
+.chancellor-portrait {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 90px;
+  object-fit: cover;
+  border: 2px solid var(--card-border-color);
+}
+
+.spdleader-row {
+  position: relative;
+  padding-right: 90px;
+  min-height: 90px;
+}
+
+.spdleader-portrait {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 90px;
+  object-fit: cover;
+  border: 2px solid var(--card-border-color);
+}
+
+
 
 .status-flag {
-  width: 32px;
-  height: 20px;
-  object-fit: cover;
-  border: 1px solid var(--border-color);
-  margin-left: 0.5em;
-  flex-shrink: 0;
+  display: block;
+  max-width: 120px;
+  height: auto;
+  margin: 6px auto 10px auto;
 }
 
 
 .flag-label-hidden {
   display: none;
 }
+
 
 
 
