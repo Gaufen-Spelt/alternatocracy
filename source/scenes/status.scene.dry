@@ -115,37 +115,107 @@ SPD's stance: [+ spd_status +]
 Resources available: [+ resources +]
 
 @politics
+on-arrival: {!
+Q.pro_republic_disp = Q.pro_republic;
+Q.nationalism_disp = Q.nationalism;
+Q.socialism_disp = Q.socialism;
+Q.pacifism_disp = Q.pacifism;
+Q.democratization_disp = Q.democratization;
+Q.radicalization_disp = Q.radicalization;
 
-= Inter-party Relations
+var partyNameOverrideIdeology = {
+    ddp: Q.ddp_name || 'DDP'
+};
 
+var partyNameOverrideRelations = {
+    ddp: Q.ddp_name || 'DDP'
+};
 
-{!<span class="tooltip-text" title="Center Party">Z</span>!}: [+ z_relation : relationships +]
+function partyLabelIdeology(p) {
+    if (partyNameOverrideIdeology.hasOwnProperty(p)) return partyNameOverrideIdeology[p];
+    return p.toUpperCase();
+}
 
-{!<span class="tooltip-text" title="German Democratic Party">!}[? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]{!</span>!}: [+ ddp_relation : relationships +]
+function partyLabelRelations(p) {
+    if (partyNameOverrideRelations.hasOwnProperty(p)) return partyNameOverrideRelations[p];
+    return p.toUpperCase();
+}
 
-{!<span class="tooltip-text" title="German People's Party">DVP</span>!}: [+ dvp_relation : relationships +]
+function formatRelationship(val) {
+    if (val < 5) return "hostile";
+    if (val < 14.9) return "frigid";
+    if (val < 29.9) return "cold";
+    if (val < 39.9) return "cool";
+    if (val < 54.9) return "neutral";
+    if (val < 64.9) return "warm";
+    if (val < 74.9) return "friendly";
+    return "very friendly";
+}
 
-{!<span class="tooltip-text" title="Communist Party of Germany">KPD</span>!}: [+ kpd_relation : relationships +]
+var ideologyHtml = "";
+for (var i = 0; i < Q.parties.length; i++) {
+    var p = Q.parties[i];
+    if (p === 'other' || p === 'spd') continue;
+    var votes = Q[p + '_votes'];
+    if (votes !== undefined && votes > 1) {
+        var ideology = Q[p + '_ideology'];
+        var leader = Q[p + '_party_leader'];
+        var label = partyLabelIdeology(p);
 
-{!<span class="tooltip-text" title="German National People's Party">DNVP</span>!}: [+ dnvp_relation : relationships +]
+        ideologyHtml += label + " Ideology: " + ideology + "<br>" +
+                         label + " Leadership: " + leader + "<br>";
 
-{!<span class="tooltip-text" title="National-Socialist German Worker's Party (Nazis)">NSDAP</span>!}: [+ nsdap_relation : relationships +]
+        var behaviorName = Q[p + '_behavior_name'];
+        if (behaviorName) {
+            ideologyHtml += label + " Behavior: " + behaviorName + "<br>";
+        }
 
-BVP: [+ bvp_relation: relationships +]
+        if (votes > 0) {
+            var relLabel = partyLabelRelations(p);
+            var rawVal = Q[p + '_relation'];
+            var formatted = formatRelationship(rawVal);
+            ideologyHtml += relLabel + " Relation: " + formatted +
+                             (Q.deterministic_mode == 1 ? " " + rawVal : "") + "<br>";
+        }
 
+        ideologyHtml += "<br>";
+    }
+}
+Q.party_ideology_leadership_html = ideologyHtml;
+!}
+
+<hr>
+= Parties
+<hr>
+
+[+ party_ideology_leadership_html +]
+
+<hr>
 = Internal Factions of the SPD
+<hr>
 
-Internal dissent: [+ dissent_percent : dissent +]
+Internal dissent: [+ dissent_percent : dissent +] [? if deterministic_mode == 1: [+ dissent_percent +] ?]
 
-{!<span class="tooltip-text" title="The Left is interested in radical, transformative policies and cooperation with the KPD.">Left</span>!} strength: [+ left_strength : strength +], dissent: [+ left_dissent : dissent +]
+{!<span class="tooltip-text" title="The Left is interested in radical, transformative policies and cooperation with the KPD.">Klassenkampf Linke</span>!} strength: [+ left_strength : strength +] [? if deterministic_mode == 1: [+ left_strength +] ?], dissent: [+ left_dissent : dissent +] [? if deterministic_mode == 1: [+ left_dissent +] ?] [? if left_split: Leftists have defected from our party! ?]
 
-{!<span class="tooltip-text" title="The Center is a faction of Center Marxists, between reform and revolution.">Center</span>!} strength: [+ center_strength : strength +], dissent: [+ center_dissent : dissent +]
+{!<span class="tooltip-text" title="The Center is a faction of Center Marxists, between reform and revolution.">Materialist / Center Marxists</span>!} strength: [+ center_strength : strength +] [? if deterministic_mode == 1: [+ center_strength +] ?], dissent: [+ center_dissent : dissent +] [? if deterministic_mode == 1: [+ center_dissent +] ?] [? if centrists_resign: "Center Marxists have defected from our party! ?]
 
-{!<span class="tooltip-text" title="Labor's goal is economic reform and benefits for organized workers.">Labor</span>!} strength: [+ labor_strength : strength +], dissent: [+ labor_dissent : dissent +]
+{!<span class="tooltip-text" title="Labor's goal is economic reform and benefits for organized workers."> Arbeitergewerkschaft </span>!} strength: [+ labor_strength : strength +] [? if deterministic_mode == 1: [+ labor_strength +] ?], dissent: [+ labor_dissent : dissent +] [? if deterministic_mode == 1: [+ labor_dissent +] ?] [? if unions_independent: Unions have defected from our party! ?]
 
-{!<span class="tooltip-text" title="Reformists are pragmatic participants in government, and seek to expand the welfare state and defend democracy.">Reformist</span>!} strength: [+ reformist_strength : strength +], dissent: [+ reformist_dissent : dissent +]
+{!<span class="tooltip-text" title="Reformists are pragmatic participants in government, and seek to expand the welfare state and defend democracy."> Reformist / Evolutionary Socialists </span>!} strength: [+ reformist_strength : strength +] [? if deterministic_mode == 1: [+ reformist_strength +] ?], dissent: [+ reformist_dissent : dissent +] [? if deterministic_mode == 1: [+ reformist_dissent +] ?] [? if reformists_resign: Reformists have defected from our party! ?]
 
-[? if neorevisionism > 0 : Neorevisionist strength: [+ neorevisionist_strength : strength +], dissent: [+ neorevisionist_dissent : dissent +] ?]
+[? if neorevisionism > 0 : Neorevisionist / Militant Democrats strength: [+ neorevisionist_strength : strength +] [? if deterministic_mode == 1: [+ neorevisionist_strength +] ?], dissent: [+ neorevisionist_dissent : dissent +] [? if deterministic_mode == 1: [+ neorevisionist_dissent +] ?] ?] [? if neorevisionism > 0 and neorev_split: Neorevisionists have defected from our party! ?]
+
+<hr>
+= National Sentiment
+<hr>
+
+Support for the Republic: [+ pro_republic_disp +]%:
+
+Support for the Nationalism: [+ nationalism_disp +]%
+
+Support for the Socialism: [+ socialism_disp +]%
+
 
 
 @paramilitaries
@@ -355,9 +425,3 @@ Rural: SPD: [+ rural_spd_display +]%, Z: [+ rural_z_display +]%, KPD: [+ rural_k
 Unemployed: SPD: [+ unemployed_spd_display +]%, Z: [+ unemployed_z_display +]%, KPD: [+ unemployed_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ unemployed_ddp_display +]%, DVP: [+ unemployed_dvp_display +]%; DNVP: [+ unemployed_dnvp_display +]%, NSDAP: [+ unemployed_nsdap_display +]%, Others: [+ unemployed_other_display +]% [? if sapd_formed: SAPD: [+ unemployed_sapd_display +]% ?]
 
 Catholics: SPD: [+ catholics_spd_display +]%, Z: [+ catholics_z_display +]%, KPD: [+ catholics_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ catholics_ddp_display +]%, DVP: [+ catholics_dvp_display +]%; DNVP: [+ catholics_dnvp_display +]%, NSDAP: [+ catholics_nsdap_display +]%, Others: [+ catholics_other_display +]% [? if sapd_formed: SAPD: [+ catholics_sapd_display +]% ?]
-
-Support for the Republic: [+ pro_republic_disp +]%
-
-Support for the Nationalism: [+ nationalism_disp +]%
-
-Support for the Socialism: [+ socialism_disp +]%
