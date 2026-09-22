@@ -181,7 +181,8 @@
     </div>
 
     <div id="save" class="overlay saves" style="display: none;">
-        <table id="saves_table" class="overlay_top">
+        <div class="overlay_top save_overlay_top">
+        <table id="saves_table">
             <tr>
                 <td>Auto-0</td>
                 <td>
@@ -324,6 +325,7 @@
                 </td>
             </tr>
         </table>
+        </div>
     </div>
 
     <!-- Sprite stuff - feel free to comment out/remove if not using -->
@@ -335,7 +337,9 @@
         <div class="sprite" id="bottomRightSprite"></div>
     </div>
 
+    <!-- #page is a CSS grid: [#mid_panel (main)] [#tools_wrapper (sidebar)] as direct siblings -->
     <div id='page'>
+
         <div id="mid_panel">
             <header>
                 <h1 id="game-title">Weimar History: An Alternate Perspective</h1>
@@ -349,18 +353,6 @@
                     <a onclick="window.showSandbox();" href="#" id="sandbox-link" style="display:none">Sandbox</a>
                 </div>
             </header>
-            <div id="tools_wrapper">
-                <div id='stats_sidebar' class='tools left'>
-                    <div class="tab_container">
-                        <button class="tab_button active" id="main_tab" onclick="window.changeTab('status', 'main_tab');">Main</button>
-                        <button class="tab_button" id="politics_tab" onclick="window.changeTab('status.politics', 'politics_tab');">Politics</button>
-                        <button class="tab_button" id="paramilitary_tab" onclick="window.changeTab('status.paramilitaries', 'paramilitary_tab');">Defense</button>
-                        <button class="tab_button" id="poll_tab" onclick="window.changeTab('status.polls', 'poll_tab');">Polls</button>
-                    </div>
-                    <div id="qualities">
-                    </div>
-                </div>
-            </div>
 
             <div id='content'>
 
@@ -378,7 +370,21 @@
       Made with <a href="https://github.com/aucchen/dendry">Dendry</a>.
       -->
             </footer>
-        </div>
-    </div>
+        </div><!-- /#mid_panel -->
+
+        <div id="tools_wrapper">
+            <div id='stats_sidebar' class='tools left'>
+                <div class="tab_container">
+                    <button class="tab_button active" id="main_tab" onclick="window.changeTab('status', 'main_tab');">Main</button>
+                    <button class="tab_button" id="politics_tab" onclick="window.changeTab('status.politics', 'politics_tab');">Politics</button>
+                    <button class="tab_button" id="paramilitary_tab" onclick="window.changeTab('status.paramilitaries', 'paramilitary_tab');">Defense</button>
+                    <button class="tab_button" id="poll_tab" onclick="window.changeTab('status.polls', 'poll_tab');">Polls</button>
+                </div>
+                <div id="qualities">
+                </div>
+            </div>
+        </div><!-- /#tools_wrapper -->
+
+    </div><!-- /#page -->
   </body>
 </html>
