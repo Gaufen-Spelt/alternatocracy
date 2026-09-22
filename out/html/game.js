@@ -401,8 +401,8 @@ window.updateSidebar = function() {
           var slug = name.toString().toLowerCase().replace(/\s+/g, '_');
           var portrait = document.createElement('img');
           portrait.className = imgClass;
-          portrait.onerror = function() { portrait.src = 'img/portraits/profile/default.png'; };
-          portrait.src = 'img/portraits/profile/' + slug + '.png';
+          portrait.onerror = function() { portrait.src = 'img/portraits/default.jpg'; };
+          portrait.src = 'img/portraits/' + slug + '.jpg';
           para.appendChild(portrait);
       }
 
@@ -428,7 +428,7 @@ window.updateSidebar = function() {
 
           var flagImg = document.createElement('img');
           flagImg.className = imgClass;
-          flagImg.onerror = function() { flagImg.src = 'img/flags/weimar.png'; };
+          flagImg.onerror = function() { flagImg.src = 'img/flags/weimar.jpg'; };
           flagImg.src = 'img/flags/' + slug + '.png';
           para.appendChild(flagImg);
       }
