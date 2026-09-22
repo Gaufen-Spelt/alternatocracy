@@ -1,9 +1,0 @@
-title: Reaction...
-subtitle: Establishment moves against us... <br> **Our doomsday begins**...
-tags: event
-max-visits: 1
-new-page: true
-on-arrival: old_middle_spd *= 0.75; rural_spd *= 0.75; dvp_relation *= 0.50; ddp_relation *= 0.85; dnvp_relation = 0; z_relation *= 0.75; coalition_dissent += 1; reaction_activated
-view-if: (reaction_points >= 5 or in_left_front >= 1) and spd_in_government
-
-= Reactionary establishment moves against us...

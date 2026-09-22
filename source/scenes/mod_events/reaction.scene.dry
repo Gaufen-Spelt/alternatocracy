@@ -1,0 +1,19 @@
+title: Reaction...
+subtitle: Establishment moves against us... <br> **Our doomsday begins**...
+tags: event
+max-visits: 1
+new-page: true
+on-arrival: new_middle_spd *= 0.80; ld_middle_spd *= 0.75; rural_spd *= 0.75; dvp_relation *= 0.50; ddp_relation *= 0.85; dnvp_relation = 0; z_relation *= 0.75; coalition_dissent += 1; reaction_activated = 1; pro_republic -= 15; nationalism += 15; socialism += 5; left_strength += 20; left_dissent *= 0.01; reformist_dissent += 5; labor_dissent += 20; neorevisionist_dissent += 20
+view-if: (reaction_progress >= reaction_threshold or in_left_front >= 1) and spd_in_government
+
+= Reactionary establishment moves against us...
+
+With our threatening reforms of republic, reactionary establishment and their backers have decisively armed themselves against our socialist policies. They have funded bourgeouis parties to stand against us and have removed left wing members of their parties. Additionally, their intensive campaigning has caused defections amongst our non natural voting base.
+
+Far right military parties on their stead have became much more aggressive in their offenses against socialists. Reichsbanner experienced division and is more than likely to split into two camps.
+
+Our economy has been considerably sabotaged by Junkers and Industrialists / Monopolists, whose interests have been directly threatened by the nationalization.
+
+Our doomsday begins. And so does their demise.
+
+- @root: ARBEITER. RISE.
