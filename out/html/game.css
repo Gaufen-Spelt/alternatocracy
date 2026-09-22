@@ -428,6 +428,56 @@ a.card:focus .card-tooltip, a.card:hover .card-tooltip {
   object-fit: cover;
 }
 
+
+
+
+
+
+/* Status sidebar portrait/flag rows */
+.president-row,
+.chancellor-row,
+.ministerpresident-row,
+.spdleader-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-indent: 0;
+}
+
+.status-portrait,
+.chancellor-portrait,
+.ministerpresident-portrait,
+.spdleader-portrait {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border: 2px solid var(--card-border-color);
+  border-radius: 4px;
+  margin-left: 0.5em;
+  flex-shrink: 0;
+}
+
+.country-name-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-indent: 0;
+}
+
+.status-flag {
+  width: 32px;
+  height: 20px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  margin-left: 0.5em;
+  flex-shrink: 0;
+}
+
+
+
+
 /*
  * sprite stuff- feel free to comment out/remove if not using
  */
