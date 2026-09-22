@@ -516,7 +516,14 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'kpd_policy', 'kpd_ultimatum', 'popular_front_dispute',
             'high_inflation', 'banking_crisis', 'march_on_berlin',
             'understanding_enemy', 'schleichers_schemes',
-            'hindenburg_dismissal', 'fundraiser'];
+            'hindenburg_dismissal', 'fundraiser',
+            // advisor burned timers - prevents immediately re-adding a removed advisor
+            'hilferding_burned', 'wels_burned', 'muller_burned', 'breitscheid_burned',
+            'severing_burned', 'braun_burned', 'juchacz_burned', 'pfulf_burned',
+            'leipart_burned', 'aufhauser_burned', 'wissell_burned', 'woytinsky_burned',
+            'levi_burned', 'sender_burned', 'rosenfeld_burned', 'seydewitz_burned', 'siemsen_burned',
+            'mierendorff_burned', 'leber_burned', 'schumacher_burned',
+            'baade_burned', 'hirschfeld_burned', 'radbruch_burned', 'stampfer_burned'];
 Q.advisor_action_timer = 0;
 // party affairs timers
 Q.ideologimus_timer = 0;
@@ -571,6 +578,32 @@ Q.kpd_ultimatum_timer = 0;
 Q.march_on_berlin_timer = 0;
 Q.hindenburg_dismissal_timer = 0;
 Q.fundraiser_timer = 24;
+// 12 ticks * 2 weeks/tick = 6 months before a fired advisor can be re-added.
+Q.hilferding_burned_timer = 0;
+Q.wels_burned_timer = 0;
+Q.muller_burned_timer = 0;
+Q.breitscheid_burned_timer = 0;
+Q.severing_burned_timer = 0;
+Q.braun_burned_timer = 0;
+Q.juchacz_burned_timer = 0;
+Q.pfulf_burned_timer = 0;
+Q.leipart_burned_timer = 0;
+Q.aufhauser_burned_timer = 0;
+Q.wissell_burned_timer = 0;
+Q.woytinsky_burned_timer = 0;
+Q.levi_burned_timer = 0;
+Q.sender_burned_timer = 0;
+Q.rosenfeld_burned_timer = 0;
+Q.seydewitz_burned_timer = 0;
+Q.siemsen_burned_timer = 0;
+Q.mierendorff_burned_timer = 0;
+Q.leber_burned_timer = 0;
+Q.schumacher_burned_timer = 0;
+Q.baade_burned_timer = 0;
+Q.hirschfeld_burned_timer = 0;
+Q.radbruch_burned_timer = 0;
+Q.stampfer_burned_timer = 0;
+
 
 // all the initial advisors are centrists.
 Q.wels_advisor = 1; // Otto Wels
