@@ -2,52 +2,127 @@ title: Status
 new-page: true
 is-special: true
 on-arrival: {!
-if (Q.unemployed) {
-    Q.unemployed_2 = Q.unemployed.toFixed(1);
+const inGov = Object.keys(Q)
+  .filter(key => key.endsWith("_in_government") && Q[key] == 1)
+  .map(key => key.replace("_in_government", "").toUpperCase());
+
+Q.parties_in_government_display = inGov.length > 0
+  ? inGov.join(", ")
+  : "None";
+
+var tolDisplay = (Q.tolerating_parties && Q.tolerating_parties.length > 0)
+  ? Q.tolerating_parties.map(function(p){ return p.toUpperCase(); }).join(", ")
+  : "None";
+Q.tolerating_parties_display = tolDisplay;
+
+if (Q.peoples_party >= 1) {
+    Q.spd_status = "People's Party";
+} else {
+    Q.spd_status = "Worker's Party";
 }
-if (Q.inflation) {
-    Q.inflation_2 = Q.inflation.toFixed(1);
+
+if (Q.country_name == "Weimar Republic" && Q.presidential_powers >= 1) {
+    Q.country_name = "German Republic"
+} 
+
+Q.country_name_display = Q.country_name || "Weimar Republic";
+
+
+
+var flagSlugMap = {
+  "Weimar Republic": "weimar",
+  "German Republic": "weimar_reformed",
+  "German Council Republic": "council_republic",
+  "Communist Republic of Germany": "communist_republic",
+  "German National State": "national_state",
+  "German Empire": "empire",
+  "German State": "junta",
+  "Third Reich": "third_reich"
+};
+Q.flag_slug = flagSlugMap[Q.country_name_display] || "weimar";
+
+var getMinisterStr = function(party, minister) {
+    if (!minister || minister === "None") return "—";
+    if (!party || party === "None") return minister;
+    return minister + " (" + party + ")";
+};
+
+var cabinetRows = [
+    ["Foreign", getMinisterStr(Q.foreign_minister_party, Q.foreign_minister)],
+    ["Interior", getMinisterStr(Q.interior_minister_party, Q.interior_minister)],
+    ["Justice", getMinisterStr(Q.justice_minister_party, Q.justice_minister)],
+    ["Labor", getMinisterStr(Q.labor_minister_party, Q.labor_minister)],
+    ["Economic", getMinisterStr(Q.economic_minister_party, Q.economic_minister)],
+    ["Finance", getMinisterStr(Q.finance_minister_party, Q.finance_minister)],
+    ["Agriculture", getMinisterStr(Q.agriculture_minister_party, Q.agriculture_minister)],
+    ["Reichswehr", Q.reichswehr_minister || "—"]
+];
+
+var html = '<table style="width: 100%; font-size: 0.82em; border-collapse: collapse; margin-top: 6px;">';
+html += '<tr style="border-bottom: 1px solid #888; text-align: left;"><th style="padding: 2px 0;">Ministry</th><th style="padding: 2px 0;">Appointee</th></tr>';
+
+for (var i = 0; i < cabinetRows.length; i++) {
+    html += '<tr style="border-bottom: 1px solid #ddd;">';
+    html += '<td style="padding: 3px 2px 3px 0; font-weight: bold; width: 40%; vertical-align: top;">' + cabinetRows[i][0] + '</td>';
+    html += '<td style="padding: 3px 0; width: 60%; vertical-align: top;">' + cabinetRows[i][1] + '</td>';
+    html += '</tr>';
 }
-Q.economic_growth_2 = '0';
-if (Q.economic_growth) {
-    Q.economic_growth_2 = Q.economic_growth.toFixed(1);
-}
+html += '</table>';
+
+Q.cabinet_table_display = html;
+
+
 !}
 
-= Status
+<hr>
+= [+ country_name_display +]
 
-[+ weeks: monther +], [+ month : month +] [+ year +]
+{!<span class="flag-label-hidden">Flag:</span>!}
+<hr>
 
-Resources available: [+ resources +]
+[? if ruhr_labor_strike: <span style="color: #dc143c;">  Ruhr is under the labor strike! </span> ?]
 
-SPD position: [? if spd_toleration : toleration ?][? if spd_in_government : in government - ?][? if spd_toleration == 0 and spd_in_government == 0 and spd_caretaker == 0 : opposition ?][? if spd_caretaker : caretaker government ?]
-[? if in_weimar_coalition and spd_in_government: Weimar Coalition ?][? if in_grand_coalition and spd_in_government: Grand Coalition ?][? if in_popular_front and spd_in_government: Popular Front ?][? if in_left_front and spd_in_government: Left Front ?][? if in_spd_majority and spd_in_government: SPD majority ?][? if in_minority_government and spd_in_government: minority government ?][? if in_emergency_government and spd_in_government: emergency government ?]
+Next election: [+ next_election_month : month +] [+ next_election_year +]
 
-[? if spd_in_government and not in_spd_majority and not in_left_front : Coalition dissent: [+ coalition_dissent : coalition_dissent +] ?]
+Next presidential election: [+ next_presidential_election_month : month +] [+ next_presidential_election_year +]
 
-[? if spd_in_government and (in_left_front or in_popular_front): KPD coalition dissent: [+ kpd_coalition_dissent : coalition_dissent +] ?]
-
+<hr>
 = Government
+<hr>
 
 President: [+ president +] ([+ president_party +])
 
 Chancellor: [+ chancellor +] ([+ chancellor_party +])
 
+<hr>
+
+[+ cabinet_table_display +]
+
 Budget: [+ budget +]
 
-Next election: [+ next_election_month : month +] [+ next_election_year +]
+= Other Positions
 
-= Economics
+Reichsbank President: [+ reichsbank_president +]
 
-Inflation: [+ inflation_2 +]%
+Reichstag President: [+ reichstag_president +]
 
-Unemployment: [+ unemployed_2 +]%
+<hr>
+= SPD
+<hr>
 
-Economic growth: [+ economic_growth_2 +]%
+SPD Leadership: [+ spd_party_leader +]
 
+SPD position: [? if spd_toleration : toleration ?][? if spd_in_government : in government - ?][? if spd_toleration == 0 and spd_in_government == 0 and spd_caretaker == 0 : opposition ?][? if spd_caretaker : caretaker government ?]
+[? if in_weimar_coalition and spd_in_government: Weimar Coalition ?][? if in_grand_coalition and spd_in_government: Grand Coalition ?][? if in_popular_front and spd_in_government: Popular Front ?][? if in_left_front and spd_in_government: Left Front ?][? if in_spd_majority and spd_in_government: SPD majority ?][? if in_minority_government and spd_in_government: minority government ?][? if in_emergency_government and spd_in_government: emergency government ?]
 
+SPD's stance: [+ spd_status +]
+<br> SPD's ideology: [+ spd_ideology +]
 
-# = Public Opinion
+Resources available: [+ resources +]
+
+Our radical convictions: [+ radicalization_disp +] — Our democratic convictions: [+ democratization_disp +]
+
+Strength of pacifist mini-faction: [+ pacifism_disp: strength_neo +].
 
 @politics
 
