@@ -67,7 +67,7 @@ Gustav Radbruch of the SPD has been appointed Justice Minister.
 
 @foreign
 title: Foreign Ministry
-subtitle: [? if not stresemann_dead: This is usually the domain of Gustav Stresemann of the DVP. Should we even consider sabotaging Stresemann's attempts of bringing DVP into the coalition? ?] The Foreign Ministry controls foreign affairs. 
+subtitle: [? if not stresemann_dead and dvp_in_government: This is usually the domain of Gustav Stresemann of the DVP. Should we even consider sabotaging Stresemann's attempts of bringing DVP into the coalition? ?] The Foreign Ministry controls foreign affairs. 
 unavailable-subtitle: [? if leverage < 10: We do not have enough leverage. ?]
 tags: mins_1928
 choose-if: leverage >= 10
