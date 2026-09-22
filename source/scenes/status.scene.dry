@@ -365,63 +365,85 @@ window.renderReichstagMini = function(svgId, barId) {
 
 window.renderReichstagMini && window.renderReichstagMini('reichstag-mini', 'party-color-bar-mini');
 !}
+on-arrival: {!
 
-= Reichstag composition:
+function fmtLine(label, value) {
+    return "- " + label + ": " + value + "%<br>";
+}
 
-{!<svg id="reichstag-mini" style="width: 280px; height: 140px;"></svg>!}
-{!<div id="party-color-bar-mini"></div>!}
+Q.party_labels = {};
+for (var i = 0; i < Q.parties.length; i++) {
+    var p = Q.parties[i];
+    switch (p) {
+        case 'ddp':   Q.party_labels[p] = Q.ddp_name || 'DDP'; break;
+        case 'wp':    Q.party_labels[p] = 'The Reich Party of the German Middle Class / WP'; break;
+        case 'other': Q.party_labels[p] = 'Others'; break;
+        default:      Q.party_labels[p] = p.toUpperCase();
+    }
+}
 
-# 1928: 30, 1930: 25, 1932: 22
-{!<span class="tooltip-text" title="Social Democratic Party of Germany">SPD</span>!}: [+ spd_r +]%
-[? if sapd_formed and sapd_r > 0: SAPD: [+ sapd_r +]% ?]
-# 1928: 15, 1930: 15, 1932: 
-{!<span class="tooltip-text" title="Center Party + Bavarian People's Party">Z + BVP</span>!}: [+ z_r +]%
-# 1928: 10, 1930: 13
-{!<span class="tooltip-text" title="Communist Party of Germany">KPD</span>!}: [+ kpd_r +]%
-# 1928: 5, 1930: 4 (as DstP)
-{!<span class="tooltip-text" title="German Democratic Party">!}[? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]{!</span>!}: [+ ddp_r +]%
-# 1928: 9, 1930: 5
-{!<span class="tooltip-text" title="German People's Party">DVP</span>!}: [+ dvp_r +]%
-# 1928: 14, 1930: 7
-{!<span class="tooltip-text" title="German National People's Party">DNVP</span>!}: [+ dnvp_r +]%
-# 1928: 3, 1930: 18
-{!<span class="tooltip-text" title="National-Socialist German Worker's Party (Nazis)">NSDAP</span>!}: [+ nsdap_r +]%
-# 1928: 9, 1930: 10
-Others: [+ other_r +]%
-BVP: [+ bvp_r +]%
+// Reichstag (current results)
+Q.party_results_list = "";
+for (var i = 0; i < Q.parties.length; i++) {
+    var p = Q.parties[i];
+    var val = Q[p + '_r'];
+    if (val !== undefined) {
+        Q.party_results_list += fmtLine(Q.party_labels[p], val.toFixed(1));
+    }
+}
+
+// Projected election results
+Q.projected_results = "";
+for (var i = 0; i < Q.parties.length; i++) {
+    var p = Q.parties[i];
+    var votes = Q[p + '_votes'];
+    if (votes !== undefined && votes > 1) {
+        Q.projected_results += fmtLine(Q.party_labels[p], votes);
+    }
+}
+
+function buildClassSection(groupList) {
+    var out = "";
+    for (var g = 0; g < groupList.length; g++) {
+        var group = groupList[g];
+        var breakdown = "";
+        for (var i = 0; i < Q.parties.length; i++) {
+            var p = Q.parties[i];
+            var val = Q[group + '_' + p + '_display'];
+            if (val !== undefined && val > 1) {
+                breakdown += fmtLine(Q.party_labels[p], val);
+            }
+        }
+        Q[group + '_breakdown'] = breakdown;
+
+        out += group + " (" + Q[group] + "):<br>" + breakdown + "<br><br>";
+    }
+    return out;
+}
+
+Q.classes_breakdown_display = buildClassSection(Q.classes);
+
+!}
+
+<hr>
+
+= Reichstag
+
+{!<svg id="reichstag-mini" style="width: 600px; height: 300px;"> </svg>
+<div id="party-color-bar-mini"></div>!}
+
+[+ party_results_list +]
+
+<hr>
 
 = Projected election results
 
-SPD: [+ spd_votes_display +]%
+[+ projected_results +]
 
-[? if sapd_formed: SAPD: [+ sapd_votes_display +]% ?]
-
-Z: [+ z_votes_display +]%
-
-BVP: [+ bvp_votes_display +]%
-
-KPD: [+ kpd_votes_display +]%
-
-[? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ ddp_votes_display +]%
-
-DVP: [+ dvp_votes_display +]%
-
-DNVP: [+ dnvp_votes_display +]%
-
-NSDAP: [+ nsdap_votes_display +]%
-
-Others: [+ other_votes_display +]%
+<hr>
 
 **Detailed results for each demographic**
 
-Workers: SPD: [+ workers_spd_display +]%, Z: [+ workers_z_display +]%, KPD: [+ workers_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ workers_ddp_display +]%, DVP: [+ workers_dvp_display +]%; DNVP: [+ workers_dnvp_display +]%, NSDAP: [+ workers_nsdap_display +]%, Others: [+ workers_other_display +]% [? if sapd_formed: SAPD: [+ workers_sapd_display +]% ?]
+[+ classes_breakdown_display +]
 
-New Middle Class: SPD: [+ new_middle_spd_display +]%, Z: [+ new_middle_z_display +]%, KPD: [+ new_middle_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ new_middle_ddp_display +]%, DVP: [+ new_middle_dvp_display +]%; DNVP: [+ new_middle_dnvp_display +]%, NSDAP: [+ new_middle_nsdap_display +]%, Others: [+ new_middle_other_display +]% [? if sapd_formed: SAPD: [+ new_middle_sapd_display +]% ?]
-
-Old Middle Class: SPD: [+ old_middle_spd_display +]%, Z: [+ old_middle_z_display +]%, KPD: [+ old_middle_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ old_middle_ddp_display +]%, DVP: [+ old_middle_dvp_display +]%; DNVP: [+ old_middle_dnvp_display +]%, NSDAP: [+ old_middle_nsdap_display +]%, Others: [+ old_middle_other_display +]% [? if sapd_formed: SAPD: [+ old_middle_sapd_display +]% ?]
-
-Rural: SPD: [+ rural_spd_display +]%, Z: [+ rural_z_display +]%, KPD: [+ rural_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ rural_ddp_display +]%, DVP: [+ rural_dvp_display +]%; DNVP: [+ rural_dnvp_display +]%, NSDAP: [+ rural_nsdap_display +]%, Others: [+ rural_other_display +]% [? if sapd_formed: SAPD: [+ rural_sapd_display +]% ?]
-
-Unemployed: SPD: [+ unemployed_spd_display +]%, Z: [+ unemployed_z_display +]%, KPD: [+ unemployed_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ unemployed_ddp_display +]%, DVP: [+ unemployed_dvp_display +]%; DNVP: [+ unemployed_dnvp_display +]%, NSDAP: [+ unemployed_nsdap_display +]%, Others: [+ unemployed_other_display +]% [? if sapd_formed: SAPD: [+ unemployed_sapd_display +]% ?]
-
-Catholics: SPD: [+ catholics_spd_display +]%, Z: [+ catholics_z_display +]%, KPD: [+ catholics_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ catholics_ddp_display +]%, DVP: [+ catholics_dvp_display +]%; DNVP: [+ catholics_dnvp_display +]%, NSDAP: [+ catholics_nsdap_display +]%, Others: [+ catholics_other_display +]% [? if sapd_formed: SAPD: [+ catholics_sapd_display +]% ?]
+<hr>
