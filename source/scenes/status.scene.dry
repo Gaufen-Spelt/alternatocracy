@@ -65,11 +65,10 @@ Q.cabinet_table_display = html;
 
 <hr>
 = [+ country_name_display +]
-
+<hr>
+<hr>
 {!<span class="flag-label-hidden">Flag:</span>!}
 <hr>
-
-[? if ruhr_labor_strike: <span style="color: #dc143c;">  Ruhr is under the labor strike! </span> ?]
 
 Next election: [+ next_election_month : month +] [+ next_election_year +]
 
@@ -87,18 +86,19 @@ Chancellor: [+ chancellor +] ([+ chancellor_party +])
 
 [? if spd_in_government and (in_left_front or in_popular_front): KPD coalition dissent: [+ kpd_coalition_dissent : coalition_dissent +] ?]
 
-
-<hr>
-
 [+ cabinet_table_display +]
 
+<hr>
+= Economy
+<hr>
+
+Unemployment: [+ unemployed +]
+
+Inflation: [+ inflation +]
+
+Economic growth: [+ economic_growth +]
+
 Budget: [+ budget +]
-
-= Other Positions
-
-Reichsbank President: [+ reichsbank_president +]
-
-Reichstag President: [+ reichstag_president +]
 
 <hr>
 = SPD
