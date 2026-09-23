@@ -12,7 +12,7 @@ on-arrival: started = 0
 = Weimar History: An Alternate Perspective
 
 - @start: Start game
-- @election_simulation: Election simulation
+- @mod_info: About
 - @game_over.achievements
 
 
