@@ -389,7 +389,7 @@ for (var i = 0; i < Q.parties.length; i++) {
 Q.projected_results = "";
 for (var i = 0; i < Q.parties.length; i++) {
     var p = Q.parties[i];
-    var votes = Q[p + '_votes'];
+    var votes = Q[p + '_votes_display'];
     if (votes !== undefined && votes > 1) {
         Q.projected_results += fmtLine(Q.party_labels[p], votes);
     }
