@@ -43,6 +43,37 @@ if (Q.month_actions >= 1) {
     Q.economic_records.push({'date': new Date(Q.year, Q.month - 1),
                              'inflation': Q.inflation,
                              'unemployment': Q.unemployed});
+
+
+// Prior triggers
+
+if (Q.interior_police_loyalty >= 0.90) {
+    Q.interior_purged = 1;
+} else {
+    Q.interior_purged = 0; 
+}
+
+// Reaction triggers
+
+Q.reaction_progress = 0;
+
+if (Q.reaction_activated != 1) {
+
+if (Q.investigate_corruption >= 3) { Q.reaction_progress += 1 }
+if (Q.bureaucracy_purged == 1) { Q.reaction_progress += 0.5 }
+if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) { Q.reaction_progress += 1}
+if (Q.interior_purged == 1) { Q.reaction_progress += 0.5 }
+
+}
+
+
+
+
+
+
+
+
+
     // change economic stats...
     // we're basically implicity drawing a Philips curve
     // budget deficits lead to some inflation
