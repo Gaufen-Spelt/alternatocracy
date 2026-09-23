@@ -22,6 +22,7 @@ As with the state police units and the Reichswehr, the internal police tends to 
 - @cancel_advisor_action
 
 @loyalty
+view-if: interior_police_loyalty < 1
 on-arrival: interior_police_loyalty += 0.1
 
 As with the Prussian state police, there are measures we can take to root out reactionary and anti-democratic sentiment in the police. We can improve training and recruiting procedures, and identify and remove known fascists and the like.
