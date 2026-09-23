@@ -1,33 +1,8 @@
 title: Post Event
 new-page: true
 on-arrival: {!
-// ============================================================================
-// SYSTEM UTILITIES & UTILITY FUNCTIONS
-// ============================================================================
 
-function cleanFloat(val, decimals = 4) {
-    if (typeof val !== 'number' || isNaN(val)) return 0;
-    var factor = Math.pow(10, decimals);
-    return Math.round(val * factor) / factor;
-}
-
-
-function transferVoters(demographic, sourceParty, targetParty, rate) {
-    var sourceKey = demographic + '_' + sourceParty;
-    var targetKey = demographic + '_' + targetParty;
-
-    if (Q[sourceKey] === undefined) Q[sourceKey] = 0;
-    if (Q[targetKey] === undefined) Q[targetKey] = 0;
-
-    var actualTransfer = Math.min(Q[sourceKey], rate);
-    Q[sourceKey] = cleanFloat(Q[sourceKey] - actualTransfer);
-    Q[targetKey] = cleanFloat(Q[targetKey] + actualTransfer);
-}
-
-// ============================================================================
-// 1. TEMPORAL ENGINE & REVENUE COLLECTION
-// ============================================================================
-
+// 1. update dates
 if (Q.month_actions >= 1) {
     Q.time += 1;
     Q.month_actions = 0;
@@ -40,285 +15,568 @@ if (Q.month_actions >= 1) {
         Q.month = 1;
         Q.year += 1;
     }
+    if (Q.fundraiser_timer <= 0) {
+        Q.workers_income = Math.round((Q.workers_spd * Q.workers_dues * (1 - Q.labor_dissent / 100) * 0.40) / 10)
+        Q.unemployed_income = Math.round((Q.unemployed_spd * Q.unemployed_dues * (1 - Q.left_dissent / 100) * 0.35) / 10)
+        Q.new_middle_income = Math.round((Q.new_middle_spd * Q.new_middle_dues * (1 - Q.labor_dissent / 100) * 0.35) / 10)
+        Q.old_middle_income = Math.round((Q.old_middle_spd * Q.old_middle_dues * (1 - Q.reformist_dissent / 100) * 0.15) / 10)
+        Q.rural_income = Math.round((Q.rural_spd * Q.rural_dues * (1 - Q.reformist_dissent / 100) * 0.20) / 10)
 
-    // Party Fundraiser - Dues Collection Cycle (Every 24 turns / 12 months)
-    Q.fundraiser_timer += 1;
-    if (Q.fundraiser_timer >= 24) {
-        Q.fundraiser_timer = 0;
+        Q.resources += Q.workers_income + Q.unemployed_income + Q.new_middle_income + Q.old_middle_income + Q.rural_income
 
-        // Collect floating-point dues across all sectors before floor operation
-        var rawDues = 0;
-        rawDues += (Q.workers_spd * Q.workers * (1 - Q.labor_dissent) * 0.40) / 10;
-        rawDues += (Q.unemployed_spd * Q.unemployed * (1 - Q.left_dissent) * 0.35) / 10;
-        rawDues += (Q.new_middle_spd * Q.new_middle * (1 - Q.labor_dissent) * 0.35) / 10;
-        rawDues += (Q.old_middle_spd * Q.old_middle * (1 - Q.reformist_dissent) * 0.15) / 10;
-        rawDues += (Q.rural_spd * Q.rural * (1 - Q.reformist_dissent) * 0.20) / 10;
+        Q.income_summary = "Workers: +" + Q.workers_income + ", Unemployed: +" + Q.unemployed_income + ", New Middle: +" + Q.new_middle_income + ", Old Middle: +" + Q.old_middle_income + ", Rural: +" + Q.rural_income;
 
-        // Apply single Math.floor to aggregate value to prevent underflow erasure
-        Q.resources += Math.floor(rawDues);
+        Q.fundraiser_timer = 24;
     }
-
-    // Append to historical tracking arrays
-    var partySupportResults = { 'date': new Date(Q.year, Q.month - 1) };
-    for (var p of Q.parties) {
-        partySupportResults[p] = cleanFloat(Q[p + '_normalized'] * 100, 2);
+    // decrement timers
+    for (timer of Q.timers) {
+        if (Q[timer+'_timer'] && Q[timer+'_timer'] > 0) {
+            Q[timer+'_timer'] -= 1;
+        }
     }
-    Q.party_support_records.push(partySupportResults);
-    Q.economic_records.push({
-        'date': new Date(Q.year, Q.month - 1),
-        'inflation': cleanFloat(Q.inflation, 2),
-        'unemployment': cleanFloat(Q.unemployed, 2)
-    });
+    // append to historical party support records
+    var party_support_results = {'date': new Date(Q.year, Q.month - 1)};
+    for (var party of Q.parties) {
+        party_support_results[party] = Q[party + '_normalized']*100;
+    }
+    Q.party_support_records.push(party_support_results);
+    Q.economic_records.push({'date': new Date(Q.year, Q.month - 1),
+                             'inflation': Q.inflation,
+                             'unemployment': Q.unemployed});
+
+
+// Prior triggers
+
+if (Q.interior_police_loyalty >= 0.90) {
+    Q.interior_purged = 1;
+} else {
+    Q.interior_purged = 0; 
 }
 
-// ============================================================================
-// 2. STATE REACTION VECTOR & PREREQUISITES
-// ============================================================================
-
-Q.interior_purged = (Q.interior_police_loyalty >= 0.90) ? 1 : 0;
+// Reaction triggers
 
 Q.reaction_progress = 0;
-Q.reaction_threshold = 5;
 
-if (Q.reaction_activated !== 1) {
-    if (Q.investigate_corruption >= 3) Q.reaction_progress += 1;
-    if (Q.bureaucracy_purged === 1) Q.reaction_progress += 0.5;
-    if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) Q.reaction_progress += 1;
-    if (Q.interior_purged === 1) Q.reaction_progress += 0.5;
-    if (Q.land_reform >= 1) Q.reaction_progress += 0.5 * Q.land_reform;
-    if (Q.nationalization_progress >= 1) Q.reaction_progress += 1 * Q.nationalization_progress;
-    if (Q.factory_takeovers >= 1) Q.reaction_progress += Q.factory_takeovers;
-    if (Q.kpd_in_government >= 1) Q.reaction_progress += 5;
-    if (Q.socialism >= 65) Q.reaction_progress += 1;
+if (Q.reaction_activated != 1) {
+
+if (Q.investigate_corruption >= 3) { Q.reaction_progress += 1 }
+if (Q.bureaucracy_purged == 1) { Q.reaction_progress += 0.5 }
+if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) { Q.reaction_progress += 1}
+if (Q.interior_purged == 1) { Q.reaction_progress += 0.5 }
+if (Q.land_reform >= 1) { Q.reaction_progress += 1 * Q.land_reform }
+
 }
 
-Q.junker_land_reform_enabled = (
-    Q.socialism >= 60 || 
-    Q.rural_spd >= 30 || 
-    Q.spd_votes >= 50 || 
-    Q.in_spd_majority >= 1 || 
-    Q.in_popular_front || 
-    Q.in_left_front
-) ? 1 : 0;
 
-// ============================================================================
-// 3. MACROECONOMIC ENGINE & PHILLIPS CURVE
-// ============================================================================
+// Junker land reforms enabling
 
-// Deficit & Inflation Drivers
-if (Q.budget < 0 && Q.budget > -2) {
-    if (Q.inflation < 2.5) Q.inflation += 0.1;
-} else if (Q.budget <= -2 && Q.budget > -5) {
-    Q.inflation += 0.2;
-    if (Q.unemployed >= 12) Q.inflation -= 0.1;
-} else if (Q.budget <= -5) {
-    Q.inflation += 0.3;
-    if (Q.unemployed >= 15) Q.inflation -= 0.1;
+if (Q.socialism >= 60 || Q.rural_spd >= 30 || Q.spd_votes >= 50 || Q.in_spd_majority >= 1 || Q.in_popular_front || Q.in_left_front) {
+    Q.junker_land_reform_enabled = 1;
+} else {
+    Q.junker_land_reform_enabled = 0;
 }
 
-// Continuous Deflationary Bounds
-if (Q.inflation <= -0.5 && Q.inflation > -5 && Q.unemployed < 15) {
-    Q.unemployed += 0.2;
-} else if (Q.inflation <= -5 && Q.unemployed < 20) {
-    Q.unemployed += 0.3;
-}
 
-// Economic Growth & Unemployment Adjustment
-if (Q.economic_growth < -0.5) {
-    if (Q.unemployed < 18) Q.unemployed += 0.1;
-    if (Q.economic_growth <= -3.0 && Q.unemployed < 28) Q.unemployed += 0.1;
-} else if (Q.economic_growth >= 2.0) {
-    if (Q.unemployed > 3.0) Q.unemployed -= 0.1;
-    if (Q.economic_growth >= 4.0 && Q.unemployed > 3.0) Q.unemployed -= 0.1;
-    if (Q.economic_growth >= 6.0 && Q.unemployed > 3.0) Q.unemployed -= 0.1;
-    if (Q.economic_growth >= 8.0 && Q.unemployed > 3.0) Q.unemployed -= 0.1;
-}
 
-// Science Bonus Calculation
-Q.science_bonus = 0;
-if (Q.education_science) Q.science_bonus += Q.education_science;
-if (Q.science) {
-    if (Q.science >= 1) Q.science_bonus += 1;
-    if (Q.science >= 3) Q.science_bonus += 2;
-    if (Q.science >= 5) Q.science_bonus += 3;
-}
-if (Q.applied_research) Q.science_bonus += 0.5 * Q.applied_research;
-Q.science_bonus = Math.min(Q.science_bonus, 6);
 
-// ============================================================================
-// 4. HISTORICAL SHIFTS & ZERO-SUM REALIGNMENT
-// ============================================================================
 
-// Disillusionment Mechanics
-if (Q.unemployed > 15 && Q.pro_republic > 40) Q.pro_republic -= 1;
-if (Q.unemployed > 30 && Q.pro_republic > 20) Q.pro_republic -= 1;
-if (Q.inflation >= 8 && Q.pro_republic > 40) Q.pro_republic -= 1;
 
-// Coalition Collapse Dynamic
-if (Q.pro_republic < (Q.spd_votes + Q.ddp_votes + Q.z_votes - 3)) {
-    transferVoters('new_middle', 'spd', 'nsdap', 3/12);
-    transferVoters('old_middle', 'spd', 'nsdap', 3/12);
-    transferVoters('rural', 'spd', 'nsdap', 3/12);
-    transferVoters('workers', 'spd', 'kpd', 4/12);
-    transferVoters('catholics', 'spd', 'z', 4/12);
-    transferVoters('unemployed', 'spd', 'kpd', 4/12);
-    transferVoters('new_middle', 'ddp', 'nsdap', 3/12);
-    transferVoters('old_middle', 'ddp', 'nsdap', 4/12);
-    transferVoters('rural', 'ddp', 'nsdap', 4/12);
-}
 
-// Timeline Drivers
-if (Q.year === 1929) {
-    transferVoters('new_middle', 'ddp', 'nsdap', 10/12);
-    transferVoters('old_middle', 'dvp', 'nsdap', 10/12);
-    transferVoters('unemployed', 'other', 'nsdap', 18/12);
-    transferVoters('workers', 'spd', 'kpd', 5/12);
-}
-
-if (Q.year === 1930) {
-    transferVoters('new_middle', 'ddp', 'nsdap', 8/12);
-    transferVoters('old_middle', 'other', 'nsdap', 10/12);
-    if (!Q.works_program) {
-        transferVoters('rural', 'dnvp', 'nsdap', 3/12);
-        transferVoters('old_middle', 'dvp', 'nsdap', 5/12);
+    // change economic stats...
+    // we're basically implicity drawing a Philips curve
+    // budget deficits lead to some inflation
+    if (Q.budget <= 0 && Q.budget > -2 && Q.inflation < 2.5) {
+        Q.inflation += 0.1;
     }
-}
-
-if (Q.year === 1931) {
-    transferVoters('new_middle', 'dvp', 'nsdap', 6/12);
-    transferVoters('old_middle', 'dvp', 'nsdap', 6/12);
-    if (!Q.works_program) {
-        transferVoters('unemployed', 'spd', 'nsdap', 7/12);
-        transferVoters('unemployed', 'spd', 'kpd', 2/12);
-    }
-}
-
-if (Q.year === 1932) {
-    transferVoters('new_middle', 'other', 'dnvp', 4/12);
-    transferVoters('old_middle', 'other', 'dnvp', 4/12);
-    transferVoters('old_middle', 'other', 'nsdap', 12/12);
-    transferVoters('rural', 'other', 'nsdap', 10/12);
-}
-
-// Anti-Inertia
-if (Q.year >= 1934 && (Q.inflation >= 8 || Q.unemployed >= 20) && Q.pro_republic <= 45 && Q.spd_in_government) {
-    for (var c of Q.classes) {
-        transferVoters(c, 'spd', 'nsdap', 6/12);
-    }
-}
-
-// Clean floating point drift across demographic matrices after operations
-for (var c of Q.classes) {
-    for (var party of Q.parties) {
-        var key = c + '_' + party;
-        if (Q[key] !== undefined) {
-            Q[key] = cleanFloat(Math.max(0, Q[key]));
+    if (Q.budget <= -2 && Q.budget > -5 && Q.inflation < 5) {
+        Q.inflation += 0.2;
+        if (Q.unemployed >= 12) {
+            Q.inflation -= 0.1;
         }
     }
-}
-
-// ============================================================================
-// 5. MATRIX NORMALIZATION & ELECTORAL DOT-PRODUCT
-// ============================================================================
-
-var decimalFactor = Math.pow(10, Q.use_decimals || 0);
-
-// Class Vote Normalization
-for (var c of Q.classes) {
-    var classVotes = 0;
-    for (var party of Q.parties) {
-        if (Q[c + '_' + party] < 0) Q[c + '_' + party] = 0;
-        classVotes += Q[c + '_' + party];
+    if (Q.budget <= -5 && Q.inflation < 10) {
+        Q.inflation += 0.3;
+        if (Q.unemployed >= 15) {
+            Q.inflation -= 0.1;
+        }
     }
-    for (var party of Q.parties) {
-        var normVal = (classVotes > 0) ? (100 * Q[c + '_' + party] / classVotes) : 0;
-        Q[c + '_' + party + '_normalized'] = cleanFloat(normVal);
-        Q[c + '_' + party + '_display'] = cleanFloat(Math.round(decimalFactor * normVal) / decimalFactor, 2);
+    // deflation is bad
+    if (Q.inflation < -0.5 && Q.inflation > -5 && Q.unemployed < 15) {
+        Q.unemployed += 0.2;
     }
-}
+    if (Q.inflation <= -5 && Q.unemployed < 20) {
+        Q.unemployed += 0.3;
+    }
+    // economic growth
+    if (Q.economic_growth < -0.5 && Q.unemployed <= 18) {
+        Q.unemployed += 0.1;
+    }
+    if (Q.economic_growth < -5 && Q.unemployed <= 28) {
+        Q.unemployed += 0.1;
+    }
+    if (Q.economic_growth >= 2 && Q.unemployed >= 17) {
+        Q.unemployed -= 0.1;
+    }
+    if (Q.economic_growth >= 4 && Q.unemployed >= 12) {
+        Q.unemployed -= 0.1;
+    }
+    if (Q.economic_growth >= 6 && Q.unemployed >= 7) {
+        Q.unemployed -= 0.1;
+    }
+    if (Q.economic_growth >= 8 && Q.unemployed >= 3) {
+        Q.unemployed -= 0.1;
+    }
+    if (Q.economic_growth >= 4 && Q.inflation >= 7.5) {
+        Q.economic_growth -= 0.1;
+    }
+    if (Q.economic_growth >= -2.5 && Q.inflation <= -5) {
+        Q.economic_growth -= 0.1;
+    }
+    if (Q.economic_growth >= 7) {
+        Q.economic_growth -= 0.1;
+    }
+    if (Q.economic_growth >= 10) {
+        Q.economic_growth -= 0.2;
+    }
+    if (Q.economic_growth >= 12) {
+        Q.economic_growth -= 0.3;
+    }
 
-// National Support Dot-Product
-var totalSupport = 0;
-for (var party of Q.parties) {
-    var partySupport = 0;
-    for (var c of Q.classes) {
-        if (Q.old_demographics) {
-            partySupport += Q[c] * Q[c + '_' + party];
+    //////////////////////////////// Education & Science support/economic changes
+    if (Q.major_curriculum && Q.major_curriculum == "democratic") {
+        if (Q.pro_republic < 60) {
+            Q.pro_republic += 0.5;
+        } 
+    }
+    if (Q.minor_curriculum && Q.minor_curriculum == "democratic") {
+        if (Q.pro_republic < 60) {
+            Q.pro_republic += 0.3;
+        } 
+    }
+    // science bonus to economic growth
+    // education bonus
+    Q.science_bonus = 0;
+    if (Q.education_science) {
+        Q.science_bonus += Q.education_science;
+    }
+    if (Q.science) {
+        if (Q.science >= 1) {
+            Q.science_bonus += 1;
+        } else if (Q.science >= 3) {
+            Q.science_bonus += 2;
+        } else if (Q.science >= 5) {
+            Q.science_bonus += 3;
+        }
+    }
+    if (Q.applied_research && Q.applied_research >= 1) {
+        Q.science_bonus += 0.5*Q.applied_research;
+    }
+    // cap the science bonus at 6
+    if (Q.science_bonus > 6) {
+        Q.science_bonus = 6;
+    }
+    console.log(Q.science_bonus);
+    // this is kinda messy but basically more science -> higher levels of baseline growth
+    if (Q.science_bonus >= 1) {
+        if (Q.return_to_normalcy && Q.economic_growth < Q.science_bonus + 3) {
+            Q.economic_growth += 0.1;
+        }
+        if (Q.return_to_normalcy && Q.economic_growth < Q.science_bonus) {
+            Q.economic_growth += 0.1;
+        }
+        if (Q.economic_growth < Q.science_bonus - 3) {
+            Q.economic_growth += 0.1;
+        }
+    }
+    // accumulated economic growth/decline
+    // Maybe there should be differences for positive/negative growth?
+    if (Q.economic_growth < 0) {
+        if (Q.economic_expansion > 0) {
+            Q.economic_expansion = 0;
         } else {
-            partySupport += Q[c] * Q[c + '_' + party + '_normalized'];
+            Q.economic_expansion += Q.economic_growth;
         }
     }
-    Q[party + '_support'] = cleanFloat(partySupport);
-    totalSupport += partySupport;
+    if (Q.economic_growth > 0 && Q.reparations <= -2 && Q.spd_in_government) {
+        Q.economic_expansion += Q.economic_growth;
+    } else if (Q.economic_growth > 0 && Q.spd_in_government) {
+        Q.economic_expansion += Q.economic_growth/2;
+    }
+    /////////////////////////////// update opinions based on economy
+    if (Q.unemployed > 15 && Q.pro_republic > 40) {
+        Q.pro_republic -= 1;
+    }
+    if (Q.unemployed > 30 && Q.pro_republic > 20) {
+        Q.pro_republic -= 1;
+    }
+    if (Q.inflation >= 8 && Q.pro_republic > 40) {
+        Q.pro_republic -= 1;
+    }
+
+    ///////////////////////////// change party support based on pro_republic
+    // if pro_republic is less than the support of the Weimar coalition, reduce SPD support...
+    if (Q.pro_republic < (Q.spd_votes + Q.ddp_votes + Q.z_votes - 3)) {
+        if (Q.new_middle_spd > 0) {
+            Q.new_middle_spd -= 5/12;
+            Q.new_middle_nsdap += 3/12;
+        }
+        if (Q.old_middle_spd > 0) {
+            Q.old_middle_spd -= 5/12;
+            Q.old_middle_nsdap += 3/12;
+        }
+        if (Q.rural_spd > 0) {
+            Q.rural_spd -= 5/12;
+            Q.rural_nsdap += 3/12;
+        }
+        if (Q.workers_spd_normalized > 30) {
+            Q.workers_spd -= 4/12;
+        }
+        if (Q.catholics_spd > 0) {
+            Q.catholics_spd -= 4/12;
+        }
+        if (Q.unemployed_spd_normalized > 10) {
+            Q.unemployed_spd -= 4/12;
+        }
+        if (Q.new_middle_ddp > 0) {
+            Q.new_middle_ddp -= 4/12;
+            Q.new_middle_nsdap += 3/12;
+        }
+        if (Q.old_middle_ddp > 0) {
+            Q.old_middle_ddp -= 5/12;
+            Q.old_middle_nsdap += 4/12;
+        }
+        if (Q.rural_ddp > 0) {
+            Q.rural_ddp -= 5/12;
+            Q.rural_nsdap += 4/12;
+        }
+    }
+
+    ////////////////////////// annual support changes
+    if (Q.year == 1929) {
+        Q.unemployed += 3/12;
+        Q.inflation -= 1/12;
+        // increase NSDAP vote share
+        Q.new_middle_nsdap += 10/12;
+        Q.old_middle_nsdap += 10/12;
+        Q.new_middle_ddp -= 5/12;
+        Q.new_middle_dvp -= 5/12;
+        Q.workers_kpd += 5/12;
+        Q.sa_strength += 50/12;
+        Q.sh_strength += 100/12;
+        Q.rural_dnvp -= 15/12;
+        Q.rural_nsdap += 10/12;
+        Q.unemployed_nsdap += 18/12;
+    } else if (Q.year == 1930) {
+        Q.rural_nsdap += 10/12;
+        Q.rural_dnvp -= 15/12;
+        Q.new_middle_dvp -= 5/12;
+        Q.old_middle_dvp -= 6/12;
+        Q.new_middle_ddp -= 5/12;
+        Q.old_middle_ddp -= 6/12;
+        Q.new_middle_nsdap += 10/12;
+        Q.old_middle_nsdap += 10/12;
+        Q.new_middle_other += 4/12;
+        Q.old_middle_other += 4/12;
+        Q.unemployed_nsdap += 8/12;
+        Q.rural_other += 5/12;
+
+        Q.workers_z += 1/12;
+        Q.old_middle_z += 2/12;
+        Q.new_middle_z += 2/12;
+        if (!Q.works_program) {
+            Q.rural_nsdap += 3/12;
+            Q.old_middle_nsdap += 5/12;
+            Q.workers_nsdap += 2/12;
+            Q.workers_other += 5/12;
+            Q.workers_kpd += 2/12;
+        }
+        Q.sa_strength += 100/12;
+        Q.sh_strength += 100/12;
+    } else if (Q.year == 1931) {
+        Q.catholics_z += 2/12;
+        Q.rural_dvp -= 8/12;
+        Q.old_middle_dvp -= 8/12;
+        Q.new_middle_dvp -= 8/12;
+        Q.old_middle_ddp -= 8/12;
+        Q.new_middle_ddp -= 8/12;
+        Q.sa_strength += 50/12;
+        Q.sh_strength += 50/12;
+        Q.sa_militancy += 0.1/12;
+        Q.old_middle_nsdap += 10/12;
+        Q.rural_other -= 5/12;
+        Q.rural_nsdap += 9/12;
+        // TODO: economic policies should reduce NSDAP rurals
+        if (!Q.works_program) {
+            Q.old_middle_dvp -= 6/12;
+            Q.new_middle_dvp -= 6/12;
+            Q.rural_dvp -= 6/12;
+            Q.workers -= 4/12;
+            Q.unemployed_nsdap += 7/12;
+            Q.unemployed_kpd += 2/12;
+            Q.rural_other -= 12/12;
+            Q.rural_nsdap += 12/12;
+            Q.new_middle_nsdap += 12/12;
+            Q.old_middle_nsdap += 12/12;
+            Q.workers_nsdap += 2/12;
+            Q.workers_kpd += 4/12;
+            Q.sa_strength += 100/12;
+            Q.sh_strength += 50/12;
+        } else if (Q.unemployed > 15) {
+            Q.old_middle_dvp -= 4/12;
+            Q.new_middle_dvp -= 4/12;
+            Q.rural_dvp -= 4/12;
+            Q.unemployed_nsdap += 4/12;
+            Q.old_middle_nsdap += 4/12;
+            Q.new_middle_nsdap += 4/12;
+            Q.rural_nsdap += 4/12;
+        }
+    } else if (Q.year == 1932) {
+        Q.old_middle_other -= 7/12;
+        Q.rural_other -= 7/12;
+        Q.old_middle_nsdap += 7/12;
+        Q.rural_nsdap += 7/12;
+        Q.unemployed_nsdap += 4/12;
+        if (!Q.works_program) {
+            Q.unemployed += 5/12;
+            Q.inflation -= 2/12;
+            Q.catholics_z += 2/12;
+            Q.workers -= 4/12;
+            Q.rural_dnvp -= 4/12;
+            Q.rural_nsdap += 8/12;
+            Q.new_middle_nsdap += 10/12;
+            Q.old_middle_nsdap += 10/12;
+            Q.unemployed_nsdap += 8/12;
+            Q.unemployed_kpd += 2/12;
+            Q.workers_nsdap += 3/12;
+            Q.workers_kpd += 3/12;
+            Q.sa_strength += 200/12;
+            Q.new_middle_dnvp += 4/12;
+            Q.old_middle_dnvp += 4/12;
+            Q.new_middle_dvp -= 4/12;
+            Q.old_middle_dvp -= 4/12;
+            Q.rural_dvp -= 4/12;
+        } else if (Q.unemployed > 25) {
+            Q.rural_nsdap += 5/12;
+            Q.unemployed_nsdap += 5/12;
+            Q.old_middle_nsdap += 5/12;
+            Q.new_middle_nsdap += 4/12;
+            Q.sa_strength += 50/12;
+        } else if (Q.unemployed > 20) {
+            Q.rural_nsdap += 2/12;
+            Q.unemployed_nsdap += 3/12;
+            Q.old_middle_nsdap += 3/12;
+            Q.new_middle_nsdap += 2/12;
+        }
+    } else if (Q.year >= 1933) {
+        if (Q.return_to_normalcy) {
+            // return to normalcy -> voters return to the base
+            if (Q.new_middle_ddp_normalized < 40) {
+                Q.new_middle_ddp += 6/12;
+            }
+            if (Q.new_middle_dvp_normalized < 25) {
+                Q.new_middle_dvp += 3/12;
+            }
+            if (Q.old_middle_dvp_normalized < 40) {
+                Q.old_middle_dvp += 6/12;
+            }
+            if (Q.rural_dnvp_normalized < 40) {
+                Q.rural_dnvp += 6/12;
+            }
+            if (Q.catholics_z_normalized < 40) {
+                Q.catholics_z += 6/12;
+            }
+        }
+        if (Q.unemployed > 20) {
+            Q.rural_nsdap += 2/12;
+            Q.unemployed_nsdap += 2/12;
+            Q.old_middle_nsdap += 2/12;
+            Q.new_middle_nsdap += 2/12;
+            if (Q.spd_in_government) {
+                Q.workers_spd -= 4/12;
+            }
+        }
+    }
+    // prevent forever support if the economy is bad
+    if (Q.year >= 1934 && (Q.inflation >= 8 || Q.unemployed >= 20) && Q.pro_republic <= 45 && Q.spd_in_government) {
+        if (Q.workers_spd_normalized > 40) {
+            Q.workers_spd -= 6/12;
+        }
+        if (Q.unemployed_spd_normalized > 20) {
+            Q.unemployed_spd -= 6/12;
+        }
+        if (Q.new_middle_spd_normalized > 20) {
+            Q.new_middle_spd -= 6/12;
+        }
+        if (Q.old_middle_spd_normalized > 20) {
+            Q.old_middle_spd -= 6/12;
+        }
+        if (Q.rural_spd_normalized > 20) {
+            Q.rural_spd -= 6/12;
+        }
+        if (Q.catholics_spd_normalized > 20) {
+            Q.catholics_spd -= 6/12;
+        }
+    }
+
+// ENDS HERE, MONTH ACTIONS..!!!
 }
 
-// National Share Normalization
+
+
+
+
+
+
+
+
+
+
+
+
+Q.last_advisor_action = 0;
+Q.last_cabinet_action = 0;
+// make sure no stat is below 0.
+for (var c of Q.classes) {
+    for (var party of Q.parties) {
+        if (Q[c+'_'+party] < 0) {
+            Q[c+'_'+party] = 0;
+        }
+    }
+}
+
+// re-calculate party support
+// calculate normalized class voting for the achievements
+var decimal_factor = Math.pow(10, Q.use_decimals || 0);
+
+for (var c of Q.classes) {
+    var class_votes = 0;
+    for (var party of Q.parties) {
+        if (Q[c+'_'+party] < 0) {
+            Q[c+'_'+party] = 0;
+        }
+        class_votes += Q[c+'_'+party];
+    }
+    for (var party of Q.parties) {
+        Q[c + '_' + party + '_normalized'] = 100*Q[c+'_'+party]/class_votes;
+        Q[c + '_' + party + '_display'] = Math.round(decimal_factor*100*Q[c+'_'+party]/class_votes)/decimal_factor;
+    }
+}
+// calculate support for each of the parties
+var total_support = 0; 
 for (var party of Q.parties) {
-    var normShare = (totalSupport > 0) ? (Q[party + '_support'] / totalSupport) : 0;
-    Q[party + '_normalized'] = cleanFloat(normShare);
-    Q[party + '_votes'] = Math.round(normShare * 100);
-    Q[party + '_votes_display'] = cleanFloat(Math.round(decimalFactor * normShare * 100) / decimalFactor, 2);
+    var party_support = 0;
+    for (var c of Q.classes) {
+        if (Q.old_demographics) { 
+            party_support += Q[c]*Q[c+'_'+party];
+        } else  { 
+            party_support += Q[c]*Q[c+'_'+party+'_normalized'];
+        } 
+    }
+    Q[party + '_support'] = party_support;
+    total_support += party_support; 
+}
+// 2. normalize support (fraction)
+for (var party of Q.parties) {
+    Q[party+'_normalized'] = Q[party + '_support']/total_support;
+    Q[party+'_votes'] = Math.round(Q[party+'_normalized']*100);
+    Q[party+'_votes_display'] = Math.round(decimal_factor*Q[party+'_normalized']*100)/decimal_factor;
 }
 
-// ============================================================================
-// 6. FACTIONAL ALIGNMENT & SYSTEM DISSENT
-// ============================================================================
-
-// Bound individual factions within [0, 100%]
-for (var f of Q.factions) {
-    if (Q[f + '_dissent'] < 0) Q[f + '_dissent'] = 0;
-    if (Q[f + '_dissent'] > 100) Q[f + '_dissent'] = 100;
-    if (Q[f + '_strength'] < 0) Q[f + '_strength'] = 0;
+// set faction strength/dissent to 0
+for (var c of Q.factions) {
+    if (Q[c+'_dissent'] < 0) {
+        Q[c+'_dissent'] = 0;
+    } else if (Q[c+'_dissent'] >= 100) {
+        Q[c+'_dissent'] = 99;
+    }
+    if (Q[c+'_strength'] < 0) {
+        Q[c+'_strength'] = 0;
+    }
 }
 
-var totalStrength = Q.left_strength + Q.center_strength + Q.labor_strength + Q.reformist_strength + Q.neorevisionist_strength;
-
-if (totalStrength > 0) {
-    Q.left_strength = cleanFloat(100 * Q.left_strength / totalStrength);
-    Q.center_strength = cleanFloat(100 * Q.center_strength / totalStrength);
-    Q.labor_strength = cleanFloat(100 * Q.labor_strength / totalStrength);
-    Q.reformist_strength = cleanFloat(100 * Q.reformist_strength / totalStrength);
-    Q.neorevisionist_strength = cleanFloat(100 * Q.neorevisionist_strength / totalStrength);
+if (Q.unemployed <= 1) {
+    Q.unemployed = 1;
 }
 
-var weightedDissent = (
-    Q.left_strength * Q.left_dissent +
-    Q.center_strength * Q.center_dissent +
-    Q.labor_strength * Q.labor_dissent +
-    Q.reformist_strength * Q.reformist_dissent +
-    Q.neorevisionist_strength * Q.neorevisionist_dissent
-);
+// re-calculate dissent.
+var total_strength = Q.left_strength + Q.center_strength + Q.labor_strength + Q.reformist_strength + Q.neorevisionist_strength;
 
-// Standardized 100% boundary cap across party dissent indices
-var globalDissentFraction = (totalStrength > 0) ? (0.01 * weightedDissent / totalStrength) : 0;
-Q.dissent = cleanFloat(Math.min(1.0, Math.max(0, globalDissentFraction)));
-Q.dissent_percent = cleanFloat(Q.dissent * 100, 2);
+// normalize strength for the different factions
+Q.left_strength = 100*Q.left_strength/total_strength;
+Q.center_strength = 100*Q.center_strength/total_strength;
+Q.labor_strength = 100*Q.labor_strength/total_strength;
+Q.reformist_strength = 100*Q.reformist_strength/total_strength;
+Q.neorevisionist_strength = 100*Q.neorevisionist_strength/total_strength;
 
-// ============================================================================
-// 7. EVENT DISPATCHER & ASSET PRELOADER
-// ============================================================================
+var total_dissent = Q.left_strength*Q.left_dissent + Q.center_strength*Q.center_dissent + Q.labor_strength*Q.labor_dissent + Q.reformist_strength*Q.reformist_dissent + Q.neorevisionist_strength*Q.neorevisionist_dissent;
 
-// Corrected global variable leakage
+
+Q.dissent = 0.01*total_dissent/total_strength;
+Q.dissent_percent = Q.dissent*100;
+console.log('new dissent: ' + Q.dissent);
+
+if (Q.dissent < 0) {
+    Q.dissent = 0;
+} else if (Q.dissent > 1) {
+    Q.dissent = 0.99;
+}
+
+
+
+
+// NORMALIZER
+
+// Helper function to normalize a list of keys on Q to a target sum
+function normalizeKeys(keys, targetSum) {
+  const total = keys.reduce((sum, key) => sum + (Q[key] || 0), 0);
+  if (total > 0) {
+    for (const key of keys) {
+      Q[key] = Math.round((Q[key] / total) * targetSum * 10) / 10;
+    }
+  }
+}
+
+// 1. Normalize classes to total 100
+normalizeKeys(Q.classes, 100);
+
+// 2. Normalize ideology metrics to total 150
+normalizeKeys(['pro_republic', 'nationalism', 'socialism'], 150);
+
+
+
+
+
+
+
+
+
+
+
+
+
 Q.has_event = 0;
-
+// check if there are any cards in #event, and then go to main if not.
 var scene = this.game.scenes['post_event.events_choice'];
 var choices = this._compileChoices(scene);
-
-if (choices && choices.length > 0 && choices[0].title !== "Continue...") {
+if (choices && choices[0].title != "Continue...") {
     Q.has_event = 1;
 } else {
     Q.has_event = 0;
 }
 
-// Corrected Image API source property
-if (this.ui && this.ui.show_portraits && choices) {
+
+// pre-load all of the event images
+if (this.ui && this.ui.show_portraits) {
     for (var choice of choices) {
         var cc = this.game.scenes[choice.id];
-        if (cc && cc.faceImage) {
+        if (cc.faceImage) {
             var im = new Image();
             im.src = cc.faceImage;
         }
     }
+}
+
+if (typeof window !== "undefined" && window.generateBar) {
 }
 !}
 go-to: events_choice if has_event = 1; main if has_event = 0 and difficulty == 0; main.main_easy if has_event = 0 and difficulty < 0; main.main_historical if difficulty >= 2; main.main_hard if difficulty == 1
