@@ -116,12 +116,6 @@ Resources available: [+ resources +]
 
 @politics
 on-arrival: {!
-Q.pro_republic_disp = Q.pro_republic;
-Q.nationalism_disp = Q.nationalism;
-Q.socialism_disp = Q.socialism;
-Q.pacifism_disp = Q.pacifism;
-Q.democratization_disp = Q.democratization;
-Q.radicalization_disp = Q.radicalization;
 
 var partyNameOverrideIdeology = {
     ddp: Q.ddp_name || 'DDP'
@@ -210,11 +204,11 @@ Internal dissent: [+ dissent_percent : dissent +] [? if deterministic_mode == 1:
 = National Sentiment
 <hr>
 
-Support for the Republic: [+ pro_republic_disp +]%:
+Support for the Republic: [+ pro_republic +]%:
 
-Support for the Nationalism: [+ nationalism_disp +]%
+Support for the Nationalism: [+ nationalism +]%
 
-Support for the Socialism: [+ socialism_disp +]%
+Support for the Socialism: [+ socialism +]%
 
 
 
