@@ -63,10 +63,18 @@ if (Q.investigate_corruption >= 3) { Q.reaction_progress += 1 }
 if (Q.bureaucracy_purged == 1) { Q.reaction_progress += 0.5 }
 if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) { Q.reaction_progress += 1}
 if (Q.interior_purged == 1) { Q.reaction_progress += 0.5 }
+if (Q.land_reform >= 1) { Q.reaction_progress += 1 * Q.land_reform }
 
 }
 
 
+// Junker land reforms enabling
+
+if (Q.socialism >= 60 || Q.rural_spd >= 30 || Q.spd_votes >= 50 || Q.in_spd_majority >= 1 || Q.in_popular_front || Q.in_left_front) {
+    Q.junker_land_reform_enabled = 1;
+} else {
+    Q.junker_land_reform_enabled = 0;
+}
 
 
 
