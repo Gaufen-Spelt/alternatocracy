@@ -45,37 +45,6 @@ if (Q.month_actions >= 1) {
                              'unemployment': Q.unemployed});
 
 
-// Prior triggers
-
-if (Q.interior_police_loyalty >= 0.90) {
-    Q.interior_purged = 1;
-} else {
-    Q.interior_purged = 0; 
-}
-
-// Reaction triggers
-
-Q.reaction_progress = 0;
-
-if (Q.reaction_activated != 1) {
-
-if (Q.investigate_corruption >= 3) { Q.reaction_progress += 1 }
-if (Q.bureaucracy_purged == 1) { Q.reaction_progress += 0.5 }
-if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) { Q.reaction_progress += 1}
-if (Q.interior_purged == 1) { Q.reaction_progress += 0.5 }
-if (Q.land_reform >= 1) { Q.reaction_progress += 1 * Q.land_reform }
-
-}
-
-
-// Junker land reforms enabling
-
-if (Q.socialism >= 60 || Q.rural_spd >= 30 || Q.spd_votes >= 50 || Q.in_spd_majority >= 1 || Q.in_popular_front || Q.in_left_front) {
-    Q.junker_land_reform_enabled = 1;
-} else {
-    Q.junker_land_reform_enabled = 0;
-}
-
 
 
 
@@ -271,15 +240,18 @@ if (Q.year == 1928) {
         Q.workers_z -= 0.5/12;
         Q.workers_nsdap -= 1/12;
         Q.rural_dnvp -= 3/12;
-        Q.old_middle_dnvp -= 3/12;
-        Q.new_middle_dnvp -= 3/12;
-        Q.rural_other += 4/12;
-        Q.old_middle_other += 4/12;
-        Q.new_middle_other += 4/12;
-        Q.old_middle_dvp -= 2/12;
-        Q.new_middle_dvp -= 3/12;
-        Q.old_middle_ddp -= 4/12;
-        Q.new_middle_ddp -= 3/12;
+        Q.old_middle_dnvp -= 6/12;
+        Q.new_middle_dnvp -= 6/12;
+        Q.rural_other += 8/12;
+        Q.old_middle_other += 6/12;
+        Q.new_middle_other += 6/12;
+        Q.old_middle_dvp -= 4/12;
+        Q.new_middle_dvp -= 6/12;
+        Q.old_middle_ddp -= 8/12;
+        Q.new_middle_ddp -= 4/12;
+        Q.workers_kpd += 2/12;
+        Q.workers_spd += 2/12;
+        Q.unemployed_kpd += 4/12;
 }
 if (Q.year == 1929) {
     Q.unemployed += 1/12;
@@ -445,6 +417,92 @@ if (Q.year == 1929) {
             Q.catholics_spd -= 6/12;
         }
     }
+
+
+
+
+
+
+
+
+
+
+/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
+
+
+// ============================================================================
+// 2. STATE REACTION VECTOR & PREREQUISITES
+// ============================================================================
+
+Q.interior_purged = (Q.interior_police_loyalty >= 0.90) ? 1 : 0;
+
+Q.reaction_progress = 0;
+Q.reaction_threshold = 5;
+
+if (Q.reaction_activated !== 1) {
+    if (Q.investigate_corruption >= 3) Q.reaction_progress += 1;
+    if (Q.bureaucracy_purged === 1) Q.reaction_progress += 0.5;
+    if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) Q.reaction_progress += 1;
+    if (Q.interior_purged === 1) Q.reaction_progress += 0.5;
+    if (Q.land_reform >= 1) Q.reaction_progress += 0.5 * Q.land_reform;
+    if (Q.nationalization_progress >= 1) Q.reaction_progress += 1 * Q.nationalization_progress;
+    if (Q.factory_takeovers >= 1) Q.reaction_progress += Q.factory_takeovers;
+    if (Q.kpd_in_government >= 1) Q.reaction_progress += 5;
+    if (Q.socialism >= 65) Q.reaction_progress += 1;
+}
+
+Q.junker_land_reform_enabled = (
+    Q.socialism >= 100 || 
+    Q.rural_spd >= 40 || 
+    Q.spd_votes >= 50 || 
+    Q.in_spd_majority >= 1 || 
+    Q.in_popular_front || 
+    Q.in_left_front
+) ? 1 : 0;
+
+
+// SPD Powerhouse relation drops.
+
+if (Q.spd_votes >= 40) {
+    let excess = Q.spd_votes - 40;
+
+    Q.dvp_relation -= excess * 0.1;
+    Q.z_relation -= excess * 0.05;
+    Q.ddp_relation -= excess * 0.025;
+}
+
+
+// Marxist majority
+let marxist_votes = (Q.spd_votes || 0) + (Q.kpd_votes || 0) + (Q.sapd_votes || 0);
+
+if (marxist_votes >= 50 && (Q.ideology === "left" || Q.ideology === "centrist")) {
+    Q.socialism += 1;
+    Q.left_strength += 0.5;
+    Q.kpd_relation += 0.5;
+    if (Q.ideology === "Left") {
+        Q.kpd_relation += 0.5;
+    }
+    if (Q.kpd_relation >= 50) {
+        Q.communist_coalition += 0.2;
+    }
+    Q.sapd_relation += 0.5;
+}
+
+
+
+
+
+/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
+
+
+
+
+
+
+
+
+
+
 
 // ENDS HERE, MONTH ACTIONS..!!!
 }
