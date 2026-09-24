@@ -95,15 +95,17 @@ We can command Arbeiter- Radio- Bund (ARB) what to translate and which message s
 
 - @radical: We should push for class struggle!
 - @reformist: We should push for reformism!
-- @consciousness: We should spread the class consciousness amongst the white collar workers!
+- @consciousness: We should spread the class consciousness amongst the white-collars!
 - @menu: Back
 
 @consciousness
-subtitle: sus WIP
-view-if: 1 == 0
-choose-if: ideology != "left" and ideology != "centrist" and socialism > spd_votes and peoples_party_progress >= 1
+subtitle: Perhaps, we can turn them towards the socialism?
+view-if: not new_middle_class_socialist and not class_war
+unavailable-subtitle: [? if ideology = "Left" or ideology = "Centrist": Our ideology is too radical to consider appealing to white collar workers. ?] [? if socialism * 0.8 < spd_votes: Our current electoral prospects outpace general support for socialism, making this appeal unconvincing. ?]
+choose-if: ideology != "left" and ideology != "centrist" and socialism * 0.8 > spd_votes
+on-arrival: new_middle_class_consciousness += 1; new_middle_spd += 2; left_strength += 5; socialism += 3; new_middle_ddp -= 1; new_middle_dvp -= 1; new_middle_spd += 2 if aufhauser_advisor = 1; new_middle_class_consciousness += 1 if aufhauser_advisor = 1
 
-Undone
+We have broadcoasted the appeal to servicemen, servants and other government employees, who are less drawn to socialist ideas than industrial workers are. Radio broadcoasters were tasked with converting new middle from nationalist, christian and liberal unions to federation of socialist white-collar trade unions (AfA-Bund). [? if aufhauser_advisor = 1: Aufhauser, the leader of AfA-Bund, has provided us with funds in mutually beneficial task. ?]
 
 @radical
 choose-if: reformist_strength + labor_strength + neorevisionist_strength < 50 and not peoples_party
