@@ -1,4 +1,5 @@
 title: 1927
+type: scene
 subtitle: Introduction...
 tags: event
 view-if: year == 1927
