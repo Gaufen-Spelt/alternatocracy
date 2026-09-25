@@ -11,9 +11,9 @@ if (Q.advisor_action_timer <= 0) {
 }
 
 if (Q.fundraiser_timer == 1) {
-    Q.pinnedCardsDescription += '\n- next fundraiser in 1 month';
+    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
 } else {
-    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' months.';
+    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
 }
 !}
 max-cards: 4
@@ -34,9 +34,15 @@ on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
     Q.pinnedCardsDescription = 'Advisors - an action is available.';
 } else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 month.';
+    Q.pinnedCardsDescription = 'Advisors - next action available in 1 turn.';
 } else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' months.';
+    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
+}
+
+if (Q.fundraiser_timer == 1) {
+    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
+} else {
+    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
 }
 !}
 max-cards: 6
@@ -57,9 +63,15 @@ on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
     Q.pinnedCardsDescription = 'Advisors - an action is available.';
 } else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 month.';
+    Q.pinnedCardsDescription = 'Advisors - next action available in 1 turn.';
 } else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' months.';
+    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
+}
+
+if (Q.fundraiser_timer == 1) {
+    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
+} else {
+    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
 }
 !}
 max-cards: 2
@@ -80,9 +92,15 @@ on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
     Q.pinnedCardsDescription = 'Advisors - an action is available.';
 } else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 month.';
+    Q.pinnedCardsDescription = 'Advisors - next action available in 1 turn.';
 } else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' months.';
+    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
+}
+
+if (Q.fundraiser_timer == 1) {
+    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
+} else {
+    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
 }
 !}
 max-cards: 3
