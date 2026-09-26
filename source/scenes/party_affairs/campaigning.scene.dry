@@ -15,9 +15,9 @@ Whether or not we are in an electoral campaign, the party is always trying to br
 Campaigning rate: [+ campaign_rate +] 
 
 {! <div class="rate-buttons" style="display:inline-block;">
-  <button onclick="change_var('campaign_rate', -0.5, 0, 5)">−</button>
+  <button onclick="change_var('campaign_rate', -0.5, 0, 5); window.dendryUI.dendryEngine.goToScene('campaigning');">−</button>
   <span id="campaign-rate-value"></span>
-  <button onclick="change_var('campaign_rate', 0.5, 0, 5)">+</button>
+  <button onclick="change_var('campaign_rate', 0.5, 0, 5); window.dendryUI.dendryEngine.goToScene('campaigning');">+</button>
 </div> !}
 
 - @leaflet: Spread the leafleats across the streets of the Reich.
