@@ -1,6 +1,8 @@
 title: Campaigning
 new-page: true
-on-arrival: month_actions += 1
+on-arrival: month_actions += 1; {!
+if (!Q.campaign_rate) Q.campaign_rate = 1; 
+!}
 is-card: true
 card-image: img/flags.jpg
 frequency: 50
@@ -9,6 +11,14 @@ tags: party_affairs
 = Campaigning
 
 Whether or not we are in an electoral campaign, the party is always trying to broaden its voter base. Who should we focus our campaign efforts on?
+
+Campaigning rate: [+ campaign_rate +] 
+
+{! <div class="rate-buttons" style="display:inline-block;">
+  <button onclick="change_var('campaign_rate', -0.5)">−</button>
+  <span id="campaign-rate-value"></span>
+  <button onclick="change_var('campaign_rate', 0.5)">+</button>
+</div> !}
 
 - @leaflet: Spread the leafleats across the streets of the Reich.
 - @workers: The urban working class, our traditional support base.
@@ -27,50 +37,50 @@ on-arrival: workers_spd += 1*(1-dissent); unemployed_spd += 1*(1-dissent); new_m
 We have put leaflets on the streets in the hope someone would pick it up. Whether it's effective or not, it's better to do it than not to.
 
 @workers
-subtitle: -1 resources
-choose-if: resources >= 1
+subtitle: -[+ campaign_rate +] resources
+choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: workers_spd += 4*(1-dissent); workers_spd -= 1 if unemployed >= 15; workers_spd -= 1 if unemployed >= 25; workers_spd += 4*(1-dissent) if wtb_adopted = 1; resources -= 1; workers_spd += 2*(1-dissent) if nationalization_progress >= 1;
+on-arrival: workers_spd += 4*(1-dissent)*campaign_rate; workers_spd -= 1 if unemployed >= 15; workers_spd -= 1 if unemployed >= 25; workers_spd += 4*(1-dissent) if wtb_adopted = 1; resources -= campaign_rate; workers_spd += 2*(1-dissent) if nationalization_progress >= 1;
 
 We have increased our campaigning among the workers. [? if unemployed >= 15: The high levels of unemployment make our campaign more difficult. ?][? if wtb_adopted = 1 : Adopting the WTB plan gives us a new rallying point around which to attract workers. ?]
 
 @new_middle
-subtitle: -1 resources
-choose-if: resources >= 1
+subtitle: -[+ campaign_rate +] resources
+choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: new_middle_spd += 3*(1-dissent); new_middle_spd -= 2 if socialism <= 49 and peoples_party == 0; resources -= 1
+on-arrival: new_middle_spd += 3*(1-dissent)*campaign_rate; new_middle_spd -= 2 if socialism <= 49 and peoples_party == 0; resources -= campaign_rate
 
 We have increased our campaigning among the new middle class. [? if socialism <= 49 and peoples_party == 0: The popular antipathy towards socialism among this group makes our campaign more difficult. ?] [? if peoples_party > 0: As a people's party, we have an easier time increasing support among the middle class than before. ?]
 
 @old_middle
-subtitle: -1 resources
-choose-if: resources >= 1
+subtitle: -[+ campaign_rate +] resources
+choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: old_middle_spd += 3*(1-dissent); resources -= 1; old_middle_spd -= 2 if nationalism >= 51 and peoples_party == 0
+on-arrival: old_middle_spd += 3*(1-dissent)*campaign_rate; resources -= campaign_rate; old_middle_spd -= 2 if nationalism >= 51 and peoples_party == 0
 
 We have increased our campaigning among the old middle class. [? if nationalism >= 51 and peoples_party == 0: The high levels of nationalism among this group make our campaign more difficult. ?] [? if peoples_party > 0: As a people's party, we have an easier time increasing support among the middle class than before. ?]
 
 @rural
-subtitle: -1 resources
-choose-if: resources >= 1
+subtitle: -[+ campaign_rate +] resources
+choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: rural_spd += 3*(1-dissent); rural_spd -= 2*(1-dissent) if peoples_party == 0; resources -= 1; rural_spd += 2*(1-dissent) if rural_policy >= 2
+on-arrival: rural_spd += 3*(1-dissent)*campaign_rate; rural_spd -= 2*(1-dissent) if peoples_party == 0; resources -= campaign_rate; rural_spd += 2*(1-dissent) if rural_policy >= 2
 
 We have increased our campaigning among farmers. [? if peoples_party == 0: We have not historically campaigned much among the farmers, and they do not trust us. ?][? if peoples_party > 0: As a people's party, we have an easier time increasing support among farmers than before. ?][? if rural_policy >= 2 : Our rural policies have made it easier for us to build support among farmers. ?]
 
 @unemployed
-subtitle: -1 resources
-choose-if: resources >= 1
+subtitle: -[+ campaign_rate +] resources
+choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: unemployed_spd += 5*(1-dissent); resources -= 1; unemployed_spd -= 2 if welfare < 0; unemployed_spd += 3*(1-dissent) if wtb_adopted = 1; unemployed_spd += 2*(1-dissent) if welfare >= 2;
+on-arrival: unemployed_spd += 5*(1-dissent)*campaign_rate; resources -= campaign_rate; unemployed_spd -= 2 if welfare < 0; unemployed_spd += 3*(1-dissent) if wtb_adopted = 1; unemployed_spd += 2*(1-dissent) if welfare >= 2;
 
 We have increased our campaigning among the unemployed. [? if welfare < 0: The welfare cuts and resultant poverty make our campaign more difficult, since we are associated with the government that enacted these cuts, and our campaign may even backfire. ?][? if wtb_adopted = 1 : Adopting the WTB plan gives us a new rallying point around which to attract support from the unemployed. ?]
 
 @catholics
-subtitle: -1 resources
-choose-if: resources >= 1
+subtitle: -[+ campaign_rate +] resources
+choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
 view-if: peoples_party == 1
-on-arrival: catholics_spd += 4*(1-dissent); resources -= 1
+on-arrival: catholics_spd += 4*(1-dissent)*campaign_rate; resources -= campaign_rate
 
 We have increased our campaigning among Catholics.
