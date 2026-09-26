@@ -351,6 +351,21 @@ window.hidePartyTooltip = function() {
         existing.parentNode.removeChild(existing);
     }
 };
+
+  function change_var(variable, amount, min, max) {
+    var q = dendryUI.dendryEngine.state.qualities;
+    var newVal = (q[variable] || 0) + amount;
+    if (min !== undefined) newVal = Math.max(min, newVal);
+    if (max !== undefined) newVal = Math.min(max, newVal);
+    q[variable] = newVal;
+    window.updateSidebar();
+}
+
+
+
+
+
+  
   
   // This function allows you to modify the text before it's displayed.
   // E.g. wrapping chat-like messages in spans.
