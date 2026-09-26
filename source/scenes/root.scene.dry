@@ -39,6 +39,8 @@ Q.new_middle_income = 0;
 Q.unemployed_income = 0;
 Q.workers_income = 0;
 
+Q.ideology = "centrist";
+
 //Progress accounts for how much is the progress reached towards activating reaction from right.
 //Threshold here means where it should activate.
 // Timer now is constant event unless Reaction is taken down.
