@@ -48,6 +48,19 @@ Q.reaction_progress = 0;
 Q.reaction_threshold = 5;
 Q.reaction_timer = 0;
 
+Q.kpd_ideology = "Marxism-Leninism";
+Q.sapd_ideology = "Left Socialism";
+Q.spd_ideology = "Social Democracy";
+Q.ddp_ideology = "Social Liberalism";
+Q.z_ideology = "Catholic Tent";
+Q.dvp_ideology = "National Liberalism";
+Q.bvp_ideology = "Bavarian Regionalism (Conservatism)";
+Q.dnvp_ideology = "National Conservatism";
+Q.nsdap_ideology = "National Socialism";
+
+Q.bvp_party_leader = "Held";
+Q.bvp_relation = 25;
+
 
 
 
