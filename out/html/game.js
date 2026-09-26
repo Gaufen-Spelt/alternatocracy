@@ -352,14 +352,14 @@ window.hidePartyTooltip = function() {
     }
 };
 
-  function change_var(variable, amount, min, max) {
+  window.change_var = function(variable, amount, min, max) {
     var q = dendryUI.dendryEngine.state.qualities;
     var newVal = (q[variable] || 0) + amount;
     if (min !== undefined) newVal = Math.max(min, newVal);
     if (max !== undefined) newVal = Math.min(max, newVal);
     q[variable] = newVal;
     window.updateSidebar();
-}
+};
 
 
 
