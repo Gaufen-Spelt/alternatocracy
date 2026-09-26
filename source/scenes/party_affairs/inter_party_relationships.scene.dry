@@ -20,8 +20,8 @@ The SPD cannot govern by itself yet. Because we do not have an electoral majorit
 
 @kpd
 subtitle: -1 resources
-choose-if: resources >= 1
-unavailable-subtitle: Not enough resources.
+choose-if: resources >= 1 and (reformist_strength + labor_strength + neorevisionist_strength) < 50 
+unavailable-subtitle: [? if (reformist_strength + labor_strength + neorevisionist_strength) >= 50: Reformist factions are blocking this ordeal. ?] [? if resources < 1: Not enough resources. ?]
 on-arrival: resources -= 1; kpd_inter_party_seen += 1
 go-to: kpd_blutmai if blutmai = 1; kpd_1 if blutmai = 0 and kpd_coalition_success = 0 and (kpd_relation < 40 or kpd_rectified_history = 1); kpd_rectification_of_history if kpd_relation >= 40 and kpd_rectified_history = 0; kpd_2 if kpd_coalition_success = 1 and kpd_rectified_history = 1
 
@@ -86,8 +86,8 @@ The Brüning semi-autocratic regime makes building friendly relations difficult,
 
 @liberals
 subtitle: -1 resources
-choose-if: resources >= 1
-unavailable-subtitle: Not enough resources.
+choose-if: resources >= 1 and (left_strength + center_strength < 50)
+unavailable-subtitle: [? if resources < 1: Not enough resources. ?] [? if left_strength + center_strength >= 50: Left and Center factions are blocking this ordeal. ?]
 on-arrival: resources -= 1; ddp_relation += 5*(1 - dissent)
 go-to: dvp_stresemann if stresemann_dead = 0; dvp_loss if stresemann_dead = 1 and year <= 1930; dvp_moribund if year > 1930
 
