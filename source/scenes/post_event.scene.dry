@@ -489,6 +489,27 @@ if (marxist_votes >= 50 && (Q.ideology === "left" || Q.ideology === "centrist"))
 }
 
 
+// MODIFIERS OF PARTY ADVISORS AND OTHER STUFF
+
+if (Q.peoples_party == 1) {
+    if (Q.left_dissent < 45) Q.left_dissent += 1;
+    if (Q.center_dissent < 40) Q.center_dissent += 1;
+    if (Q.reformist_strength < 30) Q.reformist_strength += 1;
+    if (Q.neorevisionist_strength < 20) Q.neorevisionist_strength += 1;
+}
+
+const strengthMap = {
+    left: "left_strength",
+    centrist: "center_strength",
+    labor: "labor_strength",
+    reformist: "reformist_strength",
+    neorev: "neorevisionist_strength"
+};
+const key = strengthMap[Q.ideology];
+if (key && Q[key] < 30) { Q[key] += 1; }
+
+
+
 
 
 
