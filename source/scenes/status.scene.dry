@@ -66,8 +66,9 @@ Q.cabinet_table_display = html;
 <hr>
 = [+ country_name_display +]
 <hr>
-<hr>
+
 {!<span class="flag-label-hidden">Flag:</span>!}
+
 <hr>
 
 Next election: [+ next_election_month : month +] [+ next_election_year +]
