@@ -184,7 +184,7 @@ if (Q.month_actions >= 1) {
 
     ///////////////////////////// change party support based on pro_republic
     // if pro_republic is less than the support of the Weimar coalition, reduce SPD support...
-    if (Q.pro_republic < (Q.spd_votes + Q.ddp_votes + Q.z_votes - 3)) {
+    if (Q.pro_republic < (Q.spd_votes + Q.ddp_votes + Q.z_votes)) {
         if (Q.new_middle_spd > 0) {
             Q.new_middle_spd -= 5/12;
             Q.new_middle_nsdap += 3/12;
@@ -195,7 +195,6 @@ if (Q.month_actions >= 1) {
         }
         if (Q.rural_spd > 0) {
             Q.rural_spd -= 5/12;
-            Q.rural_nsdap += 3/12;
         }
         if (Q.workers_spd_normalized > 30) {
             Q.workers_spd -= 4/12;
@@ -235,7 +234,8 @@ console.log('economic severity: ' + Q.severity);
 
 if (Q.year == 1928) {
     if (Q.dnvp_in_government == 1) {
-        Q.rural_dnvp -= 6/12;
+        Q.rural_dnvp -= 8/12;
+        Q.rural_other += 6/12;
     }
         Q.workers_z -= 0.5/12;
         Q.workers_nsdap -= 1/12;
@@ -243,10 +243,10 @@ if (Q.year == 1928) {
         Q.old_middle_dnvp -= 6/12;
         Q.new_middle_dnvp -= 6/12;
         Q.rural_other += 8/12;
-        Q.old_middle_other += 6/12;
-        Q.new_middle_other += 6/12;
-        Q.old_middle_dvp -= 4/12;
-        Q.new_middle_dvp -= 6/12;
+        Q.old_middle_other += 9/12;
+        Q.new_middle_other += 9/12;
+        Q.old_middle_dvp -= 8/12;
+        Q.new_middle_dvp -= 8/12;
         Q.old_middle_ddp -= 8/12;
         Q.new_middle_ddp -= 4/12;
         Q.workers_kpd += 2/12;
@@ -553,6 +553,13 @@ const strengthMap = {
 };
 const key = strengthMap[Q.ideology];
 if (key && Q[key] < 30) { Q[key] += 1; }
+
+
+
+
+// Bad DVP
+
+Q.dvp_rightist = (Q.dvp_party_leader == "Scholz) ? 1 : 0;
 
 
 
