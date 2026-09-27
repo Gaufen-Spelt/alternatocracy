@@ -25,6 +25,7 @@ max-cards: 4
 - @govt
 - #advisor
 - @shuffle_leadership_pinned
+- @fundraising
 
 @main_easy
 is-hand: true
@@ -53,6 +54,7 @@ max-cards: 6
 - @govt
 - #advisor
 - @shuffle_leadership_pinned
+- @fundraising
 
 @main_historical
 is-hand: true
@@ -81,6 +83,7 @@ max-cards: 2
 - @govt
 - #advisor
 - @shuffle_leadership_pinned
+- @fundraising
 
 @main_hard
 is-hand: true
@@ -109,6 +112,7 @@ max-cards: 3
 - @govt
 - #advisor
 - @shuffle_leadership_pinned
+- @fundraising
 
 
 @party
