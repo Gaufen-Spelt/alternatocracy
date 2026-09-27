@@ -418,6 +418,52 @@ if (Q.year == 1929) {
         }
     }
 
+if (Q.year >= 1935) {
+    let growth_factor = Math.max(0, Q.economic_growth / 6);
+    let employment_factor = Math.max(0, (12 - Q.unemployed) / 8);
+    let stability_factor = (Q.inflation >= -1 && Q.inflation <= 5) ? 1.0 : 0.2;
+
+    let bliss_index = (growth_factor + employment_factor) * stability_factor;
+
+    if (Q.return_to_normalcy || bliss_index >= 0.8) {
+        let decay_coefficient = Q.return_to_normalcy ? 0.25 : Math.min(0.40, 0.15 * bliss_index);
+
+        const target_reabsorption = {
+            'workers':     { 'spd': 0.50, 'kpd': 0.20, 'other': 0.30 },
+            'unemployed':  { 'spd': 0.40, 'kpd': 0.40, 'other': 0.20 },
+            'new_middle':  { 'ddp': 0.40, 'dvp': 0.30, 'spd': 0.30 },
+            'old_middle':  { 'dvp': 0.40, 'other': 0.40, 'dnvp': 0.20 },
+            'rural':       { 'dnvp': 0.40, 'other': 0.40, 'spd': 0.20 },
+            'catholics':   { 'z': 0.80, 'spd': 0.20 }
+        };
+
+        for (let c of Q.classes) {
+            let nsdap_key = `${c}_nsdap`;
+            let current_nsdap = Q[nsdap_key] || 0;
+
+            if (current_nsdap > 5) {
+                let excess_support = current_nsdap - 5;
+                let drained_voters = (excess_support * decay_coefficient) / 12;
+
+                drained_voters = Math.min(drained_voters, current_nsdap - 2);
+                Q[nsdap_key] -= drained_voters;
+
+                let class_targets = target_reabsorption[c] || { 'other': 1.0 };
+                for (let target_party in class_targets) {
+                    let share = class_targets[target_party];
+                    let destination_key = `${c}_${target_party}`;
+
+                    if (Q[destination_key] !== undefined) {
+                        Q[destination_key] += drained_voters * share;
+                    } else {
+                        Q[`${c}_other`] = (Q[`${c}_other`] || 0) + (drained_voters * share);
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 
 
