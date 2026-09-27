@@ -1,6 +1,7 @@
 title: Reaction...
 subtitle: Establishment moves against us... <br> **Our doomsday begins**...
 tags: event
+set-bg: img/class_war.jpg
 max-visits: 1
 new-page: true
 on-arrival: new_middle_spd *= 0.80; old_middle_spd *= 0.75; rural_spd *= 0.75; dvp_relation *= 0.50; kpd_relation += 20; communist_coalition += 2; rfb_strength += 100; ddp_relation *= 0.85; dnvp_relation = 0; z_relation *= 0.75; coalition_dissent += 1; reaction_activated = 1; pro_republic -= 15; nationalism += 15; socialism += 5; left_strength += 20; left_dissent *= 0.01; reformist_dissent += 5; labor_dissent += 20; neorevisionist_dissent += 20; workers += 3; unemployed -= 3; catholics -= 4; rural -= 2; old_middle += 2
