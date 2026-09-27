@@ -559,7 +559,7 @@ if (key && Q[key] < 30) { Q[key] += 1; }
 
 // Bad DVP
 
-Q.dvp_rightist = (Q.dvp_party_leader == "Scholz) ? 1 : 0;
+Q.dvp_rightist = (Q.dvp_party_leader == "Scholz") ? 1 : 0;
 
 
 
