@@ -1,5 +1,4 @@
 title: Next month
-set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
@@ -28,7 +27,6 @@ max-cards: 4
 - @shuffle_leadership_pinned
 
 @main_easy
-set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
@@ -57,7 +55,6 @@ max-cards: 6
 - @shuffle_leadership_pinned
 
 @main_historical
-set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
@@ -86,7 +83,6 @@ max-cards: 2
 - @shuffle_leadership_pinned
 
 @main_hard
-set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
