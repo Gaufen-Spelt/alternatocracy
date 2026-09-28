@@ -2,7 +2,7 @@ title: The Right calls a vote of no confidence against the current government!
 subtitle: We have angered our coalition partners too much...
 new-page: true
 on-arrival: tried_supporting_kpd = 0
-{!
+view-if: {!
   var dissentByIdeology = {
     Centrist:   { weimar: 3, grand: 2, popfront: 3, minority: 2 },
     Reformist:  { weimar: 4, grand: 3, popfront: 2, minority: 4 },
