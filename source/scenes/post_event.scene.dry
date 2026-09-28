@@ -539,6 +539,7 @@ if (marxist_votes >= 50 && (Q.ideology === "left" || Q.ideology === "centrist"))
 
 if (Q.peoples_party == 1) {
     if (Q.left_dissent < 45) Q.left_dissent += 1;
+    if (Q.left_strength > 30) Q.left_strength -= 0.5;
     if (Q.center_dissent < 40) Q.center_dissent += 1;
     if (Q.reformist_strength < 30) Q.reformist_strength += 1;
     if (Q.neorevisionist_strength < 20) Q.neorevisionist_strength += 1;
@@ -552,9 +553,26 @@ const strengthMap = {
     neorev: "neorevisionist_strength"
 };
 const key = strengthMap[Q.ideology];
-if (key && Q[key] < 30) { Q[key] += 1; }
+if (key && Q[key] < 40) { Q[key] += 1; }
 
 
+
+// LEFT SPD SPECIFICS
+
+if (Q.ideology == "Left") {
+    Q.dvp_relation -= 0.5;
+    Q.ddp_relation -= 0.2;
+    Q.z_relation -= 0.3;
+    Q.kpd_relation += 0.2;
+}
+
+if (Q.ideology == "reformist") {
+    Q.dvp_relation += 0.2;
+    Q.ddp_relation += 0.3;
+    Q.z_relation += 0.3;
+    Q.kpd_relation -= 0.7;
+    Q.dnvp_relation += 0.01;
+}
 
 
 // Bad DVP
