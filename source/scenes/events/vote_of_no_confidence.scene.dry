@@ -2,7 +2,45 @@ title: The Right calls a vote of no confidence against the current government!
 subtitle: We have angered our coalition partners too much...
 new-page: true
 on-arrival: tried_supporting_kpd = 0
-view-if: spd_in_government = 1 and ((in_grand_coalition = 1 or in_popular_front = 1 or in_minority_government = 1) and coalition_dissent >= 3) or (in_weimar_coalition = 1 and coalition_dissent >= 4) and spd_r < 50 and not constructive_vonc
+{!
+  var dissentByIdeology = {
+    Centrist:   { weimar: 3, grand: 2, popfront: 3, minority: 2 },
+    Reformist:  { weimar: 4, grand: 3, popfront: 2, minority: 4 },
+    Left:       { weimar: 2, grand: 1, popfront: 3, minority: 1 },
+    Labor:      { weimar: 4, grand: 2, popfront: 3, minority: 3 }
+  };
+
+  var coalitions = {
+    grand:    { flag: Q.in_grand_coalition,    threshold: 3 },
+    popfront: { flag: Q.in_popular_front,      threshold: 3 },
+    minority: { flag: Q.in_minority_government, threshold: 3 },
+    weimar:   { flag: Q.in_weimar_coalition,   threshold: 4 }
+  };
+
+  var table = dissentByIdeology[Q.ideology] || dissentByIdeology.Centrist;
+
+  function triggers(key) {
+    var c = coalitions[key];
+    if (c.flag != 1) return false;
+    Q.coalition_dissent = table[key];
+    return Q.coalition_dissent >= c.threshold;
+  }
+
+  var anyTrigger = false;
+  for (var key in coalitions) {
+    if (triggers(key)) {
+      anyTrigger = true;
+      break;
+    }
+  }
+
+  return (
+    Q.spd_in_government == 1 &&
+    anyTrigger &&
+    Q.spd_r < 50 &&
+    !Q.constructive_vonc
+  );
+!}
 tags: event
 go-to: vonc_menu
 
