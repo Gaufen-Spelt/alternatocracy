@@ -4,6 +4,7 @@ on-arrival: {!
 
 // 1. update dates
 if (Q.month_actions >= 1) {
+    Q.month_actions_2 = 1;
     Q.time += 1;
     Q.month_actions = 0;
     Q.weeks += 2;
@@ -473,129 +474,6 @@ if (Q.year >= 1935) {
 
 
 
-/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
-
-
-// ============================================================================
-// 2. STATE REACTION VECTOR & PREREQUISITES
-// ============================================================================
-
-Q.interior_purged = (Q.interior_police_loyalty >= 0.90) ? 1 : 0;
-
-Q.reaction_progress = 0;
-Q.reaction_threshold = 5;
-
-if (Q.reaction_activated !== 1) {
-    if (Q.investigate_corruption >= 3) Q.reaction_progress += 1;
-    if (Q.bureaucracy_purged === 1) Q.reaction_progress += 0.5;
-    if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) Q.reaction_progress += 1;
-    if (Q.interior_purged === 1) Q.reaction_progress += 0.5;
-    if (Q.land_reform >= 1) Q.reaction_progress += 0.5 * Q.land_reform;
-    if (Q.nationalization_progress >= 1) Q.reaction_progress += 1 * Q.nationalization_progress;
-    if (Q.factory_takeovers >= 1) Q.reaction_progress += Q.factory_takeovers;
-    if (Q.kpd_in_government >= 1) Q.reaction_progress += 5;
-    if (Q.socialism >= 65) Q.reaction_progress += 1;
-}
-
-Q.junker_land_reform_enabled = (
-    Q.socialism >= 100 || 
-    Q.rural_spd >= 40 || 
-    Q.spd_votes >= 50 || 
-    Q.in_spd_majority >= 1 || 
-    Q.in_popular_front || 
-    Q.in_left_front
-) ? 1 : 0;
-
-
-// SPD Powerhouse relation drops.
-
-if (Q.spd_votes >= 40) {
-    let excess = Q.spd_votes - 40;
-
-    Q.dvp_relation -= excess * 0.1;
-    Q.z_relation -= excess * 0.05;
-    Q.ddp_relation -= excess * 0.025;
-}
-
-
-// Marxist majority
-let marxist_votes = (Q.spd_votes || 0) + (Q.kpd_votes || 0) + (Q.sapd_votes || 0);
-
-if (marxist_votes >= 50 && (Q.ideology === "left" || Q.ideology === "centrist")) {
-    Q.socialism += 1;
-    Q.left_strength += 0.5;
-    Q.kpd_relation += 0.5;
-    if (Q.ideology === "Left") {
-        Q.kpd_relation += 0.5;
-    }
-    if (Q.kpd_relation >= 50) {
-        Q.communist_coalition += 0.2;
-    }
-    Q.sapd_relation += 0.5;
-}
-
-
-// MODIFIERS OF PARTY ADVISORS AND OTHER STUFF
-
-if (Q.peoples_party == 1) {
-    if (Q.left_dissent < 45) Q.left_dissent += 1;
-    if (Q.left_strength > 30) Q.left_strength -= 0.5;
-    if (Q.center_dissent < 40) Q.center_dissent += 1;
-    if (Q.reformist_strength < 30) Q.reformist_strength += 1;
-    if (Q.neorevisionist_strength < 20) Q.neorevisionist_strength += 1;
-}
-
-const strengthMap = {
-    left: "left_strength",
-    centrist: "center_strength",
-    labor: "labor_strength",
-    reformist: "reformist_strength",
-    neorev: "neorevisionist_strength"
-};
-const key = strengthMap[Q.ideology];
-if (key && Q[key] < 40) { Q[key] += 1; }
-
-
-
-// LEFT SPD SPECIFICS
-
-if (Q.ideology == "Left") {
-    Q.dvp_relation -= 0.5;
-    Q.ddp_relation -= 0.2;
-    Q.z_relation -= 0.3;
-    Q.kpd_relation += 0.2;
-}
-
-if (Q.ideology == "reformist") {
-    Q.dvp_relation += 0.2;
-    Q.ddp_relation += 0.3;
-    Q.z_relation += 0.3;
-    Q.kpd_relation -= 0.7;
-    Q.dnvp_relation += 0.01;
-}
-
-
-// Bad DVP
-
-Q.dvp_rightist = (Q.dvp_party_leader == "Scholz") ? 1 : 0;
-
-
-
-
-
-
-/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
-
-
-
-
-
-
-
-
-
-
-
 // ENDS HERE, MONTH ACTIONS..!!!
 }
 
@@ -724,7 +602,146 @@ normalizeKeys(['pro_republic', 'nationalism', 'socialism'], 150);
 
 
 
+if (Q.month_actions_2 >= 1) {
 
+
+/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
+
+
+// ============================================================================
+// 2. STATE REACTION VECTOR & PREREQUISITES
+// ============================================================================
+
+Q.interior_purged = (Q.interior_police_loyalty >= 0.90) ? 1 : 0;
+
+Q.reaction_progress = 0;
+Q.reaction_threshold = 5;
+
+if (Q.reaction_activated !== 1) {
+    if (Q.investigate_corruption >= 3) Q.reaction_progress += 1;
+    if (Q.bureaucracy_purged === 1) Q.reaction_progress += 0.5;
+    if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) Q.reaction_progress += 1;
+    if (Q.interior_purged === 1) Q.reaction_progress += 0.5;
+    if (Q.land_reform >= 1) Q.reaction_progress += 0.5 * Q.land_reform;
+    if (Q.nationalization_progress >= 1) Q.reaction_progress += 1 * Q.nationalization_progress;
+    if (Q.factory_takeovers >= 1) Q.reaction_progress += Q.factory_takeovers;
+    if (Q.kpd_in_government >= 1) Q.reaction_progress += 5;
+    if (Q.socialism >= 65) Q.reaction_progress += 1;
+}
+
+Q.junker_land_reform_enabled = (
+    Q.socialism >= 100 || 
+    Q.rural_spd >= 40 || 
+    Q.spd_votes >= 50 || 
+    Q.in_spd_majority >= 1 || 
+    Q.in_popular_front || 
+    Q.in_left_front
+) ? 1 : 0;
+
+
+// SPD Powerhouse relation drops.
+
+if (Q.spd_votes >= 40) {
+    let excess = Q.spd_votes - 40;
+
+    Q.dvp_relation -= excess * 0.1;
+    Q.z_relation -= excess * 0.05;
+    Q.ddp_relation -= excess * 0.025;
+}
+
+
+// Marxist majority
+let marxist_votes = (Q.spd_votes || 0) + (Q.kpd_votes || 0) + (Q.sapd_votes || 0);
+
+if (marxist_votes >= 50 && (Q.ideology === "left" || Q.ideology === "centrist")) {
+    Q.socialism += 1;
+    Q.left_strength += 0.5;
+    Q.kpd_relation += 0.5;
+    if (Q.ideology === "Left") {
+        Q.kpd_relation += 0.5;
+    }
+    if (Q.kpd_relation >= 50) {
+        Q.communist_coalition += 0.2;
+    }
+    Q.sapd_relation += 0.5;
+}
+
+
+// MODIFIERS OF PARTY ADVISORS AND OTHER STUFF
+
+if (Q.peoples_party == 1) {
+    if (Q.left_dissent < 45) Q.left_dissent += 1;
+    if (Q.left_strength > 30) Q.left_strength -= 0.5;
+    if (Q.center_dissent < 40) Q.center_dissent += 1;
+    if (Q.reformist_strength < 30) Q.reformist_strength += 1;
+    if (Q.neorevisionist_strength < 20) Q.neorevisionist_strength += 1;
+}
+
+const strengthMap = {
+    left: "left_strength",
+    centrist: "center_strength",
+    labor: "labor_strength",
+    reformist: "reformist_strength",
+    neorev: "neorevisionist_strength"
+};
+const key = strengthMap[Q.ideology];
+if (key && Q[key] < 40) { Q[key] += 1; }
+
+
+
+// LEFT SPD SPECIFICS
+
+if (Q.ideology == "Left") {
+    Q.dvp_relation -= 0.5;
+    Q.ddp_relation -= 0.2;
+    Q.z_relation -= 0.3;
+    Q.kpd_relation += 0.2;
+}
+
+if (Q.ideology == "reformist") {
+    Q.dvp_relation += 0.2;
+    Q.ddp_relation += 0.3;
+    Q.z_relation += 0.3;
+    Q.kpd_relation -= 0.7;
+    Q.dnvp_relation += 0.01;
+}
+
+// LEFT SPD: soft-cap non-worker/unemployed classes
+if (Q.ideology == "Left") {
+    var left_soft_cap = 20;
+    var left_bonus_classes = ["workers", "unemployed"];
+    var left_capped_classes = Q.classes.filter(function(c) {
+        return left_bonus_classes.indexOf(c) === -1;
+    });
+
+    for (var c of left_capped_classes) {
+        var norm_key = c + "_spd_normalized";
+        if (Q[norm_key] > left_soft_cap) {
+            var excess = Q[norm_key] - left_soft_cap;
+            Q[c + "_spd"] -= (excess * 0.05) / 12;
+        }
+    }
+    Q.workers_spd += 2 / 12;
+    Q.unemployed_spd += 2 / 12;
+}
+
+
+// Bad DVP
+
+Q.dvp_rightist = (Q.dvp_party_leader == "Scholz") ? 1 : 0;
+
+
+
+
+
+
+/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
+
+
+
+
+
+}
 
 
 
