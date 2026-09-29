@@ -70,10 +70,9 @@ Should we run a new campaign to publicize our new platform?
 
 @support_peoples_party_hard
 subtitle: This will increase dissent.
-view-if: (peoples_party_support >= (pp_threshold / 1.5) ) and peoples_party = 0
+view-if: (peoples_party_support >= (pp_threshold / 1.5) ) and peoples_party = 0 and ideology != "Left"
 on-arrival: neorevisionist_strength += 10; reformist_strength += 8; peoples_party = 1; workers_spd -= 15; rural_spd += 10; new_middle_spd += 10; old_middle_spd += 8; catholics_spd += 8; left_dissent += 40; center_dissent += 40; kpd_relation -= 10
 achievement: volkspartei
-view-if: ideology != "Left"
 
 It is an arduous and contentious process, but we have pushed through the proposal to become a people's party. The Left and Center claim that our new party platform is a betrayal of our founding principles, a turn away from Marxism towards bourgeois opportunism. Whatever the case, we are now a party representing all of the people, not just the proletariat.
 
