@@ -1,7 +1,7 @@
 title: Coup in Prussia
 subtitle: The Chancellor attempts to overthrow the Prussian government.
 view-if: (chancellor = "Papen" or chancellor = "Schleicher") and president = "Hindenburg" and year >= 1932 and month >= 8 and spd_in_government == 0 and spd_prussia = 1 and not presidential_powers
-on-arrival: prussian_coup_seen = 1
+on-arrival: prussian_coup_seen = 1; rfb_joins = 0; rfb_joins = 1 if ideology = "left" and kpd_relation >= 50; rb_militancy += 0.02 if rfb_joins
 new-page: true
 tags: event
 max-visits: 1
@@ -11,7 +11,7 @@ face-image: img/Reichswehr.jpg
 
 A crisis! Chancellor [+ chancellor +] has ordered the dismissal of the Prussian government in a procedure known as the *Reichsexecution*. His argument is that the Prussian state government is unable to maintain order due to the battles on the streets between the SA, Reichsbanner, and other paramilitaries. This is despite his own government legalizing them.
 
-The legality of the action is questionable. Many of our members are ready to resist.
+The legality of the action is questionable. Many of our members are ready to resist. [? if rfb_joins: With RFB joining the battle, our radical members are further emboldened and the rest are more willing to fight this battle. ?]
 
 - @defend
 - @surrender
@@ -29,17 +29,17 @@ The Reichswehr and Stahlhelm are already surrounding Berlin, and the SA is suppo
 - @surrender
 
 @defend_2
-on-arrival: resist_coup = 1; defense_strength = rb_strength*rb_militancy*(1-dissent/2); defense_strength += prussian_police_strength*prussian_police_militancy*prussian_police_loyalty if spd_prussia; enemy_strength = sa_strength*sa_militancy + sh_strength*sh_militancy; enemy_strength += reichswehr_strength*reichswehr_militancy*(1-reichswehr_loyalty)/2; defense_strength += workers_spd_normalized*(2 - dissent)*(2 - unemployed/100);
-go-to: defend_2_civil_war if defense_strength < enemy_strength; defend_2_victory if defense_strength >= enemy_strength
+on-arrival: resist_coup = 1; defense_strength = rb_strength*rb_militancy*(1-dissent/2); defense_strength += prussian_police_strength*prussian_police_militancy*prussian_police_loyalty if spd_prussia; defense_strength += rfb_strength * rfb_militancy if rfb_joins >= 1; enemy_strength = sa_strength*sa_militancy + sh_strength*sh_militancy; enemy_strength += reichswehr_strength*reichswehr_militancy*(1-reichswehr_loyalty)/2; defense_strength += workers_spd_normalized*(2 - dissent)*(2 - unemployed/100);
+go-to: defend_2_victory if defense_strength >= enemy_strength; defend_2_failure if defense_strength + 200 < enemy_strength; defend_2_civil_war if defense_strength < enemy_strength
 
 @defend_2_victory
-on-arrival: sa_strength *= 0.8; sh_strength *= 0.8; pro_republic += 10; workers_spd += 6; unemployed_spd += 6; workers_nsdap -= 6; unemployed_nsdap -= 6; coup_victory = 1
+on-arrival: sa_strength *= 0.8; sh_strength *= 0.8; pro_republic += 10; workers_spd += 6; unemployed_spd += 6; workers_nsdap -= 6; unemployed_nsdap -= 6; coup_victory = 1; workers_kpd += 3 if rfb_joins; unemployed_kpd += 5 if rfb_joins; socialism += 5 if rfb_joins
 achievement: bollwerk_der_demokratie
 go-to: defend_2_victory_2
 
 Our forces confront the government troops and their reactionary auxiliaries, and somehow, our enemies retreat without a fight! They were overwhelmed by our display of strength, and have chosen to slink away. Chancellor [+ chancellor +] withdraws the dismissal of the Prussian government, at least for now.
 
-The show of force has reinvigorated support for the republic and for the SPD, and has weakened the fascists.
+The show of force has reinvigorated support for the republic and for the SPD [? if rfb_joins: / KPD ?], and has weakened the fascists.
 
 @defend_2_victory_2
 achievement: drei_pfeile
@@ -51,7 +51,10 @@ Our forces confront the government troops and their supporters on the streets of
 
 - @civil_war: It is a civil war.
 
+@defend_2_failure
+on-arrival: spd_prussia = 0; sa_strength *= 1.2; sh_strength *= 1.2; pro_republic -= 10; workers_spd -= 8; unemployed_spd -= 8; workers_nsdap += 6; unemployed_nsdap += 6; left_dissent += 15; labor_dissent += 15; rb_militancy = rb_militancy/2; rb_strength -= 1000
 
+Our forces have failed to confront the government and their auxiliary due to their insufficient numbers and weaponry, and have backed down... We have failed the Republic...
 
 
 @surrender
