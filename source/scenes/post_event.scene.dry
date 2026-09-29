@@ -604,6 +604,8 @@ normalizeKeys(['pro_republic', 'nationalism', 'socialism'], 150);
 
 if (Q.month_actions_2 >= 1) {
 
+Q.month_actions_2 = 0;
+
 
 /////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
 
