@@ -728,11 +728,15 @@ if (Q.ideology == "Left") {
 }
 
 
-// Bad DVP
+// Settings
 
 Q.dvp_rightist = (Q.dvp_party_leader == "Scholz") ? 1 : 0;
 
-
+Q.spd_left = (Q.ideology == "Left") ? 1 : 0;
+Q.spd_centrist = (Q.ideology == "Centrist") ? 1 : 0;
+Q.spd_reformist = (Q.ideology == "Reformist") ? 1 : 0;
+Q.spd_labor = (Q.ideology == "Labor") ? 1 : 0;
+Q.spd_neorevisionist = (Q.ideology == "Neorevisionist") ? 1 : 0;
 
 
 
