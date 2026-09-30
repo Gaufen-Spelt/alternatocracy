@@ -42,6 +42,17 @@ var main = function(dendryUI) {
           return original.call(ui, fixCards(cards), extra);
         };
       });
+
+
+    var originalDisplayChoices = ui.displayChoices;
+    ui.displayChoices = function(choices) {
+      var clean = choices.map(function(c) {
+        var copy = Object.assign({}, c);
+        delete copy.image;
+        return copy;
+      });
+      return originalDisplayChoices.call(ui, clean);
+    };
   };
 
   var TITLE = "Social Democracy: An Alternate History" + '_' + "Autumn Chen";
