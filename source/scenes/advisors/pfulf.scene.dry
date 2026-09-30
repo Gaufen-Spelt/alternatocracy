@@ -4,6 +4,8 @@ tags: advisor, centrist
 card-image: img/portraits/PfülfAntonie.jpg
 view-if: pfulf_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be available in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Antonie Pfülf
 
