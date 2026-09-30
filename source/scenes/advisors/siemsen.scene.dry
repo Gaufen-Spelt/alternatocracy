@@ -4,6 +4,8 @@ tags: advisor, left
 card-image: img/portraits/SiemsenAnna.jpg
 view-if: siemsen_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be available in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Anna Siemsen
 
