@@ -155,7 +155,7 @@ body.focus-mode-expanded #content {
   grid-area: main;
   width: 100%;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -732,41 +732,32 @@ div.blank-card {
   margin-bottom: 0.5em;
 }
 
+
+
 .unavailable-card {
   color: var(--unavailable-color);
-  background-color: var(--unavailable-bg-color) !important;
-  cursor: default !important;
-  opacity: 0.5;
-}
-
-// PINNED CARD IS HEREEE
-
-
-.pinned-card.unavailable-card {
-  background-color: var(--unavailable-bg-color) !important;
-  cursor: default !important;
-  opacity: 0.4;            
-  position: relative;
-}
-
-.pinned-card.unavailable-card .card-img,
-.pinned-card.unavailable-card .card-caption {
-  opacity: 0.5;
-  color: var(--unavailable-color);
-}
-
-.pinned-card.unavailable-card a.card {
+  background-color: var(--unavailable-bg-color);
   cursor: default !important;
 }
 
-.pinned-card.unavailable-card:hover {
-  z-index: 20;
+.unavailable-card .card-img,
+.unavailable-card .card-caption {
+  opacity: 0.4;
 }
 
-.pinned-card.unavailable-card .card-tooltip {
-  opacity: 1;
-  z-index: 30;
+.unavailable-card a.card {
+  cursor: default !important;
+  border-color: rgba(128, 128, 128, 0.25);
+  box-shadow: none;
 }
+
+.unavailable-card a.card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+
+
 
 
 
@@ -802,6 +793,21 @@ a.card:focus .card-tooltip,
 a.card:hover .card-tooltip {
   visibility: visible;
   position: absolute;
+}
+
+.pinned-card:hover,
+.deck:hover,
+.card-in-hand:hover {
+  z-index: 20;
+}
+
+@media screen and (min-width: 561px) {
+  ul.pinned-cards > li:nth-child(3n) .card-tooltip,
+  ul.decks > li:nth-child(3n) .card-tooltip,
+  ul.hand > li:nth-child(3n) .card-tooltip {
+    left: auto;
+    right: 105%;
+  }
 }
 
 /*  Tag-based card colors */
