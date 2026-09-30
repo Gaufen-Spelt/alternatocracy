@@ -4,6 +4,8 @@ tags: advisor, reformist
 card-image: img/portraits/SeveringCarl.jpg
 view-if: severing_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be available in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Carl Severing
 
