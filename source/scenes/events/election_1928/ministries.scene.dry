@@ -63,7 +63,7 @@ go-to: ministries
 
 Robert Schmidt of the SPD has been appointed Economic Minister.
 
-@napthtali
+@naphtali
 subtitle: One of Hilferding's kind.
 view-if: center_strength >= 55
 on-arrival: economic_minister_party = "SPD"; economic_minister = "Naphtali"
