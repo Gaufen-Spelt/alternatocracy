@@ -4,6 +4,8 @@ tags: advisor
 card-image: img/portraits/StampferFriedrich.jpg
 view-if: stampfer_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be available in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Friedrich Stampfer
 
