@@ -4,6 +4,8 @@ tags: advisor, labor
 card-image: img/portraits/WoytinskyWladimir.jpg
 view-if: woytinsky_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be available in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Wladimir Woytinsky
 
