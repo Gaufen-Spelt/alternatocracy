@@ -4,6 +4,8 @@ tags: advisor, left
 card-image: img/portraits/LeviPaul.jpg
 view-if: levi_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be active in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Paul Levi
 
