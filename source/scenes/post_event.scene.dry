@@ -781,6 +781,22 @@ Q.trigger_vonc = (
     !Q.constructive_vonc
 ) ? 1 : 0;
 
+Q.dbg_vonc = {
+    ideology: Q.ideology,
+    normalized: vonc_ideology,
+    row: vonc_row,
+    spd_in_government: Q.spd_in_government,
+    in_grand: Q.in_grand_coalition,
+    in_weimar: Q.in_weimar_coalition,
+    in_popfront: Q.in_popular_front,
+    in_minority: Q.in_minority_government,
+    any_trigger: vonc_any_trigger,
+    spd_r: Q.spd_r,
+    constructive_vonc: Q.constructive_vonc,
+    result: Q.trigger_vonc
+};
+console.log('VONC DEBUG', JSON.stringify(Q.dbg_vonc));
+
 
 
 
