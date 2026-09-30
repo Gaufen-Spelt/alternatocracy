@@ -4,6 +4,8 @@ tags: advisor, reformist
 card-image: img/portraits/JuchaczMarie.jpg
 view-if: juchacz_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be active in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Marie Juchacz
 
