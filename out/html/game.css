@@ -739,6 +739,38 @@ div.blank-card {
   opacity: 0.5;
 }
 
+// PINNED CARD IS HEREEE
+
+
+.pinned-card.unavailable-card {
+  background-color: var(--unavailable-bg-color) !important;
+  cursor: default !important;
+  opacity: 0.4;            
+  position: relative;
+}
+
+.pinned-card.unavailable-card .card-img,
+.pinned-card.unavailable-card .card-caption {
+  opacity: 0.5;
+  color: var(--unavailable-color);
+}
+
+.pinned-card.unavailable-card a.card {
+  cursor: default !important;
+}
+
+.pinned-card.unavailable-card:hover {
+  z-index: 20;
+}
+
+.pinned-card.unavailable-card .card-tooltip {
+  opacity: 1;
+  z-index: 30;
+}
+
+
+
+
 .card-caption {
   text-align: center;
   display: block;
