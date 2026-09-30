@@ -4,6 +4,8 @@ tags: advisor, neorevisionist
 card-image: img/portraits/LeberJulius.jpg
 view-if: leber_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be active in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Julius Leber
 
