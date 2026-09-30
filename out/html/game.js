@@ -9,11 +9,39 @@
                  month: 'short',
                  day: 'numeric' };
 
-  var main = function(dendryUI) {
+var main = function(dendryUI) {
     ui = dendryUI;
     game = ui.game;
 
-    // Add your custom code here.
+    // Flatten [+ Q.x +] content (arrays) into plain text for cards.
+    function flat(x) {
+      if (x === undefined || x === null) { return x; }
+      if (typeof x === 'string') { return x; }
+      var html = ui.contentToHTML.convertLine(x);
+      return $('<span>').html(html).text();
+    }
+
+    function fixCards(cards) {
+      if (!Array.isArray(cards)) { return cards; }
+      return cards.map(function(c) {
+        if (!c) { return c; }
+        var copy = Object.assign({}, c);
+        copy.title = flat(c.title);
+        copy.subtitle = flat(c.subtitle);
+        if (copy.unavailableSubtitle !== undefined) {
+          copy.unavailableSubtitle = flat(c.unavailableSubtitle);
+        }
+        return copy;
+      });
+    }
+
+    ['displayHand', 'displayDecks', 'displayPinnedCards', 'displayMyNewRow']
+      .forEach(function(name) {
+        var original = ui[name];   // comes from the prototype
+        ui[name] = function(cards, extra) {
+          return original.call(ui, fixCards(cards), extra);
+        };
+      });
   };
 
   var TITLE = "Social Democracy: An Alternate History" + '_' + "Autumn Chen";
