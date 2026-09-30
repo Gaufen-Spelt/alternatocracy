@@ -4,6 +4,8 @@ tags: advisor
 card-image: img/portraits/HirschfeldMagnus.jpg
 view-if: hirschfeld_advisor = 1
 new-page: true 
+unavailable-subtitle: Will be active in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Magnus Hirschfeld
 
