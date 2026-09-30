@@ -4,6 +4,8 @@ tags: advisor, centrist
 card-image: img/portraits/MüllerHermann.jpg
 new-page: true
 view-if: muller_advisor = 1
+unavailable-subtitle: Will be available in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Herman Müller
 
