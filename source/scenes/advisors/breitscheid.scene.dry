@@ -4,6 +4,8 @@ tags: advisor, centrist
 card-image: img/portraits/BreitscheidRudolf.jpg
 new-page: true
 view-if: breitscheid_advisor = 1
+unavailable-subtitle: Will be active in [+ advisor_action_timer +] turns.
+choose-if: advisor_action_timer <= 0
 
 = Rudolf Breitscheid
 
