@@ -2,14 +2,14 @@ title: Economic Democracy
 is-card: true
 new-page: true
 on-arrival: economic_democracy_timer += 14; month_actions += 1
-view-if: spd_in_government and (economic_minister_party == "SPD" or finance_minister_party == "SPD") and (labor_minister_party == "SPD") and economic_democracy_timer <= 0
+view-if: economic_minister = "Naphtali" spd_in_government and (economic_minister_party == "SPD" or finance_minister_party == "SPD") and (labor_minister_party == "SPD") and economic_democracy_timer <= 0
 card-image: img/portraits/HilferdingRudolf.jpg
 tags: govt_affairs, cabinet
 #subtitle: How can we give workers more control over the means of production?
 
 = Economic Democracy
 
-A key part of the social democratic platform is that workers should have more control over the economy. This can be done either directly at the enterprise level, by giving works councils greater influence over management, or indirectly via the democratic government, by acquiring key industries from the capitalist class and placing them under democratic control.
+A key part of the Hilferding's social democratic platform is that workers should have more control over the economy. This can be done either directly at the enterprise level, by giving works councils greater influence over management, or indirectly via the democratic government, by acquiring key industries from the capitalist class and placing them under democratic control. This is considered lower level of socialist empowerment, as opposed to **Organized Capitalism**, upper level of socialist empowerment through state management and regulations.
 
 As we control the Labor [? if economic_minister_party == "SPD" : and Economic ?][? if finance_minister_party == "SPD" : and Finance ?] ministries, we can finally begin to implement our long-standing goals. [? if in_grand_coalition: Our bourgeois coalition partners might not agree, however. ?] [? if dvp_in_government: Especially opposed to this is **DVP**, which fears that economical democracy will lead to the lose of their control over workers and eventual domination of state in matters of market and industries. ?]
 
