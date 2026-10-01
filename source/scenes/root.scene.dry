@@ -729,4 +729,24 @@ new-page: true
 
 WIP: Expanded content, modifiers, addons and etcetera.
 
+- @seed: Seed.
 - @start: Back
+
+@seed
+title: Seed
+subtitle: Controls card draw randomness. Current value: [+ seed +]
+
+Current seed: <b id="seed_display">[+ seed +]</b>
+
+<p>
+<input type="number" id="seed_input" placeholder="new seed" style="width:9em;">
+<button onclick="var q=dendryUI.dendryEngine.state.qualities; q.seed=Math.floor(Number(document.getElementById('seed_input').value)||0); document.getElementById('seed_display').textContent=q.seed;">Set</button>
+</p>
+
+<p>
+<button onclick="var q=dendryUI.dendryEngine.state.qualities; q.seed=(Number(q.seed)||0)-1; document.getElementById('seed_display').textContent=q.seed;">-1</button>
+<button onclick="var q=dendryUI.dendryEngine.state.qualities; q.seed=(Number(q.seed)||0)+1; document.getElementById('seed_display').textContent=q.seed;">+1</button>
+<button onclick="var q=dendryUI.dendryEngine.state.qualities; q.seed=Math.floor(Math.random()*1000000); document.getElementById('seed_display').textContent=q.seed;">Random</button>
+</p>
+
+- @addon: Back
