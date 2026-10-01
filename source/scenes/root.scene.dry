@@ -41,7 +41,7 @@ Q.workers_income = 0;
 
 Q.ideology = "Centrist";
 Q.spd_world = 0;
-q.youth_crisis_spd = 1;
+Q.youth_crisis_spd = 1;
 
 //Progress accounts for how much is the progress reached towards activating reaction from right.
 //Threshold here means where it should activate.
