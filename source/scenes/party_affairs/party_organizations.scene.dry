@@ -13,7 +13,7 @@ In addition to being a political party, the SPD is a social world onto itself, w
 
 [? if spd_world == 0: Currently, we are in the status of self segregation from bourgeouis society, filled with individualism, competitionship, nationalism, conservatism and even chauvinism. Our values form counter-culture against the mainstream of Weimar. ?] [? if spd_world == 1: We have demontaged the self segregation policy, starting the co-operation with bourgeouis society with ambivalent goals. Class struggle left argues against opening us, while reformists suggest that we could expose them to our socialist values, especially in proletariat dominated cultural organizations. ?]
 
-[? if youth_crisis_spd < 1: As the aging party, our youth organizations, comparably, are far smaller than our traditional groups. This was caused by the hyperinflationary crisis, from which both us and other traditional (primarily liberal) parties have not recovered from ever since. If we wish to attract them, naturally, we have to fund youth organizations and find the means to expand **beyond aging working class**, which means breaking through our rigid marxist thinking... ?]
+[? if youth_crisis_spd >= 1: As the aging party, our youth organizations, comparably, are far smaller than our traditional groups. This was caused by the hyperinflationary crisis, from which both us and other traditional (primarily liberal) parties have not recovered from ever since. If we wish to attract them, naturally, we have to fund youth organizations and find the means to expand **beyond aging working class**, which means breaking through our rigid marxist thinking... ?]
 
 - @newspapers: Fund more newspapers and journalists.
 - @welfare: Fund more mutual aid and welfare programs.
