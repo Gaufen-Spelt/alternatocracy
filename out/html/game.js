@@ -57,12 +57,28 @@ var main = function(dendryUI) {
 
 
 // Frequency-based card draws.
-    var DRAW_MODE = 'weighted';  // 'weighted' = random, but weighted by frequency
-                                 // 'highest'  = highest frequency always drawn first (no RNG)
-                                 // 'lowest'   = lowest frequency always drawn first (no RNG)
-    var SHARPEN = 1;             // 'weighted' only: 1 = normal weights,
-                                 // 2-4 = favours high-frequency cards much more,
-                                 // so the RNG is "subdued"
+    var DRAW_MODE = 'seeded';    // 'weighted' = random, weighted by frequency
+                                 // 'highest'  = highest frequency always first
+                                 // 'lowest'   = lowest frequency always first
+                                 // 'seeded'   = weighted by frequency, but the dice
+                                 //              come from Q.seed (repeatable)
+    var SHARPEN = 1;             // weighted/seeded: 2-4 favours high frequency more
+
+    // Small seeded PRNG (mulberry32): same input -> same number in [0,1)
+    function seededRandom(seed) {
+      var t = (seed >>> 0) + 0x6D2B79F5;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function hashString(s) {
+      var h = 2166136261;
+      for (var i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return h >>> 0;
+    }
 
     var engineProto = Object.getPrototypeOf(ui.dendryEngine);
     engineProto._drawFromDeck = function(deckId) {
@@ -70,8 +86,8 @@ var main = function(dendryUI) {
       var viewable = this._compileChoices(deck);
       if (!viewable) { return null; }
 
-      var hand = (this.state.currentHands[this.state.sceneId] || [])
-        .map(function(c) { return c.id; });
+      var handCards = this.state.currentHands[this.state.sceneId] || [];
+      var hand = handCards.map(function(c) { return c.id; });
       var game = this.game;
       var self = this;
 
@@ -85,8 +101,8 @@ var main = function(dendryUI) {
         var s = game.scenes[c.id];
         var f = s.frequency;
         if (s.frequencyVar) { f = self._runExpression(s.frequencyVar); }
-        if (f === null) { return Infinity; }          // null = always first
-        if (f === undefined || isNaN(f)) { return 100; } // engine default
+        if (f === null) { return Infinity; }
+        if (f === undefined || isNaN(f)) { return 100; }
         return Math.max(0, f);
       }
 
@@ -99,25 +115,32 @@ var main = function(dendryUI) {
             pick = pool[i]; pickF = f;
           }
         }
-        return pick;   // ties: first listed in the deck
+        return pick;
       }
 
-      // weighted random
       var inf = pool.filter(function(c) { return freq(c) === Infinity; });
       if (inf.length) { return inf[0]; }
 
       var weights = pool.map(function(c) { return Math.pow(freq(c), SHARPEN); });
       var total = weights.reduce(function(a, b) { return a + b; }, 0);
-      if (total <= 0) { return pool[this.random.uint32() % pool.length]; }
 
-      var r = this.random.random() * total;
+      // the dice roll: from Q.seed (seeded) or the engine RNG (weighted)
+      var roll;
+      if (DRAW_MODE === 'seeded') {
+        var seed = Number(this.state.qualities.seed) || 0;
+        roll = seededRandom(seed + hashString(deckId) + handCards.length * 7919);
+      } else {
+        roll = this.random.random();
+      }
+
+      if (total <= 0) { return pool[Math.floor(roll * pool.length)]; }
+      var r = roll * total;
       for (var j = 0; j < pool.length; j++) {
         r -= weights[j];
         if (r < 0) { return pool[j]; }
       }
       return pool[pool.length - 1];
     };
-
 
 
 
