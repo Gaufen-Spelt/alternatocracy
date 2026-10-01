@@ -667,6 +667,10 @@ Q.stampfer_advisor = 0; // Friedrich Stampfer
 !}
 set-bg: img/map_2.jpg
 new-page: true
+go-to: menum
+
+@menum
+new-page: true
 
 > *"Weimar Germany speaks to us in other ways as well, perhaps most often as a warning sign. This was a society battered by economic crisis and unrelenting political conflict. World War I cast its long shadow over the entire history of the republic. However much present-day economists and historians have revised the notion that the Versailles Peace Treaty placed excessive financial burdens on Germany, Germans of the time were convinced that they had been unjustly treated by the victors of World War I. Many were quick to blame the Allies and, following the stab-in-the-back legend, Jews and socialists at home for every subsequent disaster that ensued: civil unrest, hyperinflation, depression, bankruptcies, and any other kind of misery one can imagine. Weimar Germany conjures up fears of what can happen when there is simply no societal consensus on how to move forward and every minor difference becomes a cause of existential political battles, when assassinations and street fights run rampant and minorities become the easy scapegoats of antidemocratic forces. It is a warning sign because we all know how it ended: **REDACTED**."*
 
@@ -730,7 +734,7 @@ new-page: true
 WIP: Expanded content, modifiers, addons and etcetera.
 
 - @seed: Seed.
-- @start: Back
+- @menum: Back
 
 @seed
 title: Seed
