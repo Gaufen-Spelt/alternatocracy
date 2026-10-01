@@ -40,6 +40,7 @@ Q.unemployed_income = 0;
 Q.workers_income = 0;
 
 Q.ideology = "centrist";
+Q.spd_world = 0;
 
 //Progress accounts for how much is the progress reached towards activating reaction from right.
 //Threshold here means where it should activate.
