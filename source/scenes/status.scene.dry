@@ -180,7 +180,7 @@ Q.party_ideology_leadership_html = ideologyHtml;
 !}
 on-display: {!
 
-var TOTAL_SEATS = Q.total_seats || 100;
+var TOTAL_SEATS = Q.total_seats || 100;  // seats in the chart
 
 var factions = [
     { id: 'left',       label: 'Klassenkampf Linke',                  val: Q.left_strength,       color: '#B30000' },
@@ -220,7 +220,17 @@ var svgEl = d3.select('#parliament-chart');
 if (!svgEl.empty() && chartData.length) {
     var w = svgEl.node().getBoundingClientRect().width || 600;
     svgEl.attr('height', w / 2 + 10);
-    svgEl.datum(chartData).call(d3.parliament().width(w).innerRadiusCoef(0.4));
+
+    var chart = d3.parliament().width(w).innerRadiusCoef(0.4);
+
+    // animations off
+    chart.enter.smallToBig(false);
+    chart.enter.fromCenter(false);
+    chart.update.animate(false);
+    chart.exit.bigToSmall(false);
+    chart.exit.toCenter(false);
+
+    svgEl.datum(chartData).call(chart);
 
     var legend = '';
     chartData.forEach(function(d) {
