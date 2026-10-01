@@ -11,7 +11,9 @@ card-image: img/Mann_der_Arbeit.jpg
 
 In addition to being a political party, the SPD is a social world onto itself, with a vast array of associated organizations which serve the social needs of their members from cradle to grave.
 
-[? if spd_world == 0: Currently, we are in the status of self segregation from bourgeouis society, filled with individualism, competitionship, nationalism, conservatism and even chauvinism. Our values form counter-culture against the mainstream of Weimar. ?] [? if spd_world == 1: We have demontaged the self segregation policy, starting the co-operation with bourgeouis society with ambivalent goals. Class struggle left argues against opening us, while reformists suggest that we could expose them to our socialist values, especially in proletariat dominated cultural organizations. ?] 
+[? if spd_world == 0: Currently, we are in the status of self segregation from bourgeouis society, filled with individualism, competitionship, nationalism, conservatism and even chauvinism. Our values form counter-culture against the mainstream of Weimar. ?] [? if spd_world == 1: We have demontaged the self segregation policy, starting the co-operation with bourgeouis society with ambivalent goals. Class struggle left argues against opening us, while reformists suggest that we could expose them to our socialist values, especially in proletariat dominated cultural organizations. ?]
+
+[? if youth_crisis_spd < 1: As the aging party, our youth organizations, comparably, are far smaller than our traditional groups. This was caused by the hyperinflationary crisis, from which both us and other traditional (primarily liberal) parties have not recovered from ever since. If we wish to attract them, naturally, we have to fund youth organizations and find the means to expand **beyond aging working class**, which means breaking through our rigid marxist thinking... ?]
 
 - @newspapers: Fund more newspapers and journalists.
 - @welfare: Fund more mutual aid and welfare programs.
@@ -42,7 +44,7 @@ go-to: media
 choose-if: resources > 1
 unavailable-subtitle: Not enough resources.
 subtitle: -2 resources. [? if not black_thursday_seen: Currently, our members consider this as worthless spending. ?]
-on-arrival: resources -= 2; workers_aid += 1; unemployed_spd += 2*(1 - dissent); unemployed_spd += 2+(unemployed / 7) + (workers_aid / 2) if unemployed > 10 and workers_aid > 0
+on-arrival: resources -= 2; workers_aid += 1; unemployed_spd += 2*(1 - dissent); unemployed_spd += 2+(unemployed / 6) + (workers_aid / 2) if unemployed > 10 and workers_aid > 0
 
 We have increased funding to Workers' Welfare. [? if black_thursday_seen > 0 : In an age of economic crisis, this will be helpful for improving our standing among the unemployed. ?]
 
