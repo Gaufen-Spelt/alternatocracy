@@ -742,6 +742,7 @@ Q.spd_neorevisionist = (Q.ideology == "Neorevisionist") ? 1 : 0;
 
 // /////  VONC SETTING UPDATE UPDATE VONC VONC DVP
 
+Q.vonc_dissent_met = 0;
 
 
 var vonc_dissent_table = {
