@@ -178,6 +178,75 @@ for (var i = 0; i < Q.parties.length; i++) {
 }
 Q.party_ideology_leadership_html = ideologyHtml;
 !}
+on-display: {!
+
+var TOTAL_SEATS = Q.total_seats || 500;  // change to your seat variable
+
+var partyColors = {
+    spd: '#E3000F', kpd: '#8B0000', ddp: '#FFCC00', zentrum: '#1A1A1A',
+    dnvp: '#3A5BA0', nsdap: '#6B4423', other: '#999999'
+};
+
+function seatsFor(p) {
+    if (Q[p + '_seats'] !== undefined) return Math.round(Q[p + '_seats']);
+    var v = Q[p + '_votes'] || 0;
+    return Math.round(v / 100 * TOTAL_SEATS);
+}
+
+// ---- Parliament chart ----
+var chartData = [];
+for (var i = 0; i < Q.parties.length; i++) {
+    var p = Q.parties[i];
+    var s = seatsFor(p);
+    if (s > 0) {
+        chartData.push({
+            id: p,
+            name: (p === 'ddp' ? (Q.ddp_name || 'DDP') : p.toUpperCase()),
+            seats: s,
+            color: partyColors[p] || '#777',
+            outline: '#222'
+        });
+    }
+}
+
+var svgEl = d3.select('#parliament-chart');
+if (!svgEl.empty() && chartData.length) {
+    var w = svgEl.node().getBoundingClientRect().width || 600;
+    svgEl.attr('height', w / 2 + 10);
+    svgEl.datum(chartData).call(d3.parliament().width(w).innerRadiusCoef(0.4));
+
+    var legend = '';
+    chartData.forEach(function(d) {
+        legend += '<span style="display:inline-block;margin-right:10px;">' +
+                  '<span style="display:inline-block;width:10px;height:10px;background:' +
+                  d.color + ';margin-right:4px;"></span>' + d.name + ' ' + d.seats + '</span>';
+    });
+    d3.select('#parliament-legend').html(legend);
+}
+
+// ---- Faction strengths ----
+var factions = [
+    { label: 'Klassenkampf Linke',          val: Q.left_strength },
+    { label: 'Materialist / Center Marxists', val: Q.center_strength },
+    { label: 'Arbeitergewerkschaft',        val: Q.labor_strength },
+    { label: 'Reformist / Evolutionary Socialists', val: Q.reformist_strength }
+];
+if (Q.neorevisionism >= 1) {
+    factions.push({ label: 'Neorevisionist / Militant Democrats', val: Q.neorevisionist_strength });
+}
+
+var fhtml = '<b>Faction Strengths</b><br>';
+factions.forEach(function(f) {
+    var v = f.val || 0;
+    fhtml += '<div style="margin:4px 0;">' + f.label +
+             (Q.deterministic_mode == 1 ? ' (' + v + ')' : '') +
+             '<div style="background:#ddd;height:8px;">' +
+             '<div style="background:#c00;height:8px;width:' + Math.max(0, Math.min(100, v)) + '%;"></div>' +
+             '</div></div>';
+});
+d3.select('#faction-strengths').html(fhtml);
+
+!}
 
 <hr>
 = Parties
@@ -188,6 +257,13 @@ Q.party_ideology_leadership_html = ideologyHtml;
 <hr>
 = Internal Factions of the SPD
 <hr>
+
+<div id="parliament-wrap">
+  <svg id="parliament-chart" style="width:100%"></svg>
+  <div id="parliament-legend"></div>
+</div>
+
+<div id="faction-strengths"></div>
 
 Internal dissent: [+ dissent_percent : dissent +] [? if deterministic_mode == 1: [+ dissent_percent +] ?]
 
