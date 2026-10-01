@@ -738,65 +738,37 @@ Q.spd_reformist = (Q.ideology == "Reformist") ? 1 : 0;
 Q.spd_labor = (Q.ideology == "Labor") ? 1 : 0;
 Q.spd_neorevisionist = (Q.ideology == "Neorevisionist") ? 1 : 0;
 
-// ============================================================================
-// VONC TRIGGER
-// ============================================================================
-Q.trigger_vonc = 0;
+
+
+// /////  VONC SETTING UPDATE UPDATE VONC VONC DVP
+
+
 
 var vonc_dissent_table = {
-    Centrist:  { weimar: 3, grand: 2, popfront: 3, minority: 2 },
-    Reformist: { weimar: 4, grand: 3, popfront: 2, minority: 4 },
-    Left:      { weimar: 2, grand: 1, popfront: 3, minority: 1 },
-    Labor:     { weimar: 4, grand: 2, popfront: 3, minority: 3 }
+    CENTRIST:  { weimar: 3, grand: 2, popfront: 3, minority: 2 },
+    REFORMIST: { weimar: 4, grand: 3, popfront: 2, minority: 4 },
+    LEFT:      { weimar: 2, grand: 1, popfront: 3, minority: 1 },
+    LABOR:     { weimar: 4, grand: 2, popfront: 3, minority: 3 }
 };
 
 var vonc_coalitions = [
-    { key: 'grand',    flag: Q.in_grand_coalition,    threshold: 3 },
-    { key: 'popfront', flag: Q.in_popular_front,      threshold: 3 },
-    { key: 'minority', flag: Q.in_minority_government, threshold: 3 },
-    { key: 'weimar',   flag: Q.in_weimar_coalition,   threshold: 4 }
+    { key: 'grand',    flag: 'in_grand_coalition' },
+    { key: 'popfront', flag: 'in_popular_front' },
+    { key: 'minority', flag: 'in_minority_government' },
+    { key: 'weimar',   flag: 'in_weimar_coalition' }
 ];
 
-var vonc_ideology = Q.ideology
-    ? Q.ideology.charAt(0).toUpperCase() + Q.ideology.slice(1).toLowerCase()
-    : "Centrist";
-var vonc_row = vonc_dissent_table[vonc_ideology] || vonc_dissent_table.Centrist;
-
-var vonc_any_trigger = false;
-for (var i = 0; i < vonc_coalitions.length; i++) {
-    var vc = vonc_coalitions[i];
-    if (vc.flag == 1) {
-        Q.coalition_dissent = vonc_row[vc.key];
-        if (Q.coalition_dissent >= vc.threshold) {
-            vonc_any_trigger = true;
+Q.vonc_dissent_met = 0;
+var row = vonc_dissent_table[String(Q.ideology).toUpperCase()];
+if (row) {
+    for (var i = 0; i < vonc_coalitions.length; i++) {
+        var c = vonc_coalitions[i];
+        if (Q[c.flag] == 1 && Q.coalition_dissent >= row[c.key]) {
+            Q.vonc_dissent_met = 1;
             break;
         }
     }
 }
-
-Q.trigger_vonc = (
-    Q.spd_in_government == 1 &&
-    vonc_any_trigger &&
-    Q.spd_r < 50 &&
-    !Q.constructive_vonc
-) ? 1 : 0;
-
-Q.dbg_vonc = {
-    ideology: Q.ideology,
-    normalized: vonc_ideology,
-    row: vonc_row,
-    spd_in_government: Q.spd_in_government,
-    in_grand: Q.in_grand_coalition,
-    in_weimar: Q.in_weimar_coalition,
-    in_popfront: Q.in_popular_front,
-    in_minority: Q.in_minority_government,
-    any_trigger: vonc_any_trigger,
-    spd_r: Q.spd_r,
-    constructive_vonc: Q.constructive_vonc,
-    result: Q.trigger_vonc
-};
-console.log('VONC DEBUG', JSON.stringify(Q.dbg_vonc));
-
 
 
 
