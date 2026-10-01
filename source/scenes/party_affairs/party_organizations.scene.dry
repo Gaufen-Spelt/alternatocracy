@@ -3,7 +3,7 @@ new-page: true
 is-card: true
 tags: party_affairs
 view-if: party_organizations_timer <= 0
-on-arrival: month_actions += 1; party_organizations_timer = 8;
+on-arrival: month_actions += 1; party_organizations_timer = 8; 
 card-image: img/Mann_der_Arbeit.jpg
 #subtitle: Outside of electoral politics, the SPD runs a social world onto itself.
 
@@ -11,12 +11,24 @@ card-image: img/Mann_der_Arbeit.jpg
 
 In addition to being a political party, the SPD is a social world onto itself, with a vast array of associated organizations which serve the social needs of their members from cradle to grave.
 
+[? if spd_world == 0: Currently, we are in the status of self segregation from bourgeouis society, filled with individualism, competitionship, nationalism, conservatism and even chauvinism. Our values form counter-culture against the mainstream of Weimar. ?] [? if spd_world == 1: We have demontaged the self segregation policy, starting the co-operation with bourgeouis society with ambivalent goals. Class struggle left argues against opening us, while reformists suggest that we could expose them to our socialist values, especially in proletariat dominated cultural organizations. ?] 
+
 - @newspapers: Fund more newspapers and journalists.
 - @welfare: Fund more mutual aid and welfare programs.
 - @culture: Fund sports leagues, educational, and cultural programs.
 - @youth: We have the reputation of being a party for old men. Support the youth organizations.
+- @spd_world_1: German Athletic Club invites us to co-operate with them. This will also open our own sub-world to the rest of Germany.
 - @nothing: Do not increase funding for any program.
 - @easy_discard
+
+@spd_world_1
+subtitle: Are we sure about that?
+view-if: spd_world == 0
+choose-if: resources >= 3 and reformist_strength + neorevisionist_strength >= 60 and socialism < pro_republic and ideology != "Left" and ideology != "Centrist" and (peoples_party or new_middle_consciousness = 1)
+unavailable-subtitle: [? if resources < 3: Not enough resources. ?] [? if reformist_strength + neorevisionist_strength < 60: Currently, this idea has no sufficient enough of support to consider doing this. ?] [? if ideology == Left or ideology == "Centrist": As the primarily marxist party, this can't possibly happen. ?] [? if not peoples_party or new_middle_consciousness = 1: We must expand our broad outlook on electorate. ?] [? if socialism >= pro_republic: With socialism trending, we can't possibly spend our efforts on working with unpopular bourgeouis. ?]
+on-arrival: spd_world = 1; nationalism += 5 if nationalism > socialism; socialism += 5 if socialism > nationalism; pro_republic += 5; workers_spd += 5; workers += 1; neorevisionist_strength += 5; ddp_relation += 3; z_relation += 3; dvp_relation += 3; dnvp_relation += 2; rural_spd += 5 if peoples_party; old_middle_spd += 5 if peoples_party; new_middle_spd += 8 if peoples_party or new_middle_consciousness; socialism += 5; workers_dnvp += 3 if peoples_party; workers_dvp += 3 if peoples_party; workers_ddp += 3 if peoples_party
+
+Our Workers’ Sports Federation has accepted German Athletic Club's proposal to co-operate after countless attempts of to do so. For the better or worse, the rest will follow the suit and unite the Germany's cultural world.
 
 @newspapers
 subtitle: Doubles party organizations timer.
@@ -43,8 +55,6 @@ on-arrival: resources -= 1; cultural_organizations += 1; left_dissent -= 6; cent
 It is not enough for the SPD to solely be a political party. The Worker Singer's League, Worker's Sports, and our schools and libraries are crucial to our members' lives. Funding these organizations makes our members more committed to the party, even when our policies might not be to their liking.
 
 [? if sa_strength > 500 : However, it feels frivolous to spend on sports and choirs when the fascists are murdering us in the streets. ?]
-
-[? if historical_mode: The Zentrum and DDP condemn our attempts at militarizing Reichsbanner units, fearing socialist domination. ?]
 
 @youth
 choose-if: resources > 0 and left_strength + neorevisionist_strength > 50
