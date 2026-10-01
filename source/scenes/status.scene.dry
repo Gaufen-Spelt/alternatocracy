@@ -527,12 +527,20 @@ Q.classes_breakdown_display = buildClassSection(Q.classes);
 
 @social
 
-= Social-economic matters
+= Labour
 
-Workers:
+Worker Wages: [? if real_wages >= 2 : High ?][? if real_wages == 1 : Adequate ?][? if real_wages == 0 : Baseline ?][? if real_wages < 0 : Depressed ?] ([+ real_wages +])
+Minimum Wage: [? if minimum_wage : Enforced ?][? if not minimum_wage : Unregulated ?]
+Workplace Safety & Standards: [? if workplace_safety >= 2 : Comprehensive ?][? if workplace_safety == 1 : Moderate ?][? if workplace_safety == 0 : Weak ?]
+Workday Hours: [? if eight_hour_day : Strict 8-Hour Day ?][? if not eight_hour_day : Flexible / Extended ?]
+Works Councils Power: [? if works_councils == 0 : Powerless ?][? if works_councils == 1 : Enterprise Level ?][? if works_councils == 2 : Sectorial Parity ?]
 
-Workers wages:
+Labour Dissent: [+ labor_dissent +]%
 
-Workplace safety: 
+= Capital
 
-Hours-work system:
+Business Confidence: [? if business_confidence >= 70 : Flourishing ?][? if business_confidence >= 40 and business_confidence < 70 : Cautious ?][? if business_confidence >= 20 and business_confidence < 40 : Hostile ?][? if business_confidence < 20 : Panic / Collapse ?] ([+ business_confidence +]%)
+
+Capital Strike Progress: [+ capital_strike_progress +] / 5
+Capital Flight Risk: [? if capital_flight >= 3 : Severe ?][? if capital_flight == 2 : Moderate ?][? if capital_flight == 1 : Low ?][? if capital_flight == 0 : Minimal ?]
+
