@@ -56,9 +56,13 @@ var main = function(dendryUI) {
 
 
 
-  // Deterministic card draws: LOWEST priority number is drawn first.
-    var TIE_BREAK = 'first';   // 'first'  = ties go to the card listed first in the deck (no RNG)
-                               // 'random' = ties are broken randomly (subdued RNG)
+// Frequency-based card draws.
+    var DRAW_MODE = 'weighted';  // 'weighted' = random, but weighted by frequency
+                                 // 'highest'  = highest frequency always drawn first (no RNG)
+                                 // 'lowest'   = lowest frequency always drawn first (no RNG)
+    var SHARPEN = 1;             // 'weighted' only: 1 = normal weights,
+                                 // 2-4 = favours high-frequency cards much more,
+                                 // so the RNG is "subdued"
 
     var engineProto = Object.getPrototypeOf(ui.dendryEngine);
     engineProto._drawFromDeck = function(deckId) {
@@ -69,6 +73,7 @@ var main = function(dendryUI) {
       var hand = (this.state.currentHands[this.state.sceneId] || [])
         .map(function(c) { return c.id; });
       var game = this.game;
+      var self = this;
 
       var pool = viewable.filter(function(c) {
         var s = game.scenes[c.id];
@@ -76,18 +81,41 @@ var main = function(dendryUI) {
       });
       if (pool.length === 0) { return null; }
 
-      function pr(c) {
-        var p = game.scenes[c.id].priority;
-        return (p === undefined || p === null) ? 1 : p;
+      function freq(c) {
+        var s = game.scenes[c.id];
+        var f = s.frequency;
+        if (s.frequencyVar) { f = self._runExpression(s.frequencyVar); }
+        if (f === null) { return Infinity; }          // null = always first
+        if (f === undefined || isNaN(f)) { return 100; } // engine default
+        return Math.max(0, f);
       }
 
-      var best = Math.min.apply(null, pool.map(pr));
-      var top = pool.filter(function(c) { return pr(c) === best; });
-
-      if (TIE_BREAK === 'random' && top.length > 1) {
-        return top[this.random.uint32() % top.length];
+      if (DRAW_MODE === 'highest' || DRAW_MODE === 'lowest') {
+        var pick = pool[0], pickF = freq(pool[0]);
+        for (var i = 1; i < pool.length; i++) {
+          var f = freq(pool[i]);
+          if ((DRAW_MODE === 'highest' && f > pickF) ||
+              (DRAW_MODE === 'lowest' && f < pickF)) {
+            pick = pool[i]; pickF = f;
+          }
+        }
+        return pick;   // ties: first listed in the deck
       }
-      return top[0];
+
+      // weighted random
+      var inf = pool.filter(function(c) { return freq(c) === Infinity; });
+      if (inf.length) { return inf[0]; }
+
+      var weights = pool.map(function(c) { return Math.pow(freq(c), SHARPEN); });
+      var total = weights.reduce(function(a, b) { return a + b; }, 0);
+      if (total <= 0) { return pool[this.random.uint32() % pool.length]; }
+
+      var r = this.random.random() * total;
+      for (var j = 0; j < pool.length; j++) {
+        r -= weights[j];
+        if (r < 0) { return pool[j]; }
+      }
+      return pool[pool.length - 1];
     };
 
 
