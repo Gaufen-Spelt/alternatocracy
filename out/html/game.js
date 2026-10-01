@@ -53,6 +53,47 @@ var main = function(dendryUI) {
       });
       return originalDisplayChoices.call(ui, clean);
     };
+
+
+
+  // Deterministic card draws: LOWEST priority number is drawn first.
+    var TIE_BREAK = 'first';   // 'first'  = ties go to the card listed first in the deck (no RNG)
+                               // 'random' = ties are broken randomly (subdued RNG)
+
+    var engineProto = Object.getPrototypeOf(ui.dendryEngine);
+    engineProto._drawFromDeck = function(deckId) {
+      var deck = this.game.scenes[deckId];
+      var viewable = this._compileChoices(deck);
+      if (!viewable) { return null; }
+
+      var hand = (this.state.currentHands[this.state.sceneId] || [])
+        .map(function(c) { return c.id; });
+      var game = this.game;
+
+      var pool = viewable.filter(function(c) {
+        var s = game.scenes[c.id];
+        return c.canChoose && s && s.isCard && hand.indexOf(c.id) < 0;
+      });
+      if (pool.length === 0) { return null; }
+
+      function pr(c) {
+        var p = game.scenes[c.id].priority;
+        return (p === undefined || p === null) ? 1 : p;
+      }
+
+      var best = Math.min.apply(null, pool.map(pr));
+      var top = pool.filter(function(c) { return pr(c) === best; });
+
+      if (TIE_BREAK === 'random' && top.length > 1) {
+        return top[this.random.uint32() % top.length];
+      }
+      return top[0];
+    };
+
+
+
+
+  
   };
 
   var TITLE = "Social Democracy: An Alternate History" + '_' + "Autumn Chen";
