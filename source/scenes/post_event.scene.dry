@@ -680,11 +680,11 @@ if (Q.peoples_party == 1) {
 }
 
 const strengthMap = {
-    left: "left_strength",
-    centrist: "center_strength",
-    labor: "labor_strength",
-    reformist: "reformist_strength",
-    neorev: "neorevisionist_strength"
+    Left: "left_strength",
+    Centrist: "center_strength",
+    Labor: "labor_strength",
+    Reformist: "reformist_strength",
+    Neorev: "neorevisionist_strength"
 };
 const key = strengthMap[Q.ideology];
 if (key && Q[key] < 40) { Q[key] += 1; }
@@ -700,7 +700,7 @@ if (Q.ideology == "Left") {
     Q.kpd_relation += 0.2;
 }
 
-if (Q.ideology == "reformist") {
+if (Q.ideology == "Reformist") {
     Q.dvp_relation += 0.2;
     Q.ddp_relation += 0.3;
     Q.z_relation += 0.3;
@@ -767,10 +767,10 @@ Q.vonc_dissent_met = 0;
 
 
 var vonc_dissent_table = {
-    CENTRIST:  { weimar: 3, grand: 2, popfront: 3, minority: 2 },
-    REFORMIST: { weimar: 4, grand: 3, popfront: 2, minority: 4 },
-    LEFT:      { weimar: 2, grand: 1, popfront: 3, minority: 1 },
-    LABOR:     { weimar: 4, grand: 2, popfront: 3, minority: 3 }
+    Centrist:  { weimar: 3, grand: 2, popfront: 3, minority: 2 },
+    Reformist: { weimar: 4, grand: 3, popfront: 2, minority: 4 },
+    Left:      { weimar: 2, grand: 1, popfront: 3, minority: 1 },
+    Labor:     { weimar: 4, grand: 2, popfront: 3, minority: 3 }
 };
 
 var vonc_coalitions = [
