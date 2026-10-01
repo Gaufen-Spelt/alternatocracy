@@ -39,7 +39,7 @@ Q.new_middle_income = 0;
 Q.unemployed_income = 0;
 Q.workers_income = 0;
 
-Q.ideology = "centrist";
+Q.ideology = "Centrist";
 Q.spd_world = 0;
 
 //Progress accounts for how much is the progress reached towards activating reaction from right.
