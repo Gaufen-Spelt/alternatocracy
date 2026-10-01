@@ -740,6 +740,27 @@ Q.spd_neorevisionist = (Q.ideology == "Neorevisionist") ? 1 : 0;
 
 
 
+/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+// EXTERNAL INREPENDENT OF MONTHS SETTINGS.
+
+
+
+
+
 // /////  VONC SETTING UPDATE UPDATE VONC VONC DVP
 
 Q.vonc_dissent_met = 0;
@@ -769,16 +790,6 @@ if (row) {
             break;
         }
     }
-}
-
-
-
-/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
-
-
-
-
-
 }
 
 
