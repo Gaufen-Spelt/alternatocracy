@@ -195,12 +195,13 @@ var neorevLabel = (Q.social_patriotism == 1)
 
 if (Q.ethical_socialism >= 1) {
     factions.push({ 
-        id: 'isk', 
+        id: 'ethical', 
         label: 'Ethical Socialists (ISK)', 
-        val: Q.isk_strength, 
-        color: '#8B0000'
+        val: Q.ethical_strength, 
+        color: '#8B4513'
     });
 }
+
 
 if (Q.neorevisionism >= 1) {
     factions.push({ id: 'neorev', label: neorevLabel, val: Q.neorevisionist_strength, color: '#7A3E9D' });
