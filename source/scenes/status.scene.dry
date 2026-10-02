@@ -194,14 +194,13 @@ var neorevLabel = (Q.social_patriotism == 1)
     : 'Neorevisionist / Militant Democrats';
 
 if (Q.ethical_socialism >= 1) {
-    factions.push({ 
-        id: 'ethical', 
-        label: 'Ethical Socialists (ISK)', 
-        val: Q.ethical_strength, 
+    factions.push({
+        id: 'ethical',
+        label: 'Ethical Socialists (ISK)',
+        val: Q.ethical_strength,
         color: '#8B4513'
     });
 }
-
 
 if (Q.neorevisionism >= 1) {
     factions.push({ id: 'neorev', label: neorevLabel, val: Q.neorevisionist_strength, color: '#7A3E9D' });
@@ -236,8 +235,17 @@ var chartData = factions.filter(function(f) { return f.seats > 0; }).map(functio
 
 var svgEl = d3.select('#parliament-chart');
 if (!svgEl.empty() && chartData.length) {
-    var w = svgEl.node().getBoundingClientRect().width || 600;
-    svgEl.attr('height', w / 2 + 10);
+    var w = 600;
+
+    svgEl.selectAll('*').remove();
+    svgEl
+        .attr('viewBox', '-6 -6 ' + (w + 12) + ' ' + (w / 2 + 16))
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('width', null)
+        .attr('height', null)
+        .style('width', '100%')
+        .style('height', 'auto')
+        .style('overflow', 'visible');
 
     var chart = d3.parliament().width(w).innerRadiusCoef(0.4);
 
