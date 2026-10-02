@@ -193,6 +193,15 @@ var neorevLabel = (Q.social_patriotism == 1)
     ? 'Social Republicans / Militant Democrats'
     : 'Neorevisionist / Militant Democrats';
 
+if (Q.ethical_socialism >= 1) {
+    factions.push({ 
+        id: 'isk', 
+        label: 'Ethical Socialists (ISK)', 
+        val: Q.isk_strength, 
+        color: '#8B0000'
+    });
+}
+
 if (Q.neorevisionism >= 1) {
     factions.push({ id: 'neorev', label: neorevLabel, val: Q.neorevisionist_strength, color: '#7A3E9D' });
 }
