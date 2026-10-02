@@ -58,7 +58,7 @@ The reformist wing of the party seeks to preserve the Republic and the democrati
 
 @neorevisionist
 view-if: neorevisionism >= 1 or neorevisionist_strength >= 40
-choose-if: neorevisionist_strength + socialpatriot_strength q>= 40
+choose-if: neorevisionist_strength + socialpatriot_strength >= 40
 subtitle: Transformation beyond the understanding...
 unavailable-subtitle: Neorevisionists lack the strength to their program through. For nobody else will assist them with their poison.
 on-arrival: ideology = "Neorevisionist"; spd_ideology = "Social Republicanism"; neorevisionist_strength += 5; reformist_dissent += 5; center_dissent += 10; labor_dissent += 10; left_dissent += 15; peoples_party_support += 6; neorevisionism = 1; socialism -= spd_votes; pro_republic += spd_votes
