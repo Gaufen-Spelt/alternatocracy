@@ -27,8 +27,35 @@ Reformist - Pragmatic reformists, advocating for the governance to push forward 
 - @reformist
 - @neorevisionist
 - @hermann: Hermann Heller organizes right wing neorevisionists.
+- @eichler: Willi Eichler's International Socialists are readmitted.
 - @root: Leave.
 - @easy_discard
+
+@eichler
+title: Reconcile with Willi Eichler and the **Ethical Socialists (ISK)**.
+subtitle: With Neorevisionists and Reformists holding the majority, Leonard Nelson's movement is invited back into the fold.
+view-if: neorevisionism >= 1 and (neorevisionist_strength + reformist_strength + socialpatriot_strength >= 50) and ethical_socialism != 1
+on-arrival: {!
+Q.ethical_socialism = 1;
+
+if (Q.factions.indexOf('ethical') === -1) Q.factions.push('ethical');
+
+var reformist_loss = Math.floor(Q.reformist_strength * 0.10);
+var neorev_loss = Math.floor(Q.neorevisionist_strength * 0.10);
+
+Q.reformist_strength -= reformist_loss;
+Q.neorevisionist_strength -= neorev_loss;
+Q.ethical_strength = reformist_loss + neorev_loss + 2;
+
+Q.ethical_dissent = 10;
+Q.center_dissent += 8;
+Q.left_dissent += 8;
+Q.labor_dissent += 4;
+Q.neorevisionist_dissent -= 3;
+Q.reformist_dissent -= 3;
+!}
+
+Following the death of philosopher Leonard Nelson, Willi Eichler and Minna Specht have steered the *Internationaler Sozialistischer Kampfbund* (ISK) away from sectarian isolation and toward strategic alignment with our reformist and neorevisionist currents. Leftists and centrists are furious at us for creating mess-catch-all party.
 
 @hermann
 subtitle: Inspired by Hendrik de Man and Hermann Heller, right neorevisionists are pushing for new direction.
