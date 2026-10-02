@@ -1,0 +1,8 @@
+title: Reactionary forces move in...
+subtitle: They are mobilizing their capacities.
+new-page: true
+tags: event
+view-if: reaction_timer <= 0 and reaction_activated
+on-arrival: capital_strike_progress += 2; coup_progress += 1; socialism -= 5; reaction_timer = 24
+
+Reactionary template move against them.
