@@ -34,11 +34,11 @@ Reformist - Pragmatic reformists, advocating for the governance to push forward 
 subtitle: Inspired by Hendrik de Man and Hermann Heller, right neorevisionists are pushing for new direction.
 view-if: neorevisionism >= 1 and neorevisionist_strength >= 30
 on-arrival: social_patriotism = 1; socialpatriot_strength = neorevisionist_strength; socialpatriot_strength *= 0.3; neorevisionist_strength *= 0.7; nationalism += 5; left_dissent += 5; center_dissent += 5; {!
-Q.factions.push = ['socialpatriot']
+if (Q.factions.indexOf('socialpatriot') === -1) Q.factions.push('socialpatriot');
 Q.socialpatriot_dissent = 10;
 !}
 
-Hamburg SPD (including Artur Zickler and Hans von Eckardt) and Young Socialists, who are national minded and function as the party within party, have splitted from main Neorevisionist faction, forming neo
+Hamburg SPD (including Artur Zickler and Hans von Eckardt) and Young Socialists, who are national minded and function as the party within party, have splitted from main Neorevisionist faction, forming Hamburg's group (neo-Hofgeismar circle). Their "state-minded, nation oriented" form of reformist socialism closely reminds those of ASPD. Majority of our party, including Mierendorff's left Neorevisionists – despises them and they seek to remove them. 
 
 @left
 title: Support the **Left**.
