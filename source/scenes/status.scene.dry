@@ -301,6 +301,8 @@ Internal dissent: [+ dissent_percent : dissent +] [? if deterministic_mode == 1:
 
 [? if social_patriotism == 1: Hamburg's Group (Social Patriots) strength: [+ socialpatriot_strength : strength +] [? if deterministic_mode == 1: [+ socialpatriot_strength +] ?], dissent: [+ socialpatriot_dissent : dissent +] [? if deterministic_mode == 1: [+ socialpatriot_dissent +] ?] ?]
 
+[? if ethical_socialism == 1 : {!<span class="tooltip-text" title="A subgroup of Reformists combining Neo-Kantian ethics, de Man's anti-materialism, and similarly, neorevisionist tendencies.">Ethical Socialists</span>!} strength: [+ ethical_strength : strength +] [? if deterministic_mode == 1: [+ ethical_strength +] ?], dissent: [+ ethical_dissent : dissent +] [? if deterministic_mode == 1: [+ ethical_dissent +] ?] ?] [? if ethical_socialism == 1 and ethical_split: Ethical Socialists have defected from the party! ?]
+
 <hr>
 = National Sentiment
 <hr>
