@@ -1,9 +1,8 @@
 title: Capital Strike
 subtitle: Germany's industries are idling...
-view-if: {! return ((Q.ideology == "Left" ? Q.capital_strike_progress >= 8 : Q.ideology == "Reformist" ? Q.capital_strike_progress >= 12 : Q.capital_strike_progress >= 10) || Q.budget <= -5) && Q.spd_in_government !}
+view-if: spd_in_government and capital_strike_met and capital_strike_timer <= 0
 new-page: true
-max-visits: 1
-on-arrival: unemployed += 5; workers_spd*= 0.7; new_middle_spd -= 15; old_middle_spd -= 15; unemployed_spd*=0.7; rural_spd -= 15; pro_republic -= 15; capital_strike_seen = 1; z_relation -= 10; dvp_relation -= 10; workers_nsdap += 8; unemployed_nsdap += 10; new_middle_nsdap += 15; old_middle_nsdap += 15; rural_nsdap += 15; economic_growth -= 4;
+on-arrival: unemployed += 5; workers_spd*= 0.7; new_middle_spd -= 15; old_middle_spd -= 15; unemployed_spd*=0.7; rural_spd -= 15; pro_republic -= 15; capital_strike_seen = 1; z_relation -= 10; dvp_relation -= 10; workers_nsdap += 8; unemployed_nsdap += 10; new_middle_nsdap += 15; old_middle_nsdap += 15; rural_nsdap += 15; economic_growth -= 4; capital_strike_timer = 24
 tags: event
 
 = Capital Strike
