@@ -1702,3 +1702,114 @@ body.dark-mode tr.row-neutral   { background-color: rgba(120, 120, 120, 0.10); }
     min-width: 4.5em;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Weimar Board Dossier Card */
+.board-legend-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.board-legend-card {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  gap: 8px;
+}
+
+.board-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  flex-shrink: 0;
+}
+
+.board-faction-name {
+  font-weight: 500;
+  color: inherit;
+}
+
+.board-seat-count {
+  font-weight: 700;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+/* Verdict Box */
+#board-verdict {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid #B47B00;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Evasion Alert Banner */
+.board-bypass-alert {
+  margin-top: 12px;
+  background: rgba(166, 28, 28, 0.08);
+  border: 1px dashed #A61C1C;
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.bypass-badge {
+  display: inline-block;
+  color: #A61C1C;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.bypass-body {
+  color: inherit;
+  line-height: 1.4;
+}
+
+
+
+
+
