@@ -628,29 +628,6 @@ if (!svgEl.empty()) {
     d3.select('#board-legend').html(legendHtml);
 }
 
-// Verdict Panel
-var verdictHtml = '';
-if (wc == 0) {
-    verdictHtml = '<strong>Absolute Capital Supremacy:</strong> Shareholders hold all 9 seats. Labor has no constitutional oversight or access to corporate balance sheets.';
-} else if (wc == 1) {
-    verdictHtml = '<strong>Minority Representation (§70):</strong> Workers hold 2 of 9 seats. Delegates inspect financial records and voice concerns, but capital maintains an absolute 7–2 voting majority.';
-} else {
-    verdictHtml = '<strong>Full Parity Co-Determination:</strong> Balanced 5–5 board split. Key capital expenditures and restructuring require union compromise or intervention from the neutral chair.';
-}
-d3.select('#board-verdict').html(verdictHtml);
-
-// Bypass Warning Banner
-var bypass = (wc >= 1) && (Q.capital_strike_progress >= 3 || Q.capital_flight >= 2);
-if (bypass) {
-    d3.select('#board-bypass').html(
-        '<div class="board-bypass-alert">' +
-        '<div class="bypass-badge">INFORMAL BYPASS DETECTED</div>' +
-        '<div class="bypass-body"><strong>Engerer Ausschuss:</strong> Management is routing major strategy and investment decisions through secret executive subcommittees, keeping worker delegates in the dark.</div>' +
-        '</div>'
-    );
-} else {
-    d3.select('#board-bypass').html('');
-}
 
 !}
 
@@ -672,9 +649,6 @@ Labour Dissent: [+ labor_dissent +]%
   <svg id="board-chart" style="width:100%"></svg>
   <div id="board-legend"></div>
 </div>
-
-<div id="board-verdict"></div>
-<div id="board-bypass"></div>
 
 <hr>
 = Capital
