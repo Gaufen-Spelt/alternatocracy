@@ -781,6 +781,25 @@ if (row) {
 }
 
 
+// ///// CAPITAL STRIKE SETTING
+
+var capital_strike_table = {
+    left:      7,
+    reformist: 12,
+    centrist:  8,
+    labor:     9
+};
+var capital_strike_default = 10;
+
+var cs_threshold = capital_strike_table[String(Q.ideology).toLowerCase()];
+if (cs_threshold === undefined) cs_threshold = capital_strike_default;
+
+Q.capital_strike_met = 0;
+if (Q.capital_strike_progress >= cs_threshold || Q.budget <= -5) {
+    Q.capital_strike_met = 1;
+}
+
+
 
 
 
