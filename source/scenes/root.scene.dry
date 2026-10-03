@@ -534,7 +534,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'kpd_policy', 'kpd_ultimatum', 'popular_front_dispute',
             'high_inflation', 'banking_crisis', 'march_on_berlin',
             'understanding_enemy', 'schleichers_schemes',
-            'hindenburg_dismissal', 'fundraiser', 'capital_strike' 'business_confidence'
+            'hindenburg_dismissal', 'fundraiser', 'capital_strike' 'business_confidence',
             // advisor burned timers - prevents immediately re-adding a removed advisor
             'hilferding_burned', 'wels_burned', 'muller_burned', 'breitscheid_burned',
             'severing_burned', 'braun_burned', 'juchacz_burned', 'pfulf_burned',
@@ -543,6 +543,8 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'mierendorff_burned', 'leber_burned', 'schumacher_burned',
             'baade_burned', 'hirschfeld_burned', 'radbruch_burned', 'stampfer_burned'];
 Q.advisor_action_timer = 0;
+Q.business_confidence_timer = 0;
+Q.capital_strike_timer = 0;
 // party affairs timers
 Q.ideologimus_timer = 0;
 Q.confronting_nazis_timer = 0;
