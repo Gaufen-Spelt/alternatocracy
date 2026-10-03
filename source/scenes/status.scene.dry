@@ -574,15 +574,6 @@ Works Councils Power: [? if works_councils == 0 : Powerless ?][? if works_counci
 Labour Dissent: [+ labor_dissent +]%
 
 <hr>
-= Supervisory Board
-<hr>
-
-<div id="board-wrap">
-  <svg id="board-chart" style="width:100%"></svg>
-  <div id="board-legend"></div>
-</div>
-
-<hr>
 = Capital
 
 Capital anger level: [+ capital_strike_progress +] / 10
