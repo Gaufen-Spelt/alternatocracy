@@ -781,22 +781,27 @@ if (row) {
 }
 
 
-// ///// CAPITAL STRIKE SETTING
+// ///// CAPITAL STRIKE / BUSINESS CONFIDENCE SETTING
 
-var capital_strike_table = {
-    left:      7,
-    reformist: 12,
-    centrist:  8,
-    labor:     9
+// warn = progress where confidence starts dropping
+// strike = progress where the capital strike hits
+var capital_thresholds = {
+    left:      { warn: 5, strike: 8  },
+    reformist: { warn: 9, strike: 12 },
+    centrist:  { warn: 7, strike: 10 },
+    labor:     { warn: 7, strike: 10 }
 };
-var capital_strike_default = 10;
+var capital_default = { warn: 7, strike: 10 };
 
-var cs_threshold = capital_strike_table[String(Q.ideology).toLowerCase()];
-if (cs_threshold === undefined) cs_threshold = capital_strike_default;
+var cap = capital_thresholds[String(Q.ideology).toLowerCase()] || capital_default;
 
 Q.capital_strike_met = 0;
-if (Q.capital_strike_progress >= cs_threshold || Q.budget <= -5) {
+Q.business_confidence_met = 0;
+
+if (Q.capital_strike_progress >= cap.strike || Q.budget <= -5) {
     Q.capital_strike_met = 1;
+} else if (Q.capital_strike_progress >= cap.warn) {
+    Q.business_confidence_met = 1;
 }
 
 
