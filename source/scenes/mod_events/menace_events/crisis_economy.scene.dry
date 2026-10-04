@@ -1,0 +1,46 @@
+title: Party in distress
+subtitle: Crisis got to us!
+tags: event
+new-page: true
+view-if: hunger_timer <= 0 and party_crisis
+
+= Distress!
+
+As the crisis got worse, our party suffers from dysfunction caused by the decreased well-being of our party members.
+
+We must put some effort into counteracting this!
+
+- @fund: Send home help!
+- @aid: Use our workers' aid system.
+- @welfare: Welfare still does what it can.
+- @nothing: Nothing to be done here.
+
+@fund
+subtitle: We will use party resources for that.
+choose-if: resources >= 2
+unavailable-subtitle: Not enough resources
+on-arrival: unemployed_spd += 3; workers_spd += 2; left_dissent -= 5; labor_dissent -= 5; center_dissent += 7; reformist_dissent -= 2; neorevisionist_dissent -= 5; socialpatriot_dissent += 3; ethical_dissent += 2; resources -= 2; workers += 0.1; hunger_timer = 24; party_crisis = 0
+
+We sacrificed some of our funds to assist our party members in need. Of all the factions, the centrists voice their disapproval, saying our efforts are best spent on immediate action and that some sacrifices are necessary.
+
+@aid
+subtitle: We will use the charity group Workers' Welfare under Marie Juchacz.
+choose-if: workers_aid >= 1 and juchacz_advisor
+unavailable-subtitle: [? if not juchacz_advisor: Marie Juchacz can't help us without being empowered in the first place! ?] [? if workers_aid <= 0: Workers' Welfare is underfunded to handle this. ?]
+on-arrival: workers_aid -= 1; workers_spd += 2; unemployed_spd += 2; left_dissent -= 3; labor_dissent -= 4; center_dissent += 2; ethical_dissent -= 2; hunger_timer = 18; party_crisis = 0
+
+Workers' Welfare mobilized its volunteers: soup kitchens, clothing drives and help for struggling families. 
+
+@welfare
+subtitle: The state welfare system still does what it can.
+choose-if: welfare >= 1
+unavailable-subtitle: There is no welfare system left to lean on.
+on-arrival: unemployed_spd += 1; workers_spd += 1; center_dissent -= 2; reformist_dissent -= 2; labor_dissent += 2; left_dissent += 2; hunger_timer = 12; party_crisis = 0
+
+We directed our members toward the existing welfare programs. It softens the worst of it, though the left and the unions grumble that we are leaving our own people to the mercy of government.
+
+@nothing
+subtitle: We cannot afford to act.
+on-arrival: workers_spd -= 5; unemployed_spd -= 7; old_middle_spd -= 2; rural_spd -= 5; new_middle_spd -= 5; left_dissent += 6; labor_dissent += 5; ethical_dissent += 4; center_dissent -= 2; hunger_timer = 6; party_crisis = 0
+
+We did nothing. Members drift away and the loyal ones wonder what the party is for if it cannot help them in their darkest hour.
