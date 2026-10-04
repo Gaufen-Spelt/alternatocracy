@@ -249,28 +249,24 @@ if (Q.economy_bad) {
     if (Q.hunger_timer == 0) Q.hunger_timer = -1;   
 }
 
-// ===== FUNDS (dues) =====
-var dues_map = {
-    workers: Q.workers_dues,
-    unemployed: Q.unemployed_dues,
-    new_middle: Q.new_middle_dues,
-    old_middle: Q.old_middle_dues,
-    rural: Q.rural_dues
-};
 
-// 1. Independent drain: dues 1 = none, higher = more
-var dues_drain = 0.1;
-var max_dues = 0;
-for (var cls in dues_map) {
-    var d = dues_map[cls];
-    if (d > max_dues) max_dues = d;
-    if (d > 1) Q[cls + '_spd'] -= (d - 1) * dues_drain;
+
+// ===== FUNDS (dues) =====
+var dues_limit = { workers: 4, old_middle: 4, new_middle: 4, unemployed: 2, rural: 3 };
+
+var any_over = false;   // any class at its limit
+var any_above = false;  // any class past its limit
+
+for (var cls in dues_limit) {
+    var d = Q[cls + '_dues'];
+    if (d > 1) Q[cls + '_spd'] -= (d - 1) * 0.1;   // independent monthly drain
+    if (d >= dues_limit[cls]) any_over = true;
+    if (d > dues_limit[cls]) any_above = true;
 }
 
-// 2. Funds timer
-if (max_dues >= 4) {
+if (any_over) {
     if (!(Q.funds_timer >= 0)) {
-        Q.funds_timer = (max_dues >= 5) ? 18 : 24;
+        Q.funds_timer = any_above ? 18 : 24;
     }
     Q.funds_trigger = (Q.funds_timer == 0) ? 1 : 0;
 } else {
