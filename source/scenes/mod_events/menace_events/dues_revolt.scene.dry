@@ -1,0 +1,73 @@
+title: Dues revolt
+subtitle: The members can't pay!
+tags: event
+new-page: true
+view-if: funds_timer <= 0 and funds_trigger
+on-arrival: {!
+var dues_limit = { workers: 4, old_middle: 4, new_middle: 4, unemployed: 2, rural: 3 };
+var dues_drain = { workers: 3, old_middle: 2, new_middle: 3, unemployed: 6, rural: 4 };
+for (var c in dues_limit) {
+    var d = Q[c + '_dues'];
+    if (d >= dues_limit[c]) {
+        Q[c + '_spd'] -= dues_drain[c] * d;
+    }
+}
+!}
+
+= Dues are too high!
+
+Branches report that members are falling behind on their dues. Some have stopped paying and others quietly stopped showing up altogether.
+
+Something has to give.
+
+- @cut_w: Lower dues for workers.
+- @cut_u: Lower dues for the unemployed.
+- @cut_nm: Lower dues for the new middle class.
+- @cut_om: Lower dues for the old middle class.
+- @cut_r: Lower dues for the rural members.
+- @appeal: Appeal to solidarity.
+- @hold: Hold the line.
+
+@cut_w
+view-if: workers_dues >= 4
+on-arrival: workers_dues -= 1; workers_spd += 2; labor_dissent -= 3; left_dissent -= 2; funds_timer = 24; funds_trigger = 0
+
+We eased the burden on our workers.
+
+@cut_u
+view-if: unemployed_dues >= 2
+on-arrival: unemployed_dues -= 1; unemployed_spd += 4; left_dissent -= 3; labor_dissent -= 1; funds_timer = 24; funds_trigger = 0
+
+Asking the jobless to pay was always a hard sell.
+
+@cut_nm
+view-if: new_middle_dues >= 4
+on-arrival: new_middle_dues -= 1; new_middle_spd += 2; center_dissent -= 3; reformist_dissent -= 2; funds_timer = 24; funds_trigger = 0
+
+The clerks and technicians welcome the cut, though the left grumbles that we are catering to the non-socialists.
+
+@cut_om
+view-if: old_middle_dues >= 4
+on-arrival: old_middle_dues -= 1; old_middle_spd += 2; center_dissent -= 3; reformist_dissent -= 2; funds_timer = 24; funds_trigger = 0
+
+The shopkeepers and artisans are placated, for now...
+
+@cut_r
+view-if: rural_dues >= 3
+on-arrival: rural_dues -= 1; rural_spd += 2; center_dissent -= 2; funds_timer = 24; funds_trigger = 0
+
+Rural members have been drifting to the Landvolk. This slows the bleeding.
+
+@appeal
+choose-if: dissent < 0.40
+unavailable-subtitle: Members are straight up revolting...
+subtitle: Dues stay, but we ask members to endure.
+on-arrival: left_dissent -= 2; labor_dissent -= 1; workers_spd -= 1; unemployed_spd -= 1; funds_timer = 12; funds_trigger = 0
+
+Speakers tour the branches talking about sacrifice and solidarity. It is not taken seriously, however, it could buy us some time.
+
+@hold
+subtitle: The party needs the money.
+on-arrival: workers_spd -= 3; unemployed_spd -= 3; new_middle_spd -= 2; old_middle_spd -= 2; rural_spd -= 2; left_dissent += 4; labor_dissent += 4; center_dissent += 3; funds_timer = 6; funds_trigger = 0
+
+We refused to budge...
