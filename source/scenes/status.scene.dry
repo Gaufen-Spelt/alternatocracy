@@ -286,7 +286,7 @@ d3.select('#faction-strengths').html(fhtml);
 [+ party_ideology_leadership_html +]
 
 <hr>
-= Internal Factions of the SPD
+= Internal Factions
 <hr>
 
 <div id="parliament-wrap">
