@@ -1,0 +1,112 @@
+title: News
+is-special: true
+new-page: true
+
+= News 
+
+[? if year = 1928 and month = 1: 14 January 1928: Reichswehrminister Otto Gessler resigns over the Phoebus-Affäre (Lohmann Affair), a political scandal involving secret rearmament funding through the Phoebus film company. ?]
+
+[? if year = 1928 and month = 1: 18 January: Wilhelm Groener is appointed and sworn in as new Reichswehrminister. ?]
+
+[? if year = 1928 and month = 1 and weeks > 1: **BERLIN** — Leaders of the Reich and the state of Prussia have concluded a high-stakes conference aimed at resolving the administrative deadlock threatening German federalism. While the Reich government pushed for centralizing reforms to curb Prussian influence, Prime Minister Otto Braun successfully defended his state’s autonomy as a vital safeguard for the Republic. The summit ultimately ended without a formal agreement, leaving the volatile power struggle between the central government and its largest territory dangerously unresolved.?]
+
+[? if year = 1928 and month = 1 and bayernbund_flavor_1 = 1: As the result of negotiations between Silesian Peasants League and Bavarian Peasants of Fehr, German Peasants Party has been formed. This happened in the wake of agricultural crisis, sparked by the flooding of the german market with cheap imports from outside, collapsing value of national products and their costs as other option meant inability to compete. ?]
+
+[? if year = 1928 and month = 2 and strelitz_flavor_1 = 1: Mecklenburg - Strelitz election proceeded as usual. Results: [+ strelitz_var_string +]. ?]
+
+[? if year = 1928 and month = 2 and marx_cabinet_collapsed_1: The current bourgeois-right government has fallen following the collapse of negotiations over School Law (Reichsschulgesetz). ?]
+
+[? if year = 1928 and month = 2 and marx_cabinet_collapsed_1: The Weimar Constitution, in Article 147 paragraph 2, had left the detailed regulation of school law to be "prescribed by state legislation on the basis of a national law", but the law had never been written. Marx's inability to pass one as promised brought down his government. The proposed legislation was intended to guarantee the fundamental equality of interdenominational, confessional and secular schools. The Centre Party, BVP and DNVP were in general agreement with the proposed law, but the DVP had reservations about it. They wanted to secure the primacy of the interdenominational schools and limit the church's voice in determining religious instruction. ?]
+
+[? if year = 1928 and month = 2 and marx_cabinet_collapsed_1: When talks collapsed on 15 February 1928, the Centre Party declared the coalition dissolved but agreed to continue work until 1 April on crucial issues such as the budget. ?]
+
+[? if year = 1928 and month = 2 and marx_cabinet_collapsed_1: New Reichstag election will be held on 20 May. ?]
+
+[? if year = 1928 and month = 2 and weeks >= 2: BERLIN — In a month defined by military contradictions, the Reichstag officially authorized the construction of the controversial "Panzerkreuzer A" armored cruiser on March 25. The decision sparked national outrage from leftist parties, who demanded the funds be spent on social welfare rather than naval rearmament. ?]
+
+[? if year = 1928 and month = 2 and weeks >= 2 and poland_trade_collapse = 1: Following the negotiations between [+ chancellor +]'s cabinet and Polish agricultural minister, agreement was about to be signed to drop dual tariffs, which would mean normalization between these two countries; however, recent developments in agriculture have made this rather unenforcable and thus agreement collapsed. Marx is pretty unhappy about this and he blames RLB for sabotages. ?]
+
+[? if year = 1928 and month = 2 and weeks >= 2 and poland_trade_collapse = 0: Following the negotiations between [+ chancellor +]'s cabinet and Polish agricultural minister, agreement was signed to drop the dual tariffs, marking the start the normalization of relations between Germany and Poland. ?]
+
+# URBAN PLAN NSDAP
+
+[? if year = 1928 and month = 4 and urban_plan_flavor_1 = 1: With the Urban Plan coming to it's conclusion, northern *socialist* elements of NSDAP have secured some gains amongst the working class, rendering them capable of competing their southern collegues. ?]
+
+# RLB PARTY ELECTION
+
+[? if year == 1928 and month == 8 and rlb_election_flavor_1 = 1 and rlb_election_flavor_2 = 1: In the result of Reichslandbund (RLB) leadership election, unexpectedly, Karl Hepp of [? if cnbl_crisis: CNBLP ?] [? if not cnbl_crisis: RLB – DVP ?] – representative of the smaller and medium conservative farmers, has secured his victory against the moderate candidate of Junkers. There are some growing concerns of his ambigious policies. ?]
+
+[? if year == 1928 and month == 8 and rlb_election_flavor_1 = 1 and rlb_election_flavor_2 = 2: In the result of Reichslandbund (RLB) leadership election, as expected, Martin Schiele, [? if not dnvp_in_government or dnvp_in_government and not agricultural_minister_party == "DNVP": formerly ?] [? if dnvp_in_government and agricultural_minister_party == "DNVP": current ?] agricultural minister of the Fourth Marx cabinet, has gained tremendous support from Junkers and DNVP to secure his victory. ?]
+
+[? if year == 1928 and month == 9 and furstenwalde_message = 1: On the morning of September 2nd, nationalist paramilitary politics was shaken by a dramatic development within Der Stahlhelm, the nationalist veterans' organization. In Brandenburg, the state chairman of the paramilitary, Elhard von Morozowicz, issued the following declaration on Sunday: <br>  > "We hate with all our hearts the current state structure, its form and content, its development and its essence... Fight the system that governs the state today." <br> This move allowed radicals within Der Stahlhelm to finally overwhelm the moderates and force their resignation across Germany, leaving no opposition to this new direction. Needless to say, the Republic has just gained a dangerous new enemy. ?]
+
+[? if year == 1928 and month == 9 and furstenwalde_message = 2: With the völkisch and radical faction losing momentum, Der Stahlhelm has passed a new platform by a narrow majority. This platform sets a course toward normalizing relations with the Republic (primarily with parties of the right and center). The shift has triggered revolts throughout the paramilitary, prompting the Pan-German League and affiliated nationalist organizations to break away. As many as 89,000 members have already left the organization. ?]
+
+# Other news
+
+[? if year < 1929 and month < 10 and landvolkbewegung_flavor_1 = 1: As the result of government's help to agrarian sector, Landvolkbewegung has mostly died out as serious force, leaving behind smaller radical groups. ?]
+
+[? if year = 1928 and month >= 9 and month <= 11 and lambach_reinstated == 1: DNVP's Party's high court by small margin managed to get Lambach to be reinstated back to his position. ?]
+
+[? if year = 1928 and month >= 9 and month <= 11 and lambach_reinstated == -1: DNVP's Party's high court failed to manage to get Lambach to be reinstated back to his position, dooming Christian Socials in their battle against Hugenberg's empire. ?]
+
+[? if lambach_momentum_timer == 1and lambach_flavor_trigger_1 = 1: Lambach's newest article after "Monarchismus" - "Neuer Arbeiterstatt" has caused sensation amongst his fellow members, calling for Lambach's isolation, though Lambach's growing populariy amongst alienated right wing workers and whitecollars just shows this is a *race against the time*. ?]
+
+# YOUNG OR WEIMAR?
+
+[? if year == 1929 and month == 6 and weeks <= 1 and dnvp_referendum == 1: Young Plan. ?]
+
+[? if year == 1929 and month == 6 and weeks <= 1 and dnvp_referendum == 2: Weimar Referendum. ?]
+
+# DDP MANNHEIM CONGRESS
+
+[? if year == 1929 and month == 10 and stolper_adopted == 1: At the DDP Mannheim Congress in October 1929, economist Gustav Stolper’s new economic program was officially adopted. Committing the party unequivocally to capitalism, middle-class tax relief, and reduced state spending, the platform has delighted the party's business wing and Hansa-Bund. However, the rightward shift has deeply alienated Anton Erkelenz, Ernst Lemmer, the Young Democrats, and the party's trade union left. This has substantially decreased our influence on DDP, marking the start of the fall-off of relationship between our parties. ?]
+
+[? if year == 1929 and month == 10 and stolper_adopted == -1: At the DDP Mannheim Congress in October 1929, Gustav Stolper’s free-market platform was defeated following fierce resistance from the Young Democrats and trade union allies. The party reasserts its social-liberal commitment to worker emancipation and the welfare state. While keeping Erkelenz's left-wing base intact, the decision has infuriated the party’s business wing and agricultural interests. With no coherent compromise or program, party is further driven into the pessimism... ?]
+
+# Young Plan News
+
+[? if year = 1930 and month = 5 and weeks >= 1 and young_plan_seen: Young Plan has come to the effect, effectively giving Germany some room for the breath and reducing amount of reichswehr we have to pay, including interest rate. [? if spd_in_government: However, this brings some questions and cautions regarding definite goal of SPD being in government. ?] ?]
+
+# DVP
+
+[? if year == 1930 and month == 11 and weeks < 2 and scholz_victory: Eduard Dingeldey assumed the power of chairmanship with Scholz citing issues with health. ?]
+
+[? if year == 1929 and month == 9 and weeks < 2 and stresemann_success: Julius Curtis assumed the power of chairmanship following the death of Gustav Stresemann... ?]
+
+@actions
+on-arrival: {!
+
+Q.flavor_display_text = '';
+for (const party of Q.parties) {
+    var flavorTimerKey = party + '_flavor_action_timer';
+    var descKey = party + '_action_description';
+    if (Q[flavorTimerKey] >= 1) {
+        Q.flavor_display_text += Q[descKey] + '<br>';
+    }
+}
+
+Q.government_flavor_display_text = '';
+for (const party of Q.parties) {
+    var govFlavorTimerKey = party + '_government_flavor_action_timer';
+    var govDescKey = party + '_government_action_description';
+    if (Q[govFlavorTimerKey] >= 1) {
+        Q.government_flavor_display_text += Q[govDescKey] + '<br>';
+    }
+}
+
+Q.daily_event_display_text = Q.daily_event_description || '';
+
+!}
+
+= Party Actions
+
+[? if flavor_display_text != 0: [+ flavor_display_text +] ?]
+
+= Government Actions
+
+[? if government_flavor_display_text != 0: [+ government_flavor_display_text +] ?]
+
+= Daily events
+
+[? if daily_event_display_text != 0: [+ daily_event_display_text +] ?]
