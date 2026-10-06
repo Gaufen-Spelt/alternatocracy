@@ -798,10 +798,10 @@ Q.vonc_dissent_met = 0;
 
 
 var vonc_dissent_table = {
-    Centrist:  { weimar: 3, grand: 2, popfront: 3, minority: 2 },
-    Reformist: { weimar: 4, grand: 3, popfront: 2, minority: 4 },
-    Left:      { weimar: 2, grand: 1, popfront: 3, minority: 1 },
-    Labor:     { weimar: 4, grand: 2, popfront: 3, minority: 3 }
+    CENTRIST:  { weimar: 3, grand: 2, popfront: 3, minority: 2 },
+    REFORMIST: { weimar: 4, grand: 3, popfront: 2, minority: 4 },
+    LEFT:      { weimar: 2, grand: 1, popfront: 3, minority: 1 },
+    LABOR:     { weimar: 4, grand: 2, popfront: 3, minority: 3 }
 };
 
 var vonc_coalitions = [
