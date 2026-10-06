@@ -13,7 +13,7 @@ At the Labor and Socialist International, we can forge contacts with our fratern
 - @austria: Learn organization and street fighting from the Austrian SDAPÖ.
 - @scandi: Learn the path of economics and reform from the Scandinavian social democrats.
 - @comintern: Forget the second international - embed a spy in the Comintern's conference.
-- @keynes: Contact the Keynes...
+- @keynes: We have organized the meeting with Keynes, british economist.
 - @return: We do not need international contacts at the moment.
 - @easy_discard
 - @cancel_advisor_action
@@ -56,12 +56,12 @@ The Stalinists of the KPD insists on calling us "social fascists", suggesting th
 
 @keynes
 subtitle: -1 resources
-view-if: year >= 1930
+view-if: year >= 1930 and labor_strength >= 45
 choose-if: resources >= 1
 unavailable-subtitle: Not enough resources.
-on-arrival: uk_socialism = 1
+on-arrival: uk_socialism = 1; labor_strength += 5; wtb_support += 3
 
-Sus UK.
+Our labor representatives in the head of Woytinsky have met Keynes, british local economist. Keynes argues for some sort of deficit spending for this crisis, although his theory is not fully formulated and that we are expected to develop theory by ourselves.
 
 @reduce
 
