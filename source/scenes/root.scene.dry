@@ -43,6 +43,8 @@ Q.ideology = "Centrist";
 Q.spd_world = 0;
 Q.youth_crisis_spd = 1;
 Q.seed = 1;
+Q.presidential_election_year = 1934
+Q.presidential_election_month = 7;
 
 //Progress accounts for how much is the progress reached towards activating reaction from right.
 //Threshold here means where it should activate.
