@@ -506,18 +506,45 @@ window.hidePartyTooltip = function() {
 
   // This function allows you to do something in response to signals.
   window.handleSignal = function(signal, event, scene_id) {
-  };
+  if (signal === 'scene-arrival') window.updateBottomPanel();
+};
   
   // This function runs on a new page. Right now, this auto-saves.
   window.onNewPage = function() {
     var scene = window.dendryUI.dendryEngine.state.sceneId;
-    if (scene != 'root' && !window.justLoaded) {
+    if (scene != 'root' && scene != "sandbox" && !window.justLoaded) {
         window.dendryUI.autosave();
     }
     if (window.justLoaded) {
         window.justLoaded = false;
     }
+    window.updateBottomPanel();
   };
+
+  var BOTTOM_PANEL_SCENE = 'news';
+window.newsTab = BOTTOM_PANEL_SCENE;
+
+window.changeNewsTab = function(newTab, tabId) {
+  document.querySelectorAll('#news_tab_container .tab_button').forEach(function(b) {
+    b.className = b.className.replace(' active', '');
+  });
+  var btn = document.getElementById(tabId);
+  if (btn) btn.className += ' active';
+  window.newsTab = newTab;
+  window.updateBottomPanel();
+};
+
+window.updateBottomPanel = function() {
+  var panel = $('#bottom_panel_content');
+  if (!panel.length) return;
+  var scene = dendryUI.game.scenes[window.newsTab || BOTTOM_PANEL_SCENE];
+  if (!scene) return;
+  panel.empty();
+  dendryUI.dendryEngine._runActions(scene.onArrival);
+  var dc = dendryUI.dendryEngine._makeDisplayContent(scene.content, true);
+  panel.append(dendryUI.contentToHTML.convert(dc));
+  if (scene.onDisplay) dendryUI.dendryEngine._runActions(scene.onDisplay);
+};
 
   // TODO: have some code for tabbed sidebar browsing.
 window.updateSidebar = function() {
@@ -592,7 +619,7 @@ window.updateSidebar = function() {
           return;
       }
       var tabButton = document.getElementById(tabId);
-      var tabButtons = document.getElementsByClassName('tab_button');
+      var tabButtons = tabButton.closest('.tab_container').getElementsByClassName('tab_button');
       for (i = 0; i < tabButtons.length; i++) {
         tabButtons[i].className = tabButtons[i].className.replace(' active', '');
       }
@@ -604,6 +631,7 @@ window.updateSidebar = function() {
   window.onDisplayContent = function() {
     window.updateSidebar();
     window.updateSandboxLink();
+    window.updateBottomPanel();
 };
 
   /*
