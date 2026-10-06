@@ -1,9 +1,8 @@
 title: The Death of Hindenburg
 subtitle: The President has died...
 new-page: true
-view-if: year = 1934 and month >= 7 and president = "Hindenburg"
+view-if: (year = 1934 and month >= 7 and president = "Hindenburg") or (month = presidential_election_month and year = presidential_election_year)
 on-arrival: round = 0; hindenburg_dead = 1; president = "Bumke (acting)"; president = "Großmann (acting)" if judicial_reform >= 4; spd_candidate = "Eckener"; kpd_candidate = "Thälmann"; kpd_candidate = "Münzenberg" if kpd_party_leader = "Conciliators"; z_candidate = "Adenauer"; ddp_candidate = "Gessler"; nsdap_candidate = "Hitler"; nsdap_candidate = "Göring" if hitler_deported; dnvp_candidate = "Seldte"; dvp_candidate = "Gessler"; other_candidate = "Seldte"; is_unity_candidate = 0; sapd_candidate = kpd_candidate;
-max-visits: 1
 face-image: img/Hindenburg_head.jpg
 tags: event
 
@@ -57,6 +56,7 @@ Kurt Schumacher is an ambitious rising star in the party, and would be all too w
 - @munzenberg_r1: Support Willi Münzenberg of the KPD.
 - @braun_r1: Support Otto Braun.
 - @schumacher_r1: Support Kurt Schumacher.
+- @mierendorff_r1: Support Carlo Mierendorff.
 - @juchacz_r1: Support Marie Juchacz.
 - @cultural_figure: Support a nonpartisan cultural figure?
 
@@ -132,6 +132,16 @@ on-arrival: spd_candidate = "Schumacher"; resources -= 2; is_unity_candidate = 0
 go-to: r1_menu
 
 We have nominated Kurt Schumacher to be our presidential candidate.
+
+@mierendorff_r1
+subtitle: -2 resources.
+unavailable-subtitle: [? if resources < 2 : -2 resources - Not enough resources. ?]
+choose-if: resources >= 2
+view-if: neorevisionist_strength + socialpatriot_strength + ethical_strength >= 40 or ideology = "Neorevisionist"
+on-arrival: spd_candidate = "Mierendorff"; resources -= 2; is_unity_candidate = 0
+go-to: r1_menu
+
+We have nominated Carlo Mierendorff, neorevisionist and Iron Front activist, to be our presidential candidate.
 
 
 @juchacz_r1
@@ -388,7 +398,8 @@ Schumacher: "Kurt Schumacher of the SPD",
 Juchacz: "Marie Juchacz of the SPD",
 Einstein: "Albert Einstein, scientist",
 Mann: "Heinrich Mann, writer",
-Ossietzky: "Carl von Ossietzky, journalist"
+Ossietzky: "Carl von Ossietzky, journalist",
+Mierendorff: "Carlo Mierendorff, neorevisionist"
 }
 for (var k in candidate_descs) {
     Q[k + '_running'] = 0;
@@ -458,6 +469,7 @@ Election results:
 [? if Einstein_running : Einstein - [+ Einstein_votes_disp +]% ?]
 [? if Ossietzky_running : Ossietzky - [+ Ossietzky_votes_disp +]% ?]
 [? if Mann_running : Mann - [+ Mann_votes_disp +]% ?]
+[? if Mierendorff_running: Mierendorff - [+ Mierendordf_votes_disp +]% ?]
 
 @r2_start
 on-arrival: {!
@@ -685,10 +697,23 @@ Despite the Nazi threats, supporters of the SPD and the democratic parties refus
 
 
 @election_end
-go-to: eckener_win if winner = "Eckener"; juchacz_win if winner = "Juchacz"; bundesrepublik_win if winner = "Schumacher" or winner = "Adenauer"; hitler_victory if winner = "Hitler" or winner = "Göring" or winner = "Goring"; seldte_victory if winner = "Seldte"; munzenberg_victory if winner = "Munzenberg" or winner = "Münzenberg"; thalmann_victory if winner = "Thalmann" or winner = "Thälmann"; nazis_lose if winner = "Braun" or winner = "Gessler"; cultural_victory if winner = "Ossietzky" or winner = "Mann"; einstein_victory if winner = "Einstein"
-on-arrival: president = winner; president = "Thälmann" if president == "Thalmann"; president = "Münzenberg" if president = "Munzenberg"; president = "Göring" if president = "Goring"
+go-to: mieren_win if winner = "Mierendorff"; eckener_win if winner = "Eckener"; juchacz_win if winner = "Juchacz"; bundesrepublik_win if winner = "Schumacher" or winner = "Adenauer"; hitler_victory if winner = "Hitler" or winner = "Göring" or winner = "Goring"; seldte_victory if winner = "Seldte"; munzenberg_victory if winner = "Munzenberg" or winner = "Münzenberg"; thalmann_victory if winner = "Thalmann" or winner = "Thälmann"; nazis_lose if winner = "Braun" or winner = "Gessler"; cultural_victory if winner = "Ossietzky" or winner = "Mann"; einstein_victory if winner = "Einstein"
+on-arrival: president = winner; president = "Thälmann" if president == "Thalmann"; president = "Münzenberg" if president = "Munzenberg"; president = "Göring" if president = "Goring"; {!
+Q.presidential_election_year = Q.year + 8;
+Q.presidential_election_month = Q.month;
+if (Q.presidential_election_month > 12) {
+    Q.presidential_election_year += Math.floor((Q.presidential_election_month - 1) / 12);
+    Q.presidential_election_month = ((Q.presidential_election_month - 1) % 12) + 1;
+}
+!}
 
 The election has been won by [+ winner_desc +].
+
+@mieren_win
+on-arrival: neorevisionist_strength += 30
+go-to: nazis_lose
+
+As the new age begins, neorevisionism takes over the SPD with the victory of Carlo Mierendorff. Perhaps, it's the beginning of eclipse of marxism? Regardless, we shall celebrate our presidency.
 
 @thalmann_victory
 go-to: thalmann_democrat if presidential_powers; thalmann_civil_war if not presidential_powers
@@ -744,4 +769,4 @@ go-to: nazis_lose
 
 After its electoral defeat, the NSDAP-DNVP coalition is collapsing into infighting and financial insolvency. The far-right's moment has seemingly ended, at least for now.
 
-- @1934_end: Perhaps, the crisis is over.
+- @root: Perhaps, the crisis is over.
