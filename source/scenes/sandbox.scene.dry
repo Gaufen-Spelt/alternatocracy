@@ -895,6 +895,7 @@ if (!window.dendryUI.injectSceneJumper) {
 
 window.dendryUI.injectSceneJumper();
 !}
+is-special: false
 
 = Developer sandbox. Type the id of any scene to jump straight to it.
 
