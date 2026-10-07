@@ -1,0 +1,10 @@
+title: Neorevisionist leaders resign
+new-page: true 
+subtitle: Reformist disagreements with our policies have grown too severe.
+tags: event
+view-if: not neorev_resign and ((spd_centrist and neorevisionist_dissent >= 70) or (not spd_centrist and neorevisionist_dissent >= 60))
+on-arrival: neorevisionist_strength *= 0.3; workers_spd -= 10; workers_others += 5; neorev_resign = 1
+
+= Neorevisionist leaders resign
+
+Our policy choices have greatly offended the Neorevisionist faction. Many of our most experienced leaders have resigned.
