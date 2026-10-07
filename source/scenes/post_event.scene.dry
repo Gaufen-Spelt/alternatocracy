@@ -2,6 +2,76 @@ title: Post Event
 new-page: true
 on-arrival: {!
 
+Q.parties = [...new Set(Q.parties)];
+
+// === VARIABLE RANGE CAPPING ===
+
+Q.capped_var_ranges = {
+    // 0 to 10
+    pro_consumer:              [0, 10],
+    agricultural_finance:      [0, 10],
+    land_reform:               [0, 10],
+    socialization:             [0, 10],
+    commonwealth_cooperation:  [0, 10],
+    cooperatives:              [0, 10],
+    economic_democracy:        [0, 20],
+    workers_safety:            [0, 10],
+    working_hours:             [0, 10],
+    womens_rights:             [0, 10],
+
+    // -10 to 10
+    welfare:                   [-10, 10],
+    judicial_reform:           [-10, 10],
+    pacifism:                  [-10, 10],
+    radicalization:            [-10, 10],
+    democratization:           [-10, 10],
+
+    // -1 to 2
+    confronting_antisemitism:  [-1, 2],
+
+    // 0 to 15
+    workers_aid:               [0, 15],
+    campaign_media:            [0, 15],
+    commercialized_media:      [0, 15],
+    cultural_organizations:    [0, 15],
+    wtb_support:               [0, 15],
+    local_rally:               [0, 15],
+    peoples_party_support:     [0, 15]
+};
+
+Q.apply_var_caps = function() {
+    for (var varName in Q.capped_var_ranges) {
+        if (!Q.capped_var_ranges.hasOwnProperty(varName)) continue;
+        if (Q[varName] === undefined) continue; // skip vars not in use
+
+        var range = Q.capped_var_ranges[varName];
+        var min = range[0];
+        var max = range[1];
+
+        if (Q[varName] < min) {
+            Q[varName] = min;
+        } else if (Q[varName] > max) {
+            Q[varName] = max;
+        }
+    }
+};
+
+Q.apply_var_caps();
+
+
+// QOL. REMOVES PHANTON PARTIES.
+
+const inGov = Object.keys(Q)
+  .filter(key => key.endsWith("_in_government") && Q[key] == 1)
+  .map(key => key.replace("_in_government", ""))
+  .filter(party => (Q[party + "_votes"] > 0) && (Q[party + "_r"] > 0))
+  .map(party => party.toUpperCase());
+
+Q.parties_in_government_display = inGov.length > 0
+  ? inGov.join(", ")
+  : "None";
+
+
 // 1. update dates
 if (Q.month_actions >= 1) {
     Q.month_actions_2 = 1;
@@ -771,6 +841,678 @@ if (Q.youth_crisis_spd >= 1) {
 }
 
 
+
+
+
+for (const party of Q.parties) {
+    var timerKey = party + '_action';
+    if (!Q.timers.includes(timerKey)) {
+        Q.timers.push(timerKey);
+    }
+    if (Q[timerKey + '_timer'] === undefined) {
+        Q[timerKey + '_timer'] = 0;
+    }
+
+    var flavorTimerKey = party + '_flavor_action';
+    if (!Q.timers.includes(flavorTimerKey)) {
+        Q.timers.push(flavorTimerKey);
+    }
+    if (Q[flavorTimerKey + '_timer'] === undefined) {
+        Q[flavorTimerKey + '_timer'] = 0;
+    }
+
+    var govTimerKey = party + '_government_action';
+    if (!Q.timers.includes(govTimerKey)) {
+        Q.timers.push(govTimerKey);
+    }
+    if (Q[govTimerKey + '_timer'] === undefined) {
+        Q[govTimerKey + '_timer'] = 0;
+    }
+
+    var govFlavorTimerKey = party + '_government_flavor_action';
+    if (!Q.timers.includes(govFlavorTimerKey)) {
+        Q.timers.push(govFlavorTimerKey);
+    }
+    if (Q[govFlavorTimerKey + '_timer'] === undefined) {
+        Q[govFlavorTimerKey + '_timer'] = 0;
+    }
+}
+
+function isParty(party, targetParties) {
+    if (!party || !targetParties) return false;
+    var targets = Array.isArray(targetParties) ? targetParties : [targetParties];
+    return targets.some(t => t && party.toLowerCase() === t.toLowerCase());
+}
+
+
+// PARTY ACTIONS
+
+function PickHighest(list, prop) {
+    var bestKey = null;
+    var bestVal = -Infinity;
+    for (var key in list) {
+        if (!list[key].eligible) continue;
+        var val = list[key][prop];
+        if (typeof val !== 'number' || Number.isNaN(val)) continue; // guard against undefined/NaN weights so a broken Q value can never win or lock up the comparison
+        if (val > bestVal) {
+            bestVal = val;
+            bestKey = key;
+        }
+    }
+    return bestKey;
+}
+
+function scaledWeight(baseWeight, currentValue, baseValue, maxMultiplier = 5) {
+    var ratio = Math.min(baseValue / Math.max(currentValue, 1), maxMultiplier);
+    return baseWeight * ratio;
+}
+
+function linearWeight(baseWeight, currentValue, baseValue, maxMultiplier = 5) {
+    var ratio = Math.max(currentValue, 0) / baseValue;
+    ratio = Math.min(ratio, maxMultiplier);
+    return baseWeight * ratio;
+}
+
+function inIdeoRange(party, min, max) {
+    var score = Q[party + '_ideo_score'];
+    if (score === undefined) return false;
+    return score >= min && score <= max;
+}
+
+// Human-readable party names for description text.
+Q.PARTY_DISPLAY_NAMES = {
+    dnvp: 'The DNVP',
+    dvp: 'The DVP',
+    kpo: 'The KPO',
+    sl: 'The SL',
+    sapd: 'The SAPD',
+    srpd: 'The SRPD',
+    ddp: Q.ddp_name,
+    z: 'The Zentrum',
+    bvp: 'The BVP',
+    csrp: 'The CSRP',
+    wp: 'The WP',
+    cnbl: 'The CNBL',
+    csvd: 'The CSVD',
+    vrp: 'The VRP',
+    kvp: 'The KVP',
+    dhp: 'The DHP',
+    bb: 'The BB',
+    dvfp: 'The DVFP',
+    aspd: 'The ASPD',
+    vnr: 'The VNR',
+    hl: 'The HL',
+    lb: 'The LB',
+    rdp: 'The RDP',
+    cvp: 'The CVP',
+    sls: 'The SLS',
+    dtsp: 'The DTSP',
+    dbp: 'The DBP',
+    dsbp: 'The DSBP',
+    dnf: 'The DNF',
+    rlb: 'The RLB',
+    faud: 'The FAUD',
+    kapd: 'The KAPD',
+    pp: 'The PP',
+    gsrn: 'The GSRN',
+    uspd: 'The USPD'
+};
+
+function partyLabel(party) {
+    return Q.PARTY_DISPLAY_NAMES[party] || party.toUpperCase();
+}
+
+Q.CLASS_TO_CAMPAIGN_FOCUS = {
+    workers:     'workers',
+    unemployedc: 'unemployed',
+    old_middle:  'old_middle',
+    new_middle:  'new_middle',
+    rural:       'rural',
+};
+
+// --- Global action definitions ---
+Q.GLOBAL_PARTY_ACTIONS = {
+
+    stahlhelm_recruitment: {
+        ideoMin: 17, ideoMax: 20,
+        weight: () => scaledWeight(1.30, Q.stahlhelm_strength, 1300),
+        description: (party) => partyLabel(party) + ' has overseen Der Stahlhelm recruiting some of the disgruntled mittelstand and outclasses into their paramilitary, receiving some anonymous fundings alongside.',
+        eligible: (party) => Q.sh_banned < 1 && isParty(party, 'dnvp'),
+        timer: 10,
+        apply: () => {
+            Q.sh_strength += 50;
+            Q.sh_militancy += 0.01;
+        }
+    },
+
+    rfb_recruitment: {
+        ideoMin: 1, ideoMax: 4,
+        weight: () => scaledWeight(1.30, Q.rfb_strength, 1000),
+        description: (party) => partyLabel(party) + ' has overseen the Roter Frontkämpferbund recruiting some of the disgruntled workers and unemployed into their paramilitary, receiving some anonymous fundings alongside.',
+        eligible: (party) => Q.rfb_banned < 1 && isParty(party, 'kpd'),
+        timer: 10,
+        apply: () => {
+            Q.rfb_strength += 50;
+            Q.rfb_militancy += 0.01;
+        }
+    },
+
+    nationalist_campaign: {
+        ideoMin: 14, ideoMax: 20,
+        weight: () => scaledWeight(0.75, Q.nationalism, 5),
+        description: (party) => partyLabel(party) + ' has initiated a rally for nationalism and opposition against the republican order.',
+        eligible: () => true,
+        timer: 8,
+        apply: () => {
+            Q.nationalism += 2;
+        }
+    },
+
+    prussian_counter_prussia: {
+        ideoMin: 16, ideoMax: 20,
+        weight: () => linearWeight(4.00, Q.prussian_republicanization, 30),
+        description: (party) => partyLabel(party) + ' has replaced republican and socialist officials in Prussia with nationalist judges and civil servants, steering the state police away from democratic values.',
+        eligible: (party) => Q[party + '_in_government_prussia'] > 0,
+        timer: 10,
+        apply: () => {
+            Q.prussian_republicanization -= 5;
+            Q.prussian_police_loyalty -= 0.08;
+            Q.prussian_police_strength += 30;
+            Q.nationalism += 1;
+        }
+    },
+
+    prussian_rfb_ban: {
+        ideoMin: 14, ideoMax: 20,
+        weight: () => scaledWeight(4.00, Q.rfb_strength * Q.rfb_militancy, 500),
+        description: (party) => partyLabel(party) + ' has prohibited the communist RFB paramilitary across Prussia, dealing a severe blow to left-wing militant organization in the state.',
+        eligible: (party) => Q[party + '_in_government_prussia'] > 0 && Q.rfb_banned < 1,
+        timer: 12,
+        apply: () => {
+            Q.rfb_banned = 1;
+            Q.rfb_strength -= 50;
+            Q.rfb_militancy *= 0.95;
+        }
+    },
+
+    prussian_rb_ban: {
+        ideoMin: 17, ideoMax: 20,
+        weight: () => scaledWeight(4.00, Q.rb_strength * Q.rb_militancy, 500),
+        description: (party) => partyLabel(party) + ' has issued a total ban on the Reichsbanner, citing the pro-republican paramilitary as too dangerous to permit its public activities.',
+        eligible: (party) => Q[party + '_in_government_prussia'] > 0 && Q.rb_banned < 1,
+        timer: 12,
+        apply: () => {
+            Q.rb_banned = 1;
+            Q.rb_strength -= 100;
+            Q.rb_militancy *= 0.90;
+        }
+    },
+
+    prussian_stahlhelm_ban: {
+        ideoMin: 1, ideoMax: 5,
+        weight: () => scaledWeight(4.00, Q.stahlhelm_strength * Q.stahlhelm_militancy, 500),
+        description: (party) => partyLabel(party) + ' has banned Der Stahlhelm across Prussia, moving to suppress the nationalist paramilitary\'s activities in the state.',
+        eligible: (party) => Q[party + '_in_government_prussia'] > 0 && Q.sh_banned < 1,
+        timer: 12,
+        apply: () => {
+            Q.sh_banned = 1;
+            Q.stahlhelm_strength -= 50;
+            Q.stahlhelm_militancy *= 0.95;
+        }
+    },
+
+    prussian_sa_ban: {
+        ideoMin: 1, ideoMax: 11,
+        weight: () => scaledWeight(4.00, Q.sa_strength * Q.sa_militancy, 500),
+        description: (party) => partyLabel(party) + ' has banned the SA across Prussia, striking at the Nazi paramilitary\'s ability to organize in the state.',
+        eligible: (party) => Q[party + '_in_government_prussia'] > 0 && Q.sa_banned < 1,
+        timer: 12,
+        apply: () => {
+            Q.sa_banned = 1;
+            Q.sa_strength -= 100;
+            Q.sa_militancy *= 0.90;
+        }
+    },
+
+    socialist_campaign: {
+        ideoMin: 1, ideoMax: 6,
+        weight: () => scaledWeight(0.75, Q.socialism, 5),
+        description: (party) => partyLabel(party) + ' has initiated a rally for socialism and opposition against the republican order.',
+        eligible: () => true,
+        timer: 8,
+        apply: () => {
+            Q.socialism += 3;
+        }
+    },
+
+    democratic_campaign: {
+        ideoMin: 7, ideoMax: 14,
+        weight: () => scaledWeight(0.75, Q.pro_republic, 5),
+        description: (party) => partyLabel(party) + ' has initiated a rally for republic and opposition against the extremist forces.',
+        eligible: () => true,
+        timer: 8,
+        apply: () => {
+            Q.pro_republic += 2;
+        }
+    },
+
+    campaigning: {
+        ideoMin: 1, ideoMax: 20,
+        weight: (party) => {
+            var oldR = Q['old_' + party + '_r'];
+            var pct  = Q[party + '_pct'];
+            if (!oldR || oldR <= 0) return 0;
+            var shortfall = Math.max(0, oldR - pct);
+            return linearWeight(5.00, shortfall, oldR, 4);
+        },
+        description: (party) => {
+            var focusClass = Q[party + '_campaign_target_class'];
+            var focusLabel = {
+                workers: 'the industrial working class',
+                unemployedc: 'the unemployed',
+                old_middle: 'shopkeepers and artisans',
+                new_middle: 'white-collar workers and civil servants',
+                rural: 'the countryside',
+            }[focusClass] || 'the electorate';
+            return partyLabel(party) + ' has launched a campaign push targeting ' + focusLabel + ', trailing its last Reichstag result.';
+        },
+        eligible: (party) => {
+            var oldR = Q['old_' + party + '_r'];
+            var pct  = Q[party + '_pct'];
+            return !!oldR && oldR > 0 && pct < oldR;
+        },
+        timer: 8,
+        apply: (party) => {
+            var bestClass = null;
+            var bestGap   = -Infinity;
+            for (const c of Q.classes) {
+                var current = Q[c + '_' + party] || 0;
+                var target  = computeTarget(party, c);
+                var gap     = target - current;
+                if (gap > bestGap) {
+                    bestGap   = gap;
+                    bestClass = c;
+                }
+            }
+            if (!bestClass) return;
+
+            Q[party + '_campaign_target_class'] = bestClass;
+            Q['campaign_focus_' + party] = Q.CLASS_TO_CAMPAIGN_FOCUS[bestClass] || bestClass;
+
+            var oldR = Q['old_' + party + '_r'];
+            var pct  = Q[party + '_pct'];
+            var shortfallRatio = Math.min(1.0, Math.max(0, oldR - pct) / oldR);
+            var newIntensity = 0.5 + shortfallRatio * 0.6;
+
+            Q['campaign_intensity_' + party] = Math.max(
+                Q['campaign_intensity_' + party] || 0,
+                newIntensity
+            );
+        }
+    },
+
+
+
+
+    // DVP
+        dvp_capital_strike: {
+        ideoMin: 1, ideoMax: 20, // DVP itself isn't ideo-gated; the check is on other gov parties
+        weight: () => scaledWeight(1.50, Q.capital_strike_progress, 20),
+        description: (party) => partyLabel(party) + ' has protested against the presence of a socialist party in government, calling industrialists and financiers to strike against them.',
+        eligible: (party) => {
+            if (!isParty(party, 'dvp')) return false;
+            return Q.parties.some(p =>
+                inReichGovernment(p) && Q[p + '_ideo_score'] < 8
+            );
+        },
+        timer: 18,
+        apply: () => {
+            Q.capital_strike_progress += 2;
+            Q.dvp_right += 20; 
+            Q.nationalism += 5;
+      }
+    },
+
+    dvp_industrial_lobby: {
+    ideoMin: 16, ideoMax: 20,
+    weight: () => {
+        var pressure =
+            Math.max(0, Q.upper_tax_rates || 0) * 1.0 +
+            Math.max(0, Q.working_hours || 0) * 0.6 +
+            Math.max(0, Q.workers_safety || 0) * 0.5 +
+            (Q.ruhr_labor > 0 ? 2.0 : 0) +
+            (Q.works_councils || 0) * 0.8 +
+            (Q.socialization || 0) * 1.2 +
+            (Q.cooperatives || 0) * 0.8 +
+            (Q.capital_strike_progress || 0) * 0.5;
+        return scaledWeight(1.00, pressure, 10);
+    },
+    description: (party) => {
+        var reasons = [];
+        if ((Q.socialization || 0) > 0) reasons.push({ label: 'creeping socialization', weight: (Q.socialization || 0) * 1.2 });
+        if ((Q.works_councils || 0) > 0) reasons.push({ label: 'expanded works councils', weight: (Q.works_councils || 0) * 0.8 });
+        if ((Q.workers_safety || 0) > 0) reasons.push({ label: 'new workplace safety mandates', weight: (Q.workers_safety || 0) * 0.5 });
+        if ((Q.working_hours || 0) > 0) reasons.push({ label: 'shortened working hours', weight: (Q.working_hours || 0) * 0.6 });
+        if (Q.ruhr_labor > 0) reasons.push({ label: 'the Ruhr arbitration award', weight: 2.0 });
+        if ((Q.upper_tax_rates || 0) > 0) reasons.push({ label: 'rising upper tax rates', weight: (Q.upper_tax_rates || 0) * 1.0 });
+        if ((Q.cooperatives || 0) > 0) reasons.push({ label: 'the spread of cooperatives', weight: (Q.cooperatives || 0) * 0.8 });
+
+        reasons.sort((a, b) => b.weight - a.weight);
+
+        var cause;
+        if (reasons.length === 0) {
+            cause = 'mounting regulatory pressure';
+        } else if (reasons.length === 1) {
+            cause = reasons[0].label;
+        } else {
+            cause = reasons[0].label + ' and ' + reasons[1].label;
+        }
+
+        return partyLabel(party) + ' has coordinated with major industrial associations to lobby against ' + cause + ', pressing for a friendlier business climate.';
+    },
+    eligible: (party) => isParty(party, 'dvp'),
+    timer: 10,
+    apply: () => {
+        var pressure =
+            Math.max(0, Q.upper_tax_rates || 0) * 1.0 +
+            Math.max(0, Q.working_hours || 0) * 0.6 +
+            Math.max(0, Q.workers_safety || 0) * 0.5 +
+            (Q.ruhr_labor > 0 ? 2.0 : 0) +
+            (Q.works_councils || 0) * 0.8 +
+            (Q.socialization || 0) * 1.2 +
+            (Q.cooperatives || 0) * 0.8 +
+            (Q.capital_strike_progress || 0) * 0.5;
+        Q.dvp_right += Math.min(10, 3 + pressure * 0.3);
+        Q.capital_strike_progress = (Q.capital_strike_progress || 0) + 1;
+    }
+  },
+};
+
+// --- Run one party's action turn ---
+function runPartyActions(party) {
+    var timerKey = party + '_action_timer';
+    var bannedKey = party + '_banned';
+    var descKey = party + '_action_description';
+    var flavorTimerKey = party + '_flavor_action_timer';
+
+    if (Q[timerKey] > 0 || Q[bannedKey]) return;
+
+    var pool = {};
+    for (var key in Q.GLOBAL_PARTY_ACTIONS) {
+        var action = Q.GLOBAL_PARTY_ACTIONS[key];
+        if (!inIdeoRange(party, action.ideoMin, action.ideoMax)) continue;
+
+        pool[key] = {
+            weight: action.weight(party),
+            eligible: action.eligible ? action.eligible(party) : true,
+            timer: action.timer,
+            description: action.description(party)
+        };
+    }
+
+    var chosen = PickHighest(pool, 'weight');
+
+    if (chosen === null) {
+        Q[timerKey] = 6;
+        Q[descKey] = partyLabel(party) + ' remains quiet for the time being, lacking viable options to act on.';
+        return;
+    }
+
+    Q[timerKey] = pool[chosen].timer;
+    Q[descKey] = pool[chosen].description;
+    Q.GLOBAL_PARTY_ACTIONS[chosen].apply(party);
+
+    var flavorTimerName = party + '_flavor_action';
+    if (!Q.timers.includes(flavorTimerName)) {
+        Q.timers.push(flavorTimerName);
+    }
+    Q[flavorTimerKey] = 3;
+}
+
+for (const party of Q.parties) {
+    if (party === 'spd' || party === 'other') continue;
+    runPartyActions(party);
+}
+
+
+// PARTY GOVERNMENT ACTIONS
+
+Q.MINISTRIES = [
+    'transport_minister',
+    'agriculture_minister',
+    'finance_minister',
+    'economic_minister',
+    'labor_minister',
+    'justice_minister',
+    'foreign_minister'
+];
+
+function holdsMinistry(party, ministry) {
+    return Q[ministry + '_party'] && Q[ministry + '_party'].toLowerCase() === party.toLowerCase();
+}
+
+function holdsAnyMinistry(party) {
+    for (var i = 0; i < Q.MINISTRIES.length; i++) {
+        if (holdsMinistry(party, Q.MINISTRIES[i])) return true;
+    }
+    return false;
+}
+
+function isChancellorParty(party) {
+    return Q.chancellor_party && Q.chancellor_party.toLowerCase() === party.toLowerCase();
+}
+
+function inReichGovernment(party) {
+    return Q[party + '_in_government'] >= 1 || isChancellorParty(party) || holdsAnyMinistry(party);
+}
+
+// --- Global government action definitions ---
+
+Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
+
+    chancellery_agenda_push: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 3.00,
+        description: (party) => partyLabel(party) + ', holding the Chancellery, has pushed its legislative agenda through the cabinet.',
+        eligible: (party) => isChancellorParty(party),
+        timer: 8,
+        apply: () => {
+            Q.government_stability += 1;
+        }
+    },
+
+    finance_budget_maneuver: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 2.50,
+        description: (party) => partyLabel(party) + ', controlling the Finance Ministry, has maneuvered the budget to favor its base.',
+        eligible: (party) => holdsMinistry(party, 'finance_minister'),
+        timer: 8,
+        apply: () => {
+            Q.government_stability += 0.5;
+        }
+    },
+
+    economic_policy_shift: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 2.50,
+        description: (party) => partyLabel(party) + ', at the head of the Economics Ministry, has shifted regulatory policy in its favored direction.',
+        eligible: (party) => holdsMinistry(party, 'economic_minister'),
+        timer: 8,
+        apply: () => {
+            Q.government_stability += 0.5;
+        }
+    },
+
+    labor_dispute_mediation: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 2.00,
+        description: (party) => partyLabel(party) + ', running the Labor Ministry, has intervened in ongoing industrial disputes.',
+        eligible: (party) => holdsMinistry(party, 'labor_minister'),
+        timer: 8,
+        apply: () => {
+            Q.government_stability += 0.5;
+        }
+    },
+
+    justice_appointments: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 2.00,
+        description: (party) => partyLabel(party) + ', in charge of the Justice Ministry, has steered key judicial appointments.',
+        eligible: (party) => holdsMinistry(party, 'justice_minister'),
+        timer: 10,
+        apply: () => {
+            Q.government_stability += 0.5;
+        }
+    },
+
+    foreign_policy_initiative: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 2.00,
+        description: (party) => partyLabel(party) + ', holding the Foreign Ministry, has advanced a diplomatic initiative abroad.',
+        eligible: (party) => holdsMinistry(party, 'foreign_minister'),
+        timer: 10,
+        apply: () => {
+            Q.government_stability += 0.5;
+        }
+    },
+
+    agriculture_relief_measure: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 1.75,
+        description: (party) => partyLabel(party) + ', controlling the Agriculture Ministry, has enacted relief measures for farmers.',
+        eligible: (party) => holdsMinistry(party, 'agriculture_minister'),
+        timer: 8,
+        apply: () => {
+            Q.government_stability += 0.5;
+        }
+    },
+
+    transport_infrastructure_deal: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 1.75,
+        description: (party) => partyLabel(party) + ', overseeing the Transport Ministry, has brokered an infrastructure deal.',
+        eligible: (party) => holdsMinistry(party, 'transport_minister'),
+        timer: 8,
+        apply: () => {
+            Q.government_stability += 0.5;
+        }
+    },
+
+    cabinet_coordination: {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => scaledWeight(1.00, Q.government_stability, 10),
+        description: (party) => partyLabel(party) + ' has worked behind the scenes to keep the coalition cabinet aligned.',
+        eligible: (party) => inReichGovernment(party),
+        timer: 6,
+        apply: () => {
+            Q.government_stability += 0.25;
+        }
+    },
+};
+
+// --- Run one party's government action turn ---
+function runPartyGovernmentActions(party) {
+    var timerKey = party + '_government_action_timer';
+    var bannedKey = party + '_banned';
+    var descKey = party + '_government_action_description';
+
+    if (Q[timerKey] > 0 || Q[bannedKey]) return;
+
+    if (!inReichGovernment(party)) return;
+
+    var pool = {};
+    for (var key in Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS) {
+        var action = Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS[key];
+        if (!inIdeoRange(party, action.ideoMin, action.ideoMax)) continue;
+
+        pool[key] = {
+            weight: action.weight(party),
+            eligible: action.eligible ? action.eligible(party) : true,
+            timer: action.timer,
+            description: action.description(party)
+        };
+    }
+
+    var chosen = PickHighest(pool, 'weight');
+
+    if (chosen === null) {
+        Q[timerKey] = 6;
+        Q[descKey] = partyLabel(party) + ' takes no notable government action for the time being.';
+        return;
+    }
+
+    Q[timerKey] = pool[chosen].timer;
+    Q[descKey] = pool[chosen].description;
+    Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS[chosen].apply(party);
+
+    var govFlavorTimerName = party + '_government_flavor_action';
+    if (!Q.timers.includes(govFlavorTimerName)) {
+        Q.timers.push(govFlavorTimerName);
+    }
+    Q[party + '_government_flavor_action_timer'] = 3;
+}
+
+for (const party of Q.parties) {
+    if (party === 'spd') continue;
+    runPartyGovernmentActions(party);
+}
+
+
+
+
+// DAILY EVENTS
+
+// --- Global event registry ---
+Q.GLOBAL_DAILY_EVENTS = {
+
+    generic_daily_event: {
+        weight: () => scaledWeight(1.00, Q.nationalism, 10),
+        description: () => 'A generic development has occurred, reflecting shifting conditions across the Reich.',
+        eligible: () => true,
+        timer: 6,
+        apply: () => {
+            Q.nationalism += 0;
+        }
+    },
+
+};
+
+// --- Run the daily event roll ---
+function runDailyEvents() {
+    var timerKey = 'daily_event_timer';
+    var descKey = 'daily_event_description';
+
+    if (Q[timerKey] > 0) return;
+
+    var pool = {};
+    for (var key in Q.GLOBAL_DAILY_EVENTS) {
+        var event = Q.GLOBAL_DAILY_EVENTS[key];
+
+        pool[key] = {
+            weight: event.weight(),
+            eligible: event.eligible ? event.eligible() : true,
+            timer: event.timer,
+            description: event.description()
+        };
+    }
+
+    var chosen = PickHighest(pool, 'weight');
+
+    if (chosen === null) {
+        Q[timerKey] = 6;
+        Q[descKey] = 'No notable developments occur today.';
+        return;
+    }
+
+    Q[timerKey] = pool[chosen].timer;
+    Q[descKey] = pool[chosen].description;
+    Q.GLOBAL_DAILY_EVENTS[chosen].apply();
+}
+
+runDailyEvents();
+
+
+
 /////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
 
 
@@ -846,6 +1588,95 @@ if (Q.capital_strike_progress >= cap.strike || Q.budget <= -5) {
 } else if (Q.capital_strike_progress >= cap.warn) {
     Q.business_confidence_met = 1;
 }
+
+
+
+const IDEO_KEYWORDS = [
+    [/marxism-leninism/i,                 1],
+    [/council communism/i,                0],
+    [/national bolshevism/i,              16],
+    [/syndicalist communism/i,            1],
+
+    [/revolutionary socialism/i,          2],
+    [/left-wing socialism/i,              3],
+    [/anarcho-syndicalism/i,              1],
+    [/luxemburgism/i,                     2],
+
+    [/old social democracy/i,             14],
+    [/social democracy \(revolutionary\)/i,      3],
+    [/social democracy \(center marxist\)/i,     4],
+    [/social democracy \(reformist\)/i,          6],
+    [/laborism/i,                                7],
+    [/social republicanism \(neorevisionist\)/i, 8],
+    [/right-wing social democracy/i,      12],
+    [/guild socialism/i,                  5],
+    [/christian syndicalism/i,            8],
+
+    [/social democracy/i,                 6],
+    [/social republicanism/i,             7],
+
+    [/catholic laborism/i,                10],
+    [/progressive liberalism/i,           9],
+
+    [/social liberalism/i,                9],
+    [/christian socialism/i,              7],
+    [/authoritarian catholic tent/i,      14],
+    [/catholic tent/i,                    12],
+    [/middle-class interest/i,            13],
+    [/social corporatism/i,               15],
+    [/corporatism/i,                      15],
+    [/technocratic centrism/i,            10],
+    [/radical democratic republicanism/i, 8],
+
+    [/christian conservatism/i,           14],
+    [/bavarian conservatism/i,            13],
+    [/protestant social conservatism/i,   13],
+    [/moderate conservatism/i,            14],
+    [/liberal agrarianism/i,              12],
+    [/regionalist particularism/i,        11],
+    [/rhenish federalism/i,               11],
+
+    [/national liberalism \(scholzite\)/i,       17],
+    [/national liberalism \(dingeldist\)/i,       16],
+    [/authoritarian national liberalism/i,        18],
+    [/national liberalism/i,                      14],
+    [/hanoverian agrarianism/i,                   15],
+    [/hanseatic agrarian conservatism/i,          15],
+    [/prussian legitimist monarchism/i,           16],
+
+    [/völkisch liberalism/i,              16],
+    [/populist agrarian conservatism/i,   16],
+    [/agrarian conservatism/i,            17],
+    [/junker reactionism/i,               19],
+
+    [/national conservatism \(hugenbergite\)/i,   18],
+    [/national conservatism/i,            18],
+    [/authoritarian monarchism/i,         19],
+    [/stahlhelm veterans conservatism/i,  18],
+
+    [/national socialism \(strasserism\)/i,      18],
+    [/strasserist national socialism/i,          18],
+    [/national socialism/i,               20],
+    [/völkisch nationalism/i,             20],
+    [/strasserism/i,                      18],
+    [/black reichswehr militarism/i,      19],
+];
+
+function ideoScore(ideologyString) {
+    if (!ideologyString) return 10;
+    for (const [pattern, score] of IDEO_KEYWORDS) {
+        if (pattern.test(ideologyString)) return score;
+    }
+    return 10;
+}
+
+for (const p of Q.parties) {
+    const ideology = Q[p + '_ideology'];
+    if (ideology !== undefined) {
+        Q[p + '_ideo_score'] = ideoScore(ideology);
+    }
+}
+
 
 
 
