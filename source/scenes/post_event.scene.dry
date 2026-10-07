@@ -1224,7 +1224,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
 
     eligible: (party) => {
         var oldR = Q['old_' + party + '_r'];
-        var pct  = Q[party + '_pct'];
+        var pct  = Q[party + '_votes'];
         return !!oldR && oldR > 0 && pct < oldR;
     },
 
