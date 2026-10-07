@@ -1011,6 +1011,15 @@ function inIdeoRange(party, min, max) {
     return score >= min && score <= max;
 }
 
+function weakestClass(party) {
+    var best = null, lowest = Infinity;
+    for (const c of Q.classes) {
+        var v = Q[c + '_' + party] || 0;
+        if (v < lowest) { lowest = v; best = c; }
+    }
+    return best;
+}
+
 // Human-readable party names for description text.
 Q.PARTY_DISPLAY_NAMES = {
     dnvp: 'The DNVP',
@@ -1189,59 +1198,48 @@ Q.GLOBAL_PARTY_ACTIONS = {
     },
 
     campaigning: {
-        ideoMin: 1, ideoMax: 20,
-        weight: (party) => {
-            var oldR = Q['old_' + party + '_r'];
-            var pct  = Q[party + '_pct'];
-            if (!oldR || oldR <= 0) return 0;
-            var shortfall = Math.max(0, oldR - pct);
-            return linearWeight(5.00, shortfall, oldR, 4);
-        },
-        description: (party) => {
-            var focusClass = Q[party + '_campaign_target_class'];
-            var focusLabel = {
-                workers: 'the industrial working class',
-                unemployedc: 'the unemployed',
-                old_middle: 'shopkeepers and artisans',
-                new_middle: 'white-collar workers and civil servants',
-                rural: 'the countryside',
-            }[focusClass] || 'the electorate';
-            return partyLabel(party) + ' has launched a campaign push targeting ' + focusLabel + ', trailing its last Reichstag result.';
-        },
-        eligible: (party) => {
-            var oldR = Q['old_' + party + '_r'];
-            var pct  = Q[party + '_pct'];
-            return !!oldR && oldR > 0 && pct < oldR;
-        },
-        timer: 8,
-        apply: (party) => {
-            var bestClass = null;
-            var bestGap   = -Infinity;
-            for (const c of Q.classes) {
-                var current = Q[c + '_' + party] || 0;
-                var target  = computeTarget(party, c);
-                var gap     = target - current;
-                if (gap > bestGap) {
-                    bestGap   = gap;
-                    bestClass = c;
-                }
-            }
-            if (!bestClass) return;
+    ideoMin: 1, ideoMax: 20,
 
-            Q[party + '_campaign_target_class'] = bestClass;
-            Q['campaign_focus_' + party] = Q.CLASS_TO_CAMPAIGN_FOCUS[bestClass] || bestClass;
-
-            var oldR = Q['old_' + party + '_r'];
-            var pct  = Q[party + '_pct'];
-            var shortfallRatio = Math.min(1.0, Math.max(0, oldR - pct) / oldR);
-            var newIntensity = 0.5 + shortfallRatio * 0.6;
-
-            Q['campaign_intensity_' + party] = Math.max(
-                Q['campaign_intensity_' + party] || 0,
-                newIntensity
-            );
-        }
+    weight: (party) => {
+        var oldR = Q['old_' + party + '_r'];
+        var pct  = Q[party + '_pct'];
+        if (!oldR || oldR <= 0) return 0;
+        return Math.max(0, oldR - pct) / oldR * 5;
     },
+
+    description: (party) => {
+        var focusClass = weakestClass(party);
+        var focusLabel = {
+            workers: 'the industrial working class',
+            unemployed: 'the unemployed',
+            old_middle: 'shopkeepers and artisans',
+            new_middle: 'white-collar workers and civil servants',
+            rural: 'the countryside',
+        }[focusClass] || 'the electorate';
+        return partyLabel(party) + ' has launched a campaign push targeting ' + focusLabel + ', trailing its last Reichstag result.';
+    },
+
+    eligible: (party) => {
+        var oldR = Q['old_' + party + '_r'];
+        var pct  = Q[party + '_pct'];
+        return !!oldR && oldR > 0 && pct < oldR;
+    },
+
+    timer: 8,
+
+    apply: (party) => {
+        var oldR  = Q['old_' + party + '_r'];
+        var pct   = Q[party + '_pct'];
+        var range = Math.max(0, oldR - pct);
+        var bonus = 10 * range / (range + 10);  
+
+        var bestClass = weakestClass(party);
+        if (!bestClass) return;
+
+        Q[party + '_campaign_target_class'] = bestClass;
+        Q[bestClass + '_' + party] = (Q[bestClass + '_' + party] || 0) + bonus;
+    }
+},
 
 
 
