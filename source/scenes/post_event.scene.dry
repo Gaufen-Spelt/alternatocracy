@@ -1660,6 +1660,11 @@ const IDEO_KEYWORDS = [
     [/völkisch nationalism/i,             20],
     [/strasserism/i,                      18],
     [/black reichswehr militarism/i,      19],
+
+    // REST
+
+    [/left socialism/i,           3],
+    [/bavarian regionalism/i,     13],
 ];
 
 function ideoScore(ideologyString) {
