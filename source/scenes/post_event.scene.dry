@@ -2,7 +2,99 @@ title: Post Event
 new-page: true
 on-arrival: {!
 
+const IDEO_KEYWORDS = [
+    [/marxism-leninism/i,                 1],
+    [/council communism/i,                0],
+    [/national bolshevism/i,              16],
+    [/syndicalist communism/i,            1],
+
+    [/revolutionary socialism/i,          2],
+    [/left-wing socialism/i,              3],
+    [/anarcho-syndicalism/i,              1],
+    [/luxemburgism/i,                     2],
+
+    [/old social democracy/i,             14],
+    [/social democracy \(revolutionary\)/i,      3],
+    [/social democracy \(center marxist\)/i,     4],
+    [/social democracy \(reformist\)/i,          6],
+    [/laborism/i,                                7],
+    [/social republicanism \(neorevisionist\)/i, 8],
+    [/right-wing social democracy/i,      12],
+    [/guild socialism/i,                  5],
+    [/christian syndicalism/i,            8],
+
+    [/social democracy/i,                 6],
+    [/social republicanism/i,             7],
+
+    [/catholic laborism/i,                10],
+    [/progressive liberalism/i,           9],
+
+    [/social liberalism/i,                9],
+    [/christian socialism/i,              7],
+    [/authoritarian catholic tent/i,      14],
+    [/catholic tent/i,                    12],
+    [/middle-class interest/i,            13],
+    [/social corporatism/i,               15],
+    [/corporatism/i,                      15],
+    [/technocratic centrism/i,            10],
+    [/radical democratic republicanism/i, 8],
+
+    [/christian conservatism/i,           14],
+    [/bavarian conservatism/i,            13],
+    [/protestant social conservatism/i,   13],
+    [/moderate conservatism/i,            14],
+    [/liberal agrarianism/i,              12],
+    [/regionalist particularism/i,        11],
+    [/rhenish federalism/i,               11],
+
+    [/national liberalism \(scholzite\)/i,       17],
+    [/national liberalism \(dingeldist\)/i,       16],
+    [/authoritarian national liberalism/i,        18],
+    [/national liberalism/i,                      14],
+    [/hanoverian agrarianism/i,                   15],
+    [/hanseatic agrarian conservatism/i,          15],
+    [/prussian legitimist monarchism/i,           16],
+
+    [/völkisch liberalism/i,              16],
+    [/populist agrarian conservatism/i,   16],
+    [/agrarian conservatism/i,            17],
+    [/junker reactionism/i,               19],
+
+    [/national conservatism \(hugenbergite\)/i,   18],
+    [/national conservatism/i,            18],
+    [/authoritarian monarchism/i,         19],
+    [/stahlhelm veterans conservatism/i,  18],
+
+    [/national socialism \(strasserism\)/i,      18],
+    [/strasserist national socialism/i,          18],
+    [/national socialism/i,               20],
+    [/völkisch nationalism/i,             20],
+    [/strasserism/i,                      18],
+    [/black reichswehr militarism/i,      19],
+
+    // REST
+
+    [/left socialism/i,           3],
+    [/bavarian regionalism/i,     13],
+];
+
+function ideoScore(ideologyString) {
+    if (!ideologyString) return 10;
+    for (const [pattern, score] of IDEO_KEYWORDS) {
+        if (pattern.test(ideologyString)) return score;
+    }
+    return 10;
+}
+
+for (const p of Q.parties) {
+    const ideology = Q[p + '_ideology'];
+    if (ideology !== undefined) {
+        Q[p + '_ideo_score'] = ideoScore(ideology);
+    }
+}
+
 Q.parties = [...new Set(Q.parties)];
+const Parties = Q.parties.map(party => data[party + '_' + in_government] ?? 0);
 
 // === VARIABLE RANGE CAPPING ===
 
@@ -1591,96 +1683,7 @@ if (Q.capital_strike_progress >= cap.strike || Q.budget <= -5) {
 
 
 
-const IDEO_KEYWORDS = [
-    [/marxism-leninism/i,                 1],
-    [/council communism/i,                0],
-    [/national bolshevism/i,              16],
-    [/syndicalist communism/i,            1],
 
-    [/revolutionary socialism/i,          2],
-    [/left-wing socialism/i,              3],
-    [/anarcho-syndicalism/i,              1],
-    [/luxemburgism/i,                     2],
-
-    [/old social democracy/i,             14],
-    [/social democracy \(revolutionary\)/i,      3],
-    [/social democracy \(center marxist\)/i,     4],
-    [/social democracy \(reformist\)/i,          6],
-    [/laborism/i,                                7],
-    [/social republicanism \(neorevisionist\)/i, 8],
-    [/right-wing social democracy/i,      12],
-    [/guild socialism/i,                  5],
-    [/christian syndicalism/i,            8],
-
-    [/social democracy/i,                 6],
-    [/social republicanism/i,             7],
-
-    [/catholic laborism/i,                10],
-    [/progressive liberalism/i,           9],
-
-    [/social liberalism/i,                9],
-    [/christian socialism/i,              7],
-    [/authoritarian catholic tent/i,      14],
-    [/catholic tent/i,                    12],
-    [/middle-class interest/i,            13],
-    [/social corporatism/i,               15],
-    [/corporatism/i,                      15],
-    [/technocratic centrism/i,            10],
-    [/radical democratic republicanism/i, 8],
-
-    [/christian conservatism/i,           14],
-    [/bavarian conservatism/i,            13],
-    [/protestant social conservatism/i,   13],
-    [/moderate conservatism/i,            14],
-    [/liberal agrarianism/i,              12],
-    [/regionalist particularism/i,        11],
-    [/rhenish federalism/i,               11],
-
-    [/national liberalism \(scholzite\)/i,       17],
-    [/national liberalism \(dingeldist\)/i,       16],
-    [/authoritarian national liberalism/i,        18],
-    [/national liberalism/i,                      14],
-    [/hanoverian agrarianism/i,                   15],
-    [/hanseatic agrarian conservatism/i,          15],
-    [/prussian legitimist monarchism/i,           16],
-
-    [/völkisch liberalism/i,              16],
-    [/populist agrarian conservatism/i,   16],
-    [/agrarian conservatism/i,            17],
-    [/junker reactionism/i,               19],
-
-    [/national conservatism \(hugenbergite\)/i,   18],
-    [/national conservatism/i,            18],
-    [/authoritarian monarchism/i,         19],
-    [/stahlhelm veterans conservatism/i,  18],
-
-    [/national socialism \(strasserism\)/i,      18],
-    [/strasserist national socialism/i,          18],
-    [/national socialism/i,               20],
-    [/völkisch nationalism/i,             20],
-    [/strasserism/i,                      18],
-    [/black reichswehr militarism/i,      19],
-
-    // REST
-
-    [/left socialism/i,           3],
-    [/bavarian regionalism/i,     13],
-];
-
-function ideoScore(ideologyString) {
-    if (!ideologyString) return 10;
-    for (const [pattern, score] of IDEO_KEYWORDS) {
-        if (pattern.test(ideologyString)) return score;
-    }
-    return 10;
-}
-
-for (const p of Q.parties) {
-    const ideology = Q[p + '_ideology'];
-    if (ideology !== undefined) {
-        Q[p + '_ideo_score'] = ideoScore(ideology);
-    }
-}
 
 
 
