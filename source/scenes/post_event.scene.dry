@@ -94,7 +94,10 @@ for (const p of Q.parties) {
 }
 
 Q.parties = [...new Set(Q.parties)];
-const Parties = Q.parties.map(party => data[party + '_' + in_government] ?? 0);
+
+for (const party of Q.parties) {
+    Q[party + '_in_government'] = Q[party + '_in_government'] ?? 0;
+}
 
 // === VARIABLE RANGE CAPPING ===
 
