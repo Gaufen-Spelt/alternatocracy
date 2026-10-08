@@ -48,6 +48,7 @@ window.applyOminousTheme = function(force) {
   var key = mode + ':' + x;
   if (!force && key === window.__themeKey) return;   // nothing changed
   window.__themeKey = key;
+  document.body.classList.toggle('ominous', active);
 
   var style = document.body.style;
   var target = window.OMINOUS_THEME[mode];
