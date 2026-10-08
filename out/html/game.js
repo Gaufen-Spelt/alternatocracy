@@ -48,12 +48,14 @@ var main = function(dendryUI) {
     }
 
     ['displayHand', 'displayDecks', 'displayPinnedCards', 'displayMyNewRow']
-      .forEach(function(name) {
-        var original = ui[name];   // comes from the prototype
-        ui[name] = function(cards, extra) {
-          return original.call(ui, fixCards(cards), extra);
-        };
-      });
+  .forEach(function(name) {
+    var original = ui[name];
+    ui[name] = function(cards, extra) {
+      var r = original.call(ui, fixCards(cards), extra);
+      window.tagCards();          
+      return r;
+    };
+  });
 
 
     var originalDisplayChoices = ui.displayChoices;
@@ -555,6 +557,49 @@ window.hidePartyTooltip = function() {
   $old.first().before($new);
   $old.remove();
 };
+
+
+
+
+  
+
+
+
+  window.scenesWithTag = function(tag) {
+  return Object.keys((dendryUI.game.tagLookup || {})[tag] || {});
+};
+
+window.getTags = function(sceneId) {
+  if (!window.__tagsByScene) {
+    var lookup = dendryUI.game.tagLookup || {};
+    var byScene = {};
+    Object.keys(lookup).forEach(function(tag) {
+      Object.keys(lookup[tag]).forEach(function(id) {
+        (byScene[id] = byScene[id] || []).push(tag);
+      });
+    });
+    window.__tagsByScene = byScene;
+  }
+  return window.__tagsByScene[sceneId] || [];
+};
+
+window.hasTag = function(id, tag) { return window.getTags(id).indexOf(tag) >= 0; };
+
+window.tagCards = function() {
+  $('#content a.card[card-id]').each(function() {
+    var $li = $(this).closest('li');
+    var tags = window.getTags($(this).attr('card-id'));
+    tags.forEach(function(t) { $li.addClass('tag-' + t); });
+    if (!tags.length) $li.addClass('tag-other');
+  });
+};
+
+
+
+
+
+
+  
 
   var BOTTOM_PANEL_SCENE = 'news';
 window.newsTab = BOTTOM_PANEL_SCENE;
