@@ -172,7 +172,11 @@ if (Q.month_actions >= 1) {
     Q.month_actions_2 = 1;
     Q.time += 1;
     Q.month_actions = 0;
-    Q.weeks += 2;
+    if (Q.hitler_rubicon >= 1) {
+      Q.weeks += 1;
+    } else {
+      Q.weeks += 2;
+    }
     if (Q.weeks >= 4) {
         Q.month += 1;
         Q.weeks = 0;
