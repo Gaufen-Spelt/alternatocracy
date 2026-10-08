@@ -14,6 +14,83 @@ if (Q.fundraiser_timer == 1) {
 } else {
     Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
 }
+
+if (Q.hitler_rubicon >= 1) {
+if (!window.__reactionClockStarted) {
+    window.__reactionClockStarted = true;
+
+    // Defaults (only set if missing, so saves keep their values)
+    if (Q.reaction_window_ms === undefined) Q.reaction_window_ms = 3500; // real ms per 7 days at 1x
+    if (Q.reaction_days_needed === undefined) Q.reaction_days_needed = 7;
+    if (Q.speed_multiplier === undefined)   Q.speed_multiplier = 1;
+    if (Q.paused === undefined)             Q.paused = 0;
+    if (Q.day === undefined)                Q.day = 0;       // cumulative day counter (cosmetic)
+    if (Q.idle_days === undefined)          Q.idle_days = 0; // days waited on main since last reset
+    if (Q._last_year === undefined)         Q._last_year = Q.year;
+
+    function dayTick() {
+        try {
+            var engine = dendryUI.dendryEngine;
+            var onMain = (engine.state.sceneId === 'main');
+
+            if (!Q.paused && onMain) {
+                Q.day += 1;
+                Q.idle_days += 1;
+
+                // advisor timer: once per 30 days
+                if (Q.advisor_action_timer > 0 && Q.day % 30 === 0) {
+                    Q.advisor_action_timer -= 1;
+                }
+
+                // Player was too slow: trigger a post_event step
+                if (Q.idle_days >= Q.reaction_days_needed) {
+                    Q.idle_days = 0;
+                    Q.month_actions = (Q.month_actions || 0) + 1;
+                }
+
+                // Run post_event logic every day (keeps event checks responsive,
+                // same as the old ticker). The month step only fires when
+                // month_actions >= 1.
+                var postEventScene = engine.game.scenes['post_event'];
+                if (postEventScene && postEventScene.onArrival) {
+                    engine._runActions(postEventScene.onArrival);
+                    if (Q.has_event) {
+                        engine.__changeScene('post_event');
+                    }
+                }
+
+                // post_event owns the calendar; catch year rollovers here
+                if (Q.year > Q._last_year) {
+                    if (Q.historical_mode) Q.resources += 2 * (Q.year - Q._last_year);
+                    Q._last_year = Q.year;
+                }
+
+                window.updateSidebar();
+                window.updateNewsSidebar();
+            } else if (!onMain) {
+                // Player left the scene in time: reset the reaction window
+                Q.idle_days = 0;
+            }
+
+            // Still allow status redraw if user is on status page
+            if (Q.current_scene === 'status' && typeof visit === 'function') {
+                visit('status');
+            }
+        } catch (e) {
+            console.error('dayTick error:', e);
+        }
+
+        // Re-schedule each time so speed changes apply immediately.
+        var perDay = (Q.reaction_window_ms || 3500) / (Q.reaction_days_needed || 7);
+        var delay = perDay / (Q.speed_multiplier || 1);
+        window.__reactionTimer = setTimeout(dayTick, Math.max(100, delay));
+    }
+
+    window.__reactionTimer = setTimeout(dayTick, 500);
+}
+
+}
+
 !}
 max-cards: 4
 
