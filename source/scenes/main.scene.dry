@@ -15,6 +15,42 @@ if (Q.fundraiser_timer == 1) {
     Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
 }
 
+// ============================================================
+// LIVE DATE HEADER
+// Updates <span id="date-header"> in place, no scene reload needed.
+// Runs regardless of hitler_rubicon, so the header stays live even
+// when the reaction clock isn't running (e.g. after player actions).
+// ============================================================
+if (!window.__dateHeaderStarted) {
+    window.__dateHeaderStarted = true;
+
+    // EDIT THESE to match your `monther` and `month` quality labels.
+    var MONTHER_LABELS = { 0: 'Early', 1: 'Early', 2: 'Late', 3: 'Late' };
+    var MONTH_NAMES = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+
+    window.updateDateHeader = function () {
+        var el = document.getElementById('date-header');
+        if (!el) return;
+
+        var parts = [];
+        if (Q.hitler_rubicon >= 1) {
+            parts.push('Day: ' + (Q.day || 0));
+            parts.push('Week: ' + (Q.week || 0));
+        }
+        parts.push(MONTHER_LABELS[Q.weeks] !== undefined ? MONTHER_LABELS[Q.weeks] : Q.weeks);
+        parts.push((MONTH_NAMES[Q.month] || Q.month) + ' ' + Q.year);
+
+        var text = parts.join(', ');
+        if (el.textContent !== text) el.textContent = text;
+    };
+
+    // Cheap poll: only touches the DOM when the text actually changes.
+    window.__dateHeaderTimer = setInterval(window.updateDateHeader, 250);
+}
+// Also refresh right after this scene renders.
+setTimeout(function () { if (window.updateDateHeader) window.updateDateHeader(); }, 0);
+
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
     window.__reactionClockStarted = true;
@@ -48,9 +84,8 @@ if (!window.__reactionClockStarted) {
                     Q.month_actions = (Q.month_actions || 0) + 1;
                 }
 
-                // Run post_event logic every day (keeps event checks responsive,
-                // same as the old ticker). The month step only fires when
-                // month_actions >= 1.
+                // Run post_event logic every day (keeps event checks responsive).
+                // The month step only fires when month_actions >= 1.
                 var postEventScene = engine.game.scenes['post_event'];
                 if (postEventScene && postEventScene.onArrival) {
                     engine._runActions(postEventScene.onArrival);
@@ -67,6 +102,7 @@ if (!window.__reactionClockStarted) {
 
                 window.updateSidebar();
                 window.updateNewsSidebar();
+                if (window.updateDateHeader) window.updateDateHeader();
             } else if (!onMain) {
                 // Player left the scene in time: reset the reaction window
                 Q.idle_days = 0;
@@ -88,11 +124,12 @@ if (!window.__reactionClockStarted) {
 
     window.__reactionTimer = setTimeout(dayTick, 500);
 }
-
 }
 
 !}
 max-cards: 4
+
+
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
