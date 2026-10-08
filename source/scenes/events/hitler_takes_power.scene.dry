@@ -1,6 +1,6 @@
 title: Hitler takes power.
 subtitle: The beginning of the end.
-view-if: chancellor == "Hitler" or president == "Hitler" or chancellor_party == "NSDAP"
+view-if: chancellor == "Hitler" or president == "Hitler" or chancellor_party == "NSDAP" and not hitler_rubicon
 on-arrival: spd_in_government = 0
 tags: event
 new-page: true
@@ -13,9 +13,19 @@ What are we to do now?
 
 - @fight: We will fight on the streets to prevent Hitler from taking power.
 - @give_up: We will vote against the nazis in the Reichstag.
+- @time: Time slows down...
 
+@time 
+subtitle: Court resists the decision, however they are unable to impose the decision.
+view-if: full_reform
+on-arrival: hitler_rubicon = 1
+
+Courts declares the ruling of Hitler illegal and unaligned with Republic's principles, however the real situation is that we are unable to oust Hitler due to to his power. His loyalist elements and paramilitary had already begun the campaign of terror...
+
+Time slows down...
 
 @fight
+view-if: not full_reform
 
 Do we realize that this means civil war, against the full force of the state?
 
@@ -23,6 +33,7 @@ Do we realize that this means civil war, against the full force of the state?
 - @give_up: We are not ready for war. Instead, we will vote against the nazis in the Reichstag.
 
 @give_up
+view-if: not full_reform
 
 Speeches are made. Votes are held. Bullets fly in the streets. Some socialists are killed or jailed. Others flee the country. What can votes even do at this juncture?
 
