@@ -117,25 +117,130 @@ max-cards: 4
 - @shuffle_leadership_pinned
 - @fundraising
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @main_easy
+title: Next month
 is-hand: true
+new-page: true
 on-arrival: {!
-if (Q.advisor_action_timer <= 0) {
-    Q.pinnedCardsDescription = 'Advisors - an action is available.';
-} else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 turn.';
-} else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
+// Pinned-cards text, as a function so the clock can refresh it live.
+window.computePinnedDescription = function() {
+    var Qs = dendryUI.dendryEngine.state.qualities;
+    var s;
+    if (Qs.advisor_action_timer <= 0) {
+        s = 'Advisors - an action is available.';
+    } else if (Qs.advisor_action_timer == 1) {
+        s = 'Advisors - next action available in 1 turn.';
+    } else {
+        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
+    }
+
+    if (Qs.fundraiser_timer == 1) {
+        s += '\n- next fundraiser in 1 turn';
+    } else {
+        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
+    }
+
+    Qs.pinnedCardsDescription = s;
+    $('.pinned-text-description').text(s);
+};
+window.computePinnedDescription();
+
+if (Q.hitler_rubicon >= 1) {
+if (!window.__reactionClockStarted) {
+    window.__reactionClockStarted = true;
+
+    // Defaults (only set if missing, so saves keep their values)
+    if (Q.reaction_window_ms === undefined) Q.reaction_window_ms = 3500; // real ms per 7 days at 1x
+    if (Q.reaction_days_needed === undefined) Q.reaction_days_needed = 7;
+    if (Q.speed_multiplier === undefined)   Q.speed_multiplier = 1;
+    if (Q.paused === undefined)             Q.paused = 0;
+    if (Q.day === undefined)                Q.day = 0;       // cumulative day counter
+    if (Q.idle_days === undefined)          Q.idle_days = 0; // days waited on main since last reset
+    if (Q._last_year === undefined)         Q._last_year = Q.year;
+
+    function dayTick() {
+        try {
+            var engine = dendryUI.dendryEngine;
+            var onMain = (engine.state.sceneId === 'main');
+
+            if (!Q.paused && onMain) {
+                Q.idle_days += 1;
+
+                // Player was too slow: trigger a post_event step
+                if (Q.idle_days >= Q.reaction_days_needed) {
+                    Q.idle_days = 0;
+                    Q.month_actions = (Q.month_actions || 0) + 1;
+                }
+
+                // Run post_event logic every day; month step only fires when
+                // month_actions >= 1.
+                var postEventScene = engine.game.scenes['post_event'];
+                if (postEventScene && postEventScene.onArrival) {
+                    engine._runActions(postEventScene.onArrival);
+                    if (Q.has_event) {
+                        engine.__changeScene('post_event');
+                    }
+                }
+
+                // post_event owns the calendar; catch year rollovers here
+                if (Q.year > Q._last_year) {
+                    if (Q.historical_mode) Q.resources += 2 * (Q.year - Q._last_year);
+                    Q._last_year = Q.year;
+                }
+
+                    Q.day = Q.weeks * 7 + Q.idle_days;
+                      if (Q._last_month !== Q.month) {
+                      if (Q._last_month !== undefined && Q.advisor_action_timer > 0) Q.advisor_action_timer -= 1;
+                      Q._last_month = Q.month;
+                      }
+
+                // ---- live UI refresh ----
+                window.updateSidebar();
+                window.updateNewsSidebar && window.updateNewsSidebar();
+                if (window.refreshLiveContent) window.refreshLiveContent();      // date heading etc.
+                if (window.computePinnedDescription) window.computePinnedDescription();
+            } else if (!onMain) {
+                // Player left the scene in time: reset the reaction window
+                Q.idle_days = 0;
+            }
+
+            // Still allow status redraw if user is on status page
+            if (Q.current_scene === 'status' && typeof visit === 'function') {
+                visit('status');
+            }
+        } catch (e) {
+            console.error('dayTick error:', e);
+        }
+
+        // Re-schedule each time so speed changes apply immediately.
+        var perDay = (Q.reaction_window_ms || 3500) / (Q.reaction_days_needed || 7);
+        var delay = perDay / (Q.speed_multiplier || 1);
+        window.__reactionTimer = setTimeout(dayTick, Math.max(100, delay));
+    }
+
+    window.__reactionTimer = setTimeout(dayTick, 500);
+}
 }
 
-if (Q.fundraiser_timer == 1) {
-    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
-} else {
-    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
-}
 !}
 max-cards: 6
 
+= [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
+
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
 [? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
@@ -146,25 +251,147 @@ max-cards: 6
 - @shuffle_leadership_pinned
 - @fundraising
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @main_historical
+title: Next month
 is-hand: true
+new-page: true
 on-arrival: {!
-if (Q.advisor_action_timer <= 0) {
-    Q.pinnedCardsDescription = 'Advisors - an action is available.';
-} else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 turn.';
-} else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
+// Pinned-cards text, as a function so the clock can refresh it live.
+window.computePinnedDescription = function() {
+    var Qs = dendryUI.dendryEngine.state.qualities;
+    var s;
+    if (Qs.advisor_action_timer <= 0) {
+        s = 'Advisors - an action is available.';
+    } else if (Qs.advisor_action_timer == 1) {
+        s = 'Advisors - next action available in 1 turn.';
+    } else {
+        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
+    }
+
+    if (Qs.fundraiser_timer == 1) {
+        s += '\n- next fundraiser in 1 turn';
+    } else {
+        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
+    }
+
+    Qs.pinnedCardsDescription = s;
+    $('.pinned-text-description').text(s);
+};
+window.computePinnedDescription();
+
+if (Q.hitler_rubicon >= 1) {
+if (!window.__reactionClockStarted) {
+    window.__reactionClockStarted = true;
+
+    // Defaults (only set if missing, so saves keep their values)
+    if (Q.reaction_window_ms === undefined) Q.reaction_window_ms = 3500; // real ms per 7 days at 1x
+    if (Q.reaction_days_needed === undefined) Q.reaction_days_needed = 7;
+    if (Q.speed_multiplier === undefined)   Q.speed_multiplier = 1;
+    if (Q.paused === undefined)             Q.paused = 0;
+    if (Q.day === undefined)                Q.day = 0;       // cumulative day counter
+    if (Q.idle_days === undefined)          Q.idle_days = 0; // days waited on main since last reset
+    if (Q._last_year === undefined)         Q._last_year = Q.year;
+
+    function dayTick() {
+        try {
+            var engine = dendryUI.dendryEngine;
+            var onMain = (engine.state.sceneId === 'main');
+
+            if (!Q.paused && onMain) {
+                Q.idle_days += 1;
+
+                // Player was too slow: trigger a post_event step
+                if (Q.idle_days >= Q.reaction_days_needed) {
+                    Q.idle_days = 0;
+                    Q.month_actions = (Q.month_actions || 0) + 1;
+                }
+
+                // Run post_event logic every day; month step only fires when
+                // month_actions >= 1.
+                var postEventScene = engine.game.scenes['post_event'];
+                if (postEventScene && postEventScene.onArrival) {
+                    engine._runActions(postEventScene.onArrival);
+                    if (Q.has_event) {
+                        engine.__changeScene('post_event');
+                    }
+                }
+
+                // post_event owns the calendar; catch year rollovers here
+                if (Q.year > Q._last_year) {
+                    if (Q.historical_mode) Q.resources += 2 * (Q.year - Q._last_year);
+                    Q._last_year = Q.year;
+                }
+
+                    Q.day = Q.weeks * 7 + Q.idle_days;
+                      if (Q._last_month !== Q.month) {
+                      if (Q._last_month !== undefined && Q.advisor_action_timer > 0) Q.advisor_action_timer -= 1;
+                      Q._last_month = Q.month;
+                      }
+
+                // ---- live UI refresh ----
+                window.updateSidebar();
+                window.updateNewsSidebar && window.updateNewsSidebar();
+                if (window.refreshLiveContent) window.refreshLiveContent();      // date heading etc.
+                if (window.computePinnedDescription) window.computePinnedDescription();
+            } else if (!onMain) {
+                // Player left the scene in time: reset the reaction window
+                Q.idle_days = 0;
+            }
+
+            // Still allow status redraw if user is on status page
+            if (Q.current_scene === 'status' && typeof visit === 'function') {
+                visit('status');
+            }
+        } catch (e) {
+            console.error('dayTick error:', e);
+        }
+
+        // Re-schedule each time so speed changes apply immediately.
+        var perDay = (Q.reaction_window_ms || 3500) / (Q.reaction_days_needed || 7);
+        var delay = perDay / (Q.speed_multiplier || 1);
+        window.__reactionTimer = setTimeout(dayTick, Math.max(100, delay));
+    }
+
+    window.__reactionTimer = setTimeout(dayTick, 500);
+}
 }
 
-if (Q.fundraiser_timer == 1) {
-    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
-} else {
-    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
-}
 !}
 max-cards: 2
 
+= [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
+
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
 [? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
@@ -175,24 +402,143 @@ max-cards: 2
 - @shuffle_leadership_pinned
 - @fundraising
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @main_hard
+title: Next month
 is-hand: true
+new-page: true
 on-arrival: {!
-if (Q.advisor_action_timer <= 0) {
-    Q.pinnedCardsDescription = 'Advisors - an action is available.';
-} else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 turn.';
-} else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
+// Pinned-cards text, as a function so the clock can refresh it live.
+window.computePinnedDescription = function() {
+    var Qs = dendryUI.dendryEngine.state.qualities;
+    var s;
+    if (Qs.advisor_action_timer <= 0) {
+        s = 'Advisors - an action is available.';
+    } else if (Qs.advisor_action_timer == 1) {
+        s = 'Advisors - next action available in 1 turn.';
+    } else {
+        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
+    }
+
+    if (Qs.fundraiser_timer == 1) {
+        s += '\n- next fundraiser in 1 turn';
+    } else {
+        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
+    }
+
+    Qs.pinnedCardsDescription = s;
+    $('.pinned-text-description').text(s);
+};
+window.computePinnedDescription();
+
+if (Q.hitler_rubicon >= 1) {
+if (!window.__reactionClockStarted) {
+    window.__reactionClockStarted = true;
+
+    // Defaults (only set if missing, so saves keep their values)
+    if (Q.reaction_window_ms === undefined) Q.reaction_window_ms = 3500; // real ms per 7 days at 1x
+    if (Q.reaction_days_needed === undefined) Q.reaction_days_needed = 7;
+    if (Q.speed_multiplier === undefined)   Q.speed_multiplier = 1;
+    if (Q.paused === undefined)             Q.paused = 0;
+    if (Q.day === undefined)                Q.day = 0;       // cumulative day counter
+    if (Q.idle_days === undefined)          Q.idle_days = 0; // days waited on main since last reset
+    if (Q._last_year === undefined)         Q._last_year = Q.year;
+
+    function dayTick() {
+        try {
+            var engine = dendryUI.dendryEngine;
+            var onMain = (engine.state.sceneId === 'main');
+
+            if (!Q.paused && onMain) {
+                Q.idle_days += 1;
+
+                // Player was too slow: trigger a post_event step
+                if (Q.idle_days >= Q.reaction_days_needed) {
+                    Q.idle_days = 0;
+                    Q.month_actions = (Q.month_actions || 0) + 1;
+                }
+
+                // Run post_event logic every day; month step only fires when
+                // month_actions >= 1.
+                var postEventScene = engine.game.scenes['post_event'];
+                if (postEventScene && postEventScene.onArrival) {
+                    engine._runActions(postEventScene.onArrival);
+                    if (Q.has_event) {
+                        engine.__changeScene('post_event');
+                    }
+                }
+
+                // post_event owns the calendar; catch year rollovers here
+                if (Q.year > Q._last_year) {
+                    if (Q.historical_mode) Q.resources += 2 * (Q.year - Q._last_year);
+                    Q._last_year = Q.year;
+                }
+
+                    Q.day = Q.weeks * 7 + Q.idle_days;
+                      if (Q._last_month !== Q.month) {
+                      if (Q._last_month !== undefined && Q.advisor_action_timer > 0) Q.advisor_action_timer -= 1;
+                      Q._last_month = Q.month;
+                      }
+
+                // ---- live UI refresh ----
+                window.updateSidebar();
+                window.updateNewsSidebar && window.updateNewsSidebar();
+                if (window.refreshLiveContent) window.refreshLiveContent();      // date heading etc.
+                if (window.computePinnedDescription) window.computePinnedDescription();
+            } else if (!onMain) {
+                // Player left the scene in time: reset the reaction window
+                Q.idle_days = 0;
+            }
+
+            // Still allow status redraw if user is on status page
+            if (Q.current_scene === 'status' && typeof visit === 'function') {
+                visit('status');
+            }
+        } catch (e) {
+            console.error('dayTick error:', e);
+        }
+
+        // Re-schedule each time so speed changes apply immediately.
+        var perDay = (Q.reaction_window_ms || 3500) / (Q.reaction_days_needed || 7);
+        var delay = perDay / (Q.speed_multiplier || 1);
+        window.__reactionTimer = setTimeout(dayTick, Math.max(100, delay));
+    }
+
+    window.__reactionTimer = setTimeout(dayTick, 500);
+}
 }
 
-if (Q.fundraiser_timer == 1) {
-    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
-} else {
-    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
-}
 !}
 max-cards: 3
+
+= [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
