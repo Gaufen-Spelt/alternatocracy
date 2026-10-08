@@ -1,5 +1,6 @@
 title: Next month
 is-hand: true
+new-page: true
 on-arrival: {!
 // Pinned-cards text, as a function so the clock can refresh it live.
 window.computePinnedDescription = function() {
@@ -105,8 +106,6 @@ if (!window.__reactionClockStarted) {
 max-cards: 4
 
 = [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
-
-<hr>
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
