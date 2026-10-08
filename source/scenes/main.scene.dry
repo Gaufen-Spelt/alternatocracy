@@ -1,55 +1,28 @@
 title: Next month
 is-hand: true
 on-arrival: {!
-if (Q.advisor_action_timer <= 0) {
-    Q.pinnedCardsDescription = 'Advisors - an action is available.';
-} else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 turn.';
-} else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' turns.';
-}
+// Pinned-cards text, as a function so the clock can refresh it live.
+window.computePinnedDescription = function() {
+    var Qs = dendryUI.dendryEngine.state.qualities;
+    var s;
+    if (Qs.advisor_action_timer <= 0) {
+        s = 'Advisors - an action is available.';
+    } else if (Qs.advisor_action_timer == 1) {
+        s = 'Advisors - next action available in 1 turn.';
+    } else {
+        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
+    }
 
-if (Q.fundraiser_timer == 1) {
-    Q.pinnedCardsDescription += '\n- next fundraiser in 1 turn';
-} else {
-    Q.pinnedCardsDescription += '\n- next fundraiser in ' + Q.fundraiser_timer + ' turns.';
-}
+    if (Qs.fundraiser_timer == 1) {
+        s += '\n- next fundraiser in 1 turn';
+    } else {
+        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
+    }
 
-// ============================================================
-// LIVE DATE HEADER
-// Updates <span id="date-header"> in place, no scene reload needed.
-// Runs regardless of hitler_rubicon, so the header stays live even
-// when the reaction clock isn't running (e.g. after player actions).
-// ============================================================
-if (!window.__dateHeaderStarted) {
-    window.__dateHeaderStarted = true;
-
-    // EDIT THESE to match your `monther` and `month` quality labels.
-    var MONTHER_LABELS = { 0: 'Early', 1: 'Early', 2: 'Late', 3: 'Late' };
-    var MONTH_NAMES = ['', 'January', 'February', 'March', 'April', 'May', 'June',
-                       'July', 'August', 'September', 'October', 'November', 'December'];
-
-    window.updateDateHeader = function () {
-        var el = document.getElementById('date-header');
-        if (!el) return;
-
-        var parts = [];
-        if (Q.hitler_rubicon >= 1) {
-            parts.push('Day: ' + (Q.day || 0));
-            parts.push('Week: ' + (Q.week || 0));
-        }
-        parts.push(MONTHER_LABELS[Q.weeks] !== undefined ? MONTHER_LABELS[Q.weeks] : Q.weeks);
-        parts.push((MONTH_NAMES[Q.month] || Q.month) + ' ' + Q.year);
-
-        var text = parts.join(', ');
-        if (el.textContent !== text) el.textContent = text;
-    };
-
-    // Cheap poll: only touches the DOM when the text actually changes.
-    window.__dateHeaderTimer = setInterval(window.updateDateHeader, 250);
-}
-// Also refresh right after this scene renders.
-setTimeout(function () { if (window.updateDateHeader) window.updateDateHeader(); }, 0);
+    Qs.pinnedCardsDescription = s;
+    $('.pinned-text-description').text(s);
+};
+window.computePinnedDescription();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -60,7 +33,7 @@ if (!window.__reactionClockStarted) {
     if (Q.reaction_days_needed === undefined) Q.reaction_days_needed = 7;
     if (Q.speed_multiplier === undefined)   Q.speed_multiplier = 1;
     if (Q.paused === undefined)             Q.paused = 0;
-    if (Q.day === undefined)                Q.day = 0;       // cumulative day counter (cosmetic)
+    if (Q.day === undefined)                Q.day = 0;       // cumulative day counter
     if (Q.idle_days === undefined)          Q.idle_days = 0; // days waited on main since last reset
     if (Q._last_year === undefined)         Q._last_year = Q.year;
 
@@ -84,8 +57,8 @@ if (!window.__reactionClockStarted) {
                     Q.month_actions = (Q.month_actions || 0) + 1;
                 }
 
-                // Run post_event logic every day (keeps event checks responsive).
-                // The month step only fires when month_actions >= 1.
+                // Run post_event logic every day; month step only fires when
+                // month_actions >= 1.
                 var postEventScene = engine.game.scenes['post_event'];
                 if (postEventScene && postEventScene.onArrival) {
                     engine._runActions(postEventScene.onArrival);
@@ -100,9 +73,11 @@ if (!window.__reactionClockStarted) {
                     Q._last_year = Q.year;
                 }
 
+                // ---- live UI refresh ----
                 window.updateSidebar();
-                window.updateNewsSidebar();
-                if (window.updateDateHeader) window.updateDateHeader();
+                window.updateNewsSidebar && window.updateNewsSidebar();
+                if (window.refreshLiveContent) window.refreshLiveContent();      // date heading etc.
+                if (window.computePinnedDescription) window.computePinnedDescription();
             } else if (!onMain) {
                 // Player left the scene in time: reset the reaction window
                 Q.idle_days = 0;
@@ -128,8 +103,6 @@ if (!window.__reactionClockStarted) {
 
 !}
 max-cards: 4
-
-
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
