@@ -14,6 +14,10 @@ if (Q.country_name == "Weimar Republic" && Q.presidential_powers >= 1) {
     Q.country_name = "German Republic"
 } 
 
+if (Q.hitler_rubicon == 1) {
+    Q.country_name = "Third German Empire"
+}
+
 Q.country_name_display = Q.country_name || "Weimar Republic";
 
 
@@ -26,7 +30,7 @@ var flagSlugMap = {
   "German National State": "national_state",
   "German Empire": "empire",
   "German State": "junta",
-  "Third Reich": "third_reich"
+  "Third German Empire": "third_reich"
 };
 Q.flag_slug = flagSlugMap[Q.country_name_display] || "weimar";
 
@@ -71,9 +75,11 @@ Q.cabinet_table_display = html;
 
 <hr>
 
-Next election: [+ next_election_month : month +] [+ next_election_year +]
+[? if hitler_rubicon != 1: Next election: [+ next_election_month : month +] [+ next_election_year +] ?]
 
-Next presidential election: [+ next_presidential_election_month : month +] [+ next_presidential_election_year +]
+[? if hitler_rubicon != 1: Next presidential election: [+ next_presidential_election_month : month +] [+ next_presidential_election_year +] ?]
+
+[? if hitler_rubicon == 1: **Elections are suspended**. ?]
 
 <hr>
 = Government
@@ -87,7 +93,7 @@ Chancellor: [+ chancellor +] ([+ chancellor_party +])
 
 [? if spd_in_government and (in_left_front or in_popular_front): KPD coalition dissent: [+ kpd_coalition_dissent : coalition_dissent +] ?]
 
-[+ cabinet_table_display +]
+[? if hitler_rubicon != 1: [+ cabinet_table_display +] ?]
 
 <hr>
 = Economy
