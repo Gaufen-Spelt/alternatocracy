@@ -667,6 +667,7 @@ window.updateSidebar = function() {
     window.updateSidebar();
     window.updateSandboxLink();
     window.updateBottomPanel();
+    window.applyOminousTheme();
 };
 
   /*
@@ -740,6 +741,7 @@ window.updateSidebar = function() {
     }
     document.getElementById('font_size_value').textContent = window.dendryUI.font_size.toFixed(1) + "em";
     window.pinnedCardsDescription = "Advisor cards - actions are only usable once per 6 months.";
+    window.applyOminousTheme();
   };
 
 }());
