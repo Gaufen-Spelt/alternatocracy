@@ -529,7 +529,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'war_guilt', 'womens_rights', 'economic_democracy',
             'dealing_with_toleration',
             'constitutional_reform', 'labor_rights',
-            'education_science', 'curriculum',
+            'education_science', 'curriculum', 'organized_capitalism',
             // menace events
             'hunger', 'funds',
             // events
@@ -576,6 +576,7 @@ Q.next_election_year = 1928;
 Q.next_election_month = 5;
 Q.next_election_time = 5;
 // government affairs timers
+Q.organized_capitalism_timer = 0;
 Q.agricultural_policy_timer = 0;
 Q.domestic_enemies_timer = 0;
 Q.economic_policy_timer = 0;
