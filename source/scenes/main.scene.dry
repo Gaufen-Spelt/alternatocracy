@@ -44,7 +44,7 @@ if (!window.__reactionClockStarted) {
             var onMain = (engine.state.sceneId === 'main');
 
             if (!Q.paused && onMain) {
-                Q.day += 1;
+                Q.day = (Q.day + 1) % 30;
                 Q.idle_days += 1;
 
                 // advisor timer: once per 30 days
