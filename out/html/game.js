@@ -332,11 +332,13 @@ var main = function(dendryUI) {
       window.dendryUI.dark_mode = false;
       document.body.classList.remove('dark-mode');
       window.dendryUI.saveSettings();
+      window.applyOminousTheme();
   };
   window.enableDarkMode = function() {
       window.dendryUI.dark_mode = true;
       document.body.classList.add('dark-mode');
       window.dendryUI.saveSettings();
+      window.applyOminousTheme();
   };
 
   // populates the checkboxes in the options view
