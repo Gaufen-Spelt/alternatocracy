@@ -6,7 +6,7 @@ if (!Q.campaign_rate) Q.campaign_rate = 1;
 is-card: true
 card-image: img/flags.jpg
 frequency: 50
-tags: party_affairs
+tags: party_affairs, resistance-affairs
 
 = Campaigning
 
