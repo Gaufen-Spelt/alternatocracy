@@ -44,13 +44,7 @@ if (!window.__reactionClockStarted) {
             var onMain = (engine.state.sceneId === 'main');
 
             if (!Q.paused && onMain) {
-                Q.day = (Q.day + 1) % 30;
                 Q.idle_days += 1;
-
-                // advisor timer: once per 30 days
-                if (Q.advisor_action_timer > 0 && Q.day % 30 === 0) {
-                    Q.advisor_action_timer -= 1;
-                }
 
                 // Player was too slow: trigger a post_event step
                 if (Q.idle_days >= Q.reaction_days_needed) {
@@ -73,6 +67,12 @@ if (!window.__reactionClockStarted) {
                     if (Q.historical_mode) Q.resources += 2 * (Q.year - Q._last_year);
                     Q._last_year = Q.year;
                 }
+
+                    Q.day = Q.weeks * 7 + Q.idle_days;
+                      if (Q._last_month !== Q.month) {
+                      if (Q._last_month !== undefined && Q.advisor_action_timer > 0) Q.advisor_action_timer -= 1;
+                      Q._last_month = Q.month;
+                      }
 
                 // ---- live UI refresh ----
                 window.updateSidebar();
