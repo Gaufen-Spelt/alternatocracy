@@ -13,6 +13,18 @@ var main = function(dendryUI) {
     ui = dendryUI;
     game = ui.game;
 
+    var originalDisplayContent = ui.displayContent;
+    ui.displayContent = function(paragraphs, faceImage) {
+      var before = this.$content.children().length;
+      var result = originalDisplayContent.call(this, paragraphs, faceImage);
+      var sceneId = this.dendryEngine.state.sceneId;
+      this.$content.children().slice(before)
+        .addClass('live-content')
+        .attr('data-live-scene', sceneId);
+      return result;
+    };
+
+
     // Flatten [+ Q.x +] content (arrays) into plain text for cards.
     function flat(x) {
       if (x === undefined || x === null) { return x; }
@@ -520,6 +532,29 @@ window.hidePartyTooltip = function() {
     }
     window.updateBottomPanel();
   };
+
+  window.refreshLiveContent = function() {
+  var engine = dendryUI.dendryEngine;
+  var sceneId = engine.state.sceneId;
+  var scene = dendryUI.game.scenes[sceneId];
+  if (!scene || scene.content === undefined) return;
+
+  var $old = $('#content > .live-content[data-live-scene="' + sceneId + '"]')
+               .not('.face-figure');
+  if (!$old.length) return;
+
+  var dc = engine._makeDisplayContent(scene.content, true);
+  var $new = $(dendryUI.contentToHTML.convert(dc))
+               .filter(function() { return this.nodeType === 1; });
+
+  var oldText = $old.map(function() { return $(this).text(); }).get().join('|');
+  var newText = $new.map(function() { return $(this).text(); }).get().join('|');
+  if (oldText === newText) return;
+
+  $new.addClass('live-content').attr('data-live-scene', sceneId);
+  $old.first().before($new);
+  $old.remove();
+};
 
   var BOTTOM_PANEL_SCENE = 'news';
 window.newsTab = BOTTOM_PANEL_SCENE;
