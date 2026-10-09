@@ -35,7 +35,7 @@ tags: remove_advisor
 
 @remove_hilferding
 title: Remove Hilferding
-subtitle: subtitle: <img src="img/portraits/HilferdingRudolf.jpg" style="width: 15%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Hilferding is an economist and a disciple of Karl Kautsky. Originating from Vienna, Austria, he trained as a medical doctor, but later became involved in Marxist economics as a discipline. He has been the lead ideologist of our party since the Heidelberg Program of 1925.</span>{!<br><br>!}
+subtitle: <img src="img/portraits/HilferdingRudolf.jpg" style="width: 15%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Hilferding is an economist and a disciple of Karl Kautsky. Originating from Vienna, Austria, he trained as a medical doctor, but later became involved in Marxist economics as a discipline. He has been the lead ideologist of our party since the Heidelberg Program of 1925.</span>{!<br><br>!}
 view-if: hilferding_advisor = 1
 on-arrival: hilferding_advisor = 0; hilferding_burned_timer = 12; center_dissent += 5; n_advisors -= 1
 tags: remove_advisor
