@@ -9,7 +9,7 @@ go-to: rm_main
 
 Changing the leadership of the party is painful, but perhaps it is necessary to adapt to changing circumstances.
 
-Removing advisors will increase dissent from their faction of the party, while selecting advisors will increase a faction's strength.
+Removing advisors will increase dissent from their faction of the party, while selecting advisors will increase a faction's strength. [? if spd_centrist: With how Center is obsessed with the power, political maneuvers will require fundamental change of ideologies...?]
 
 Independent from any faction advisors yield their own slot.
 
@@ -21,6 +21,8 @@ Independent from any faction advisors yield their own slot.
 ###################### removing leaders
 
 @rm_main
+choose-if: not spd_centrist
+unavailable-subtitle: Center Marxist leadership holds tight grip on advisorship. Perhaps, adopting different ideology could change this?
 title: Remove advisors.
 tags: center_advisor, left_advisor, reformist_advisor, labor_advisor, neorev_advisor, nonfactional_advisor 
 frequency: 1
@@ -35,7 +37,7 @@ tags: remove_advisor
 
 @remove_hilferding
 title: Remove Hilferding
-subtitle: <img src="img/portraits/HilferdingRudolf.jpg" style="width: 15%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Hilferding is an economist and a disciple of Karl Kautsky. Originating from Vienna, Austria, he trained as a medical doctor, but later became involved in Marxist economics as a discipline. He has been the lead ideologist of our party since the Heidelberg Program of 1925.</span>{!<br><br>!}
+subtitle: <img src="img/portraits/HilferdingRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Hilferding is an economist and a disciple of Karl Kautsky. Originating from Vienna, Austria, he trained as a medical doctor, but later became involved in Marxist economics as a discipline. He has been the lead ideologist of our party since the Heidelberg Program of 1925.</span>{!<br><br>!}
 view-if: hilferding_advisor = 1
 on-arrival: hilferding_advisor = 0; hilferding_burned_timer = 12; center_dissent += 5; n_advisors -= 1
 tags: remove_advisor
