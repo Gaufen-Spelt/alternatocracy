@@ -303,21 +303,29 @@ view-if: n_advisors < 3
 
 @reformist
 view-if: n_advisors < 3
+choose-if: not spd_centrist
+unavailable-subtitle: Center Marxist leadership holds tight grip on advisorship. Perhaps, adopting different ideology could change this?
 
 - #reformist_advisor
 
 @left
 view-if: n_advisors < 3
+choose-if: not spd_centrist
+unavailable-subtitle: Center Marxist leadership holds tight grip on advisorship. Perhaps, adopting different ideology could change this?
 
 - #left_advisor
 
 @labor
 view-if: n_advisors < 3
+choose-if: not spd_centrist
+unavailable-subtitle: Center Marxist leadership holds tight grip on advisorship. Perhaps, adopting different ideology could change this?
 
 - #labor_advisor
 
 @neorev
 view-if: neorevisionism > 0 and n_advisors < 3
+choose-if: not spd_centrist
+unavailable-subtitle: Center Marxist leadership holds tight grip on advisorship. Perhaps, adopting different ideology could change this?
 
 - #neorev_advisor
 
