@@ -38,15 +38,18 @@ tags: remove_advisor
 @remove_hilferding
 title: Remove Hilferding
 subtitle: <img src="img/portraits/HilferdingRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Hilferding is an economist and a disciple of Karl Kautsky. Originating from Vienna, Austria, he trained as a medical doctor, but later became involved in Marxist economics as a discipline. He has been the lead ideologist of our party since the Heidelberg Program of 1925.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: hilferding_advisor = 1
-on-arrival: hilferding_advisor = 0; hilferding_burned_timer = 12; center_dissent += 5; n_advisors -= 1
 tags: remove_advisor
+on-arrival: hilferding_advisor = 0; hilferding_burned_timer = 12; center_dissent += 5; n_advisors -= 1
 go-to: rm_main
 
 Hilferding has been removed as an advisor. The Centrist faction disapproves.
 
 @remove_wels
 title: Remove Wels
+subtitle: <img src="img/portraits/WelsOtto.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Wels is the long-time chairman of the SPD. He is a gifted organizer and a member of the centrist faction.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: wels_advisor = 1
 tags: remove_advisor
 on-arrival: wels_advisor = 0; wels_burned_timer = 12; center_dissent += 5; n_advisors -= 1
@@ -56,6 +59,8 @@ Wels has been removed as an advisor. The Centrist faction disapproves.
 
 @remove_muller
 title: Remove Müller
+subtitle: <img src="img/portraits/MüllerHermann.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Müller is a former [? if chancellor = "Müller": and current ?] Chancellor, and is a long-time Social Democratic leader.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: muller_advisor = 1
 tags: remove_advisor
 on-arrival: muller_advisor = 0; muller_burned_timer = 12; center_dissent += 5; n_advisors -= 1
@@ -65,6 +70,8 @@ Müller has been removed as an advisor. The Centrist faction disapproves.
 
 @remove_breitscheid
 title: Remove Breitscheid
+subtitle: <img src="img/portraits/BreitscheidRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Breitscheid is a long-time SPD leader, who was at one time part of the anti-war USPD. He came from a working-class family, but has a doctorate degree and started his political career as a liberal.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: breitscheid_advisor = 1
 tags: remove_advisor
 on-arrival: breitscheid_advisor = 0; breitscheid_burned_timer = 12; center_dissent += 5; n_advisors -= 1
@@ -72,12 +79,12 @@ go-to: rm_main
 
 Breitscheid has been removed as an advisor. The Centrist faction disapproves.
 
-
 # reformists
-
 
 @remove_severing
 title: Remove Severing
+subtitle: <img src="img/portraits/SeveringCarl.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Severing has been Interior Minister for both the German Republic and for the state of Prussia, and his priority is using the security services to target the enemies of the republic.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: severing_advisor = 1
 tags: remove_advisor
 on-arrival: severing_advisor = 0; severing_burned_timer = 12; reformist_dissent += 5; n_advisors -= 1
@@ -87,6 +94,8 @@ Severing has been removed as an advisor. The Reformist faction disapproves.
 
 @remove_braun
 title: Remove Braun
+subtitle: <img src="img/portraits/BraunOtto.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Braun [? if spd_prussia = 1 : is ?][? if spd_prussia = 0 : was ?] the Minister-President of Prussia, the largest state in Germany. He is a reformist leader who seeks to work with the bourgeois parties.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: braun_advisor = 1
 tags: remove_advisor
 on-arrival: braun_advisor = 0; braun_burned_timer = 12; reformist_dissent += 5; n_advisors -= 1
@@ -96,6 +105,8 @@ Braun has been removed as an advisor. The Reformist faction disapproves.
 
 @remove_juchacz
 title: Remove Juchacz
+subtitle: <img src="img/portraits/JuchaczMarie.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Juchacz is the founder of the Worker's Welfare, our mutual aid organization; her experiences as a single mother in poverty led her to socialism. She is the most senior woman among the SPD leadership, who is often treated as the "go-to" when the predominantly male leadership sought out womens' voices.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: juchacz_advisor = 1
 tags: remove_advisor
 on-arrival: juchacz_advisor = 0; juchacz_burned_timer = 12; reformist_dissent += 5; n_advisors -= 1
@@ -105,6 +116,8 @@ Juchacz has been removed as an advisor. The Reformist faction disapproves.
 
 @remove_pfulf
 title: Remove Pfülf
+subtitle: <img src="img/portraits/PfülfAntonie.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Pfülf is a former teacher from Bavaria who came from a conservative Catholic family. She is an activist for women's rights and for broadening the support of the SPD.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: pfulf_advisor = 1
 tags: remove_advisor
 on-arrival: pfulf_advisor = 0; pfulf_burned_timer = 12; reformist_dissent += 5; n_advisors -= 1
@@ -112,11 +125,12 @@ go-to: rm_main
 
 Pfülf has been removed as an advisor. The Reformist faction disapproves.
 
-
 # labor
 
 @remove_leipart
 title: Remove Leipart
+subtitle: <img src="img/portraits/LeipartTheodor.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Leipart is a leader of the ADGB, the largest federation of socialist trade unions.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: leipart_advisor = 1
 tags: remove_advisor
 on-arrival: leipart_advisor = 0; leipart_burned_timer = 12; labor_dissent += 5; n_advisors -= 1
@@ -126,6 +140,8 @@ Leipart has been removed as an advisor. The Labor faction disapproves.
 
 @remove_aufhauser
 title: Remove Aufhäuser
+subtitle: <img src="img/portraits/AufhäuserSiegfried.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Aufhäuser is a leader of the AfA-Bund, the federation of socialist white-collar trade unions.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: aufhauser_advisor = 1
 tags: remove_advisor
 on-arrival: aufhauser_advisor = 0; aufhauser_burned_timer = 12; labor_dissent += 5; n_advisors -= 1
@@ -135,6 +151,8 @@ Aufhäuser has been removed as an advisor. The Labor faction disapproves.
 
 @remove_wissell
 title: Remove Wissell
+subtitle: <img src="img/portraits/WissellRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Wissell is a labor economist working for the ADGB, the federation of free trade unions, and has been a labor minister on multiple occasions. His priority is to improve conditions for organized workers.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: wissell_advisor = 1
 tags: remove_advisor
 on-arrival: wissell_advisor = 0; wissell_burned_timer = 12; labor_dissent += 3; n_advisors -= 1
@@ -142,9 +160,10 @@ go-to: rm_main
 
 Wissell has been removed as an advisor. The Labor faction disapproves.
 
-
 @remove_woytinsky
 title: Remove Woytinsky
+subtitle: <img src="img/portraits/WoytinskyWladimir.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Wladimir Woytinsky is a Russian Menshevik in exile, and the chief economist of the socialist trade union federation. His primary idea is to use massive government spending as a way of stimulating demand to extricate us from the depression.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: woytinsky_advisor = 1
 tags: remove_advisor
 on-arrival: woytinsky_advisor = 0; woytinsky_burned_timer = 12; labor_dissent += 3; n_advisors -= 1
@@ -156,6 +175,8 @@ Woytinsky has been removed as an advisor. The Labor faction disapproves.
 
 @remove_levi
 title: Remove Levi
+subtitle: <img src="img/portraits/LeviPaul.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Levi is a former leader of the KPD who left over their devotion to violence and revolutionary adventurism.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: levi_advisor = 1
 tags: remove_advisor
 on-arrival: levi_advisor = 0; levi_burned_timer = 12; left_dissent += 5; n_advisors -= 1
@@ -165,6 +186,8 @@ Levi has been removed as an advisor. The Leftist faction disapproves.
 
 @remove_sender
 title: Remove Sender
+subtitle: <img src="img/portraits/SenderToni.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Toni Sender is an organizer and writer who came from a bourgeois family, but was radicalized into socialism after her experiences in the workforce. She was a member of the anti-war USPD, but did not support armed revolution.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: sender_advisor = 1
 tags: remove_advisor
 on-arrival: sender_advisor = 0; sender_burned_timer = 12; left_dissent += 3; n_advisors -= 1
@@ -174,6 +197,8 @@ Sender has been removed as an advisor. The Leftist faction disapproves.
 
 @remove_rosenfeld
 title: Remove Rosenfeld
+subtitle: <img src="img/portraits/RosenfeldKurt.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Rosenfeld works as a lawyer in Berlin who defends left-wing individuals and causes. He favors cooperation with the KPD and a path of class struggle for the SPD.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: rosenfeld_advisor = 1
 tags: remove_advisor
 on-arrival: rosenfeld_advisor = 0; rosenfeld_burned_timer = 12; left_dissent += 3; n_advisors -= 1
@@ -183,6 +208,8 @@ Rosenfeld has been removed as an advisor. The Leftist faction disapproves.
 
 @remove_seydewitz
 title: Remove Seydewitz
+subtitle: <img src="img/portraits/SeydewitzMax.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Max Seydewitz is a former leader of the youth wing, current supporter of the left wing of the SPD, and advocates for class struggle.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: seydewitz_advisor = 1
 tags: remove_advisor
 on-arrival: seydewitz_advisor = 0; seydewitz_burned_timer = 12; left_dissent += 3; n_advisors -= 1
@@ -192,6 +219,8 @@ Seydewitz has been removed as an advisor. The Leftist faction disapproves.
 
 @remove_siemsen
 title: Remove Siemsen
+subtitle: <img src="img/portraits/SiemsenAnna.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Anna Siemsen is an educational reform advocate and pacifist, who was one of the few German women to receive a PhD in the pre-war period. She was a former member of the USPD.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: siemsen_advisor = 1
 tags: remove_advisor
 on-arrival: siemsen_advisor = 0; siemsen_burned_timer = 12; left_dissent += 3; n_advisors -= 1
@@ -199,13 +228,12 @@ go-to: rm_main
 
 Siemsen has been removed as an advisor. The Leftist faction disapproves.
 
-
-
-
 # neorevisionists
 
 @remove_mierendorff
 title: Remove Mierendorff
+subtitle: <img src="img/portraits/MierendorffCarlo.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Carlo Mierendorff is the founder of the neo-revisionist ideological tendency, and supports both democratic reforms and extra-parliamentary action to combat the Nazis and authoritarian parties. He is from a middle-class, academic background, and is one of our youngest leaders.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: mierendorff_advisor = 1
 tags: remove_advisor
 on-arrival: mierendorff_advisor = 0; mierendorff_burned_timer = 12; neorevisionist_dissent += 5; n_advisors -= 1
@@ -215,6 +243,8 @@ Mierendorff has been removed as an advisor. The Neorevisionist faction disapprov
 
 @remove_leber
 title: Remove Leber
+subtitle: <img src="img/portraits/LeberJulius.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Leber is a former army officer who turned against the military leaders of the Kapp Putsch in 1920, helping us put down the army's attempted coup. He is in favor of expanded democracy and building a broad popular base for the SPD.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: leber_advisor = 1
 tags: remove_advisor
 on-arrival: leber_advisor = 0; leber_burned_timer = 12; neorevisionist_dissent += 3; n_advisors -= 1
@@ -224,6 +254,8 @@ Leber has been removed as an advisor. The Neorevisionist faction disapproves.
 
 @remove_schumacher
 title: Remove Schumacher
+subtitle: <img src="img/portraits/SchumacherKurt.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>A Great War veteran and a neorevisionist leader, Kurt Schumacher argues for a strong resistance against the Nazis.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: schumacher_advisor = 1
 tags: remove_advisor
 on-arrival: schumacher_advisor = 0; schumacher_burned_timer = 12; neorevisionist_dissent += 3; n_advisors -= 1
@@ -235,8 +267,11 @@ Schumacher has been removed as an advisor. The Neorevisionist faction disapprove
 
 # tbh I'm not sure if Baade should be a reformist or nonfactional. same for stampfer. they were vaguely reformist-aligned but had pretty different ideas from the other reformists here. so they're non-factional.
 
+
 @remove_baade
 title: Remove Baade
+subtitle: <img src="img/portraits/BaadeFritz.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Baade is one of the few agricultural experts in the SPD, and an unorthodox economist.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: baade_advisor = 1
 tags: remove_advisor
 on-arrival: baade_advisor = 0; baade_burned_timer = 12; n_nonfactional_advisors -= 1
@@ -246,6 +281,8 @@ Baade has been removed as an advisor.
 
 @remove_hirschfeld
 title: Remove Hirschfeld
+subtitle: <img src="img/portraits/HirschfeldMagnus.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Magnus Hirschfeld is the founder of the Institut für Sexualwissenschaft and an advocate for the rights of sexual minorities.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: hirschfeld_advisor = 1
 tags: remove_advisor
 on-arrival: hirschfeld_advisor = 0; hirschfeld_burned_timer = 12; n_nonfactional_advisors -= 1
@@ -255,6 +292,8 @@ Hirschfeld has been removed as an advisor.
 
 @remove_stampfer
 title: Remove Stampfer
+subtitle: <img src="img/portraits/StampferFriedrich.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Friedrich Stampfer is the long-time editor-in-chief of Vorwärts, our party newspaper, and also a Reichstag member. He was historically part of the Majority SPD that supported our participation in the Great War, but also supports cooperation with the KPD to save the Republic.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: stampfer_advisor = 1
 tags: remove_advisor
 on-arrival: stampfer_advisor = 0; stampfer_burned_timer = 12; n_nonfactional_advisors -= 1
@@ -264,16 +303,14 @@ Stampfer has been removed as an advisor.
 
 @remove_radbruch
 title: Remove Radbruch
+subtitle: <img src="img/portraits/RadbruchGustav.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff;"><span>Gustav Radbruch is a renowned legal scholar and long-time SPD justice minister.</span>{!<br><br>!}
+choose-if: not spd_centrist
 view-if: radbruch_advisor = 1
 tags: remove_advisor
 on-arrival: radbruch_advisor = 0; radbruch_burned_timer = 12; n_nonfactional_advisors -= 1
 go-to: rm_main
 
 Radbruch has been removed as an advisor.
-
-
-
-
 
 
 ####################### adding advisors
@@ -353,7 +390,7 @@ Rudolf Hilferding is now an advisor.
 title: Otto Wels
 subtitle: Otto Wels is a long-time party organizer and member of the leadership, serving under Friedrich Ebert. {!<br><br>!}[? if difficulty < 0 : Actions -  Clear the Agenda, Party Discipline , The Republican Synthesis ?]
 is-card: true
-card-image: img/portraits/WelsRudolf.jpg
+card-image: img/portraits/WelsOtto.jpg
 tags: center_advisor
 view-if: wels_advisor = 0 and wels_burned_timer <= 0 and n_advisors < 3 and centrists_resign = 0
 on-arrival: wels_advisor = 1; n_advisors += 1
