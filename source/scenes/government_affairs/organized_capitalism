@@ -1,0 +1,69 @@
+Title: Organized Capitalism & State Regulation
+new-page: true
+is-card: true
+tags: govt_affairs, cabinet
+on-arrival: month_actions += 1; organized_capitalism_timer += 16
+view-if: (economic_minister == "Hilferding" or finance_minister == "Hilferding" or economic_minister == "Naphtali") and spd_in_government and organized_capitalism_timer <= 0 and economic_democracy >= 3
+card-image: img/organcap.jpg
+
+= Organized Capitalism & State Regulation
+
+Modern capitalism in Germany has changed. Small competing businesses have been replaced by large banks, industrial cartels, and price-fixing syndicates.
+
+As Rudolf Hilferding noted at the Kiel Congress, this means the old market system is mostly gone. Big business has already proven that large-scale planning is possible. Our goal now is not to print money recklessly, but to use the power of the state to protect workers and regulate private monopolies.
+
+[? if dvp_in_government: Our coalition partners in the **DVP** strongly oppose state intervention, claiming that wage arbitration and cartel rules ruin free enterprise. They are willing to leave the government if such happens. ?]
+
+- @protect_political_wage
+- @expand_cartel_supervision
+- @support_public_enterprises
+- @lower_agricultural_tariffs
+- @nationalize_banks_crisis
+- @root: Do not enact any policies for now.
+- @easy_discard
+- @cancel_advisor_action
+
+@protect_political_wage
+title: Enforce binding state arbitration (*Schlichtungswesen*).
+subtitle: Use state arbitrators to protect union wages against wage cuts.
+view-if: binding_arbitration_enforced == 0
+on-arrival: organized_capitalism += 1; binding_arbitration_enforced = 1; workers_spd += 6*(1-dissent); labor_strength += 6; labor_dissent -= 4; capital_strike_progress += 1; dvp_relation -= 8; coalition_dissent += 1 if in_grand_coalition
+max-visits: 1
+
+Hilferding argued that "the weekly wage is a political wage." By making state wage arbitration legally binding on employers, we protect workers against industrial lockouts and ensure unions remain a key part of the state economy.
+
+@expand_cartel_supervision
+title: Empower the Cartel Court to audit corporate account books.
+subtitle: Force major industrial syndicates to open their books to public inspection.
+view-if: cartel_control == 0
+on-arrival: organized_capitalism += 1; cartel_control = 1; capital_strike_progress += 1; dvp_relation -= 8; middle_class_spd += 3*(1-dissent); new_middle_spd += 3*(1-dissent); inflation -= 0.4
+max-visits: 1
+
+We have expanded the authority of the state Cartel Court (*Kartellgericht*). By inspecting corporate account books and penalizing unfair price-fixing on coal, steel, and raw materials, we protect small businesses and lower prices for consumers.
+
+@support_public_enterprises
+title: Expand public and municipal enterprises (*Gemeinwirtschaft*).
+subtitle: -1 budget - Direct state contracts toward public utilities and trade union co-ops.
+choose-if: budget >= 1
+on-arrival: organized_capitalism += 1; budget -= 1; workers_spd += 4*(1-dissent); economic_growth += 0.2; dvp_relation -= 5
+max-visits: 2
+
+Instead of seizing private factories directly, we use government contracts to favor municipal energy suppliers, public transit systems, and trade-union-owned housing cooperatives. This builds a strong public sector that competes directly with private monopolies.
+
+@lower_agricultural_tariffs
+title: Lower agricultural tariffs on foreign grain and livestock.
+subtitle: Lower food costs for city workers, despite anger from rural landowners.
+view-if: agrarian_tariffs_lowered == 0
+on-arrival: organized_capitalism += 1; agrarian_tariffs_lowered = 1; workers_spd += 5*(1-dissent); unemployed_spd += 3*(1-dissent); inflation -= 0.5; rural_spd -= 3; dnvp_relation -= 12; coalition_dissent += 1 if in_grand_coalition
+max-visits: 1
+
+Bread and meat prices are political prices. By cutting tariffs on imported food, we lower the cost of living for city workers—even though wealthy Junker landowners accuse us of betraying German agriculture.
+
+@nationalize_banks_crisis
+title: Secure banking supervision and prepare state guarantees.
+subtitle: Set up strict oversight over commercial banks to prepare for financial instability.
+view-if: bank_control == 0
+on-arrival: organized_capitalism += 1; bank_control = 1; capital_strike_progress += 1; dvp_relation -= 6
+max-visits: 1
+
+While treaties limit our ability to nationalize major banks during normal times, we institute strict auditing over commercial bank reserves. If a banking crisis occurs, the government will be ready to intervene and protect deposits.
