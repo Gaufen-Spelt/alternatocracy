@@ -2,7 +2,7 @@ title: Building a People's Party
 new-page: true
 is-card: true
 card-image: img/poster_0.jpg
-view-if: {! return ((Q.neorevisionism > 0 && Q.peoples_party_support >= 6 && Q.peoples_party == 0 && Q.peoples_party_timer == 0) || (Q.peoples_party == 1 && Q.sandbox == 1 && Q.peoples_party_timer == 0) || (Q.peoples_party == 1 && Q.ideology == "left" && Q.peoples_party_timer == 0)) !}
+view-if: {! return (Q.spd_centrist == 0 && ((Q.neorevisionism > 0 && Q.peoples_party_support >= 6 && Q.peoples_party == 0 && Q.peoples_party_timer == 0) || (Q.peoples_party == 1 && Q.sandbox == 1 && Q.peoples_party_timer == 0) || (Q.peoples_party == 1 && Q.ideology == "left" && Q.peoples_party_timer == 0))) !}
 on-arrival: peoples_party_timer = 48; pp_threshold = 12 + ((left_strength + center_strength) / 10)
 tags: party_affairs
 #subtitle: Can the SPD move beyond the working class?
