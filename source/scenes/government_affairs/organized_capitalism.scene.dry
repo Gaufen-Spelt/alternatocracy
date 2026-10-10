@@ -51,6 +51,10 @@ face-image: img/organcap.jpg
       <div class="orgcap-bar" style="height:85px;border-radius:3px 3px 0 0;"></div>
       <div class="orgcap-label" style="font-size:0.7em;">Arbitration</div>
     </div>
+    <div class="orgcap-col" data-q="synthetic_rationalization_done" style="flex:1;max-width:80px;">
+      <div class="orgcap-bar" style="height:60px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;">Rational.</div>
+    </div>
     <div class="orgcap-col" data-q="public_enterprises_expanded" style="flex:1;max-width:80px;">
       <div class="orgcap-bar" style="height:55px;border-radius:3px 3px 0 0;"></div>
       <div class="orgcap-label" style="font-size:0.7em;">Public sector</div>
@@ -72,6 +76,7 @@ As Rudolf Hilferding noted at the Kiel Congress, this means the old market syste
 - @lower_agricultural_tariffs
 - @expand_cartel_supervision
 - @protect_political_wage
+- @promote_synthetic_rationalization
 - @support_public_enterprises
 - @nationalize_banks_crisis
 - @root: Do not enact any policies for now.
@@ -96,12 +101,22 @@ max-visits: 1
 
 We have expanded the authority of the state Cartel Court (*Kartellgericht*). By inspecting corporate account books and penalizing unfair price-fixing on coal, steel, and raw materials, we protect small businesses and lower prices for consumers.
 
+@promote_synthetic_rationalization
+title: Fund synthetic chemistry and industrial rationalization.
+subtitle: -1 budget - Back artificial material research and the Kuratorium für Wirtschaftlichkeit.
+view-if: synthetic_rationalization_done == 0
+choose-if: budget >= 1
+on-arrival: organized_capitalism += 1; synthetic_rationalization_done = 1; budget -= 1; industry_progress += 1; new_middle_spd += 4*(1-dissent); capital_strike_progress += 1
+max-visits: 1
+
+As Hilferding emphasized, the rise of synthetic chemistry and scientific rationalization makes our economy independent of raw material shortages and proves that large-scale planning works. By backing scientific management bodies like the *Kuratorium für Wirtschaftlichkeit*, we force enterprises to treat productivity as a public concern.
+
 @support_public_enterprises
 title: Expand public and municipal enterprises (*Gemeinwirtschaft*).
 subtitle: -1 budget - Direct state contracts toward public utilities and trade union co-ops.
 choose-if: budget >= 1
 on-arrival: organized_capitalism += 1; public_enterprises_expanded = 1; budget -= 1; workers_spd += 4*(1-dissent); economic_growth += 0.2; dvp_relation -= 5
-max-visits: 2
+max-visits: 1
 
 Instead of seizing private factories directly, we use government contracts to favor municipal energy suppliers, public transit systems, and trade-union-owned housing cooperatives. This builds a strong public sector that competes directly with private monopolies.
 
@@ -109,7 +124,7 @@ Instead of seizing private factories directly, we use government contracts to fa
 title: Lower agricultural tariffs on foreign grain and livestock.
 subtitle: Lower food costs for city workers, despite anger from rural landowners.
 view-if: agrarian_tariffs_lowered == 0
-on-arrival: organized_capitalism += 1; agrarian_tariffs_lowered = 1; workers_spd += 5*(1-dissent); unemployed_spd += 3*(1-dissent); inflation -= 0.5; rural_spd -= 3; dnvp_relation -= 12; coalition_dissent += 1 if in_grand_coalition
+on-arrival: organized_capitalism += 1; agrarian_tariffs_lowered = 1; workers_spd += 5*(1-dissent); tariffs -= 1; unemployed_spd += 3*(1-dissent); inflation -= 0.5; rural_spd -= 3; dnvp_relation -= 12; coalition_dissent += 1 if in_grand_coalition
 max-visits: 1
 
 Bread and meat prices are political prices. By cutting tariffs on imported food, we lower the cost of living for city workers—even though wealthy Junker landowners accuse us of betraying German agriculture.
