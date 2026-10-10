@@ -37,31 +37,33 @@ face-image: img/organcap.jpg
 
 {!
 <div class="orgcap-panel" style="text-align:center;margin:1em 0;">
-  <div class="orgcap-symbol" style="font-size:2.8em;line-height:1;margin-bottom:0.2em;">★</div>
   <div style="display:flex;justify-content:center;align-items:flex-end;gap:6px;">
     <div class="orgcap-col" data-q="agrarian_tariffs_lowered" style="flex:1;max-width:80px;">
       <div class="orgcap-bar" style="height:25px;border-radius:3px 3px 0 0;"></div>
-      <div class="orgcap-label" style="font-size:0.7em;">Tariffs</div>
+      <div class="orgcap-label" style="font-size:0.7em;white-space:nowrap;">Tariffs</div>
     </div>
     <div class="orgcap-col" data-q="cartel_control" style="flex:1;max-width:80px;">
-      <div class="orgcap-bar" style="height:70px;border-radius:3px 3px 0 0;"></div>
-      <div class="orgcap-label" style="font-size:0.7em;">Cartels</div>
+      <div class="orgcap-bar" style="height:55px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;white-space:nowrap;">Cartels</div>
     </div>
     <div class="orgcap-col" data-q="binding_arbitration_enforced" style="flex:1;max-width:80px;">
       <div class="orgcap-bar" style="height:85px;border-radius:3px 3px 0 0;"></div>
-      <div class="orgcap-label" style="font-size:0.7em;">Arbitration</div>
+      <div class="orgcap-label" style="font-size:0.7em;white-space:nowrap;">Arbitration</div>
     </div>
+
+    <div class="orgcap-symbol" style="align-self:flex-start;font-size:2.4em;line-height:1;width:1.2em;flex:none;">★</div>
+
     <div class="orgcap-col" data-q="synthetic_rationalization_done" style="flex:1;max-width:80px;">
-      <div class="orgcap-bar" style="height:60px;border-radius:3px 3px 0 0;"></div>
-      <div class="orgcap-label" style="font-size:0.7em;">Rational.</div>
+      <div class="orgcap-bar" style="height:85px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;white-space:nowrap;">Rational.</div>
     </div>
     <div class="orgcap-col" data-q="public_enterprises_expanded" style="flex:1;max-width:80px;">
       <div class="orgcap-bar" style="height:55px;border-radius:3px 3px 0 0;"></div>
-      <div class="orgcap-label" style="font-size:0.7em;">Public sector</div>
+      <div class="orgcap-label" style="font-size:0.7em;white-space:nowrap;">Public</div>
     </div>
     <div class="orgcap-col" data-q="bank_control" style="flex:1;max-width:80px;">
-      <div class="orgcap-bar" style="height:40px;border-radius:3px 3px 0 0;"></div>
-      <div class="orgcap-label" style="font-size:0.7em;">Banks</div>
+      <div class="orgcap-bar" style="height:25px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;white-space:nowrap;">Banks</div>
     </div>
   </div>
 </div>
