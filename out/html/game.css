@@ -1796,3 +1796,106 @@ body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+.industrial-scene {
+  --ind-pad-x: 1.5em;
+  --ind-amber: #e0a800;
+  --ind-line: #2a2d30;
+  --ind-heading: #2a2d30;
+  --content-bg-color: #cfd0cc;
+  --text-color: #23272b;
+  --link-color: #8c1d0f;
+  --link-hover-color: rgba(224, 168, 0, 0.18);
+  --em-color: #6b1409;
+
+  padding: 0 var(--ind-pad-x) 1.5em !important;
+  border: 3px solid var(--ind-line) !important;
+  border-radius: 0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, rgba(255,255,255,0.2), rgba(0,0,0,0.08)) !important;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,0.25),
+    inset 0 0 50px rgba(0,0,0,0.18),
+    3px 3px 14px rgba(0,0,0,0.35) !important;
+}
+
+body.dark-mode .industrial-scene {
+  --ind-line: #8a8d90;
+  --ind-heading: #e0a800;
+  --content-bg-color: #1c1e20;
+  --text-color: #dcdcd6;
+  --link-color: #ffa24d;
+  --link-hover-color: rgba(224, 168, 0, 0.14);
+  --em-color: #e8a070;
+
+  border-style: solid !important;
+  border-width: 3px !important;
+  border-color: var(--ind-line) !important;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.25)) !important;
+}
+
+/* Photo banner */
+.industrial-scene::before {
+  content: "";
+  display: block;
+  height: 170px;
+  margin: 0 calc(-1 * var(--ind-pad-x)) 0.8em;
+  background:
+    linear-gradient(to bottom, rgba(15,17,19,0.05), rgba(15,17,19,0.55)),
+    url("img/organcap.jpg") center 35% / cover no-repeat;
+  filter: grayscale(1) contrast(1.15);
+  border-bottom: 8px solid;
+  border-image: repeating-linear-gradient(-45deg, #e0a800 0 12px, #1a1a1a 12px 24px) 8;
+}
+
+/* Headings */
+.industrial-scene :is(h1, h2, h3, h4, h5, h6) {
+  font-family: "Oswald", "Arial Narrow", Impact, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ind-heading);
+  text-shadow: none;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--ind-amber);
+}
+.industrial-scene h1:first-child { margin-top: 0.6em; }
+
+/* Choices */
+.industrial-scene .choices {
+  border: 3px solid var(--ind-line);
+  border-radius: 0;
+  background: rgba(255,255,255,0.18);
+}
+body.dark-mode .industrial-scene .choices { background: rgba(0,0,0,0.25); }
+
+.industrial-scene .choices li { border-bottom: 1px solid var(--ind-line); }
+.industrial-scene .choices li:hover { box-shadow: inset 5px 0 0 var(--ind-amber); }
+.industrial-scene .choices li:last-child { border-bottom: none; }
+.industrial-scene .choices a { color: var(--link-color); }
+
+.industrial-scene .face-figure {
+  border-color: var(--ind-line);
+  filter: grayscale(1) contrast(1.1);
+}
+
+@media screen and (max-width: 1200px) { .industrial-scene { --ind-pad-x: 1.2em; } }
+@media screen and (max-width: 560px) {
+  .industrial-scene { --ind-pad-x: 1em; }
+  .industrial-scene::before { height: 120px; }
+}
+
