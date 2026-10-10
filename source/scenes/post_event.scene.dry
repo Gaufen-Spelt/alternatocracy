@@ -2,52 +2,56 @@ title: Post Event
 new-page: true
 on-arrival: {!
 
+// ============================================================================
+// IDEOLOGY SCORING (first matching pattern wins, so order matters)
+// ============================================================================
+
 const IDEO_KEYWORDS = [
-    [/marxism-leninism/i,                 1],
-    [/council communism/i,                0],
-    [/national bolshevism/i,              16],
-    [/syndicalist communism/i,            1],
+    [/marxism-leninism/i,                         1],
+    [/council communism/i,                        0],
+    [/national bolshevism/i,                      16],
+    [/syndicalist communism/i,                    1],
 
-    [/revolutionary socialism/i,          2],
-    [/left-wing socialism/i,              3],
-    [/anarcho-syndicalism/i,              1],
-    [/luxemburgism/i,                     2],
+    [/revolutionary socialism/i,                  2],
+    [/left-wing socialism/i,                      3],
+    [/anarcho-syndicalism/i,                      1],
+    [/luxemburgism/i,                             2],
 
-    [/old social democracy/i,             14],
-    [/social democracy \(revolutionary\)/i,      3],
-    [/social democracy \(center marxist\)/i,     4],
-    [/social democracy \(reformist\)/i,          6],
-    [/laborism/i,                                7],
-    [/social republicanism \(neorevisionist\)/i, 8],
-    [/right-wing social democracy/i,      12],
-    [/guild socialism/i,                  5],
-    [/christian syndicalism/i,            8],
+    [/old social democracy/i,                     14],
+    [/social democracy \(revolutionary\)/i,       3],
+    [/social democracy \(center marxist\)/i,      4],
+    [/social democracy \(reformist\)/i,           6],
+    [/laborism/i,                                 7],
+    [/social republicanism \(neorevisionist\)/i,  8],
+    [/right-wing social democracy/i,              12],
+    [/guild socialism/i,                          5],
+    [/christian syndicalism/i,                    8],
 
-    [/social democracy/i,                 6],
-    [/social republicanism/i,             7],
+    [/social democracy/i,                         6],
+    [/social republicanism/i,                     7],
 
-    [/catholic laborism/i,                10],
-    [/progressive liberalism/i,           9],
+    [/catholic laborism/i,                        10],
+    [/progressive liberalism/i,                   9],
 
-    [/social liberalism/i,                9],
-    [/christian socialism/i,              7],
-    [/authoritarian catholic tent/i,      14],
-    [/catholic tent/i,                    12],
-    [/middle-class interest/i,            13],
-    [/social corporatism/i,               15],
-    [/corporatism/i,                      15],
-    [/technocratic centrism/i,            10],
-    [/radical democratic republicanism/i, 8],
+    [/social liberalism/i,                        9],
+    [/christian socialism/i,                      7],
+    [/authoritarian catholic tent/i,              14],
+    [/catholic tent/i,                            12],
+    [/middle-class interest/i,                    13],
+    [/social corporatism/i,                       15],
+    [/corporatism/i,                              15],
+    [/technocratic centrism/i,                    10],
+    [/radical democratic republicanism/i,         8],
 
-    [/christian conservatism/i,           14],
-    [/bavarian conservatism/i,            13],
-    [/protestant social conservatism/i,   13],
-    [/moderate conservatism/i,            14],
-    [/liberal agrarianism/i,              12],
-    [/regionalist particularism/i,        11],
-    [/rhenish federalism/i,               11],
+    [/christian conservatism/i,                   14],
+    [/bavarian conservatism/i,                    13],
+    [/protestant social conservatism/i,           13],
+    [/moderate conservatism/i,                    14],
+    [/liberal agrarianism/i,                      12],
+    [/regionalist particularism/i,                11],
+    [/rhenish federalism/i,                       11],
 
-    [/national liberalism \(scholzite\)/i,       17],
+    [/national liberalism \(scholzite\)/i,        17],
     [/national liberalism \(dingeldist\)/i,       16],
     [/authoritarian national liberalism/i,        18],
     [/national liberalism/i,                      14],
@@ -55,27 +59,25 @@ const IDEO_KEYWORDS = [
     [/hanseatic agrarian conservatism/i,          15],
     [/prussian legitimist monarchism/i,           16],
 
-    [/völkisch liberalism/i,              16],
-    [/populist agrarian conservatism/i,   16],
-    [/agrarian conservatism/i,            17],
-    [/junker reactionism/i,               19],
+    [/völkisch liberalism/i,                      16],
+    [/populist agrarian conservatism/i,           16],
+    [/agrarian conservatism/i,                    17],
+    [/junker reactionism/i,                       19],
 
     [/national conservatism \(hugenbergite\)/i,   18],
-    [/national conservatism/i,            18],
-    [/authoritarian monarchism/i,         19],
-    [/stahlhelm veterans conservatism/i,  18],
+    [/national conservatism/i,                    18],
+    [/authoritarian monarchism/i,                 19],
+    [/stahlhelm veterans conservatism/i,          18],
 
-    [/national socialism \(strasserism\)/i,      18],
-    [/strasserist national socialism/i,          18],
-    [/national socialism/i,               20],
-    [/völkisch nationalism/i,             20],
-    [/strasserism/i,                      18],
-    [/black reichswehr militarism/i,      19],
+    [/national socialism \(strasserism\)/i,       18],
+    [/strasserist national socialism/i,           18],
+    [/national socialism/i,                       20],
+    [/völkisch nationalism/i,                     20],
+    [/strasserism/i,                              18],
+    [/black reichswehr militarism/i,              19],
 
-    // REST
-
-    [/left socialism/i,           3],
-    [/bavarian regionalism/i,     13],
+    [/left socialism/i,                           3],
+    [/bavarian regionalism/i,                     13],
 ];
 
 function ideoScore(ideologyString) {
@@ -99,10 +101,12 @@ for (const party of Q.parties) {
     Q[party + '_in_government'] = Q[party + '_in_government'] ?? 0;
 }
 
-// === VARIABLE RANGE CAPPING ===
+
+// ============================================================================
+// VARIABLE RANGE CAPS
+// ============================================================================
 
 Q.capped_var_ranges = {
-    // 0 to 10
     pro_consumer:              [0, 10],
     agricultural_finance:      [0, 10],
     land_reform:               [0, 10],
@@ -114,17 +118,14 @@ Q.capped_var_ranges = {
     working_hours:             [0, 10],
     womens_rights:             [0, 10],
 
-    // -10 to 10
     welfare:                   [-10, 10],
     judicial_reform:           [-10, 10],
     pacifism:                  [-10, 10],
     radicalization:            [-10, 10],
     democratization:           [-10, 10],
 
-    // -1 to 2
     confronting_antisemitism:  [-1, 2],
 
-    // 0 to 15
     workers_aid:               [0, 15],
     campaign_media:            [0, 15],
     commercialized_media:      [0, 15],
@@ -137,38 +138,46 @@ Q.capped_var_ranges = {
 Q.apply_var_caps = function() {
     for (var varName in Q.capped_var_ranges) {
         if (!Q.capped_var_ranges.hasOwnProperty(varName)) continue;
-        if (Q[varName] === undefined) continue; // skip vars not in use
+        if (Q[varName] === undefined) continue;
 
         var range = Q.capped_var_ranges[varName];
-        var min = range[0];
-        var max = range[1];
-
-        if (Q[varName] < min) {
-            Q[varName] = min;
-        } else if (Q[varName] > max) {
-            Q[varName] = max;
-        }
+        if (Q[varName] < range[0]) Q[varName] = range[0];
+        else if (Q[varName] > range[1]) Q[varName] = range[1];
     }
 };
 
 Q.apply_var_caps();
 
 
-// QOL. REMOVES PHANTON PARTIES.
+// ============================================================================
+// GOVERNMENT DISPLAY (ignores phantom parties)
+// ============================================================================
 
 const inGov = Object.keys(Q)
-  .filter(key => key.endsWith("_in_government") && Q[key] == 1)
-  .map(key => key.replace("_in_government", ""))
-  .filter(party => (Q[party + "_votes"] > 0) && (Q[party + "_r"] > 0))
-  .map(party => party.toUpperCase());
+    .filter(key => key.endsWith("_in_government") && Q[key] == 1)
+    .map(key => key.replace("_in_government", ""))
+    .filter(party => (Q[party + "_votes"] > 0) && (Q[party + "_r"] > 0))
+    .map(party => party.toUpperCase());
 
-Q.parties_in_government_display = inGov.length > 0
-  ? inGov.join(", ")
-  : "None";
+Q.parties_in_government_display = inGov.length > 0 ? inGov.join(", ") : "None";
 
 
-// 1. update dates
-if (Q.month_actions >= 1) {
+// ============================================================================
+// MONTHLY HELPERS
+// ============================================================================
+
+function calcSeverity(Q) {
+    var unemployment_severity = Math.max(0, (Q.unemployed - 1) / 19);
+    var deflation_severity    = Math.max(0, (-Q.inflation - 1) / 5);
+    var inflation_severity    = Math.max(0, (Q.inflation - 1) / 4);
+    var growth_severity       = Math.max(0, (-Q.economic_growth - 0.5) / 2.5);
+    var severity = unemployment_severity
+        + Math.max(deflation_severity, inflation_severity)
+        + growth_severity;
+    return Math.min(severity, 1.75);
+}
+
+function advanceDate() {
     Q.month_actions_2 = 1;
     Q.time += 1;
     Q.month_actions = 0;
@@ -176,273 +185,194 @@ if (Q.month_actions >= 1) {
     Q.weeks += (Q.hitler_rubicon >= 1) ? 1 : 2;
     if (Q.weeks >= 4) { Q.month += 1; Q.weeks = 0; }
     if (Q.month >= 13) { Q.month = 1; Q.year += 1; }
-    Q.week = Q.weeks;      // now set after the rollover
-    Q.day = Q.weeks * 7;   // day = start of the current week
-    if (Q.fundraiser_timer <= 0) {
-        Q.workers_income = Math.round((Q.workers_spd * Q.workers_dues * (1 - Q.labor_dissent / 100) * 0.40) / 10)
-        Q.unemployed_income = Math.round((Q.unemployed_spd * Q.unemployed_dues * (1 - Q.left_dissent / 100) * 0.35) / 10)
-        Q.new_middle_income = Math.round((Q.new_middle_spd * Q.new_middle_dues * (1 - Q.labor_dissent / 100) * 0.35) / 10)
-        Q.old_middle_income = Math.round((Q.old_middle_spd * Q.old_middle_dues * (1 - Q.reformist_dissent / 100) * 0.15) / 10)
-        Q.rural_income = Math.round((Q.rural_spd * Q.rural_dues * (1 - Q.reformist_dissent / 100) * 0.20) / 10)
+    Q.week = Q.weeks;
+    Q.day = Q.weeks * 7;
+}
 
-        Q.resources += Q.workers_income + Q.unemployed_income + Q.new_middle_income + Q.old_middle_income + Q.rural_income
+function collectPartyIncome() {
+    if (Q.fundraiser_timer > 0) return;
 
-        Q.income_summary = "Workers: +" + Q.workers_income + ", Unemployed: +" + Q.unemployed_income + ", New Middle: +" + Q.new_middle_income + ", Old Middle: +" + Q.old_middle_income + ", Rural: +" + Q.rural_income;
+    Q.workers_income     = Math.round((Q.workers_spd     * Q.workers_dues     * (1 - Q.labor_dissent / 100)      * 0.40) / 10);
+    Q.unemployed_income  = Math.round((Q.unemployed_spd  * Q.unemployed_dues  * (1 - Q.left_dissent / 100)       * 0.35) / 10);
+    Q.new_middle_income  = Math.round((Q.new_middle_spd  * Q.new_middle_dues  * (1 - Q.labor_dissent / 100)      * 0.35) / 10);
+    Q.old_middle_income  = Math.round((Q.old_middle_spd  * Q.old_middle_dues  * (1 - Q.reformist_dissent / 100)  * 0.15) / 10);
+    Q.rural_income       = Math.round((Q.rural_spd       * Q.rural_dues       * (1 - Q.reformist_dissent / 100)  * 0.20) / 10);
 
-        Q.fundraiser_timer = 24;
-    }
-    // decrement timers
-    for (timer of Q.timers) {
-        if (Q[timer+'_timer'] && Q[timer+'_timer'] > 0) {
-            Q[timer+'_timer'] -= 1;
+    Q.resources += Q.workers_income + Q.unemployed_income + Q.new_middle_income
+                 + Q.old_middle_income + Q.rural_income;
+
+    Q.income_summary = "Workers: +" + Q.workers_income
+        + ", Unemployed: +" + Q.unemployed_income
+        + ", New Middle: +" + Q.new_middle_income
+        + ", Old Middle: +" + Q.old_middle_income
+        + ", Rural: +" + Q.rural_income;
+
+    Q.fundraiser_timer = 24;
+}
+
+function tickTimers() {
+    for (const timer of Q.timers) {
+        if (Q[timer + '_timer'] && Q[timer + '_timer'] > 0) {
+            Q[timer + '_timer'] -= 1;
         }
     }
-    // append to historical party support records
-    var party_support_results = {'date': new Date(Q.year, Q.month - 1)};
+}
+
+function recordHistory() {
+    var date = new Date(Q.year, Q.month - 1);
+
+    var support = { date: date };
     for (var party of Q.parties) {
-        party_support_results[party] = Q[party + '_normalized']*100;
+        support[party] = Q[party + '_normalized'] * 100;
     }
-    Q.party_support_records.push(party_support_results);
-    Q.economic_records.push({'date': new Date(Q.year, Q.month - 1),
-                             'inflation': Q.inflation,
-                             'unemployment': Q.unemployed});
+    Q.party_support_records.push(support);
 
+    Q.economic_records.push({
+        date: date,
+        inflation: Q.inflation,
+        unemployment: Q.unemployed
+    });
+}
 
-
-
-
-
-
-
-    // change economic stats...
-    // we're basically implicity drawing a Philips curve
-    // budget deficits lead to some inflation
+// Implicit Phillips curve: deficits, deflation and growth feed into unemployment/inflation.
+function driftEconomy() {
+    // Budget deficits -> inflation
     if (Q.budget <= 0 && Q.budget > -2 && Q.inflation < 2.5) {
         Q.inflation += 0.1;
     }
     if (Q.budget <= -2 && Q.budget > -5 && Q.inflation < 5) {
         Q.inflation += 0.2;
-        if (Q.unemployed >= 12) {
-            Q.inflation -= 0.1;
-        }
+        if (Q.unemployed >= 12) Q.inflation -= 0.1;
     }
     if (Q.budget <= -5 && Q.inflation < 10) {
         Q.inflation += 0.3;
-        if (Q.unemployed >= 15) {
-            Q.inflation -= 0.1;
-        }
-    }
-    // deflation is bad
-    if (Q.inflation < -0.5 && Q.inflation > -5 && Q.unemployed < 15) {
-        Q.unemployed += 0.2;
-    }
-    if (Q.inflation <= -5 && Q.unemployed < 20) {
-        Q.unemployed += 0.3;
-    }
-    // economic growth
-    if (Q.economic_growth < -0.5 && Q.unemployed <= 18) {
-        Q.unemployed += 0.1;
-    }
-    if (Q.economic_growth < -5 && Q.unemployed <= 28) {
-        Q.unemployed += 0.1;
-    }
-    if (Q.economic_growth >= 2 && Q.unemployed >= 17) {
-        Q.unemployed -= 0.1;
-    }
-    if (Q.economic_growth >= 4 && Q.unemployed >= 12) {
-        Q.unemployed -= 0.1;
-    }
-    if (Q.economic_growth >= 6 && Q.unemployed >= 7) {
-        Q.unemployed -= 0.1;
-    }
-    if (Q.economic_growth >= 8 && Q.unemployed >= 3) {
-        Q.unemployed -= 0.1;
-    }
-    if (Q.economic_growth >= 4 && Q.inflation >= 7.5) {
-        Q.economic_growth -= 0.1;
-    }
-    if (Q.economic_growth >= -2.5 && Q.inflation <= -5) {
-        Q.economic_growth -= 0.1;
-    }
-    if (Q.economic_growth >= 7) {
-        Q.economic_growth -= 0.1;
-    }
-    if (Q.economic_growth >= 10) {
-        Q.economic_growth -= 0.2;
-    }
-    if (Q.economic_growth >= 12) {
-        Q.economic_growth -= 0.3;
+        if (Q.unemployed >= 15) Q.inflation -= 0.1;
     }
 
-    //////////////////////////////// Education & Science support/economic changes
-    if (Q.major_curriculum && Q.major_curriculum == "democratic") {
-        if (Q.pro_republic < 60) {
-            Q.pro_republic += 0.5;
-        } 
-    }
-    if (Q.minor_curriculum && Q.minor_curriculum == "democratic") {
-        if (Q.pro_republic < 60) {
-            Q.pro_republic += 0.3;
-        } 
-    }
-    // science bonus to economic growth
-    // education bonus
+    // Deflation -> unemployment
+    if (Q.inflation < -0.5 && Q.inflation > -5 && Q.unemployed < 15) Q.unemployed += 0.2;
+    if (Q.inflation <= -5 && Q.unemployed < 20) Q.unemployed += 0.3;
+
+    // Growth <-> unemployment
+    if (Q.economic_growth < -0.5 && Q.unemployed <= 18) Q.unemployed += 0.1;
+    if (Q.economic_growth < -5 && Q.unemployed <= 28) Q.unemployed += 0.1;
+    if (Q.economic_growth >= 2 && Q.unemployed >= 17) Q.unemployed -= 0.1;
+    if (Q.economic_growth >= 4 && Q.unemployed >= 12) Q.unemployed -= 0.1;
+    if (Q.economic_growth >= 6 && Q.unemployed >= 7)  Q.unemployed -= 0.1;
+    if (Q.economic_growth >= 8 && Q.unemployed >= 3)  Q.unemployed -= 0.1;
+
+    // Overheating / deflationary drag on growth
+    if (Q.economic_growth >= 4 && Q.inflation >= 7.5) Q.economic_growth -= 0.1;
+    if (Q.economic_growth >= -2.5 && Q.inflation <= -5) Q.economic_growth -= 0.1;
+    if (Q.economic_growth >= 7)  Q.economic_growth -= 0.1;
+    if (Q.economic_growth >= 10) Q.economic_growth -= 0.2;
+    if (Q.economic_growth >= 12) Q.economic_growth -= 0.3;
+}
+
+function applyEducationAndScience() {
+    if (Q.major_curriculum == "democratic" && Q.pro_republic < 60) Q.pro_republic += 0.5;
+    if (Q.minor_curriculum == "democratic" && Q.pro_republic < 60) Q.pro_republic += 0.3;
+
     Q.science_bonus = 0;
-    if (Q.education_science) {
-        Q.science_bonus += Q.education_science;
-    }
+    if (Q.education_science) Q.science_bonus += Q.education_science;
     if (Q.science) {
-        if (Q.science >= 1) {
-            Q.science_bonus += 1;
-        } else if (Q.science >= 3) {
-            Q.science_bonus += 2;
-        } else if (Q.science >= 5) {
-            Q.science_bonus += 3;
-        }
+        if (Q.science >= 5) Q.science_bonus += 3;
+        else if (Q.science >= 3) Q.science_bonus += 2;
+        else if (Q.science >= 1) Q.science_bonus += 1;
     }
     if (Q.applied_research && Q.applied_research >= 1) {
-        Q.science_bonus += 0.5*Q.applied_research;
+        Q.science_bonus += 0.5 * Q.applied_research;
     }
-    // cap the science bonus at 6
-    if (Q.science_bonus > 6) {
-        Q.science_bonus = 6;
-    }
-    console.log(Q.science_bonus);
-    // this is kinda messy but basically more science -> higher levels of baseline growth
+    if (Q.science_bonus > 6) Q.science_bonus = 6;
+
+    // More science -> higher baseline growth
     if (Q.science_bonus >= 1) {
-        if (Q.return_to_normalcy && Q.economic_growth < Q.science_bonus + 3) {
-            Q.economic_growth += 0.1;
-        }
-        if (Q.return_to_normalcy && Q.economic_growth < Q.science_bonus) {
-            Q.economic_growth += 0.1;
-        }
-        if (Q.economic_growth < Q.science_bonus - 3) {
-            Q.economic_growth += 0.1;
-        }
+        if (Q.return_to_normalcy && Q.economic_growth < Q.science_bonus + 3) Q.economic_growth += 0.1;
+        if (Q.return_to_normalcy && Q.economic_growth < Q.science_bonus)     Q.economic_growth += 0.1;
+        if (Q.economic_growth < Q.science_bonus - 3)                         Q.economic_growth += 0.1;
     }
-    // accumulated economic growth/decline
-    // Maybe there should be differences for positive/negative growth?
+}
+
+function accumulateExpansion() {
     if (Q.economic_growth < 0) {
-        if (Q.economic_expansion > 0) {
-            Q.economic_expansion = 0;
-        } else {
-            Q.economic_expansion += Q.economic_growth;
-        }
+        if (Q.economic_expansion > 0) Q.economic_expansion = 0;
+        else Q.economic_expansion += Q.economic_growth;
     }
     if (Q.economic_growth > 0 && Q.reparations <= -2 && Q.spd_in_government) {
         Q.economic_expansion += Q.economic_growth;
     } else if (Q.economic_growth > 0 && Q.spd_in_government) {
-        Q.economic_expansion += Q.economic_growth/2;
+        Q.economic_expansion += Q.economic_growth / 2;
     }
-    /////////////////////////////// update opinions based on economy
-    if (Q.unemployed > 15 && Q.pro_republic > 40) {
-        Q.pro_republic -= 1;
-    }
-    if (Q.unemployed > 30 && Q.pro_republic > 20) {
-        Q.pro_republic -= 1;
-    }
-    if (Q.inflation >= 8 && Q.pro_republic > 40) {
-        Q.pro_republic -= 1;
-    }
-
-    ///////////////////////////// change party support based on pro_republic
-    // if pro_republic is less than the support of the Weimar coalition, reduce SPD support...
-    if (Q.pro_republic < (Q.spd_votes + Q.ddp_votes + Q.z_votes)) {
-        if (Q.new_middle_spd > 0) {
-            Q.new_middle_spd -= 5/12;
-            Q.new_middle_nsdap += 3/12;
-        }
-        if (Q.old_middle_spd > 0) {
-            Q.old_middle_spd -= 5/12;
-            Q.old_middle_nsdap += 3/12;
-        }
-        if (Q.rural_spd > 0) {
-            Q.rural_spd -= 5/12;
-        }
-        if (Q.workers_spd_normalized > 30) {
-            Q.workers_spd -= 4/12;
-        }
-        if (Q.catholics_spd > 0) {
-            Q.catholics_spd -= 4/12;
-        }
-        if (Q.unemployed_spd_normalized > 10) {
-            Q.unemployed_spd -= 4/12;
-        }
-        if (Q.new_middle_ddp > 0) {
-            Q.new_middle_ddp -= 4/12;
-            Q.new_middle_nsdap += 3/12;
-        }
-        if (Q.old_middle_ddp > 0) {
-            Q.old_middle_ddp -= 5/12;
-            Q.old_middle_nsdap += 4/12;
-        }
-        if (Q.rural_ddp > 0) {
-            Q.rural_ddp -= 5/12;
-            Q.rural_nsdap += 4/12;
-        }
-    }
-
-////////////////////////// annual support changes
-
-function calcSeverity(Q) {
-    var unemployment_severity = Math.max(0, (Q.unemployed - 1) / 19);      // 1% baseline, ~1.0 at 20%
-    var deflation_severity = Math.max(0, (-Q.inflation - 1) / 5);          // starts above -1%, ~1.0 at -6%
-    var inflation_severity = Math.max(0, (Q.inflation - 1) / 4);           // starts above 1%, ~1.0 at 5%
-    var growth_severity = Math.max(0, (-Q.economic_growth - 0.5) / 2.5);   // starts below -0.5%, ~1.0 at -3%
-    var severity = unemployment_severity + Math.max(deflation_severity, inflation_severity) + growth_severity;
-    return Math.min(severity, 1.75);
-}
-Q.severity = calcSeverity(Q);
-console.log('economic severity: ' + Q.severity);
-
-
-
-
-// ===== (party distress) =====
-Q.economy_bad = (Q.severity >= 1) ? 1 : 0;   
-
-if (Q.economy_bad) {
-    if (!(Q.hunger_timer >= 0)) {            
-        Q.hunger_timer = 24 - Math.min(6, Math.round(Q.severity * 3.5));
-    }
-    Q.party_crisis = (Q.hunger_timer == 0) ? 1 : 0;
-} else {
-    Q.party_crisis = 0;
-    if (Q.hunger_timer == 0) Q.hunger_timer = -1;   
 }
 
-
-
-// ===== FUNDS (dues) =====
-var dues_limit = { workers: 4, old_middle: 4, new_middle: 4, unemployed: 2, rural: 3 };
-
-var any_over = false;   // any class at its limit
-var any_above = false;  // any class past its limit
-
-for (var cls in dues_limit) {
-    var d = Q[cls + '_dues'];
-    if (d > 1) Q[cls + '_spd'] -= (d - 1) * 0.1;   // independent monthly drain
-    if (d >= dues_limit[cls]) any_over = true;
-    if (d > dues_limit[cls]) any_above = true;
+function applyEconomyToOpinion() {
+    if (Q.unemployed > 15 && Q.pro_republic > 40) Q.pro_republic -= 1;
+    if (Q.unemployed > 30 && Q.pro_republic > 20) Q.pro_republic -= 1;
+    if (Q.inflation >= 8  && Q.pro_republic > 40) Q.pro_republic -= 1;
 }
 
-if (any_over) {
-    if (!(Q.funds_timer >= 0)) {
-        Q.funds_timer = any_above ? 18 : 24;
-    }
-    Q.funds_trigger = (Q.funds_timer == 0) ? 1 : 0;
-} else {
-    Q.funds_trigger = 0;
-    if (Q.funds_timer == 0) Q.funds_timer = -1;
+// If pro_republic falls below Weimar coalition support, Weimar parties bleed votes.
+function applyWeimarErosion() {
+    if (Q.pro_republic >= (Q.spd_votes + Q.ddp_votes + Q.z_votes)) return;
+
+    if (Q.new_middle_spd > 0) { Q.new_middle_spd -= 5/12; Q.new_middle_nsdap += 3/12; }
+    if (Q.old_middle_spd > 0) { Q.old_middle_spd -= 5/12; Q.old_middle_nsdap += 3/12; }
+    if (Q.rural_spd > 0)      { Q.rural_spd -= 5/12; }
+    if (Q.workers_spd_normalized > 30)    Q.workers_spd -= 4/12;
+    if (Q.catholics_spd > 0)              Q.catholics_spd -= 4/12;
+    if (Q.unemployed_spd_normalized > 10) Q.unemployed_spd -= 4/12;
+
+    if (Q.new_middle_ddp > 0) { Q.new_middle_ddp -= 4/12; Q.new_middle_nsdap += 3/12; }
+    if (Q.old_middle_ddp > 0) { Q.old_middle_ddp -= 5/12; Q.old_middle_nsdap += 4/12; }
+    if (Q.rural_ddp > 0)      { Q.rural_ddp -= 5/12;      Q.rural_nsdap += 4/12; }
 }
 
+function updatePartyDistress() {
+    Q.economy_bad = (Q.severity >= 1) ? 1 : 0;
 
-
-if (Q.year == 1928) {
-    if (Q.dnvp_in_government == 1) {
-        Q.rural_dnvp -= 8/12;
-        Q.rural_other += 6/12;
+    if (Q.economy_bad) {
+        if (!(Q.hunger_timer >= 0)) {
+            Q.hunger_timer = 24 - Math.min(6, Math.round(Q.severity * 3.5));
+        }
+        Q.party_crisis = (Q.hunger_timer == 0) ? 1 : 0;
+    } else {
+        Q.party_crisis = 0;
+        if (Q.hunger_timer == 0) Q.hunger_timer = -1;
     }
+}
+
+function updateDuesPressure() {
+    var dues_limit = { workers: 4, old_middle: 4, new_middle: 4, unemployed: 2, rural: 3 };
+    var any_over = false;
+    var any_above = false;
+
+    for (var cls in dues_limit) {
+        var d = Q[cls + '_dues'];
+        if (d > 1) Q[cls + '_spd'] -= (d - 1) * 0.1;
+        if (d >= dues_limit[cls]) any_over = true;
+        if (d > dues_limit[cls]) any_above = true;
+    }
+
+    if (any_over) {
+        if (!(Q.funds_timer >= 0)) {
+            Q.funds_timer = any_above ? 18 : 24;
+        }
+        Q.funds_trigger = (Q.funds_timer == 0) ? 1 : 0;
+    } else {
+        Q.funds_trigger = 0;
+        if (Q.funds_timer == 0) Q.funds_timer = -1;
+    }
+}
+
+// Year-by-year electoral drift, scaled by economic severity.
+function applyYearlyShifts() {
+    var s = Q.severity;
+
+    if (Q.year == 1928) {
+        if (Q.dnvp_in_government == 1) {
+            Q.rural_dnvp -= 8/12;
+            Q.rural_other += 6/12;
+        }
         Q.workers_z -= 0.5/12;
         Q.workers_nsdap -= 1/12;
         Q.rural_dnvp -= 3/12;
@@ -458,250 +388,251 @@ if (Q.year == 1928) {
         Q.workers_kpd += 2/12;
         Q.workers_spd += 2/12;
         Q.unemployed_kpd += 4/12;
-}
-if (Q.year == 1929) {
-    Q.unemployed += 1/12;
-    Q.inflation -= 0.5/12;
-    Q.sa_strength += 20/12;
-    Q.sh_strength += 40/12;
-
-    Q.new_middle_nsdap += (7.5/12) * Q.severity;
-    Q.old_middle_nsdap += (7.5/12) * Q.severity;
-    Q.new_middle_ddp -= (3.75/12) * Q.severity;
-    Q.new_middle_dvp -= (3.75/12) * Q.severity;
-    Q.workers_kpd += (3.75/12) * Q.severity;
-    Q.sa_strength += (22.5/12) * Q.severity;
-    Q.sh_strength += (45/12) * Q.severity;
-    Q.rural_dnvp -= (11.25/12) * Q.severity;
-    Q.rural_nsdap += (7.5/12) * Q.severity;
-    Q.unemployed_nsdap += (13.5/12) * Q.severity;
-
-} else if (Q.year == 1930) {
-    Q.rural_other += 5/12;
-
-    Q.rural_nsdap += (7.5/12) * Q.severity;
-    Q.rural_dnvp -= (11.25/12) * Q.severity;
-    Q.new_middle_dvp -= (3.75/12) * Q.severity;
-    Q.old_middle_dvp -= (4.5/12) * Q.severity;
-    Q.new_middle_ddp -= (3.75/12) * Q.severity;
-    Q.old_middle_ddp -= (4.5/12) * Q.severity;
-    Q.new_middle_nsdap += (7.5/12) * Q.severity;
-    Q.old_middle_nsdap += (7.5/12) * Q.severity;
-    Q.new_middle_other += (3/12) * Q.severity;
-    Q.old_middle_other += (3/12) * Q.severity;
-    Q.unemployed_nsdap += (6/12) * Q.severity;
-
-    Q.workers_z += 1/12;
-    Q.old_middle_z += 2/12;
-    Q.new_middle_z += 2/12;
-
-    if (!Q.works_program) {
-        Q.rural_nsdap += (2.25/12) * Q.severity;
-        Q.old_middle_nsdap += (3.75/12) * Q.severity;
-        Q.workers_nsdap += (1.5/12) * Q.severity;
-        Q.workers_other += (3.75/12) * Q.severity;
-        Q.workers_kpd += (1.5/12) * Q.severity;
-    }
-    Q.sa_strength += (75/12) * Q.severity;
-    Q.sh_strength += (75/12) * Q.severity;
-
-} else if (Q.year == 1931) {
-    Q.catholics_z += 2/12;
-    Q.sa_militancy += 0.1/12;
-
-    Q.rural_dvp -= (6/12) * Q.severity;
-    Q.old_middle_dvp -= (6/12) * Q.severity;
-    Q.new_middle_dvp -= (6/12) * Q.severity;
-    Q.old_middle_ddp -= (6/12) * Q.severity;
-    Q.new_middle_ddp -= (6/12) * Q.severity;
-    Q.sa_strength += (37.5/12) * Q.severity;
-    Q.sh_strength += (37.5/12) * Q.severity;
-    Q.old_middle_nsdap += (7.5/12) * Q.severity;
-    Q.rural_other -= (3.75/12) * Q.severity;
-    Q.rural_nsdap += (6.75/12) * Q.severity;
-
-    if (!Q.works_program) {
-        Q.old_middle_dvp -= (4.5/12) * Q.severity;
-        Q.new_middle_dvp -= (4.5/12) * Q.severity;
-        Q.rural_dvp -= (4.5/12) * Q.severity;
-        Q.workers -= (3/12) * Q.severity;
-        Q.unemployed_nsdap += (5.25/12) * Q.severity;
-        Q.unemployed_kpd += (1.5/12) * Q.severity;
-        Q.rural_other -= (9/12) * Q.severity;
-        Q.rural_nsdap += (9/12) * Q.severity;
-        Q.new_middle_nsdap += (9/12) * Q.severity;
-        Q.old_middle_nsdap += (9/12) * Q.severity;
-        Q.workers_nsdap += (1.5/12) * Q.severity;
-        Q.workers_kpd += (3/12) * Q.severity;
-        Q.sa_strength += (75/12) * Q.severity;
-        Q.sh_strength += (37.5/12) * Q.severity;
-    } else if (Q.unemployed > 15) {
-        Q.old_middle_dvp -= (3/12) * Q.severity;
-        Q.new_middle_dvp -= (3/12) * Q.severity;
-        Q.rural_dvp -= (3/12) * Q.severity;
-        Q.unemployed_nsdap += (3/12) * Q.severity;
-        Q.old_middle_nsdap += (3/12) * Q.severity;
-        Q.new_middle_nsdap += (3/12) * Q.severity;
-        Q.rural_nsdap += (3/12) * Q.severity;
     }
 
-} else if (Q.year == 1932) {
-    Q.old_middle_other -= (5.25/12) * Q.severity;
-    Q.rural_other -= (5.25/12) * Q.severity;
-    Q.old_middle_nsdap += (5.25/12) * Q.severity;
-    Q.rural_nsdap += (5.25/12) * Q.severity;
-    Q.unemployed_nsdap += (3/12) * Q.severity;
+    if (Q.year == 1929) {
+        Q.unemployed += 1/12;
+        Q.inflation -= 0.5/12;
+        Q.sa_strength += 20/12;
+        Q.sh_strength += 40/12;
 
-    if (!Q.works_program) {
-        Q.unemployed += 5/12;
-        Q.inflation -= 2/12;
+        Q.new_middle_nsdap += (7.5/12) * s;
+        Q.old_middle_nsdap += (7.5/12) * s;
+        Q.new_middle_ddp -= (3.75/12) * s;
+        Q.new_middle_dvp -= (3.75/12) * s;
+        Q.workers_kpd += (3.75/12) * s;
+        Q.sa_strength += (22.5/12) * s;
+        Q.sh_strength += (45/12) * s;
+        Q.rural_dnvp -= (11.25/12) * s;
+        Q.rural_nsdap += (7.5/12) * s;
+        Q.unemployed_nsdap += (13.5/12) * s;
+
+    } else if (Q.year == 1930) {
+        Q.rural_other += 5/12;
+
+        Q.rural_nsdap += (7.5/12) * s;
+        Q.rural_dnvp -= (11.25/12) * s;
+        Q.new_middle_dvp -= (3.75/12) * s;
+        Q.old_middle_dvp -= (4.5/12) * s;
+        Q.new_middle_ddp -= (3.75/12) * s;
+        Q.old_middle_ddp -= (4.5/12) * s;
+        Q.new_middle_nsdap += (7.5/12) * s;
+        Q.old_middle_nsdap += (7.5/12) * s;
+        Q.new_middle_other += (3/12) * s;
+        Q.old_middle_other += (3/12) * s;
+        Q.unemployed_nsdap += (6/12) * s;
+
+        Q.workers_z += 1/12;
+        Q.old_middle_z += 2/12;
+        Q.new_middle_z += 2/12;
+
+        if (!Q.works_program) {
+            Q.rural_nsdap += (2.25/12) * s;
+            Q.old_middle_nsdap += (3.75/12) * s;
+            Q.workers_nsdap += (1.5/12) * s;
+            Q.workers_other += (3.75/12) * s;
+            Q.workers_kpd += (1.5/12) * s;
+        }
+        Q.sa_strength += (75/12) * s;
+        Q.sh_strength += (75/12) * s;
+
+    } else if (Q.year == 1931) {
         Q.catholics_z += 2/12;
-        Q.workers -= (3/12) * Q.severity;
-        Q.rural_dnvp -= (3/12) * Q.severity;
-        Q.rural_nsdap += (6/12) * Q.severity;
-        Q.new_middle_nsdap += (7.5/12) * Q.severity;
-        Q.old_middle_nsdap += (7.5/12) * Q.severity;
-        Q.unemployed_nsdap += (6/12) * Q.severity;
-        Q.unemployed_kpd += (1.5/12) * Q.severity;
-        Q.workers_nsdap += (2.25/12) * Q.severity;
-        Q.workers_kpd += (2.25/12) * Q.severity;
-        Q.sa_strength += (150/12) * Q.severity;
-        Q.new_middle_dnvp += (3/12) * Q.severity;
-        Q.old_middle_dnvp += (3/12) * Q.severity;
-        Q.new_middle_dvp -= (3/12) * Q.severity;
-        Q.old_middle_dvp -= (3/12) * Q.severity;
-        Q.rural_dvp -= (3/12) * Q.severity;
-    } else if (Q.unemployed > 25) {
-        Q.rural_nsdap += (3.75/12) * Q.severity;
-        Q.unemployed_nsdap += (3.75/12) * Q.severity;
-        Q.old_middle_nsdap += (3.75/12) * Q.severity;
-        Q.new_middle_nsdap += (3/12) * Q.severity;
-        Q.sa_strength += (37.5/12) * Q.severity;
-    } else if (Q.unemployed > 20) {
-        Q.rural_nsdap += (1.5/12) * Q.severity;
-        Q.unemployed_nsdap += (2.25/12) * Q.severity;
-        Q.old_middle_nsdap += (2.25/12) * Q.severity;
-        Q.new_middle_nsdap += (1.5/12) * Q.severity;
-    }
+        Q.sa_militancy += 0.1/12;
 
-} else if (Q.year >= 1933) {
-    if (Q.return_to_normalcy) {
-        if (Q.new_middle_ddp_normalized < 40) { Q.new_middle_ddp += 6/12; }
-        if (Q.new_middle_dvp_normalized < 25) { Q.new_middle_dvp += 3/12; }
-        if (Q.old_middle_dvp_normalized < 40) { Q.old_middle_dvp += 6/12; }
-        if (Q.rural_dnvp_normalized < 40) { Q.rural_dnvp += 6/12; }
-        if (Q.catholics_z_normalized < 40) { Q.catholics_z += 6/12; }
-    }
-    if (Q.unemployed > 10) {
-        Q.rural_nsdap += (1.5/12) * Q.severity;
-        Q.unemployed_nsdap += (1.5/12) * Q.severity;
-        Q.old_middle_nsdap += (1.5/12) * Q.severity;
-        Q.new_middle_nsdap += (1.5/12) * Q.severity;
-        if (Q.spd_in_government) {
-            Q.workers_spd -= (3/12) * Q.severity;
+        Q.rural_dvp -= (6/12) * s;
+        Q.old_middle_dvp -= (6/12) * s;
+        Q.new_middle_dvp -= (6/12) * s;
+        Q.old_middle_ddp -= (6/12) * s;
+        Q.new_middle_ddp -= (6/12) * s;
+        Q.sa_strength += (37.5/12) * s;
+        Q.sh_strength += (37.5/12) * s;
+        Q.old_middle_nsdap += (7.5/12) * s;
+        Q.rural_other -= (3.75/12) * s;
+        Q.rural_nsdap += (6.75/12) * s;
+
+        if (!Q.works_program) {
+            Q.old_middle_dvp -= (4.5/12) * s;
+            Q.new_middle_dvp -= (4.5/12) * s;
+            Q.rural_dvp -= (4.5/12) * s;
+            Q.workers -= (3/12) * s;
+            Q.unemployed_nsdap += (5.25/12) * s;
+            Q.unemployed_kpd += (1.5/12) * s;
+            Q.rural_other -= (9/12) * s;
+            Q.rural_nsdap += (9/12) * s;
+            Q.new_middle_nsdap += (9/12) * s;
+            Q.old_middle_nsdap += (9/12) * s;
+            Q.workers_nsdap += (1.5/12) * s;
+            Q.workers_kpd += (3/12) * s;
+            Q.sa_strength += (75/12) * s;
+            Q.sh_strength += (37.5/12) * s;
+        } else if (Q.unemployed > 15) {
+            Q.old_middle_dvp -= (3/12) * s;
+            Q.new_middle_dvp -= (3/12) * s;
+            Q.rural_dvp -= (3/12) * s;
+            Q.unemployed_nsdap += (3/12) * s;
+            Q.old_middle_nsdap += (3/12) * s;
+            Q.new_middle_nsdap += (3/12) * s;
+            Q.rural_nsdap += (3/12) * s;
+        }
+
+    } else if (Q.year == 1932) {
+        Q.old_middle_other -= (5.25/12) * s;
+        Q.rural_other -= (5.25/12) * s;
+        Q.old_middle_nsdap += (5.25/12) * s;
+        Q.rural_nsdap += (5.25/12) * s;
+        Q.unemployed_nsdap += (3/12) * s;
+
+        if (!Q.works_program) {
+            Q.unemployed += 5/12;
+            Q.inflation -= 2/12;
+            Q.catholics_z += 2/12;
+            Q.workers -= (3/12) * s;
+            Q.rural_dnvp -= (3/12) * s;
+            Q.rural_nsdap += (6/12) * s;
+            Q.new_middle_nsdap += (7.5/12) * s;
+            Q.old_middle_nsdap += (7.5/12) * s;
+            Q.unemployed_nsdap += (6/12) * s;
+            Q.unemployed_kpd += (1.5/12) * s;
+            Q.workers_nsdap += (2.25/12) * s;
+            Q.workers_kpd += (2.25/12) * s;
+            Q.sa_strength += (150/12) * s;
+            Q.new_middle_dnvp += (3/12) * s;
+            Q.old_middle_dnvp += (3/12) * s;
+            Q.new_middle_dvp -= (3/12) * s;
+            Q.old_middle_dvp -= (3/12) * s;
+            Q.rural_dvp -= (3/12) * s;
+        } else if (Q.unemployed > 25) {
+            Q.rural_nsdap += (3.75/12) * s;
+            Q.unemployed_nsdap += (3.75/12) * s;
+            Q.old_middle_nsdap += (3.75/12) * s;
+            Q.new_middle_nsdap += (3/12) * s;
+            Q.sa_strength += (37.5/12) * s;
+        } else if (Q.unemployed > 20) {
+            Q.rural_nsdap += (1.5/12) * s;
+            Q.unemployed_nsdap += (2.25/12) * s;
+            Q.old_middle_nsdap += (2.25/12) * s;
+            Q.new_middle_nsdap += (1.5/12) * s;
+        }
+
+    } else if (Q.year >= 1933) {
+        if (Q.return_to_normalcy) {
+            if (Q.new_middle_ddp_normalized < 40) Q.new_middle_ddp += 6/12;
+            if (Q.new_middle_dvp_normalized < 25) Q.new_middle_dvp += 3/12;
+            if (Q.old_middle_dvp_normalized < 40) Q.old_middle_dvp += 6/12;
+            if (Q.rural_dnvp_normalized < 40)     Q.rural_dnvp += 6/12;
+            if (Q.catholics_z_normalized < 40)    Q.catholics_z += 6/12;
+        }
+        if (Q.unemployed > 10) {
+            Q.rural_nsdap += (1.5/12) * s;
+            Q.unemployed_nsdap += (1.5/12) * s;
+            Q.old_middle_nsdap += (1.5/12) * s;
+            Q.new_middle_nsdap += (1.5/12) * s;
+            if (Q.spd_in_government) {
+                Q.workers_spd -= (3/12) * s;
+            }
         }
     }
 }
-    // prevent forever support if the economy is bad
-    if (Q.year >= 1934 && (Q.inflation >= 8 || Q.unemployed >= 20) && Q.pro_republic <= 45 && Q.spd_in_government) {
-        if (Q.workers_spd_normalized > 40) {
-            Q.workers_spd -= 6/12;
-        }
-        if (Q.unemployed_spd_normalized > 20) {
-            Q.unemployed_spd -= 6/12;
-        }
-        if (Q.new_middle_spd_normalized > 20) {
-            Q.new_middle_spd -= 6/12;
-        }
-        if (Q.old_middle_spd_normalized > 20) {
-            Q.old_middle_spd -= 6/12;
-        }
-        if (Q.rural_spd_normalized > 20) {
-            Q.rural_spd -= 6/12;
-        }
-        if (Q.catholics_spd_normalized > 20) {
-            Q.catholics_spd -= 6/12;
-        }
-    }
 
-if (Q.year >= 1935) {
-    let growth_factor = Math.max(0, Q.economic_growth / 6);
-    let employment_factor = Math.max(0, (12 - Q.unemployed) / 8);
-    let stability_factor = (Q.inflation >= -1 && Q.inflation <= 5) ? 1.0 : 0.2;
+// Prevents SPD from keeping its support forever in a prolonged crisis.
+function applyLateCrisisPenalty() {
+    if (!(Q.year >= 1934 && (Q.inflation >= 8 || Q.unemployed >= 20)
+          && Q.pro_republic <= 45 && Q.spd_in_government)) return;
 
-    let bliss_index = (growth_factor + employment_factor) * stability_factor;
+    if (Q.workers_spd_normalized > 40)    Q.workers_spd -= 6/12;
+    if (Q.unemployed_spd_normalized > 20) Q.unemployed_spd -= 6/12;
+    if (Q.new_middle_spd_normalized > 20) Q.new_middle_spd -= 6/12;
+    if (Q.old_middle_spd_normalized > 20) Q.old_middle_spd -= 6/12;
+    if (Q.rural_spd_normalized > 20)      Q.rural_spd -= 6/12;
+    if (Q.catholics_spd_normalized > 20)  Q.catholics_spd -= 6/12;
+}
 
-    if (Q.return_to_normalcy || bliss_index >= 0.8) {
-        let decay_coefficient = Q.return_to_normalcy ? 0.25 : Math.min(0.40, 0.15 * bliss_index);
+// In good times (or after a return to normalcy) NSDAP support drains back to other parties.
+function applyNsdapDecay() {
+    if (Q.year < 1935) return;
 
-        const target_reabsorption = {
-            'workers':     { 'spd': 0.50, 'kpd': 0.20, 'other': 0.30 },
-            'unemployed':  { 'spd': 0.40, 'kpd': 0.40, 'other': 0.20 },
-            'new_middle':  { 'ddp': 0.40, 'dvp': 0.30, 'spd': 0.30 },
-            'old_middle':  { 'dvp': 0.40, 'other': 0.40, 'dnvp': 0.20 },
-            'rural':       { 'dnvp': 0.40, 'other': 0.40, 'spd': 0.20 },
-            'catholics':   { 'z': 0.80, 'spd': 0.20 }
-        };
+    var growth_factor = Math.max(0, Q.economic_growth / 6);
+    var employment_factor = Math.max(0, (12 - Q.unemployed) / 8);
+    var stability_factor = (Q.inflation >= -1 && Q.inflation <= 5) ? 1.0 : 0.2;
+    var bliss_index = (growth_factor + employment_factor) * stability_factor;
 
-        for (let c of Q.classes) {
-            let nsdap_key = `${c}_nsdap`;
-            let current_nsdap = Q[nsdap_key] || 0;
+    if (!(Q.return_to_normalcy || bliss_index >= 0.8)) return;
 
-            if (current_nsdap > 5) {
-                let excess_support = current_nsdap - 5;
-                let drained_voters = (excess_support * decay_coefficient) / 12;
+    var decay_coefficient = Q.return_to_normalcy ? 0.25 : Math.min(0.40, 0.15 * bliss_index);
 
-                drained_voters = Math.min(drained_voters, current_nsdap - 2);
-                Q[nsdap_key] -= drained_voters;
+    const target_reabsorption = {
+        workers:    { spd: 0.50, kpd: 0.20, other: 0.30 },
+        unemployed: { spd: 0.40, kpd: 0.40, other: 0.20 },
+        new_middle: { ddp: 0.40, dvp: 0.30, spd: 0.30 },
+        old_middle: { dvp: 0.40, other: 0.40, dnvp: 0.20 },
+        rural:      { dnvp: 0.40, other: 0.40, spd: 0.20 },
+        catholics:  { z: 0.80, spd: 0.20 }
+    };
 
-                let class_targets = target_reabsorption[c] || { 'other': 1.0 };
-                for (let target_party in class_targets) {
-                    let share = class_targets[target_party];
-                    let destination_key = `${c}_${target_party}`;
+    for (let c of Q.classes) {
+        let nsdap_key = c + '_nsdap';
+        let current_nsdap = Q[nsdap_key] || 0;
+        if (current_nsdap <= 5) continue;
 
-                    if (Q[destination_key] !== undefined) {
-                        Q[destination_key] += drained_voters * share;
-                    } else {
-                        Q[`${c}_other`] = (Q[`${c}_other`] || 0) + (drained_voters * share);
-                    }
-                }
+        let excess_support = current_nsdap - 5;
+        let drained_voters = (excess_support * decay_coefficient) / 12;
+        drained_voters = Math.min(drained_voters, current_nsdap - 2);
+        Q[nsdap_key] -= drained_voters;
+
+        let class_targets = target_reabsorption[c] || { other: 1.0 };
+        for (let target_party in class_targets) {
+            let destination_key = c + '_' + target_party;
+            let amount = drained_voters * class_targets[target_party];
+
+            if (Q[destination_key] !== undefined) {
+                Q[destination_key] += amount;
+            } else {
+                Q[c + '_other'] = (Q[c + '_other'] || 0) + amount;
             }
         }
     }
 }
 
 
+// ============================================================================
+// MONTHLY UPDATE
+// ============================================================================
 
+if (Q.month_actions >= 1) {
+    advanceDate();
+    collectPartyIncome();
+    tickTimers();
+    recordHistory();
 
+    driftEconomy();
+    applyEducationAndScience();
+    accumulateExpansion();
+    applyEconomyToOpinion();
+    applyWeimarErosion();
 
+    Q.severity = calcSeverity(Q);
+    updatePartyDistress();
+    updateDuesPressure();
 
-
-
-
-
-// ENDS HERE, MONTH ACTIONS..!!!
+    applyYearlyShifts();
+    applyLateCrisisPenalty();
+    applyNsdapDecay();
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 Q.last_advisor_action = 0;
 Q.last_cabinet_action = 0;
-// make sure no stat is below 0.
+
+
+// ============================================================================
+// CLAMPS, NORMALIZATION, DISSENT
+// ============================================================================
+
 var decimal_factor = Math.pow(10, Q.use_decimals || 0);
 
-// ---- 0. Sanity clamps ----
 if (Q.unemployed < 1) Q.unemployed = 1;
 
+// Per-class party shares
 for (var c of Q.classes) {
     var class_votes = 0;
     for (var party of Q.parties) {
@@ -717,7 +648,7 @@ for (var c of Q.classes) {
     }
 }
 
-
+// National party support
 var total_support = 0;
 for (var party of Q.parties) {
     var party_support = 0;
@@ -736,6 +667,7 @@ for (var party of Q.parties) {
     Q[party + '_votes_display'] = Math.round(decimal_factor * frac * 100) / decimal_factor;
 }
 
+// Faction dissent
 for (var f of Q.factions) {
     Q[f + '_dissent']  = Math.min(99, Math.max(0, Q[f + '_dissent']  || 0));
     Q[f + '_strength'] = Math.max(0, Q[f + '_strength'] || 0);
@@ -750,7 +682,7 @@ var active = Q.factions.filter(function(f) {
 var faction_total = 0;
 active.forEach(function(f) { faction_total += Q[f + '_strength']; });
 
-var weighted_dissent = 0; // sum of (strength% * dissent%)
+var weighted_dissent = 0;
 if (faction_total > 0) {
     active.forEach(function(f) {
         Q[f + '_strength'] = 100 * Q[f + '_strength'] / faction_total;
@@ -760,44 +692,30 @@ if (faction_total > 0) {
 
 Q.dissent = Math.min(0.99, Math.max(0, weighted_dissent / 10000));
 Q.dissent_percent = Q.dissent * 100;
-console.log('new dissent: ' + Q.dissent);
 
-
-
-
-// NORMALIZER
-
-// Helper function to normalize a list of keys on Q to a target sum
+// Normalizer
 function normalizeKeys(keys, targetSum) {
-  const total = keys.reduce((sum, key) => sum + (Q[key] || 0), 0);
-  if (total > 0) {
-    for (const key of keys) {
-      Q[key] = Math.round((Q[key] / total) * targetSum * 10) / 10;
+    const total = keys.reduce((sum, key) => sum + (Q[key] || 0), 0);
+    if (total > 0) {
+        for (const key of keys) {
+            Q[key] = Math.round((Q[key] / total) * targetSum * 10) / 10;
+        }
     }
-  }
 }
 
-// 1. Normalize classes to total 100
 normalizeKeys(Q.classes, 100);
-
-// 2. Normalize ideology metrics to total 150
 normalizeKeys(['pro_republic', 'nationalism', 'socialism'], 150);
 
 
-
-
+// ============================================================================
+// POST-MONTH STATE, PARTY ACTIONS AND EVENTS
+// ============================================================================
 
 if (Q.month_actions_2 >= 1) {
 
 Q.month_actions_2 = 0;
 
-
-/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
-
-
-// ============================================================================
-// 2. STATE REACTION VECTOR & PREREQUISITES
-// ============================================================================
+// ---- State reaction vector -------------------------------------------------
 
 Q.interior_purged = (Q.interior_police_loyalty >= 0.90) ? 1 : 0;
 
@@ -810,51 +728,44 @@ if (Q.reaction_activated !== 1) {
     if (Q.rural_cooperatives + Q.cooperatives + Q.socializations >= 3) Q.reaction_progress += 1;
     if (Q.interior_purged === 1) Q.reaction_progress += 0.5;
     if (Q.land_reform >= 1) Q.reaction_progress += 0.5 * Q.land_reform;
-    if (Q.nationalization_progress >= 1) Q.reaction_progress += 1 * Q.nationalization_progress;
+    if (Q.nationalization_progress >= 1) Q.reaction_progress += Q.nationalization_progress;
     if (Q.factory_takeovers >= 1) Q.reaction_progress += Q.factory_takeovers;
     if (Q.kpd_in_government >= 1) Q.reaction_progress += 3;
     if (Q.socialism >= 65) Q.reaction_progress += 1;
 }
 
 Q.junker_land_reform_enabled = (
-    Q.socialism >= 100 || 
-    Q.rural_spd >= 40 || 
-    Q.spd_votes >= 50 || 
-    Q.in_spd_majority >= 1 || 
-    Q.in_popular_front || 
+    Q.socialism >= 100 ||
+    Q.rural_spd >= 40 ||
+    Q.spd_votes >= 50 ||
+    Q.in_spd_majority >= 1 ||
+    Q.in_popular_front ||
     Q.in_left_front
 ) ? 1 : 0;
 
-
-// SPD Powerhouse relation drops.
+// ---- SPD powerhouse: other parties cool toward a dominant SPD --------------
 
 if (Q.spd_votes >= 40) {
     let excess = Q.spd_votes - 40;
-
     Q.dvp_relation -= excess * 0.1;
-    Q.z_relation -= excess * 0.05;
+    Q.z_relation   -= excess * 0.05;
     Q.ddp_relation -= excess * 0.025;
 }
 
+// ---- Marxist majority ------------------------------------------------------
 
-// Marxist majority
 let marxist_votes = (Q.spd_votes || 0) + (Q.kpd_votes || 0) + (Q.sapd_votes || 0);
 
-if (marxist_votes >= 50 && (Q.ideology === "left" || Q.ideology === "centrist")) {
+if (marxist_votes >= 50 && (Q.ideology === "Left" || Q.ideology === "Centrist")) {
     Q.socialism += 1;
     Q.left_strength += 0.5;
     Q.kpd_relation += 0.5;
-    if (Q.ideology === "Left") {
-        Q.kpd_relation += 0.5;
-    }
-    if (Q.kpd_relation >= 50) {
-        Q.communist_coalition += 0.2;
-    }
+    if (Q.ideology === "Left") Q.kpd_relation += 0.5;
+    if (Q.kpd_relation >= 50) Q.communist_coalition += 0.2;
     Q.sapd_relation += 0.5;
 }
 
-
-// MODIFIERS OF PARTY ADVISORS AND OTHER STUFF
+// ---- Party faction modifiers -----------------------------------------------
 
 if (Q.peoples_party == 1) {
     if (Q.left_dissent < 45) Q.left_dissent += 1;
@@ -871,35 +782,22 @@ const strengthMap = {
     Reformist: "reformist_strength",
     Neorev: "neorevisionist_strength"
 };
-const key = strengthMap[Q.ideology];
-if (key && Q[key] < 40) { Q[key] += 1; }
+const ideologyStrengthKey = strengthMap[Q.ideology];
+if (ideologyStrengthKey && Q[ideologyStrengthKey] < 40) {
+    Q[ideologyStrengthKey] += 1;
+}
 
-
-
-// LEFT SPD SPECIFICS
+// ---- SPD ideology effects --------------------------------------------------
 
 if (Q.ideology == "Left") {
     Q.dvp_relation -= 0.5;
     Q.ddp_relation -= 0.2;
-    Q.z_relation -= 0.3;
+    Q.z_relation   -= 0.3;
     Q.kpd_relation += 0.2;
-}
 
-if (Q.ideology == "Reformist") {
-    Q.dvp_relation += 0.2;
-    Q.ddp_relation += 0.3;
-    Q.z_relation += 0.3;
-    Q.kpd_relation -= 0.7;
-    Q.dnvp_relation += 0.01;
-}
-
-// LEFT SPD: soft-cap non-worker/unemployed classes
-if (Q.ideology == "Left") {
+    // Soft-cap non-worker/unemployed classes
     var left_soft_cap = 20;
-    var left_bonus_classes = ["workers", "unemployed"];
-    var left_capped_classes = Q.classes.filter(function(c) {
-        return left_bonus_classes.indexOf(c) === -1;
-    });
+    var left_capped_classes = Q.classes.filter(c => c !== "workers" && c !== "unemployed");
 
     for (var c of left_capped_classes) {
         var norm_key = c + "_spd_normalized";
@@ -912,63 +810,49 @@ if (Q.ideology == "Left") {
     Q.unemployed_spd += 2 / 12;
 }
 
-// Settings
+if (Q.ideology == "Reformist") {
+    Q.dvp_relation += 0.2;
+    Q.ddp_relation += 0.3;
+    Q.z_relation   += 0.3;
+    Q.kpd_relation -= 0.7;
+    Q.dnvp_relation += 0.01;
+}
+
+// ---- Flags -----------------------------------------------------------------
 
 Q.dvp_rightist = (Q.dvp_party_leader == "Scholz") ? 1 : 0;
-Q.youth_crisis_spd = ((Q.new_middle_consciousness >= 1 || Q.iron_front_formed >= 1 || Q.peoples_party >= 1) && Q.young_socialists >= 2) ? 0 : 1;
+Q.youth_crisis_spd = (
+    (Q.new_middle_consciousness >= 1 || Q.iron_front_formed >= 1 || Q.peoples_party >= 1)
+    && Q.young_socialists >= 2
+) ? 0 : 1;
 
-Q.spd_left = (Q.ideology == "Left") ? 1 : 0;
-Q.spd_centrist = (Q.ideology == "Centrist") ? 1 : 0;
-Q.spd_reformist = (Q.ideology == "Reformist") ? 1 : 0;
-Q.spd_labor = (Q.ideology == "Labor") ? 1 : 0;
+Q.spd_left           = (Q.ideology == "Left") ? 1 : 0;
+Q.spd_centrist       = (Q.ideology == "Centrist") ? 1 : 0;
+Q.spd_reformist      = (Q.ideology == "Reformist") ? 1 : 0;
+Q.spd_labor          = (Q.ideology == "Labor") ? 1 : 0;
 Q.spd_neorevisionist = (Q.ideology == "Neorevisionist") ? 1 : 0;
-
-
-// YOUTH DECAY
 
 if (Q.youth_crisis_spd >= 1) {
     Q.workers_spd -= 0.1;
     Q.new_middle_spd -= 0.05;
-    Q.unemployed -= 0.05;
+    Q.unemployed_spd -= 0.05;
 }
 
+// ---- Timer registration ----------------------------------------------------
 
-
-
+function ensureTimer(name) {
+    if (!Q.timers.includes(name)) Q.timers.push(name);
+    if (Q[name + '_timer'] === undefined) Q[name + '_timer'] = 0;
+}
 
 for (const party of Q.parties) {
-    var timerKey = party + '_action';
-    if (!Q.timers.includes(timerKey)) {
-        Q.timers.push(timerKey);
-    }
-    if (Q[timerKey + '_timer'] === undefined) {
-        Q[timerKey + '_timer'] = 0;
-    }
-
-    var flavorTimerKey = party + '_flavor_action';
-    if (!Q.timers.includes(flavorTimerKey)) {
-        Q.timers.push(flavorTimerKey);
-    }
-    if (Q[flavorTimerKey + '_timer'] === undefined) {
-        Q[flavorTimerKey + '_timer'] = 0;
-    }
-
-    var govTimerKey = party + '_government_action';
-    if (!Q.timers.includes(govTimerKey)) {
-        Q.timers.push(govTimerKey);
-    }
-    if (Q[govTimerKey + '_timer'] === undefined) {
-        Q[govTimerKey + '_timer'] = 0;
-    }
-
-    var govFlavorTimerKey = party + '_government_flavor_action';
-    if (!Q.timers.includes(govFlavorTimerKey)) {
-        Q.timers.push(govFlavorTimerKey);
-    }
-    if (Q[govFlavorTimerKey + '_timer'] === undefined) {
-        Q[govFlavorTimerKey + '_timer'] = 0;
-    }
+    ensureTimer(party + '_action');
+    ensureTimer(party + '_flavor_action');
+    ensureTimer(party + '_government_action');
+    ensureTimer(party + '_government_flavor_action');
 }
+
+// ---- Shared helpers --------------------------------------------------------
 
 function isParty(party, targetParties) {
     if (!party || !targetParties) return false;
@@ -976,16 +860,13 @@ function isParty(party, targetParties) {
     return targets.some(t => t && party.toLowerCase() === t.toLowerCase());
 }
 
-
-// PARTY ACTIONS
-
 function PickHighest(list, prop) {
     var bestKey = null;
     var bestVal = -Infinity;
     for (var key in list) {
         if (!list[key].eligible) continue;
         var val = list[key][prop];
-        if (typeof val !== 'number' || Number.isNaN(val)) continue; // guard against undefined/NaN weights so a broken Q value can never win or lock up the comparison
+        if (typeof val !== 'number' || Number.isNaN(val)) continue;
         if (val > bestVal) {
             bestVal = val;
             bestKey = key;
@@ -1000,8 +881,7 @@ function scaledWeight(baseWeight, currentValue, baseValue, maxMultiplier = 5) {
 }
 
 function linearWeight(baseWeight, currentValue, baseValue, maxMultiplier = 5) {
-    var ratio = Math.max(currentValue, 0) / baseValue;
-    ratio = Math.min(ratio, maxMultiplier);
+    var ratio = Math.min(Math.max(currentValue, 0) / baseValue, maxMultiplier);
     return baseWeight * ratio;
 }
 
@@ -1020,43 +900,16 @@ function weakestClass(party) {
     return best;
 }
 
-// Human-readable party names for description text.
 Q.PARTY_DISPLAY_NAMES = {
-    dnvp: 'The DNVP',
-    dvp: 'The DVP',
-    kpo: 'The KPO',
-    sl: 'The SL',
-    sapd: 'The SAPD',
-    srpd: 'The SRPD',
-    ddp: Q.ddp_name,
-    z: 'The Zentrum',
-    bvp: 'The BVP',
-    csrp: 'The CSRP',
-    wp: 'The WP',
-    cnbl: 'The CNBL',
-    csvd: 'The CSVD',
-    vrp: 'The VRP',
-    kvp: 'The KVP',
-    dhp: 'The DHP',
-    bb: 'The BB',
-    dvfp: 'The DVFP',
-    aspd: 'The ASPD',
-    vnr: 'The VNR',
-    hl: 'The HL',
-    lb: 'The LB',
-    rdp: 'The RDP',
-    cvp: 'The CVP',
-    sls: 'The SLS',
-    dtsp: 'The DTSP',
-    dbp: 'The DBP',
-    dsbp: 'The DSBP',
-    dnf: 'The DNF',
-    rlb: 'The RLB',
-    faud: 'The FAUD',
-    kapd: 'The KAPD',
-    pp: 'The PP',
-    gsrn: 'The GSRN',
-    uspd: 'The USPD'
+    dnvp: 'The DNVP',   dvp: 'The DVP',     kpo: 'The KPO',     sl: 'The SL',
+    sapd: 'The SAPD',   srpd: 'The SRPD',   ddp: Q.ddp_name,    z: 'The Zentrum',
+    bvp: 'The BVP',     csrp: 'The CSRP',   wp: 'The WP',       cnbl: 'The CNBL',
+    csvd: 'The CSVD',   vrp: 'The VRP',     kvp: 'The KVP',     dhp: 'The DHP',
+    bb: 'The BB',       dvfp: 'The DVFP',   aspd: 'The ASPD',   vnr: 'The VNR',
+    hl: 'The HL',       lb: 'The LB',       rdp: 'The RDP',     cvp: 'The CVP',
+    sls: 'The SLS',     dtsp: 'The DTSP',   dbp: 'The DBP',     dsbp: 'The DSBP',
+    dnf: 'The DNF',     rlb: 'The RLB',     faud: 'The FAUD',   kapd: 'The KAPD',
+    pp: 'The PP',       gsrn: 'The GSRN',   uspd: 'The USPD'
 };
 
 function partyLabel(party) {
@@ -1065,13 +918,29 @@ function partyLabel(party) {
 
 Q.CLASS_TO_CAMPAIGN_FOCUS = {
     workers:     'workers',
-    unemployedc: 'unemployed',
+    unemployed: 'unemployed',
     old_middle:  'old_middle',
     new_middle:  'new_middle',
     rural:       'rural',
 };
 
-// --- Global action definitions ---
+function inReichGovernment(party) {
+    return Q[party + '_in_government'] >= 1 || isChancellorParty(party) || holdsAnyMinistry(party);
+}
+
+function lobbyPressure() {
+    return Math.max(0, Q.upper_tax_rates || 0) * 1.0
+        + Math.max(0, Q.working_hours || 0) * 0.6
+        + Math.max(0, Q.workers_safety || 0) * 0.5
+        + (Q.ruhr_labor > 0 ? 2.0 : 0)
+        + (Q.works_councils || 0) * 0.8
+        + (Q.socialization || 0) * 1.2
+        + (Q.cooperatives || 0) * 0.8
+        + (Q.capital_strike_progress || 0) * 0.5;
+}
+
+// ---- Party actions ---------------------------------------------------------
+
 Q.GLOBAL_PARTY_ACTIONS = {
 
     stahlhelm_recruitment: {
@@ -1104,9 +973,25 @@ Q.GLOBAL_PARTY_ACTIONS = {
         description: (party) => partyLabel(party) + ' has initiated a rally for nationalism and opposition against the republican order.',
         eligible: () => true,
         timer: 8,
-        apply: () => {
-            Q.nationalism += 2;
-        }
+        apply: () => { Q.nationalism += 2; }
+    },
+
+    socialist_campaign: {
+        ideoMin: 1, ideoMax: 6,
+        weight: () => scaledWeight(0.75, Q.socialism, 5),
+        description: (party) => partyLabel(party) + ' has initiated a rally for socialism and opposition against the republican order.',
+        eligible: () => true,
+        timer: 8,
+        apply: () => { Q.socialism += 3; }
+    },
+
+    democratic_campaign: {
+        ideoMin: 7, ideoMax: 14,
+        weight: () => scaledWeight(0.75, Q.pro_republic, 5),
+        description: (party) => partyLabel(party) + ' has initiated a rally for republic and opposition against the extremist forces.',
+        eligible: () => true,
+        timer: 8,
+        apply: () => { Q.pro_republic += 2; }
     },
 
     prussian_counter_prussia: {
@@ -1175,157 +1060,98 @@ Q.GLOBAL_PARTY_ACTIONS = {
         }
     },
 
-    socialist_campaign: {
-        ideoMin: 1, ideoMax: 6,
-        weight: () => scaledWeight(0.75, Q.socialism, 5),
-        description: (party) => partyLabel(party) + ' has initiated a rally for socialism and opposition against the republican order.',
-        eligible: () => true,
-        timer: 8,
-        apply: () => {
-            Q.socialism += 3;
-        }
-    },
-
-    democratic_campaign: {
-        ideoMin: 7, ideoMax: 14,
-        weight: () => scaledWeight(0.75, Q.pro_republic, 5),
-        description: (party) => partyLabel(party) + ' has initiated a rally for republic and opposition against the extremist forces.',
-        eligible: () => true,
-        timer: 8,
-        apply: () => {
-            Q.pro_republic += 2;
-        }
-    },
-
     campaigning: {
-    ideoMin: 1, ideoMax: 20,
+        ideoMin: 1, ideoMax: 20,
+        weight: (party) => {
+            var oldR = Q['old_' + party + '_r'];
+            var pct  = Q[party + '_votes'];
+            if (!oldR || oldR <= 0) return 0;
+            return Math.max(0, oldR - pct) / oldR * 5;
+        },
+        description: (party) => {
+            var focusClass = weakestClass(party);
+            var focusLabel = {
+                workers: 'the industrial working class',
+                unemployed: 'the unemployed',
+                old_middle: 'shopkeepers and artisans',
+                new_middle: 'white-collar workers and civil servants',
+                rural: 'the countryside',
+            }[focusClass] || 'the electorate';
+            return partyLabel(party) + ' has launched a campaign push targeting ' + focusLabel + ', trailing its last Reichstag result.';
+        },
+        eligible: (party) => {
+            var oldR = Q['old_' + party + '_r'];
+            var pct  = Q[party + '_votes'];
+            return !!oldR && oldR > 0 && pct < oldR;
+        },
+        timer: 8,
+        apply: (party) => {
+            var oldR  = Q['old_' + party + '_r'];
+            var pct   = Q[party + '_votes'];
+            var range = Math.max(0, oldR - pct);
+            var bonus = 10 * range / (range + 10);
 
-    weight: (party) => {
-        var oldR = Q['old_' + party + '_r'];
-        var pct  = Q[party + '_pct'];
-        if (!oldR || oldR <= 0) return 0;
-        return Math.max(0, oldR - pct) / oldR * 5;
+            var bestClass = weakestClass(party);
+            if (!bestClass) return;
+
+            Q[party + '_campaign_target_class'] = bestClass;
+            Q[bestClass + '_' + party] = (Q[bestClass + '_' + party] || 0) + bonus;
+        }
     },
-
-    description: (party) => {
-        var focusClass = weakestClass(party);
-        var focusLabel = {
-            workers: 'the industrial working class',
-            unemployed: 'the unemployed',
-            old_middle: 'shopkeepers and artisans',
-            new_middle: 'white-collar workers and civil servants',
-            rural: 'the countryside',
-        }[focusClass] || 'the electorate';
-        return partyLabel(party) + ' has launched a campaign push targeting ' + focusLabel + ', trailing its last Reichstag result.';
-    },
-
-    eligible: (party) => {
-        var oldR = Q['old_' + party + '_r'];
-        var pct  = Q[party + '_votes'];
-        return !!oldR && oldR > 0 && pct < oldR;
-    },
-
-    timer: 8,
-
-    apply: (party) => {
-        var oldR  = Q['old_' + party + '_r'];
-        var pct   = Q[party + '_pct'];
-        var range = Math.max(0, oldR - pct);
-        var bonus = 10 * range / (range + 10);  
-
-        var bestClass = weakestClass(party);
-        if (!bestClass) return;
-
-        Q[party + '_campaign_target_class'] = bestClass;
-        Q[bestClass + '_' + party] = (Q[bestClass + '_' + party] || 0) + bonus;
-    }
-},
-
-
-
 
     // DVP
-        dvp_capital_strike: {
-        ideoMin: 1, ideoMax: 20, // DVP itself isn't ideo-gated; the check is on other gov parties
+    dvp_capital_strike: {
+        ideoMin: 1, ideoMax: 20,
         weight: () => scaledWeight(1.50, Q.capital_strike_progress, 20),
         description: (party) => partyLabel(party) + ' has protested against the presence of a socialist party in government, calling industrialists and financiers to strike against them.',
         eligible: (party) => {
             if (!isParty(party, 'dvp')) return false;
-            return Q.parties.some(p =>
-                inReichGovernment(p) && Q[p + '_ideo_score'] < 8
-            );
+            return Q.parties.some(p => inReichGovernment(p) && Q[p + '_ideo_score'] < 8);
         },
         timer: 18,
         apply: () => {
             Q.capital_strike_progress += 2;
-            Q.dvp_right += 20; 
+            Q.dvp_right += 20;
             Q.nationalism += 5;
-      }
+        }
     },
 
     dvp_industrial_lobby: {
-    ideoMin: 16, ideoMax: 20,
-    weight: () => {
-        var pressure =
-            Math.max(0, Q.upper_tax_rates || 0) * 1.0 +
-            Math.max(0, Q.working_hours || 0) * 0.6 +
-            Math.max(0, Q.workers_safety || 0) * 0.5 +
-            (Q.ruhr_labor > 0 ? 2.0 : 0) +
-            (Q.works_councils || 0) * 0.8 +
-            (Q.socialization || 0) * 1.2 +
-            (Q.cooperatives || 0) * 0.8 +
-            (Q.capital_strike_progress || 0) * 0.5;
-        return scaledWeight(1.00, pressure, 10);
-    },
-    description: (party) => {
-        var reasons = [];
-        if ((Q.socialization || 0) > 0) reasons.push({ label: 'creeping socialization', weight: (Q.socialization || 0) * 1.2 });
-        if ((Q.works_councils || 0) > 0) reasons.push({ label: 'expanded works councils', weight: (Q.works_councils || 0) * 0.8 });
-        if ((Q.workers_safety || 0) > 0) reasons.push({ label: 'new workplace safety mandates', weight: (Q.workers_safety || 0) * 0.5 });
-        if ((Q.working_hours || 0) > 0) reasons.push({ label: 'shortened working hours', weight: (Q.working_hours || 0) * 0.6 });
-        if (Q.ruhr_labor > 0) reasons.push({ label: 'the Ruhr arbitration award', weight: 2.0 });
-        if ((Q.upper_tax_rates || 0) > 0) reasons.push({ label: 'rising upper tax rates', weight: (Q.upper_tax_rates || 0) * 1.0 });
-        if ((Q.cooperatives || 0) > 0) reasons.push({ label: 'the spread of cooperatives', weight: (Q.cooperatives || 0) * 0.8 });
+        ideoMin: 16, ideoMax: 20,
+        weight: () => scaledWeight(1.00, lobbyPressure(), 10),
+        description: (party) => {
+            var reasons = [];
+            if ((Q.socialization || 0) > 0)   reasons.push({ label: 'creeping socialization',          weight: Q.socialization * 1.2 });
+            if ((Q.works_councils || 0) > 0)  reasons.push({ label: 'expanded works councils',         weight: Q.works_councils * 0.8 });
+            if ((Q.workers_safety || 0) > 0)  reasons.push({ label: 'new workplace safety mandates',   weight: Q.workers_safety * 0.5 });
+            if ((Q.working_hours || 0) > 0)   reasons.push({ label: 'shortened working hours',         weight: Q.working_hours * 0.6 });
+            if (Q.ruhr_labor > 0)             reasons.push({ label: 'the Ruhr arbitration award',      weight: 2.0 });
+            if ((Q.upper_tax_rates || 0) > 0) reasons.push({ label: 'rising upper tax rates',          weight: Q.upper_tax_rates * 1.0 });
+            if ((Q.cooperatives || 0) > 0)    reasons.push({ label: 'the spread of cooperatives',      weight: Q.cooperatives * 0.8 });
 
-        reasons.sort((a, b) => b.weight - a.weight);
+            reasons.sort((a, b) => b.weight - a.weight);
 
-        var cause;
-        if (reasons.length === 0) {
-            cause = 'mounting regulatory pressure';
-        } else if (reasons.length === 1) {
-            cause = reasons[0].label;
-        } else {
-            cause = reasons[0].label + ' and ' + reasons[1].label;
+            var cause;
+            if (reasons.length === 0)      cause = 'mounting regulatory pressure';
+            else if (reasons.length === 1) cause = reasons[0].label;
+            else                           cause = reasons[0].label + ' and ' + reasons[1].label;
+
+            return partyLabel(party) + ' has coordinated with major industrial associations to lobby against ' + cause + ', pressing for a friendlier business climate.';
+        },
+        eligible: (party) => isParty(party, 'dvp'),
+        timer: 10,
+        apply: () => {
+            Q.dvp_right += Math.min(10, 3 + lobbyPressure() * 0.3);
+            Q.capital_strike_progress = (Q.capital_strike_progress || 0) + 1;
         }
-
-        return partyLabel(party) + ' has coordinated with major industrial associations to lobby against ' + cause + ', pressing for a friendlier business climate.';
     },
-    eligible: (party) => isParty(party, 'dvp'),
-    timer: 10,
-    apply: () => {
-        var pressure =
-            Math.max(0, Q.upper_tax_rates || 0) * 1.0 +
-            Math.max(0, Q.working_hours || 0) * 0.6 +
-            Math.max(0, Q.workers_safety || 0) * 0.5 +
-            (Q.ruhr_labor > 0 ? 2.0 : 0) +
-            (Q.works_councils || 0) * 0.8 +
-            (Q.socialization || 0) * 1.2 +
-            (Q.cooperatives || 0) * 0.8 +
-            (Q.capital_strike_progress || 0) * 0.5;
-        Q.dvp_right += Math.min(10, 3 + pressure * 0.3);
-        Q.capital_strike_progress = (Q.capital_strike_progress || 0) + 1;
-    }
-  },
 };
 
-// --- Run one party's action turn ---
 function runPartyActions(party) {
     var timerKey = party + '_action_timer';
-    var bannedKey = party + '_banned';
     var descKey = party + '_action_description';
-    var flavorTimerKey = party + '_flavor_action_timer';
 
-    if (Q[timerKey] > 0 || Q[bannedKey]) return;
+    if (Q[timerKey] > 0 || Q[party + '_banned']) return;
 
     var pool = {};
     for (var key in Q.GLOBAL_PARTY_ACTIONS) {
@@ -1351,12 +1177,7 @@ function runPartyActions(party) {
     Q[timerKey] = pool[chosen].timer;
     Q[descKey] = pool[chosen].description;
     Q.GLOBAL_PARTY_ACTIONS[chosen].apply(party);
-
-    var flavorTimerName = party + '_flavor_action';
-    if (!Q.timers.includes(flavorTimerName)) {
-        Q.timers.push(flavorTimerName);
-    }
-    Q[flavorTimerKey] = 3;
+    Q[party + '_flavor_action_timer'] = 3;
 }
 
 for (const party of Q.parties) {
@@ -1364,8 +1185,7 @@ for (const party of Q.parties) {
     runPartyActions(party);
 }
 
-
-// PARTY GOVERNMENT ACTIONS
+// ---- Party government actions ---------------------------------------------
 
 Q.MINISTRIES = [
     'transport_minister',
@@ -1382,21 +1202,24 @@ function holdsMinistry(party, ministry) {
 }
 
 function holdsAnyMinistry(party) {
-    for (var i = 0; i < Q.MINISTRIES.length; i++) {
-        if (holdsMinistry(party, Q.MINISTRIES[i])) return true;
-    }
-    return false;
+    return Q.MINISTRIES.some(m => holdsMinistry(party, m));
 }
 
 function isChancellorParty(party) {
     return Q.chancellor_party && Q.chancellor_party.toLowerCase() === party.toLowerCase();
 }
 
-function inReichGovernment(party) {
-    return Q[party + '_in_government'] >= 1 || isChancellorParty(party) || holdsAnyMinistry(party);
+// Builds a simple ministry action that adds a little government stability.
+function ministryAction(ministry, weight, timer, description) {
+    return {
+        ideoMin: 1, ideoMax: 20,
+        weight: () => weight,
+        description: (party) => partyLabel(party) + description,
+        eligible: (party) => holdsMinistry(party, ministry),
+        timer: timer,
+        apply: () => { Q.government_stability += 0.5; }
+    };
 }
-
-// --- Global government action definitions ---
 
 Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
 
@@ -1406,87 +1229,16 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         description: (party) => partyLabel(party) + ', holding the Chancellery, has pushed its legislative agenda through the cabinet.',
         eligible: (party) => isChancellorParty(party),
         timer: 8,
-        apply: () => {
-            Q.government_stability += 1;
-        }
+        apply: () => { Q.government_stability += 1; }
     },
 
-    finance_budget_maneuver: {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 2.50,
-        description: (party) => partyLabel(party) + ', controlling the Finance Ministry, has maneuvered the budget to favor its base.',
-        eligible: (party) => holdsMinistry(party, 'finance_minister'),
-        timer: 8,
-        apply: () => {
-            Q.government_stability += 0.5;
-        }
-    },
-
-    economic_policy_shift: {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 2.50,
-        description: (party) => partyLabel(party) + ', at the head of the Economics Ministry, has shifted regulatory policy in its favored direction.',
-        eligible: (party) => holdsMinistry(party, 'economic_minister'),
-        timer: 8,
-        apply: () => {
-            Q.government_stability += 0.5;
-        }
-    },
-
-    labor_dispute_mediation: {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 2.00,
-        description: (party) => partyLabel(party) + ', running the Labor Ministry, has intervened in ongoing industrial disputes.',
-        eligible: (party) => holdsMinistry(party, 'labor_minister'),
-        timer: 8,
-        apply: () => {
-            Q.government_stability += 0.5;
-        }
-    },
-
-    justice_appointments: {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 2.00,
-        description: (party) => partyLabel(party) + ', in charge of the Justice Ministry, has steered key judicial appointments.',
-        eligible: (party) => holdsMinistry(party, 'justice_minister'),
-        timer: 10,
-        apply: () => {
-            Q.government_stability += 0.5;
-        }
-    },
-
-    foreign_policy_initiative: {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 2.00,
-        description: (party) => partyLabel(party) + ', holding the Foreign Ministry, has advanced a diplomatic initiative abroad.',
-        eligible: (party) => holdsMinistry(party, 'foreign_minister'),
-        timer: 10,
-        apply: () => {
-            Q.government_stability += 0.5;
-        }
-    },
-
-    agriculture_relief_measure: {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 1.75,
-        description: (party) => partyLabel(party) + ', controlling the Agriculture Ministry, has enacted relief measures for farmers.',
-        eligible: (party) => holdsMinistry(party, 'agriculture_minister'),
-        timer: 8,
-        apply: () => {
-            Q.government_stability += 0.5;
-        }
-    },
-
-    transport_infrastructure_deal: {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 1.75,
-        description: (party) => partyLabel(party) + ', overseeing the Transport Ministry, has brokered an infrastructure deal.',
-        eligible: (party) => holdsMinistry(party, 'transport_minister'),
-        timer: 8,
-        apply: () => {
-            Q.government_stability += 0.5;
-        }
-    },
+    finance_budget_maneuver:       ministryAction('finance_minister',     2.50, 8,  ', controlling the Finance Ministry, has maneuvered the budget to favor its base.'),
+    economic_policy_shift:         ministryAction('economic_minister',    2.50, 8,  ', at the head of the Economics Ministry, has shifted regulatory policy in its favored direction.'),
+    labor_dispute_mediation:       ministryAction('labor_minister',       2.00, 8,  ', running the Labor Ministry, has intervened in ongoing industrial disputes.'),
+    justice_appointments:          ministryAction('justice_minister',     2.00, 10, ', in charge of the Justice Ministry, has steered key judicial appointments.'),
+    foreign_policy_initiative:     ministryAction('foreign_minister',     2.00, 10, ', holding the Foreign Ministry, has advanced a diplomatic initiative abroad.'),
+    agriculture_relief_measure:    ministryAction('agriculture_minister', 1.75, 8,  ', controlling the Agriculture Ministry, has enacted relief measures for farmers.'),
+    transport_infrastructure_deal: ministryAction('transport_minister',   1.75, 8,  ', overseeing the Transport Ministry, has brokered an infrastructure deal.'),
 
     cabinet_coordination: {
         ideoMin: 1, ideoMax: 20,
@@ -1494,20 +1246,15 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         description: (party) => partyLabel(party) + ' has worked behind the scenes to keep the coalition cabinet aligned.',
         eligible: (party) => inReichGovernment(party),
         timer: 6,
-        apply: () => {
-            Q.government_stability += 0.25;
-        }
+        apply: () => { Q.government_stability += 0.25; }
     },
 };
 
-// --- Run one party's government action turn ---
 function runPartyGovernmentActions(party) {
     var timerKey = party + '_government_action_timer';
-    var bannedKey = party + '_banned';
     var descKey = party + '_government_action_description';
 
-    if (Q[timerKey] > 0 || Q[bannedKey]) return;
-
+    if (Q[timerKey] > 0 || Q[party + '_banned']) return;
     if (!inReichGovernment(party)) return;
 
     var pool = {};
@@ -1534,11 +1281,6 @@ function runPartyGovernmentActions(party) {
     Q[timerKey] = pool[chosen].timer;
     Q[descKey] = pool[chosen].description;
     Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS[chosen].apply(party);
-
-    var govFlavorTimerName = party + '_government_flavor_action';
-    if (!Q.timers.includes(govFlavorTimerName)) {
-        Q.timers.push(govFlavorTimerName);
-    }
     Q[party + '_government_flavor_action_timer'] = 3;
 }
 
@@ -1547,12 +1289,8 @@ for (const party of Q.parties) {
     runPartyGovernmentActions(party);
 }
 
+// ---- Daily events ----------------------------------------------------------
 
-
-
-// DAILY EVENTS
-
-// --- Global event registry ---
 Q.GLOBAL_DAILY_EVENTS = {
 
     generic_daily_event: {
@@ -1560,14 +1298,11 @@ Q.GLOBAL_DAILY_EVENTS = {
         description: () => 'A generic development has occurred, reflecting shifting conditions across the Reich.',
         eligible: () => true,
         timer: 6,
-        apply: () => {
-            Q.nationalism += 0;
-        }
+        apply: () => { Q.nationalism += 0; }
     },
 
 };
 
-// --- Run the daily event roll ---
 function runDailyEvents() {
     var timerKey = 'daily_event_timer';
     var descKey = 'daily_event_description';
@@ -1601,34 +1336,14 @@ function runDailyEvents() {
 
 runDailyEvents();
 
-
-
-/////  CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE CUSTOM CODE 
-
-
-
-
-
 }
 
 
+// ============================================================================
+// COALITION / BUSINESS SETTINGS (run every time, independent of the month)
+// ============================================================================
 
-
-
-
-
-
-// EXTERNAL INREPENDENT OF MONTHS SETTINGS.
-
-
-
-
-
-// /////  VONC SETTING UPDATE UPDATE VONC VONC DVP
-
-Q.vonc_dissent_met = 0;
-
-
+// VONC dissent thresholds, by SPD ideology and coalition type
 var vonc_dissent_table = {
     CENTRIST:  { weimar: 3, grand: 2, popfront: 3, minority: 2 },
     REFORMIST: { weimar: 4, grand: 3, popfront: 2, minority: 4 },
@@ -1644,22 +1359,18 @@ var vonc_coalitions = [
 ];
 
 Q.vonc_dissent_met = 0;
-var row = vonc_dissent_table[String(Q.ideology).toUpperCase()];
-if (row) {
+var vonc_row = vonc_dissent_table[String(Q.ideology).toUpperCase()];
+if (vonc_row) {
     for (var i = 0; i < vonc_coalitions.length; i++) {
-        var c = vonc_coalitions[i];
-        if (Q[c.flag] == 1 && Q.coalition_dissent >= row[c.key]) {
+        var coalition = vonc_coalitions[i];
+        if (Q[coalition.flag] == 1 && Q.coalition_dissent >= vonc_row[coalition.key]) {
             Q.vonc_dissent_met = 1;
             break;
         }
     }
 }
 
-
-// ///// CAPITAL STRIKE / BUSINESS CONFIDENCE SETTING
-
-// warn = progress where confidence starts dropping
-// strike = progress where the capital strike hits
+// Capital strike thresholds: "warn" = confidence starts dropping, "strike" = strike hits
 var capital_thresholds = {
     left:      { warn: 5, strike: 8  },
     reformist: { warn: 9, strike: 12 },
@@ -1667,7 +1378,6 @@ var capital_thresholds = {
     labor:     { warn: 7, strike: 10 }
 };
 var capital_default = { warn: 7, strike: 10 };
-
 var cap = capital_thresholds[String(Q.ideology).toLowerCase()] || capital_default;
 
 Q.capital_strike_met = 0;
@@ -1680,28 +1390,15 @@ if (Q.capital_strike_progress >= cap.strike || Q.budget <= -5) {
 }
 
 
+// ============================================================================
+// EVENT CHECK
+// ============================================================================
 
-
-
-
-
-
-
-
-
-
-Q.has_event = 0;
-// check if there are any cards in #event, and then go to main if not.
 var scene = this.game.scenes['post_event.events_choice'];
 var choices = this._compileChoices(scene);
-if (choices && choices[0].title != "Continue...") {
-    Q.has_event = 1;
-} else {
-    Q.has_event = 0;
-}
+Q.has_event = (choices && choices[0].title != "Continue...") ? 1 : 0;
 
-
-// pre-load all of the event images
+// Pre-load event images
 if (this.ui && this.ui.show_portraits) {
     for (var choice of choices) {
         var cc = this.game.scenes[choice.id];
@@ -1710,9 +1407,6 @@ if (this.ui && this.ui.show_portraits) {
             im.src = cc.faceImage;
         }
     }
-}
-
-if (typeof window !== "undefined" && window.generateBar) {
 }
 !}
 go-to: events_choice if has_event = 1; main if has_event = 0 and difficulty == 0; main.main_easy if has_event = 0 and difficulty < 0; main.main_historical if difficulty >= 2; main.main_hard if difficulty == 1
