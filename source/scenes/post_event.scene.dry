@@ -408,7 +408,6 @@ function applyYearlyShifts() {
         Q.unemployed_nsdap += (13.5/12) * s;
 
     } else if (Q.year == 1930) {
-        Q.rural_other += 5/12;
 
         Q.rural_nsdap += (7.5/12) * s;
         Q.rural_dnvp -= (11.25/12) * s;
@@ -418,9 +417,12 @@ function applyYearlyShifts() {
         Q.old_middle_ddp -= (4.5/12) * s;
         Q.new_middle_nsdap += (7.5/12) * s;
         Q.old_middle_nsdap += (7.5/12) * s;
-        Q.new_middle_other += (3/12) * s;
-        Q.old_middle_other += (3/12) * s;
+        Q.new_middle_other -= (3/12) * s;
+        Q.old_middle_other -= (3/12) * s;
         Q.unemployed_nsdap += (6/12) * s;
+        Q.old_middle_other -= 6/12 * s;
+        Q.rural_other -= 6/12 * s;
+        Q.unemployed_other -= 3/12 * s;
 
         Q.workers_z += 1/12;
         Q.old_middle_z += 2/12;
