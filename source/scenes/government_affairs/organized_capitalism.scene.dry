@@ -2,11 +2,64 @@ Title: Organized Capitalism & State Regulation
 new-page: true
 is-card: true
 tags: govt_affairs, cabinet
-on-arrival: month_actions += 1; organized_capitalism_timer += 16
+on-arrival: month_actions += 1; organized_capitalism_timer += 16; {!
+window.updateOrgCapPanel = function() {
+  var Q = dendryUI.dendryEngine.state.qualities;
+  $('.orgcap-panel').each(function() {
+    var $p = $(this), all = true;
+    $p.find('.orgcap-col').each(function() {
+      var on = (Number(Q[$(this).attr('data-q')]) || 0) >= 1;
+      if (!on) all = false;
+      $(this).find('.orgcap-bar').css({
+        background: on ? '#E3000F' : '#999',
+        opacity: on ? 1 : 0.35
+      });
+      $(this).find('.orgcap-label').css('opacity', on ? 1 : 0.5);
+    });
+    $p.find('.orgcap-symbol').css({
+      color: all ? '#E3000F' : '#999',
+      opacity: all ? 1 : 0.3,
+      textShadow: all ? '0 0 14px #E3000F' : 'none',
+      webkitTextStroke: all ? '1px #FFD700' : '0'
+    });
+  });
+};
+
+window.updateOrgCapPanel();
+                                                                   
+!}
 view-if: (economic_minister == "Hilferding" or finance_minister == "Hilferding" or economic_minister == "Naphtali") and spd_in_government and organized_capitalism_timer <= 0 and economic_democracy >= 3
 card-image: img/organcap.jpg
 
 = Organized Capitalism & State Regulation
+
+{!
+<div class="orgcap-panel" style="text-align:center;margin:1em 0;">
+  <div class="orgcap-symbol" style="font-size:2.8em;line-height:1;margin-bottom:0.2em;">★</div>
+  <div style="display:flex;justify-content:center;align-items:flex-end;gap:6px;">
+    <div class="orgcap-col" data-q="agrarian_tariffs_lowered" style="flex:1;max-width:80px;">
+      <div class="orgcap-bar" style="height:25px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;">Tariffs</div>
+    </div>
+    <div class="orgcap-col" data-q="cartel_control" style="flex:1;max-width:80px;">
+      <div class="orgcap-bar" style="height:40px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;">Cartels</div>
+    </div>
+    <div class="orgcap-col" data-q="binding_arbitration_enforced" style="flex:1;max-width:80px;">
+      <div class="orgcap-bar" style="height:55px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;">Arbitration</div>
+    </div>
+    <div class="orgcap-col" data-q="public_enterprises_expanded" style="flex:1;max-width:80px;">
+      <div class="orgcap-bar" style="height:70px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;">Public sector</div>
+    </div>
+    <div class="orgcap-col" data-q="bank_control" style="flex:1;max-width:80px;">
+      <div class="orgcap-bar" style="height:85px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-label" style="font-size:0.7em;">Banks</div>
+    </div>
+  </div>
+</div>
+!}
 
 Modern capitalism in Germany has changed. Small competing businesses have been replaced by large banks, industrial cartels, and price-fixing syndicates.
 
@@ -14,10 +67,10 @@ As Rudolf Hilferding noted at the Kiel Congress, this means the old market syste
 
 [? if dvp_in_government: Our coalition partners in the **DVP** strongly oppose state intervention, claiming that wage arbitration and cartel rules ruin free enterprise. They are willing to leave the government if such happens. ?]
 
-- @protect_political_wage
-- @expand_cartel_supervision
-- @support_public_enterprises
 - @lower_agricultural_tariffs
+- @expand_cartel_supervision
+- @protect_political_wage
+- @support_public_enterprises
 - @nationalize_banks_crisis
 - @root: Do not enact any policies for now.
 - @easy_discard
