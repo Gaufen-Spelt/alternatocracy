@@ -3,15 +3,14 @@ new-page: true
 is-card: true
 tags: govt_affairs, cabinet
 on-arrival: month_actions += 1; organized_capitalism_timer += 16
-style: industrial
 on-display: {!
 window.updateOrgCapPanel = function() {
   var Q = dendryUI.dendryEngine.state.qualities;
+  var star = (Number(Q.reichsbank_nationalized) || 0) >= 1;
   $('.orgcap-panel').each(function() {
-    var $p = $(this), all = true;
+    var $p = $(this);
     $p.find('.orgcap-col').each(function() {
       var on = (Number(Q[$(this).attr('data-q')]) || 0) >= 1;
-      if (!on) all = false;
       $(this).find('.orgcap-bar').css({
         background: on ? '#E3000F' : '#999',
         opacity: on ? 1 : 0.35
@@ -19,20 +18,20 @@ window.updateOrgCapPanel = function() {
       $(this).find('.orgcap-label').css('opacity', on ? 1 : 0.5);
     });
     $p.find('.orgcap-symbol').css({
-      color: all ? '#E3000F' : '#999',
-      opacity: all ? 1 : 0.3,
-      textShadow: all ? '0 0 14px #E3000F' : 'none',
-      webkitTextStroke: all ? '1px #FFD700' : '0'
+      color: star ? '#E3000F' : '#999',
+      opacity: star ? 1 : 0.3,
+      textShadow: star ? '0 0 14px #E3000F' : 'none',
+      webkitTextStroke: star ? '1px #FFD700' : '0'
     });
   });
 };
 
 window.updateOrgCapPanel();
-                                                                   
 !}
 view-if: (economic_minister == "Hilferding" or finance_minister == "Hilferding" or economic_minister == "Naphtali") and spd_in_government and organized_capitalism_timer <= 0 and economic_democracy >= 3
 card-image: img/organcap.jpg
 face-image: img/organcap.jpg
+subtitle: For the best or worst, this is LLMized mutant. Will be fixed after im done with the rest of paths.
 
 = Organized Capitalism & State Regulation
 
@@ -80,9 +79,19 @@ As Rudolf Hilferding noted at the Kiel Congress, this means the old market syste
 - @promote_synthetic_rationalization
 - @support_public_enterprises
 - @nationalize_banks_crisis
+- @nationalize_reichsbank
 - @root: Do not enact any policies for now.
 - @easy_discard
 - @cancel_advisor_action
+
+@nationalize_reichsbank
+title: Nationalize the *Reichsbank*
+subtitle: Last step.
+view-if: binding_arbitration_enforced >= 1 and cartel_control >= 1 and synthetic_rationalization_done >= 1 and bank_control >= 1 and agrarian_tariffs_lowered >= 1 and public_enterprises_expanded >= 1
+on-arrival: reichsbank_nationalized = 1; capital_strike_progress *= 0.1; socialism += 20; budget += 5; resources += 20; dvp_relation -= 50
+max-visits: 1
+
+Reichsbank has been nationalized following our capture of the economy...
 
 @protect_political_wage
 title: Enforce binding state arbitration (*Schlichtungswesen*).
