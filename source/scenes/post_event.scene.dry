@@ -918,10 +918,11 @@ function partyLabel(party) {
 
 Q.CLASS_TO_CAMPAIGN_FOCUS = {
     workers:     'workers',
-    unemployed: 'unemployed',
+    unemployed:  'unemployed',
     old_middle:  'old_middle',
     new_middle:  'new_middle',
     rural:       'rural',
+    catholics:   'catholics',
 };
 
 function inReichGovernment(party) {
@@ -1076,6 +1077,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
                 old_middle: 'shopkeepers and artisans',
                 new_middle: 'white-collar workers and civil servants',
                 rural: 'the countryside',
+                catholics: 'the catholics',
             }[focusClass] || 'the electorate';
             return partyLabel(party) + ' has launched a campaign push targeting ' + focusLabel + ', trailing its last Reichstag result.';
         },
