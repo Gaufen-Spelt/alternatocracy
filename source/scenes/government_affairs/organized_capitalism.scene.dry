@@ -31,6 +31,7 @@ window.updateOrgCapPanel();
 !}
 view-if: (economic_minister == "Hilferding" or finance_minister == "Hilferding" or economic_minister == "Naphtali") and spd_in_government and organized_capitalism_timer <= 0 and economic_democracy >= 3
 card-image: img/organcap.jpg
+face-image: img/organcap.jpg
 
 = Organized Capitalism & State Regulation
 
@@ -43,19 +44,19 @@ card-image: img/organcap.jpg
       <div class="orgcap-label" style="font-size:0.7em;">Tariffs</div>
     </div>
     <div class="orgcap-col" data-q="cartel_control" style="flex:1;max-width:80px;">
-      <div class="orgcap-bar" style="height:40px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-bar" style="height:70px;border-radius:3px 3px 0 0;"></div>
       <div class="orgcap-label" style="font-size:0.7em;">Cartels</div>
     </div>
     <div class="orgcap-col" data-q="binding_arbitration_enforced" style="flex:1;max-width:80px;">
-      <div class="orgcap-bar" style="height:55px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-bar" style="height:85px;border-radius:3px 3px 0 0;"></div>
       <div class="orgcap-label" style="font-size:0.7em;">Arbitration</div>
     </div>
     <div class="orgcap-col" data-q="public_enterprises_expanded" style="flex:1;max-width:80px;">
-      <div class="orgcap-bar" style="height:70px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-bar" style="height:55px;border-radius:3px 3px 0 0;"></div>
       <div class="orgcap-label" style="font-size:0.7em;">Public sector</div>
     </div>
     <div class="orgcap-col" data-q="bank_control" style="flex:1;max-width:80px;">
-      <div class="orgcap-bar" style="height:85px;border-radius:3px 3px 0 0;"></div>
+      <div class="orgcap-bar" style="height:40px;border-radius:3px 3px 0 0;"></div>
       <div class="orgcap-label" style="font-size:0.7em;">Banks</div>
     </div>
   </div>
@@ -99,7 +100,7 @@ We have expanded the authority of the state Cartel Court (*Kartellgericht*). By 
 title: Expand public and municipal enterprises (*Gemeinwirtschaft*).
 subtitle: -1 budget - Direct state contracts toward public utilities and trade union co-ops.
 choose-if: budget >= 1
-on-arrival: organized_capitalism += 1; budget -= 1; workers_spd += 4*(1-dissent); economic_growth += 0.2; dvp_relation -= 5
+on-arrival: organized_capitalism += 1; public_enterprises_expanded = 1; budget -= 1; workers_spd += 4*(1-dissent); economic_growth += 0.2; dvp_relation -= 5
 max-visits: 2
 
 Instead of seizing private factories directly, we use government contracts to favor municipal energy suppliers, public transit systems, and trade-union-owned housing cooperatives. This builds a strong public sector that competes directly with private monopolies.
