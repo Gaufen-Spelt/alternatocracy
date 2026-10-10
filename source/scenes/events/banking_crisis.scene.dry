@@ -13,10 +13,20 @@ The Darmstädter und Nationalbank, or Danat Bank, has collapsed! Along with it g
 
 This is a bourgeois dispute, but the costs will be borne by the proletariat. The people are facing ever-increasing hunger and poverty, and perhaps we are partly to blame.
 
+- @nationalize: Take over the Danat Bank!
 - @nothing_to_do: There is nothing we can do.
 - @stabilization: Take action to stabilize the economy!
 - @austerity: Chancellor [+ chancellor +]'s response is, as always, more austerity.
 - @end_toleration: We are tired of austerity. End the toleration arrangement!
+
+@nationalize
+view-if: spd_centrist and spd_in_government
+choose-if: (economic_minister = "Naphtali" and economic_democracy >= 4) and not dvp_in_government
+unavailable-subtitle: [? if not economic_minister = "Naphtali": Naphtali could be useful here. ?] [? if economic_democracy < 4: Lower level control of economy is insufficient to even initiate this action. This requires **economical democracy**. ?] [? if dvp_in_government: DVP would not let this happen ever. ?]
+subtitle: The very first step of **Organized Capitalism**.
+on-arrival: budget += 1; danat_nationalized = 1; workers_spd += 5; socialism += 5; unemployed -= 1; economic_growth += 2; dvp_relation -= 5; capital_strike_progress += 2; inflation += 1.5; ddp_relation -= 3; z_relation -= 4
+
+According to our economist Rudolf Hilferding, this failing project is best to be nationalized, so government could control the part of economy much more efficiently. Although our bourgeouis partners disagree with us, they can't do much in the face of collapse of bank and it's value. Thus, bank has been nationalized, reducing the influence of private sector.
 
 @nothing_to_do
 view-if: spd_in_government = 1
