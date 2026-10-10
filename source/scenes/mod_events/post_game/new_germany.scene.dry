@@ -1,0 +1,21 @@
+title: New era.
+subtitle: Germany enters the future. [+ year +], [+ month: month +]
+tags: event
+max-visits: 1
+view-if: year >= 1936 and month >= 1 and year < 1937
+new-page: true
+face-image: img/new_germany.jpg
+
+= Germany enters the future
+
+After the disastrous Great Depression of 1929, it seemed like Germany was destined to fall – however, maneuvers of the democratic forces have saved this country. Radical parties have lost their momentum and are doomed to the obscurity unless they were to launch their last bid and revolt...
+
+Regardless, future is ahead of Germany.
+
+- @forward: Forward!
+- @root: Maybe I would remain like to remain in the past.
+
+@forward
+on-arrival: new_germany = 1; nsdap_banned = 1 if nsdap_pct < 3
+go-to: root
+set-bg: img/germany_0.jpg
