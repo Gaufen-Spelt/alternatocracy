@@ -27,9 +27,9 @@ We have already formulated an economic plan. Now we have to implement it.
 @wtb_2
 title: Continue the implementation of the WTB-Plan.
 subtitle: -3 budget
-unavailable-subtitle: Unemployment is low enough that the time for the WTB-Plan has passed.
 view-if: wtb_implemented > 2 and budget >= 3 
-choose-if: unemployed > 8
+choose-if: unemployed > 8 and spd_centrist == 0
+unavailable-subtitle: [? if unemployed <= 8 : Unemployment is low enough that the time for the WTB-Plan has passed. ?] [? if spd_centrist != 0 : The centrist leadership will not support the WTB-Plan. ?]
 on-arrival: works_program += 1; budget -= 3; workers_spd += 7*(1-dissent); workers += 1 if works_program <= 4; unemployed -= 3 if unemployed > 8; unemployed_spd += 7*(1-dissent); workers_kpd -= 3; workers_nsdap -= 3; wtb_implemented += 1; kpd_coalition_dissent += 1; kpd_relation -= 5 if in_popular_front or in_left_front; inflation += 2; economic_growth += 1.6; economic_growth -= 0.6 if economic_growth > 5
 
 [? if works_program == 4 : We have commenced Phase 2 of the WTB-Plan. ?][? if works_program > 4 :  We have continued our implementation of the WTB-Plan. ?] In addition to public works, we are now focusing on rebuilding our industries.
@@ -38,9 +38,9 @@ on-arrival: works_program += 1; budget -= 3; workers_spd += 7*(1-dissent); worke
 @wtb_2_deficit
 title: Continue the implementation of the WTB-Plan.
 subtitle: -3 budget - we will enter a deficit.
-unavailable-subtitle: Unemployment is low enough that we should not do deficit spending.
 view-if: wtb_implemented > 2 and budget < 3 and budget >= -3
-choose-if: unemployed > 10
+choose-if: unemployed > 10 and spd_centrist == 0
+unavailable-subtitle: [? if unemployed <= 10 : Unemployment is low enough that the time for the WTB-Plan has passed. ?] [? if spd_centrist != 0 : The centrist leadership will not support the WTB-Plan. ?]
 on-arrival: works_program += 1; budget -= 3; workers_spd += 6*(1-dissent); workers += 1 if works_program <= 4; unemployed -= 3 if unemployed > 8; unemployed_spd += 6*(1-dissent); workers_kpd -= 2; workers_nsdap -= 2; coalition_dissent += 1; capital_strike_progress += 1; wtb_implemented += 1; kpd_coalition_dissent += 1; kpd_relation -= 5 if in_popular_front or in_left_front; inflation += 3; economic_growth += 1.6; economic_growth -= 0.6 if economic_growth > 5
 
 We have continued our implementation of the WTB-Plan, despite the continued deficit spending. In addition to public works, we are now focusing on rebuilding our industries.
@@ -60,9 +60,9 @@ The economy is doing better, finally. Even the bourgeois parties are beginning t
 @implement_wtb_no_deficit
 title: Implement the WTB plan.
 subtitle: -[+ wtb_budget +] budget. [? if wtb_budget == 3 : Our pro-labor policies have reduced the cost of the plan. ?]
-unavailable-subtitle: Unemployment is low enough that the time for the WTB-Plan has passed.
 view-if: budget >= wtb_budget and wtb_implemented == 0 and wtb_adopted == 1
-choose-if: unemployed > 8
+choose-if: unemployed > 8 and spd_centrist == 0
+unavailable-subtitle: [? if unemployed <= 8 : Unemployment is low enough that the time for the WTB-Plan has passed. ?] [? if spd_centrist != 0 : The centrist leadership will not support the WTB-Plan. ?]
 on-arrival: budget -= wtb_budget; works_program += 1; unemployed -= 4; workers_spd += 8*(1-dissent); unemployed_spd += 8*(1-dissent); wtb_implemented += 1; kpd_coalition_dissent += 1; kpd_relation -= 5 if in_popular_front or in_left_front; inflation += 2; economic_growth += 2.8; pro_republic += 3*(1-dissent);
 achievement: wirtschaftspolitik
 
@@ -73,9 +73,9 @@ We have started to enact the WTB plan. Money is beginning to flow through the ec
 @implement_wtb_deficit
 title: Implement the WTB plan.
 subtitle: -[+ wtb_budget +] budget - we will enter deficit spending. [? if wtb_budget == 3 : Our pro-labor policies have reduced the cost of the plan. ?]
-unavailable-subtitle: Unemployment is low enough that the time for the WTB-Plan has passed.
 view-if: budget < wtb_budget and wtb_implemented == 0 and wtb_adopted == 1
-choose-if: unemployed > 8
+choose-if: unemployed > 8 and spd_centrist == 0
+unavailable-subtitle: [? if unemployed <= 8 : Unemployment is low enough that the time for the WTB-Plan has passed. ?] [? if spd_centrist != 0 : The centrist leadership will not support the WTB-Plan. ?]
 on-arrival: coalition_dissent += 1; coalition_dissent += 1 if historical_mode; coalition_dissent += 1 if chancellor == "Brüning"; works_program += 1; budget -= wtb_budget; unemployed -= 4; workers += 2; workers_spd += 8*(1-dissent); unemployed_spd += 8*(1-dissent); capital_strike_progress += 1; wtb_implemented += 1; kpd_coalition_dissent += 1; kpd_relation -= 5 if in_popular_front or in_left_front; inflation += 3; economic_growth += 3; pro_republic += 3*(1-dissent);
 achievement: wirtschaftspolitik
 
