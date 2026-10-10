@@ -2,7 +2,8 @@ Title: Organized Capitalism & State Regulation
 new-page: true
 is-card: true
 tags: govt_affairs, cabinet
-on-arrival: month_actions += 1; organized_capitalism_timer += 16; {!
+on-arrival: month_actions += 1; organized_capitalism_timer += 16
+on-display: {!
 window.updateOrgCapPanel = function() {
   var Q = dendryUI.dendryEngine.state.qualities;
   $('.orgcap-panel').each(function() {
