@@ -66,7 +66,16 @@ Q.nsdap_ideology = "National Socialism";
 
 Q.bvp_party_leader = "Held";
 Q.bvp_relation = 25;
+Q.dnvp_in_government = 1;
+Q.dvp_in_government = 1;
+Q.z_in_government = 1;
+Q.bvp_in_government = 1;
 
+Q.ddp_in_government = 0;
+Q.spd_in_government = 0;
+Q.kpd_in_government = 0;
+Q.other_in_government = 0;
+Q.nsdap_in_government = 0;
 
 
 
@@ -153,7 +162,6 @@ Q.z_relation = 45;
 Q.kpd_relation = 26;
 Q.ddp_relation = 55;
 Q.dvp_relation = 25;
-// DNVP and NSDAP are invariably hostile
 Q.dnvp_relation = 10;
 Q.nsdap_relation = 0;
 
