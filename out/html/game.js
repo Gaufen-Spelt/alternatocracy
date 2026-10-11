@@ -692,6 +692,17 @@ window.updateSidebar = function() {
       attachPortrait(Q.president, 'President:', 'president-row', 'status-portrait');
       attachPortrait(Q.chancellor, 'Chancellor:', 'chancellor-row', 'chancellor-portrait');
       attachPortrait(Q.spd_party_leader, 'SPD Leadership:', 'spdleader-row', 'spdleader-portrait');
+      var partyList = Q.parties;
+      if (typeof partyList === 'string') {
+          partyList = partyList.split(',').map(function(s) { return s.trim(); });
+      }
+      if (Array.isArray(partyList)) {
+          partyList.forEach(function(party) {
+              if (!party || party === 'SPD') { return; }   // SPD already handled above
+              var leader = Q[party.toString().toLowerCase() + '_party_leader'];
+              attachPortrait(leader, party + ' Leadership:', 'spdleader-row', 'spdleader-portrait');
+          });
+      }
   }
 };
 
