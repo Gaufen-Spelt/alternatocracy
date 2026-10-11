@@ -1197,6 +1197,7 @@ function runPartyActions(party) {
 for (const party of Q.parties) {
     if (party === 'spd' || party === 'other') continue;
     runPartyActions(party);
+    catch (e) { console.error('party action failed:', party, e); }
 }
 
 // ---- Party government actions ---------------------------------------------
