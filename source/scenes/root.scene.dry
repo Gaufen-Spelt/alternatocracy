@@ -376,6 +376,18 @@ Q.old_dnvp_r = 20;
 Q.old_nsdap_r = 7;
 Q.old_other_r = 8;
 
+Q.partyData = [
+    { id: "kpd",   name: "KPD",    seats: 45,  color: "#8B0000", show: true },
+    { id: "spd",   name: "SPD",    seats: 130, color: "#E3000F", show: true },
+    { id: "ddp",   name: Q.ddp_name || "DDP", seats: 30, color: "#DCCA4A", show: true },
+    { id: "z",     name: "Center", seats: 70,  color: "#111111", show: true },
+    { id: "bvp",   name: "BVP",    seats: 20,  color: "#69A2BE", show: true },
+    { id: "dvp",   name: "DVP",    seats: 50,  color: "#D5AC27", show: true },
+    { id: "other", name: "Other",  seats: 40,  color: "#a0a0a0", show: true },
+    { id: "dnvp",  name: "DNVP",   seats: 100, color: "#3F7BC1", show: true },
+    { id: "nsdap", name: "NSDAP",  seats: 15,  color: "#954B00", show: true }
+];
+
 // sapd isn't formed yet, but it may be formed
 Q.sapd_r = 0;
 Q.old_sapd_r = 0;
