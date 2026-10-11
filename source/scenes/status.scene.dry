@@ -163,14 +163,6 @@ for (var i = 0; i < Q.parties.length; i++) {
         var leader = Q[p + '_party_leader'];
         var label = partyLabelIdeology(p);
 
-        ideologyHtml += label + " Ideology: " + ideology + "<br>" +
-                '<div class="partyleader-row spdleader-row">' + label + " Leadership: " + leader + '</div>';
-
-        var behaviorName = Q[p + '_behavior_name'];
-        if (behaviorName) {
-            ideologyHtml += label + " Behavior: " + behaviorName + "<br>";
-        }
-
         if (votes > 0) {
             var relLabel = partyLabelRelations(p);
             var rawVal = Q[p + '_relation'];
@@ -178,6 +170,9 @@ for (var i = 0; i < Q.parties.length; i++) {
             ideologyHtml += relLabel + " Relation: " + formatted +
                              (Q.deterministic_mode == 1 ? " " + rawVal : "") + "<br>";
         }
+
+        ideologyHtml += label + " Ideology: " + ideology + "<br>" +
+                '<div class="partyleader-row spdleader-row">' + label + " Leadership: " + leader + '</div>';
 
         ideologyHtml += "<br>";
     }
