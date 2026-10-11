@@ -164,7 +164,7 @@ for (var i = 0; i < Q.parties.length; i++) {
         var label = partyLabelIdeology(p);
 
         ideologyHtml += label + " Ideology: " + ideology + "<br>" +
-                         label + " Leadership: " + leader + "<br>";
+                '<div class="partyleader-row spdleader-row">' + label + " Leadership: " + leader + '</div>';
 
         var behaviorName = Q[p + '_behavior_name'];
         if (behaviorName) {
