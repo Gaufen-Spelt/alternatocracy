@@ -284,8 +284,8 @@ Q.unemployed_qol = 100;
 Q.old_middle_qol = 100;
 Q.new_middle_qol = 100;
 
-Q.classes = ['workers', 'old_middle', 'new_middle', 'rural', 'unemployed', 'catholics'];
-Q.parties = ['spd', 'kpd', 'z', 'ddp', 'dvp', 'dnvp', 'nsdap', 'other', 'bvp'];
+Q.classes = ['workers', 'unemployed', 'catholics', 'new_middle', 'rural', 'old_middle'];
+Q.parties = ['kpd', 'spd', 'ddp', 'z', 'bvp', 'dvp', 'other', 'dnvp', 'nsdap'];
 
 // TODO: add 'sapd' later on
 Q.sapd_formed = 0;
