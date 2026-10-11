@@ -640,7 +640,7 @@ window.updateSidebar = function() {
       dendryUI.dendryEngine._runActions(scene.onDisplay);
   }
 
-  if (window.statusTab === 'status') {
+  if (window.statusTab === 'status' || window.statusTab === 'status.politics') {
       var Q = dendryUI.dendryEngine.state.qualities;
       var qualitiesEl = document.getElementById('qualities');
       var paragraphs = qualitiesEl.querySelectorAll('p');
