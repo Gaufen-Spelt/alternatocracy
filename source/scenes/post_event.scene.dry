@@ -820,6 +820,16 @@ if (Q.ideology == "Reformist") {
     Q.dnvp_relation += 0.01;
 }
 
+if (Q.ideology == "Centrist") {
+    if (Q.left_dissent >= 30) Q.left_dissent -= 0.5;
+    if (Q.labor_dissent >= 30) Q.labor_dissent -= 0.5;
+    if (Q.reformist_dissent >= 30) Q.reformist_dissent -= 0.5;
+    if (Q.neorevisionist_dissent >= 30) Q.neorevisionist_dissent -= 0.5;
+    if (Q.ethical_dissent >= 30) Q.ethical_dissent -= 0.5;
+    if (Q.socialpatriot_dissent >= 30) Q.socialpatriot_dissent -= 0.5;
+}
+    
+
 // ---- Flags -----------------------------------------------------------------
 
 Q.dvp_rightist = (Q.dvp_party_leader == "Scholz") ? 1 : 0;
