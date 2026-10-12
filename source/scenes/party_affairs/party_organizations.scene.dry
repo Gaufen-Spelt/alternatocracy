@@ -12,6 +12,10 @@ frequency: 250
 
 In addition to being a political party, the SPD is a social world onto itself, with a vast array of associated organizations which serve the social needs of their members from cradle to grave.
 
+Jungsozialisten (Jusos – Young Socialists) strength: [+ jung_strength +]
+
+Sozialistische Arbeiter-Jugend (SAJ – Socialist Workers' Youth) strength: [+ saj_strength +]
+
 [? if spd_world == 0: Currently, we are in the status of self segregation from bourgeouis society, filled with individualism, competitionship, nationalism, conservatism and even chauvinism. Our values form counter-culture against the mainstream of Weimar. ?] [? if spd_world == 1: We have demontaged the self segregation policy, starting the co-operation with bourgeouis society with ambivalent goals. Class struggle left argues against opening us, while reformists suggest that we could expose them to our socialist values, especially in proletariat dominated cultural organizations. ?]
 
 [? if youth_crisis_spd >= 1: As the aging party, our youth organizations, comparably, are far smaller than our traditional groups. This was caused by the hyperinflationary crisis, from which both us and other traditional (primarily liberal) parties have not recovered from ever since. If we wish to attract them, naturally, we have to fund youth organizations and find the means to expand **beyond aging working class**, which means breaking through our rigid marxist thinking... ?]
@@ -60,12 +64,33 @@ It is not enough for the SPD to solely be a political party. The Worker Singer's
 [? if sa_strength > 500 : However, it feels frivolous to spend on sports and choirs when the fascists are murdering us in the streets. ?]
 
 @youth
-choose-if: resources > 0 and left_strength + neorevisionist_strength > 50
-unavailable-subtitle: [? if resources <= 0: Not enough resources. ?] [? if left_strength + neorevisionist_strength + (center_strength / 3) <= 50: Currently, our radical currents are too weak to convince our old leadership. ?]
+choose-if: resources > 0
+unavailable-subtitle: Not enough resources.
 subtitle: -1 resources
-on-arrival: resources -= 1; rb_strength += 50; rb_militancy += 0.02; young_socialists += 1; left_strength += 5; neorevisionist_strength += 5; radicalization += 1;
+on-arrival: resources -= 1; rb_strength += 50; rb_militancy += 0.02; jung_side = left_strength + neorevisionist_strength; jung_side += socialpatriot_strength if social_patriotism; jung_side += ethical_strength if ethical_socialism; saj_side = reformist_strength + center_strength
 
-Our new youth members flock to the left or neorevisionist wings of the party, and also bring new radicalism to the Reichsbanner.
+We are drawing in a new generation of members, and many of them also join the Reichsbanner, bringing fresh energy and militancy to its ranks.
+
+However, our two youth organizations are clashing. The wing with the stronger backing in the party will decide which one gets our funds.
+
+- @saj: Sozialistische Arbeiter-Jugend (SAJ – Socialist Workers' Youth) - our main youth organization.
+- @jung: Jungsozialisten (Jusos – Young Socialists) - our young adult organization.
+
+@jung
+subtitle: This organization is filled with neorevisionists and leftists, who often clash with centrists and reformists.
+choose-if: jung_side > saj_side
+unavailable-subtitle: Our reformists and centrists hold more sway over the youth question. The Jusos will not get our funding.
+on-arrival: jung_strength += 10; left_strength += 5; neorevisionist_strength += 5; socialpatriot_strength += 5 if social_patriotism; ethical_strength += 5 if ethical_socialism; radicalization += 1; young_socialists += 1; left_dissent -= 3; neorevisionist_dissent -= 3; socialpatriot_dissent -= 3 if social_patriotism; ethical_dissent -= 3 if ethical_socialism; center_dissent += 3; reformist_dissent += 3; labor_dissent += 2
+
+We have funded the Young Socialists. Their ranks swell with radicals, neorevisionists [? if social_patriotism: , the Hamburg circle ?] [? if ethical_socialism: and ethical socialists ?], who push the party in a more militant direction. Centrists, reformists and laborites are unhappy about the new militancy.
+
+@saj
+subtitle: Our main organization, less political than Young Socialists.
+choose-if: saj_side >= jung_side
+unavailable-subtitle: Our left and neorevisionist currents hold more sway over the youth question. The SAJ will not get our funding.
+on-arrival: saj_strength += 10; reformist_strength += 5; center_strength += 5; reformist_dissent -= 3; center_dissent -= 3; left_dissent += 3; neorevisionist_dissent += 3; socialpatriot_dissent += 3 if social_patriotism; ethical_dissent += 3 if ethical_socialism
+
+We have funded the SAJ. Its members are loyal to the party leadership and fill our ranks with disciplined, moderate cadres. Leftists and neorevisionists [? if social_patriotism: , the Hamburg circle ?] [? if ethical_socialism: and ethical socialists ?] complain that the youth are being tamed.
 
 @nothing
 
