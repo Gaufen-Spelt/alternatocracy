@@ -987,6 +987,21 @@ window.partyUI = {
         dvp: ['dvp_party_leader'], dnvp: ['dnvp_party_leader'], nsdap: ['nsdap_party_leader']
     },
 
+    fill: function() {
+        var q = this.Q(), self = this;
+        function put(id, val) {
+            var el = document.getElementById(id);
+            if (el) el.value = (val === undefined || val === null) ? '' : String(val);
+        }
+        put('pn_ddp', q.ddp_name);
+        put('pn_srpd', q.srpd_name);
+        this.all.forEach(function(p) {
+            put('pi_' + p, q[p + '_ideology']);
+            var keys = self.leaderKeys[p];
+            if (keys) put('pl_' + p, q[keys[0]]);
+        });
+    },
+
     setIdeology: function(p, v) { this.Q()[p + '_ideology'] = v; },
 
     setLeader: function(p, v) {
@@ -1038,16 +1053,12 @@ window.partyUI = {
             tenths[biggest] += (1000 - sum);
             q.parties.forEach(function(p) { q[c + '_' + p] = tenths[p] / 10; });
         });
-    },
-
-    esc: function(s) {
-        return String(s === undefined ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
     }
 };
 
 var h = '<p><b>Names</b></p>';
-h += '<p>DDP name: <input type="text" style="width:8em;" value="' + partyUI.esc(Q.ddp_name) + '" onchange="partyUI.setName(\'ddp\',this.value)"><br>';
-h += 'SRPD name: <input type="text" style="width:8em;" value="' + partyUI.esc(Q.srpd_name) + '" onchange="partyUI.setName(\'srpd\',this.value)"></p>';
+h += '<p>DDP name: <input type="text" style="width:8em;" id="pn_ddp" onchange="partyUI.setName(\'ddp\',this.value)"><br>';
+h += 'SRPD name: <input type="text" style="width:8em;" id="pn_srpd" onchange="partyUI.setName(\'srpd\',this.value)"></p>';
 
 h += '<p><b>Extra parties</b> (start at 0% in every class)<br>';
 partyUI.optional.forEach(function(p) {
@@ -1060,9 +1071,9 @@ h += '<div style="overflow-x:auto;"><table style="font-size:0.8em;border-collaps
 partyUI.all.forEach(function(p) {
     var keys = partyUI.leaderKeys[p];
     h += '<tr><td><b>' + partyUI.names[p] + '</b></td>';
-    h += '<td><input type="text" style="width:11em;" value="' + partyUI.esc(Q[p + '_ideology']) + '" onchange="partyUI.setIdeology(\'' + p + '\',this.value)"></td>';
+    h += '<td><input type="text" style="width:11em;" id="pi_' + p + '" onchange="partyUI.setIdeology(\'' + p + '\',this.value)"></td>';
     if (keys) {
-        h += '<td><input type="text" style="width:7em;" value="' + partyUI.esc(Q[keys[0]]) + '" onchange="partyUI.setLeader(\'' + p + '\',this.value)"></td>';
+        h += '<td><input type="text" style="width:7em;" id="pl_' + p + '" onchange="partyUI.setLeader(\'' + p + '\',this.value)"></td>';
     } else {
         h += '<td>-</td>';
     }
@@ -1073,5 +1084,7 @@ Q.party_html = h;
 !}
 
 [+ party_html +]
+
+<img src="" style="display:none" onerror="partyUI.fill()">
 
 - @addon: Back
