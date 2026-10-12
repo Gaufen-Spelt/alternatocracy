@@ -390,7 +390,10 @@ window.partyColors = {
   'NSDAP': '#8B5A00',
   'CNBLP': '#556B2F',
   'DBP': '#A0522D',
-  'VRP': '#2F4F4F'
+  'VRP': '#2F4F4F',
+  'SRPD': '#7A3E9D',
+  'SD': '#E8707E',
+  'VSRPD': '#B04A8F'
 };
 
 // Tooltip content for each party.
@@ -408,7 +411,10 @@ window.partyInfo = {
   'NSDAP': 'National Socialist German Workers\' Party',
   'CNBLP': 'Christian-National Peasants\' and Farmers\' Party',
   'DBP': 'German Farmers\' Party',
-  'VRP': 'Reich Party for Civil Rights and Deflation'
+  'VRP': 'Reich Party for Civil Rights and Deflation',
+  'SRPD': 'Social Republican Party of Germany. A breakaway party of the SPD\'s neorevisionists, committed to the militant defense of the republic.',
+  'SD': 'Social Party of Germany. A breakaway party of the SPD\'s reformists, favoring gradual reform and governing beyond the working class.',
+  'VSRPD': 'United Social-Republican Party of Germany. A merger of the reformists and neorevisionists who left the SPD.'
 };
 
 // Wraps recognized party abbreviations in colored, tooltip-triggering spans.
