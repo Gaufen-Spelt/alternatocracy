@@ -38,6 +38,8 @@ Q.old_middle_income = 0;
 Q.new_middle_income = 0;
 Q.unemployed_income = 0;
 Q.workers_income = 0;
+Q.jung_strength = 4;
+Q.saj_strength = 100;
 
 Q.ideology = "Centrist";
 Q.spd_centrist = 1;
