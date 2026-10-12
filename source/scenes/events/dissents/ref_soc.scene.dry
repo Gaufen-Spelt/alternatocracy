@@ -5,7 +5,7 @@ view-if: reformists_resign and neorev_split
 new-page: true
 max-visits: 1
 go-to: srpd_formed
-on-arrival: workers_srpd += 3; new_middle_srpd += 5; old_middle_srpd += 4; rural_srpd += 2; catholics_srpd += 5
+on-arrival: workers_srpd += 3; new_middle_srpd += 5; old_middle_srpd += 4; rural_srpd += 2; catholics_srpd += 5; srpd_leader = "Heller"
 
 = Reformists and Social Republican merger
 
