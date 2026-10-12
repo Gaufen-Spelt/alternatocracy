@@ -4,25 +4,35 @@ Q.srpd_formed = 1;
 Q.parties.push('srpd');
 Q.srpd_name = "SRPD";
 if (Q.neorev_split) {
-    Q.srpd_name = "SRPD"
-    Q.srpd_leader = "Horsing"
+    Q.srpd_name = "SRPD";
+    Q.srpd_leader = "Horsing";
+    Q.srpd_ideology = "Social Republicanism";
 }
 if (Q.reformists_resign) {
-    Q.srpd_name = "SD"
-    Q.srpd_leader = "Braun"
+    Q.srpd_name = "SD";
+    Q.srpd_leader = "Braun";
+    Q.srpd_ideology = "Social Democracy (Reformist)";
 }
 if (Q.neorev_split && Q.reformists_resign) {
-    Q.srpd_name = "VSRPD"
-    Q.srpd_leader = "Heller"
+    Q.srpd_name = "VSRPD";
+    Q.srpd_leader = "Heller";
+    Q.srpd_ideology = "Social Republicanism";
 }
 
-Q.workers_srpd = 6;
+Q.workers_srpd = Q.workers_srpd || 0;
+Q.unemployed_srpd = Q.unemployed_srpd || 0;
+Q.rural_srpd = Q.rural_srpd || 0;
+Q.catholics_srpd = Q.catholics_srpd || 0;
+Q.new_middle_srpd = Q.new_middle_srpd || 0;
+Q.old_middle_srpd = Q.old_middle_srpd || 0;
+
+Q.workers_srpd += 6;
 Q.workers_spd -= 3;
-Q.new_middle_srpd = 6;
-Q.old_middle_srpd = 1;
-Q.rural_srpd = 1;
-Q.unemployed_srpd = 2;
-Q.catholics_srpd = 1;
+Q.new_middle_srpd += 6;
+Q.old_middle_srpd += 1;
+Q.rural_srpd += 1;
+Q.unemployed_srpd += 2;
+Q.catholics_srpd += 1;
 
 Q.workers_other -= 2;
 
