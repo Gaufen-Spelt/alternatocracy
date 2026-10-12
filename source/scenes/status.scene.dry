@@ -126,12 +126,12 @@ on-arrival: {!
 
 var partyNameOverrideIdeology = {
     ddp: Q.ddp_name || 'DDP',
-    srpd: Q.srpd_label || 'SRPD'
+    srpd: Q.srpd_name || 'SRPD'
 };
 
 var partyNameOverrideRelations = {
     ddp: Q.ddp_name || 'DDP',
-    srpd: Q.srpd_label || 'SRPD'
+    srpd: Q.srpd_name || 'SRPD'
 };
 
 function partyLabelIdeology(p) {
@@ -513,7 +513,7 @@ Q.party_labels = {};
 for (var i = 0; i < Q.parties.length; i++) {
     var p = Q.parties[i];
     switch (p) {
-        case 'srpd':  Q.party_labels[p] = Q.srpd_label || 'SRPD'; break;
+        case 'srpd':  Q.party_labels[p] = Q.srpd_name || 'SRPD'; break;
         case 'ddp':   Q.party_labels[p] = Q.ddp_name || 'DDP'; break;
         case 'wp':    Q.party_labels[p] = 'The Reich Party of the German Middle Class / WP'; break;
         case 'other': Q.party_labels[p] = 'Others'; break;
