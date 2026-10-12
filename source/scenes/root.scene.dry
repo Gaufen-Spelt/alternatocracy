@@ -767,6 +767,7 @@ new-page: true
 WIP: Expanded content, modifiers, addons and etcetera.
 
 - @seed: Seed.
+- @votes: Randomizer of Class Votes
 - @menum: Back
 
 @seed
@@ -787,3 +788,89 @@ Current seed: <b id="seed_display">[+ seed +]</b>
 </p>
 
 - @addon: Back
+
+
+// RANDOMIZER
+
+@votes
+title: Randomized Class Votes
+subtitle: Randomizes starting party support within each social class.
+new-page: true
+on-arrival: {!
+var names = {kpd:'KPD', spd:'SPD', ddp:'DDP', z:'Z', bvp:'BVP', dvp:'DVP', other:'Other', dnvp:'DNVP', nsdap:'NSDAP'};
+var cnames = {workers:'Workers', unemployed:'Unemp.', catholics:'Cath.', new_middle:'New Mid.', rural:'Rural', old_middle:'Old Mid.'};
+var html = '<table style="width:100%;font-size:0.85em;text-align:center;border-collapse:collapse;"><tr><th></th>';
+Q.classes.forEach(function(c){ html += '<th>' + cnames[c] + '</th>'; });
+html += '</tr>';
+Q.parties.forEach(function(p){
+    html += '<tr><td style="text-align:left;"><b>' + names[p] + '</b></td>';
+    Q.classes.forEach(function(c){
+        html += '<td>' + Number(Q[c + '_' + p]).toFixed(1) + '</td>';
+    });
+    html += '</tr>';
+});
+html += '</table>';
+Q.votes_table = html;
+!}
+
+Status: [? if votes_randomized = 1 : **Randomized** ?][? if votes_randomized = 0 : **Default (historical baseline)** ?]
+
+[+ votes_table +]
+
+- @votes_randomize: Randomize class votes
+- @votes_revert: Revert to normal
+- @addon: Back
+
+@votes_randomize
+new-page: true
+on-arrival: {!
+// Back up the original values once, so revert always returns to the true baseline.
+if (!Q.votes_randomized) {
+    var backup = {};
+    Q.classes.forEach(function(c){
+        Q.parties.forEach(function(p){
+            backup[c + '_' + p] = Q[c + '_' + p];
+        });
+    });
+    Q.votes_backup = backup;
+}
+
+Q.classes.forEach(function(c){
+    // Multiply each party's share by a random factor (0.5 - 1.5), then normalize to 100.
+    var raw = {}, total = 0;
+    Q.parties.forEach(function(p){
+        var base = Number(Q.votes_backup[c + '_' + p]);
+        raw[p] = base * (0.5 + Math.random());
+        total += raw[p];
+    });
+
+    // Convert to tenths of a percent, fixing rounding drift so the class sums to exactly 100.0.
+    var tenths = {}, sum = 0, biggest = Q.parties[0];
+    Q.parties.forEach(function(p){
+        tenths[p] = Math.round(raw[p] / total * 1000);
+        sum += tenths[p];
+        if (tenths[p] > tenths[biggest]) biggest = p;
+    });
+    tenths[biggest] += (1000 - sum);
+
+    Q.parties.forEach(function(p){
+        Q[c + '_' + p] = tenths[p] / 10;
+    });
+});
+Q.votes_randomized = 1;
+!}
+go-to: votes
+
+@votes_revert
+new-page: true
+on-arrival: {!
+if (Q.votes_randomized && Q.votes_backup) {
+    Q.classes.forEach(function(c){
+        Q.parties.forEach(function(p){
+            Q[c + '_' + p] = Q.votes_backup[c + '_' + p];
+        });
+    });
+}
+Q.votes_randomized = 0;
+!}
+go-to: votes
