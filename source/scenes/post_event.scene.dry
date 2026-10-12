@@ -2,6 +2,12 @@ title: Post Event
 new-page: true
 on-arrival: {!
 
+document.body.classList.remove('srpd-sd', 'srpd-vsrpd');
+if (Q.srpd_formed) {
+    if (Q.srpd_name == "SD") document.body.classList.add('srpd-sd');
+    if (Q.srpd_name == "VSRPD") document.body.classList.add('srpd-vsrpd');
+}
+
 // ============================================================================
 // IDEOLOGY SCORING (first matching pattern wins, so order matters)
 // ============================================================================
