@@ -2,6 +2,9 @@ on-arrival: {!
 // set up the infrastructure
 Q.srpd_formed = 1;
 Q.parties.push('srpd');
+Q.srpd_name = "SRPD";
+if (Q.reformists_resign) Q.srpd_name = "SD"
+if (Q.neorev_split && Q.reformists_resign) Q.srpd_name = "VSRPD"
 
 Q.workers_srpd = 6;
 Q.workers_spd -= 3;
