@@ -1376,12 +1376,12 @@ fin_lower_tariffs: financeAction({
     support: { workers: 4, unemployed: 4, rural: -5, old_middle: -3 }
 }),
 
-    economic_policy_shift:         ministryAction('economic_minister',    2.50, 8,  ', at the head of the Economics Ministry, has shifted regulatory policy in its favored direction.'),
-    labor_dispute_mediation:       ministryAction('labor_minister',       2.00, 8,  ', running the Labor Ministry, has intervened in ongoing industrial disputes.'),
-    justice_appointments:          ministryAction('justice_minister',     2.00, 10, ', in charge of the Justice Ministry, has steered key judicial appointments.'),
-    foreign_policy_initiative:     ministryAction('foreign_minister',     2.00, 10, ', holding the Foreign Ministry, has advanced a diplomatic initiative abroad.'),
-    agriculture_relief_measure:    ministryAction('agriculture_minister', 1.75, 8,  ', controlling the Agriculture Ministry, has enacted relief measures for farmers.'),
-    transport_infrastructure_deal: ministryAction('transport_minister',   1.75, 8,  ', overseeing the Transport Ministry, has brokered an infrastructure deal.'),
+    economic_policy_shift:         ministryAction('economic_minister',    0.40, 8,  ', at the head of the Economics Ministry, has shifted regulatory policy in its favored direction.'),
+    labor_dispute_mediation:       ministryAction('labor_minister',       0.40, 8,  ', running the Labor Ministry, has intervened in ongoing industrial disputes.'),
+    justice_appointments:          ministryAction('justice_minister',     0.40, 10, ', in charge of the Justice Ministry, has steered key judicial appointments.'),
+    foreign_policy_initiative:     ministryAction('foreign_minister',     0.40, 10, ', holding the Foreign Ministry, has advanced a diplomatic initiative abroad.'),
+    agriculture_relief_measure:    ministryAction('agriculture_minister', 0.45, 8,  ', controlling the Agriculture Ministry, has enacted relief measures for farmers.'),
+    transport_infrastructure_deal: ministryAction('transport_minister',   0.45, 8,  ', overseeing the Transport Ministry, has brokered an infrastructure deal.'),
 
     cabinet_coordination: {
         ideoMin: 1, ideoMax: 20,
