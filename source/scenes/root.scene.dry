@@ -809,7 +809,12 @@ if (Q.votes_chaos === undefined) Q.votes_chaos = 25;
 window.votesUI = {
     Q: function() { return dendryUI.dendryEngine.state.qualities; },
 
-    // Save the original values once, so revert always returns to the true baseline.
+    names: {kpd:'KPD', sapd:'SAPD', spd:'SPD', srpd:'SRPD', ddp:'DDP', z:'Z', bvp:'BVP', dvp:'DVP', other:'Other', dnvp:'DNVP', nsdap:'NSDAP'},
+    cnames: {workers:'Workers', unemployed:'Unemp.', catholics:'Cath.', new_middle:'New Mid.', rural:'Rural', old_middle:'Old Mid.'},
+    // Display order of all possible parties (optional ones slot in here).
+    order: ['kpd', 'sapd', 'spd', 'srpd', 'ddp', 'z', 'bvp', 'dvp', 'other', 'dnvp', 'nsdap'],
+    optional: ['sapd', 'srpd'],
+
     backup: function() {
         var q = this.Q();
         if (q.votes_backup) return;
@@ -818,15 +823,47 @@ window.votesUI = {
             q.parties.forEach(function(p) { b[c + '_' + p] = q[c + '_' + p]; });
         });
         q.votes_backup = b;
+        q.votes_backup_parties = q.parties.slice();
     },
 
-    // Push current values into the input boxes and update class totals.
+    // Build the vote table for the current party list.
+    tableHTML: function() {
+        var q = this.Q(), self = this;
+        var h = '<table style="font-size:0.8em;text-align:center;border-collapse:collapse;"><tr><th></th>';
+        q.classes.forEach(function(c) { h += '<th>' + self.cnames[c] + '</th>'; });
+        h += '</tr>';
+        q.parties.forEach(function(p) {
+            h += '<tr><td style="text-align:left;"><b>' + self.names[p] + '</b></td>';
+            q.classes.forEach(function(c) {
+                h += '<td><input type="number" step="0.1" min="0" style="width:3.8em;" id="vi_' + c + '_' + p + '" value="' + Number(q[c + '_' + p] || 0).toFixed(1) + '" onchange="votesUI.setCell(\'' + c + '\',\'' + p + '\',this.value)"></td>';
+            });
+            h += '</tr>';
+        });
+        h += '<tr><td style="text-align:left;"><b>Total</b></td>';
+        q.classes.forEach(function(c) { h += '<td id="vt_' + c + '"></td>'; });
+        h += '</tr></table>';
+        return h;
+    },
+
+    
+    rerender: function() {
+        var q = this.Q();
+        var w = document.getElementById('votes_table_wrap');
+        if (w) w.innerHTML = this.tableHTML();
+        this.optional.forEach(function(p) {
+            var cb = document.getElementById('vp_' + p);
+            if (cb) cb.checked = (q.parties.indexOf(p) >= 0);
+        });
+        this.refresh();
+    },
+
+    
     refresh: function() {
         var q = this.Q();
         q.classes.forEach(function(c) {
             var sum = 0;
             q.parties.forEach(function(p) {
-                var v = Number(q[c + '_' + p]);
+                var v = Number(q[c + '_' + p] || 0);
                 sum += v;
                 var el = document.getElementById('vi_' + c + '_' + p);
                 if (el) el.value = v.toFixed(1);
@@ -841,7 +878,32 @@ window.votesUI = {
         if (s) s.textContent = q.votes_randomized ? 'Modified' : 'Default (historical baseline)';
     },
 
-    // Manual edit of a single cell.
+    
+    toggleParty: function(p, on) {
+        var q = this.Q(), order = this.order;
+        this.backup();
+        if (on) {
+            if (q.parties.indexOf(p) < 0) {
+                q.parties.push(p);
+                q.parties.sort(function(a, b) { return order.indexOf(a) - order.indexOf(b); });
+            }
+            q.classes.forEach(function(c) {
+                if (q[c + '_' + p] === undefined) q[c + '_' + p] = 0;
+            });
+            q[p + '_formed'] = 1;
+            q.votes_randomized = 1;
+            this.rerender();
+        } else {
+            q.parties = q.parties.filter(function(x) { return x !== p; });
+            q.classes.forEach(function(c) { q[c + '_' + p] = 0; });
+            q[p + '_formed'] = 0;
+            // The removed party's share is redistributed so classes still total 100.
+            this.normalize();
+            this.rerender();
+        }
+    },
+
+    
     setCell: function(c, p, v) {
         var q = this.Q();
         this.backup();
@@ -855,7 +917,6 @@ window.votesUI = {
         document.getElementById('chaos_val').textContent = v;
     },
 
-    // 0 = small tweak (+/-20% of baseline), 100 = uniformly random split.
     randomize: function() {
         var q = this.Q();
         this.backup();
@@ -863,7 +924,7 @@ window.votesUI = {
         q.classes.forEach(function(c) {
             var tw = {}, rn = {}, tTotal = 0, rTotal = 0;
             q.parties.forEach(function(p) {
-                var base = Number(q.votes_backup[c + '_' + p]);
+                var base = Number(q.votes_backup[c + '_' + p]) || 0;
                 tw[p] = base * (0.8 + 0.4 * Math.random());
                 rn[p] = -Math.log(1 - Math.random());
                 tTotal += tw[p];
@@ -883,17 +944,16 @@ window.votesUI = {
         this.refresh();
     },
 
-    // Rescale every class to total exactly 100.0 (fixes manual edits).
     normalize: function() {
         var q = this.Q();
         this.backup();
         q.classes.forEach(function(c) {
             var total = 0;
-            q.parties.forEach(function(p) { total += Number(q[c + '_' + p]); });
+            q.parties.forEach(function(p) { total += Number(q[c + '_' + p] || 0); });
             if (total <= 0) return;
             var tenths = {}, sum = 0, biggest = q.parties[0];
             q.parties.forEach(function(p) {
-                tenths[p] = Math.round(Number(q[c + '_' + p]) / total * 1000);
+                tenths[p] = Math.round(Number(q[c + '_' + p] || 0) / total * 1000);
                 sum += tenths[p];
                 if (tenths[p] > tenths[biggest]) biggest = p;
             });
@@ -907,37 +967,35 @@ window.votesUI = {
     revert: function() {
         var q = this.Q();
         if (q.votes_backup) {
+            var bp = q.votes_backup_parties || q.parties;
+            this.optional.forEach(function(p) {
+                if (bp.indexOf(p) < 0) {
+                    q[p + '_formed'] = 0;
+                    q.classes.forEach(function(c) { q[c + '_' + p] = 0; });
+                }
+            });
+            q.parties = bp.slice();
             q.classes.forEach(function(c) {
-                q.parties.forEach(function(p) { q[c + '_' + p] = q.votes_backup[c + '_' + p]; });
+                bp.forEach(function(p) { q[c + '_' + p] = q.votes_backup[c + '_' + p]; });
             });
         }
         q.votes_randomized = 0;
-        this.refresh();
+        this.rerender();
     }
 };
-
-var names = {kpd:'KPD', spd:'SPD', ddp:'DDP', z:'Z', bvp:'BVP', dvp:'DVP', other:'Other', dnvp:'DNVP', nsdap:'NSDAP'};
-var cnames = {workers:'Workers', unemployed:'Unemp.', catholics:'Cath.', new_middle:'New Mid.', rural:'Rural', old_middle:'Old Mid.'};
 
 var html = '<p>Status: <b id="votes_status"></b></p>';
 html += '<p>Chaos: <b id="chaos_val">' + Q.votes_chaos + '</b> / 100<br>';
 html += '<input type="range" min="0" max="100" value="' + Q.votes_chaos + '" style="width:100%;" oninput="votesUI.setChaos(this.value)"></p>';
+html += '<p>Optional parties (placeholders, start at 0): ';
+votesUI.optional.forEach(function(p) {
+    html += '<label><input type="checkbox" id="vp_' + p + '"' + (Q.parties.indexOf(p) >= 0 ? ' checked' : '') + ' onchange="votesUI.toggleParty(\'' + p + '\',this.checked)"> ' + votesUI.names[p] + '</label> ';
+});
+html += '</p>';
 html += '<p><button onclick="votesUI.randomize()">Randomize</button> ';
 html += '<button onclick="votesUI.normalize()">Normalize to 100</button> ';
 html += '<button onclick="votesUI.revert()">Revert to normal</button></p>';
-html += '<div style="overflow-x:auto;"><table style="font-size:0.8em;text-align:center;border-collapse:collapse;"><tr><th></th>';
-Q.classes.forEach(function(c) { html += '<th>' + cnames[c] + '</th>'; });
-html += '</tr>';
-Q.parties.forEach(function(p) {
-    html += '<tr><td style="text-align:left;"><b>' + names[p] + '</b></td>';
-    Q.classes.forEach(function(c) {
-        html += '<td><input type="number" step="0.1" min="0" style="width:3.8em;" id="vi_' + c + '_' + p + '" value="' + Number(Q[c + '_' + p]).toFixed(1) + '" onchange="votesUI.setCell(\'' + c + '\',\'' + p + '\',this.value)"></td>';
-    });
-    html += '</tr>';
-});
-html += '<tr><td style="text-align:left;"><b>Total</b></td>';
-Q.classes.forEach(function(c) { html += '<td id="vt_' + c + '"></td>'; });
-html += '</tr></table></div>';
+html += '<div id="votes_table_wrap" style="overflow-x:auto;">' + votesUI.tableHTML() + '</div>';
 Q.votes_html = html;
 !}
 
