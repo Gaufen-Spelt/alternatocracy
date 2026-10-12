@@ -918,6 +918,13 @@ function weakestClass(party) {
     return best;
 }
 
+function addSupport(party, deltas) {
+    for (var c in deltas) {
+        var key = c + '_' + party;
+        Q[key] = (Q[key] || 0) + deltas[c];
+    }
+}
+
 Q.PARTY_DISPLAY_NAMES = {
     dnvp: 'The DNVP',   dvp: 'The DVP',     kpo: 'The KPO',     sl: 'The SL',
     sapd: 'The SAPD',   srpd: 'The SRPD',   ddp: Q.ddp_name,    z: 'The Zentrum',
@@ -1256,7 +1263,104 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         apply: () => { Q.government_stability += 1; }
     },
 
-    finance_budget_maneuver:       ministryAction('finance_minister',     2.50, 8,  ', controlling the Finance Ministry, has maneuvered the budget to favor its base.'),
+    finance_budget_maneuver:       ministryAction('finance_minister',     0.40, 8,  ', controlling the Finance Ministry, has maneuvered the budget to favor its base.'),
+    
+fin_tax_rich: financeAction({
+    ideoMin: 1, ideoMax: 8,
+    weight: () => scaledWeight(2.50, Q.budget, 5),
+    desc: ', at the Finance Ministry, has pushed through higher income and property taxes on the wealthy.',
+    eligible: () => Q.upper_tax_rates <= 5,
+    effects: { upper_tax_rates: 1, budget: 2, capital_strike_progress: 1, inflation: -0.6, economic_growth: -0.4, unemployed: 1 },
+    support: { workers: 3, old_middle: -3, new_middle: -3 }
+}),
+
+fin_tax_consumption: financeAction({
+    ideoMin: 9, ideoMax: 17,
+    weight: () => scaledWeight(2.20, Q.budget, 5),
+    desc: ', at the Finance Ministry, has raised consumption taxes to plug the budget hole, a burden that falls hardest on workers.',
+    eligible: () => Q.lower_tax_rates <= 5,
+    effects: { lower_tax_rates: 1, budget: 2, inflation: -0.4 },
+    support: { workers: -4, unemployed: -3 }
+}),
+
+fin_shared_sacrifice: financeAction({
+    ideoMin: 7, ideoMax: 13,
+    weight: () => scaledWeight(2.30, Q.budget, 4),
+    desc: ', at the Finance Ministry, has called for "shared sacrifice" and raised taxes across the board.',
+    eligible: () => Q.upper_tax_rates <= 5 && Q.lower_tax_rates <= 5,
+    effects: { upper_tax_rates: 1, lower_tax_rates: 1, budget: 3, unemployed: 2, inflation: -1.1, economic_growth: -0.6 },
+    support: { workers: -3, old_middle: -3, new_middle: -3 }
+}),
+
+// TAXES -- cuts
+
+fin_cut_rich: financeAction({
+    ideoMin: 14, ideoMax: 20,
+    weight: () => linearWeight(2.40, Q.budget, 8),
+    desc: ', at the Finance Ministry, has cut income and property taxes on business and the propertied classes.',
+    eligible: () => Q.budget >= 2 && Q.upper_tax_rates >= -5,
+    effects: { upper_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4, dvp_right: 5 },
+    support: { old_middle: 4, new_middle: 4, workers: -2 }
+}),
+
+fin_cut_overall: financeAction({
+    ideoMin: 9, ideoMax: 16,
+    weight: () => linearWeight(2.30, Q.budget, 10),
+    desc: ', at the Finance Ministry, has delivered a broad tax cut, drawing applause from business and the middle classes.',
+    eligible: () => Q.budget >= 3 && Q.upper_tax_rates >= -5 && Q.lower_tax_rates >= -5,
+    effects: { upper_tax_rates: -1, lower_tax_rates: -1, budget: -3, inflation: 1, economic_growth: 0.6 },
+    support: { new_middle: 4, old_middle: 4, workers: 3 }
+}),
+
+fin_cut_poor: financeAction({
+    ideoMin: 1, ideoMax: 8,
+    weight: () => linearWeight(2.20, Q.budget, 8),
+    desc: ', at the Finance Ministry, has trimmed consumption taxes to relieve working-class households.',
+    eligible: () => Q.budget >= 2 && Q.lower_tax_rates >= -5,
+    effects: { lower_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4 },
+    support: { workers: 5, unemployed: 3 }
+}),
+
+// TAXES -- budget-neutral rebalancing (ideological, flat weight)
+
+fin_progressive_shift: financeAction({
+    ideoMin: 1, ideoMax: 6,
+    weight: () => 1.20,
+    desc: ', at the Finance Ministry, has shifted the tax burden upward, raising levies on the rich while easing them for the poor.',
+    eligible: () => Q.upper_tax_rates <= 5 && Q.lower_tax_rates >= -5,
+    effects: { upper_tax_rates: 1, lower_tax_rates: -1, capital_strike_progress: 1 },
+    support: { workers: 5, old_middle: -3, new_middle: -3 }
+}),
+
+fin_regressive_shift: financeAction({
+    ideoMin: 15, ideoMax: 20,
+    weight: () => 1.20,
+    desc: ', at the Finance Ministry, has lowered taxes on the rich while raising consumption taxes, shifting the burden onto workers.',
+    eligible: () => Q.upper_tax_rates >= -5 && Q.lower_tax_rates <= 5,
+    effects: { upper_tax_rates: -1, lower_tax_rates: 1, dvp_right: 5 },
+    support: { old_middle: 4, new_middle: 4, workers: -5 }
+}),
+
+// TARIFFS
+
+fin_raise_tariffs: financeAction({
+    ideoMin: 14, ideoMax: 20,
+    weight: () => scaledWeight(2.00, Q.budget, 5) + linearWeight(0.30, Q.unemployed, 5, 3),
+    desc: ', at the Finance Ministry, has raised import duties, shielding farmers and small producers while prices climb.',
+    eligible: () => Q.tariffs <= 5,
+    effects: { tariffs: 1, budget: 2, inflation: 0.7, unemployed: 1.5, economic_growth: -0.4, west_relation: -1, east_relation: -1, reparations_negotiation: -2 },
+    support: { rural: 4, old_middle: 3, workers: -4, unemployed: -4 }
+}),
+
+fin_lower_tariffs: financeAction({
+    ideoMin: 1, ideoMax: 13,
+    weight: () => linearWeight(1.80, Q.budget, 8) + linearWeight(0.30, Q.inflation, 3, 3),
+    desc: ', at the Finance Ministry, has lowered import duties, cheapening basic goods and improving ties with trading partners.',
+    eligible: () => Q.budget >= 2 && Q.tariffs > -5,
+    effects: { tariffs: -1, budget: -2, inflation: -0.5, economic_growth: 0.4, west_relation: 1, east_relation: 1 },
+    support: { workers: 4, unemployed: 4, rural: -5, old_middle: -3 }
+}),
+
     economic_policy_shift:         ministryAction('economic_minister',    2.50, 8,  ', at the head of the Economics Ministry, has shifted regulatory policy in its favored direction.'),
     labor_dispute_mediation:       ministryAction('labor_minister',       2.00, 8,  ', running the Labor Ministry, has intervened in ongoing industrial disputes.'),
     justice_appointments:          ministryAction('justice_minister',     2.00, 10, ', in charge of the Justice Ministry, has steered key judicial appointments.'),
