@@ -1271,7 +1271,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
 
     chancellery_agenda_push: {
         ideoMin: 1, ideoMax: 20,
-        weight: () => 3.00,
+        weight: () => 1.00,
         description: (party) => partyLabel(party) + ', holding the Chancellery, has pushed its legislative agenda through the cabinet.',
         eligible: (party) => isChancellorParty(party),
         timer: 8,
@@ -1362,7 +1362,7 @@ fin_raise_tariffs: financeAction({
     ideoMin: 14, ideoMax: 20,
     weight: () => scaledWeight(2.00, Q.budget, 5) + linearWeight(0.30, Q.unemployed, 5, 3),
     desc: ', at the Finance Ministry, has raised import duties, shielding farmers and small producers while prices climb.',
-    eligible: () => Q.tariffs <= 5,
+    eligible: () => Q.tariffs < 5,
     effects: { tariffs: 1, budget: 2, inflation: 0.7, unemployed: 1.5, economic_growth: -0.4, west_relation: -1, east_relation: -1, reparations_negotiation: -2 },
     support: { rural: 4, old_middle: 3, workers: -4, unemployed: -4 }
 }),
@@ -1385,7 +1385,7 @@ fin_lower_tariffs: financeAction({
 
     cabinet_coordination: {
         ideoMin: 1, ideoMax: 20,
-        weight: () => scaledWeight(1.00, Q.government_stability, 10),
+        weight: () => scaledWeight(0.10, Q.government_stability, 10),
         description: (party) => partyLabel(party) + ' has worked behind the scenes to keep the coalition cabinet aligned.',
         eligible: (party) => inReichGovernment(party),
         timer: 6,
