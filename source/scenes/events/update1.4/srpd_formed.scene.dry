@@ -3,8 +3,18 @@ on-arrival: {!
 Q.srpd_formed = 1;
 Q.parties.push('srpd');
 Q.srpd_name = "SRPD";
-if (Q.reformists_resign) Q.srpd_name = "SD"
-if (Q.neorev_split && Q.reformists_resign) Q.srpd_name = "VSRPD"
+if (Q.neorev_split) {
+    Q.srpd_name = "SRPD"
+    Q.srpd_leader = "Horsing"
+}
+if (Q.reformists_resign) {
+    Q.srpd_name = "SD"
+    Q.srpd_leader = "Braun"
+}
+if (Q.neorev_split && Q.reformists_resign) {
+    Q.srpd_name = "VSRPD"
+    Q.srpd_leader = "Heller"
+}
 
 Q.workers_srpd = 6;
 Q.workers_spd -= 3;
