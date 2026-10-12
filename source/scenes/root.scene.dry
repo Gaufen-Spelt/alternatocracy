@@ -65,6 +65,7 @@ Q.dvp_ideology = "National Liberalism";
 Q.bvp_ideology = "Bavarian Regionalism (Conservatism)";
 Q.dnvp_ideology = "National Conservatism";
 Q.nsdap_ideology = "National Socialism";
+Q.srpd_ideology = "Social Republicanism";
 
 Q.bvp_party_leader = "Held";
 Q.bvp_relation = 25;
@@ -175,6 +176,8 @@ Q.nsdap_party_leader = "Hitler";
 Q.dnvp_party_leader = "Westarp";
 Q.ddp_party_leader = "Koch-Weser";
 Q.dvp_party_leader = "Stresemann";
+Q.srpd_leader = "Horsing";
+Q.sapd_leader = "Rosenfeld";
 
 // hmm... maybe we can play nice with Hindenburg???
 Q.hindenburg_relation = 25;
