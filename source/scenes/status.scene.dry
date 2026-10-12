@@ -339,7 +339,37 @@ if (Q.sh_strength) {
 if (Q.sa_strength) {
     Q.sa_strength_2 = Q.sa_strength.toFixed(1);
 }
+
+var rb_power = (Q.rb_strength || 0) * (Q.rb_militancy || 0);
+var rfb_power = (Q.rfb_strength || 0) * (Q.rfb_militancy || 0);
+var sh_power = (Q.sh_strength || 0) * (Q.sh_militancy || 0);
+var sa_power = (Q.sa_strength || 0) * (Q.sa_militancy || 0);
+var total_power = rb_power + rfb_power + sh_power + sa_power;
+
+if (total_power > 0) {
+    Q.rb_control = (rb_power / total_power * 100).toFixed(1);
+    Q.rfb_control = (rfb_power / total_power * 100).toFixed(1);
+    Q.sh_control = (sh_power / total_power * 100).toFixed(1);
+    Q.sa_control = (sa_power / total_power * 100).toFixed(1);
+} else {
+    Q.rb_control = "0.0";
+    Q.rfb_control = "0.0";
+    Q.sh_control = "0.0";
+    Q.sa_control = "0.0";
+}
 !}
+
+= Balance of Paramilitary Power
+
+Share of paramilitary power, calculated from strength and militarization:
+
+Reichsbanner: [+ rb_control +]%
+
+RFB: [+ rfb_control +]%
+
+Stahlhelm: [+ sh_control +]%
+
+SA: [+ sa_control +]%
 
 = Paramilitaries
 
