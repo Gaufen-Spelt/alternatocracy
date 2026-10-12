@@ -6,7 +6,7 @@ view-if: (year = next_election_year and month >= next_election_month) or (year >
 on-departure: month_actions += 1; in_election = 0; next_election_year = next_election_year + 4; n_elections += 1; next_election_time = time + 48; papen_chancellor_timer = 4; hindenburg_dismissal_timer = 6;
 set-jump: post_election_1928
 face-image: img/Rothe_Wahlen_1903.jpg
-on-arrival: dvp_in_government = 0; spd_in_government = 0; z_in_government = 0; ddp_in_government = 0; bvp_in_government = 0; dnvp_in_government = 0; nsdap_in_government = 0; kpd_in_government = 0; hilferding_resign = 0
+on-arrival: dvp_in_government = 0; spd_in_government = 0; z_in_government = 0; ddp_in_government = 0; bvp_in_government = 0; dnvp_in_government = 0; nsdap_in_government = 0; kpd_in_government = 0; hilferding_resign = 0; srpd_in_government = 0
 
 # TODO: should there be an image?
 
@@ -99,9 +99,13 @@ if (Q.kpd_r >= Q.spd_r && Q.kpd_r >= Q.nsdap_r) {
     Q.largest_party = 'KPD';
 }
 
+var srpd_share = (Q.srpd_formed && Q.srpd_r) ? Q.srpd_r : 0;
+
 // coalitions
-Q.weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r;
-Q.grand_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r + Q.bvp_r;
+Q.weimar_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r;
+Q.grand_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r + Q.dvp_r + Q.bvp_r;
+Q.neo_weimar_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
+Q.progressive_coalition = Q.spd_r + srpd_share + Q.kpd_r + Q.ddp_r + Q.sapd_r;
 Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
 Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r;
 Q.right_coalition = Q.z_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r;
@@ -111,11 +115,11 @@ Q.left_coalition = Q.spd_r + Q.kpd_r + Q.sapd_r;
 Q.popular_front_coalition = Q.spd_r + Q.kpd_r + Q.z_r + Q.ddp_r - 3 + Q.sapd_r;
 Q.anti_democratic_coalition = Q.kpd_r + Q.nsdap_r + Q.dnvp_r;
 // aka everyone except nazi, kpd, dnvp
-Q.neo_weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
 // Hitler + Right-wing parties (only comes into effect if you've alienated Z too badly)
 Q.hitler_right_coalition = Q.z_r + Q.dnvp_r + Q.nsdap_r;
 // Progressive coalition isn't going to be implemented as a distinct coalition but it's the coalition that lets you pass improved women's rights/gay rights
-Q.progressive_coalition = Q.spd_r + Q.kpd_r + Q.ddp_r + Q.sapd_r;
+// Republican Concentration: SRPD + DDP + Z + BVP + DVP (DVP only if it is not rightist). No SPD.
+Q.republican_concentration = srpd_share + Q.ddp_r + Q.z_r + Q.bvp_r + (Q.dvp_rightist ? 0 : Q.dvp_r);
 
 if (Q.kpd_relation >= 30) {
     Q.weimar_coalition += Q.sapd_r;
@@ -145,6 +149,7 @@ Q.reichswehr_minister_party = 'I';
 Q.economic_minister_party = Q.ddp_name;
 Q.finance_minister_party = 'DVP';
 Q.agriculture_minister_party = 'Z';
+Q.in_republican_concentration = 0;
 
 // reset KPD goals
 Q.kpd_goals_seen = 0;
@@ -174,6 +179,14 @@ Q.z_minus_bvp_r = Q.z_r - 3;
 // understanding the enemy
 if (Q.nsdap_r >= 15) {
     Q.understanding_enemy_timer = 2;
+}
+
+var srpdColors = { "SRPD": "#7A3E9D", "SD": "#E8707E", "VSRPD": "#B04A8F" };
+Q.srpd_color = srpdColors[Q.srpd_name] || "#7A3E9D";
+Q.srpd_row_html = "";
+if (Q.srpd_formed && Q.srpd_r) {
+    Q.srpd_row_html = '<tr><td><div class="box" style="background-color:' + Q.srpd_color + '"> </div> ' +
+        (Q.srpd_name || "SRPD") + ':</td><td>' + Q.srpd_r_disp + '%</td><td>' + Q.str_change_srpd + '</td></tr>';
 }
 
 var election_result = {'date': new Date(Q.year, Q.month - 1)};
@@ -251,6 +264,16 @@ data = data.concat([
     },
 ]);
 
+if (Q.srpd_formed && Q.srpd_r) {
+    var srpd_idx = data.findIndex(function(d) { return d.id === 'spd'; });
+    data.splice(srpd_idx + 1, 0, {
+        "id": "srpd",
+        "legend": Q.srpd_name || "SRPD",
+        "name": Q.srpd_name || "SRPD",
+        "seats": Math.round(Q.srpd_r * 5),
+    });
+}
+
 if (window && d3) {
     var width = 500; 
     var height = 500;
@@ -284,6 +307,14 @@ Q.partyData = Q.partyData.concat([
     { id: "dnvp",  name: "DNVP",       seats: Math.round(Q.dnvp_r*5),  color: "#3F7BC1", show: true },
     { id: "nsdap", name: "NSDAP",      seats: Math.round(Q.nsdap_r*5), color: "#954B00", show: true },
 ]);
+
+if (Q.srpd_formed && Q.srpd_r) {
+    var srpd_pidx = Q.partyData.findIndex(function(d) { return d.id === 'spd'; });
+    Q.partyData.splice(srpd_pidx + 1, 0, {
+        id: "srpd", name: Q.srpd_name || "SRPD",
+        seats: Math.round(Q.srpd_r * 5), color: Q.srpd_color, show: true
+    });
+}
 !}
 go-to: coalition_menu
 
@@ -294,6 +325,8 @@ go-to: coalition_menu
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
 {!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px; outline-style: solid;'> </div> !} **SPD:** {!</td><td>!} **[+ spd_r +]%** {!</td><td>!} **[+ str_change_spd +]** {!</td></tr>!}
+
+[+ srpd_row_html +]
 
 [? if sapd_formed : {!<tr><td><div class="box" style='background-color:#C40000'> </div> !}SAPD: {!</td><td>!} [+ sapd_r +]% {!</td><td>!} [+ str_change_sapd +] {!</td></tr>!} ?]
 
@@ -316,13 +349,15 @@ go-to: coalition_menu
 
 **Potential coalitions:**
 
-Weimar Coalition (SPD + Z + [+ ddp_name +]): [+ weimar_coalition +]%
+Weimar Coalition (SPD + [? if srpd_formed: [+ srpd_name +] + ?]Z + [+ ddp_name +]): [+ weimar_coalition +]%
 
-Grand Coalition (SPD + Z + BVP + [+ ddp_name +] + DVP): [+ grand_coalition +]%
+Grand Coalition (SPD + [? if srpd_formed: [+ srpd_name +] + ?]Z + BVP + [+ ddp_name +] + DVP): [+ grand_coalition +]%
 
 Bourgeois Coalition (Z + BVP + [+ ddp_name +] + DVP + Others): [+ bourgeois_coalition +]%
 
 Right-wing Coalition (Z + BVP + DVP + Others + DNVP): [+ right_coalition +]%
+
+[? if srpd_formed: Republican Concentration ([+ srpd_name +] + Z + BVP + [+ ddp_name +][? if not dvp_rightist: + DVP ?]): [+ republican_concentration +]% ?]
 
 [? if nazi_urgency <= 1 and nsdap_r >= 15 : The rapid rise in NSDAP votes is extremely worrying. Many had believed that the party was moribund; now, some of us consider it to be the greatest threat to democracy in Germany. ?]
 
@@ -345,6 +380,32 @@ There are some potential coalition arrangements.
 - @popular_front_coalition
 - @right_coalition
 - @burgerblock_coalition
+- @republican_concentration
+
+@republican_concentration
+title: Republican Concentration
+subtitle: [+ srpd_name +] + Z + BVP + [+ ddp_name +] [? if not dvp_rightist: + DVP ?]: [+ republican_concentration +]%
+view-if: srpd_formed and republican_concentration >= 50
+choose-if: z_relation >= 30 and ddp_relation >= 30 and srpd_formed
+unavailable-subtitle: [+ srpd_name +] + Z + BVP + [+ ddp_name +] [? if not dvp_rightist: + DVP ?]: [+ republican_concentration +]% - [? if z_relation < 30: Our relationship with the Center Party is not good enough. ?][? if ddp_relation < 30: Our relationship with the [+ ddp_name +] is not good enough. ?]
+
+The republican parties, without the Marxists, can reach a majority. [+ srpd_name +], the Center, the Democrats [? if not dvp_rightist: and the DVP ?] are ready to govern together. This "Republican Concentration" would be a government of the center and moderate left that tolerates no extremes. Our choice is whether to support it from the outside or to oppose it.
+
+- @republican_concentration_toleration: We will tolerate it.
+- @republican_concentration_opposition: We will go into opposition.
+- @coalition_menu: Try a different governing arrangement.
+
+@republican_concentration_toleration
+subtitle: We will vote against no-confidence motions, but will not join the government.
+on-arrival: spd_in_government = 0; spd_toleration = 1; in_republican_concentration = 1; srpd_in_government = 1; z_in_government = 1; ddp_in_government = 1; bvp_in_government = 1; dvp_in_government = 1 if not dvp_rightist; chancellor = "Brüning"; chancellor_party = "Z"; z_relation += 5; ddp_relation += 5; srpd_relation += 5; left_dissent += 5; center_dissent += 5; labor_dissent += 5; reformist_dissent -= 3; neorevisionist_dissent -= 3
+
+We have decided to tolerate the Republican Concentration government. Our former comrades now sit in cabinet, and we protect it from the far right without having to answer for its policies.
+
+@republican_concentration_opposition
+subtitle: This risks a government that rules against labor.
+on-arrival: spd_in_government = 0; spd_toleration = 0; in_republican_concentration = 1; srpd_in_government = 1; z_in_government = 1; ddp_in_government = 1; bvp_in_government = 1; dvp_in_government = 1 if not dvp_rightist; chancellor = "Brüning"; chancellor_party = "Z"; pro_republic -= 3; left_dissent -= 3; center_dissent -= 3
+
+We have gone into opposition against the Republican Concentration. The new government depends on its own majority, and it can pursue its own economic policy without us.
 
 # TODO: black-brown coalition
 
@@ -945,7 +1006,7 @@ We have supported a minority government led by the Center Party under Chancellor
 
 @no_majority
 title: There is no clear governing majority.
-view-if: weimar_coalition < 50 and (grand_coalition < 50 or grand_coalition_failed == 1) and president = "Hindenburg" and far_right_coalition < 50
+view-if: weimar_coalition < 50 and ((grand_coalition < 50 or dvp_rightist) or grand_coalition_failed == 1) and president = "Hindenburg" and far_right_coalition < 50
 on-arrival: no_majority_elections += 1
 go-to: no_majority_bruning if chancellor = "Brüning" or chancellor = "Wirth"; no_majority_papen if chancellor = "Papen" and no_majority_papen_elections == 0; no_majority_papen_2 if chancellor == "Papen" and no_majority_papen_elections > 0; no_majority_schleicher if chancellor = "Schleicher"; no_majority_spd if chancellor_party = "SPD" or chancellor == "Marx"
 
