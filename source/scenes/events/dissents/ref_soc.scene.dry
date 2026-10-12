@@ -1,0 +1,12 @@
+title: Reformists and Social Republicans merge!
+subtitle: New giant.
+tags: event
+view-if: reformists_resign and neorev_split
+new-page: true
+max-visits: 1
+go-to: srpd_formed
+on-arrival: workers_srpd += 3; new_middle_srpd += 5; old_middle_srpd += 4; rural_srpd += 2; catholics_srpd += 5
+
+= Reformists and Social Republican merger
+
+Following the dissent from SPD, these factions have merged.
