@@ -925,6 +925,21 @@ function addSupport(party, deltas) {
     }
 }
 
+function financeAction(o) {
+    return {
+        ideoMin: o.ideoMin, ideoMax: o.ideoMax,
+        weight: () => o.weight(),
+        description: (party) => partyLabel(party) + o.desc,
+        eligible: (party) => holdsMinistry(party, 'finance_minister') && o.eligible(),
+        timer: o.timer || 10,
+        apply: (party) => {
+            for (var k in o.effects) Q[k] = (Q[k] || 0) + o.effects[k];
+            addSupport(party, o.support || {});
+            Q.government_stability += 0.5;
+        }
+    };
+}
+
 Q.PARTY_DISPLAY_NAMES = {
     dnvp: 'The DNVP',   dvp: 'The DVP',     kpo: 'The KPO',     sl: 'The SL',
     sapd: 'The SAPD',   srpd: 'The SRPD',   ddp: Q.ddp_name,    z: 'The Zentrum',
