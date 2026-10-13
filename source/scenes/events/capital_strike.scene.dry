@@ -21,24 +21,7 @@ Industrial leaders have indicated, however, that a settlement is possible in vie
 - @concede_hours
 - @concede_safety
 - @concede_insurance
-
-@reformist
-
-= Capital Strike
-
-Our policies have greatly angered the capitalists. Investment has fallen, and factories are idling, preventing the workers from fulfilling their jobs. Meanwhile, the bourgeois press is a constant chorus of venomous invective directed at us and our economic policies.
-
-However, capitalists are willing to compromise with us (owing to our reformist nature). What are we willing to sacrifice?
-
-- @socialization: Return socialized enterprises to private ownership.
-- @concede_councils
-- @concede_cooperatives
-- @concede_rich_taxes
-- @concede_regressive
-- @concede_hours
-- @concede_safety
-- @concede_insurance
-- @rest: We won't do any concessions.
+- @rest: Refuse all concessions.
 
 @socialization
 view-if: socializations > 0 or nationalization_progress > 0
@@ -157,7 +140,7 @@ title: Launch a propaganda campaign blaming the capitalists for the crisis.
 subtitle: -5 resources
 choose-if: (radio >= 3 or commercialized_media >= 5) and resources >= 5
 unavailable-subtitle: [? if radio < 3 and commercialized_media < 5 : We have not built up our media enough. ?] [? if resources < 5: We do not have enough resources. ?]
-on-arrival: workers_spd += 7*(1-dissent); new_middle_spd += 6*(1-dissent); unemployed_spd += 6*(1-dissent); pro_republic += 5*(1-dissent); resources -= 1
+on-arrival: workers_spd += 7*(1-dissent); new_middle_spd += 6*(1-dissent); unemployed_spd += 6*(1-dissent); pro_republic += 5*(1-dissent); resources -= 5
 
 We launch a counter-propaganda campaign to blame the economic crisis on the capitalists, using all of our media channels to do so. Because of our existing media framework, this is moderately successful in directing popular criticisms towards the capitalists and away from us.
 
