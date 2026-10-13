@@ -2,8 +2,125 @@ title: Capital Strike
 subtitle: Germany's industries are idling...
 view-if: spd_in_government and capital_strike_met and capital_strike_timer <= 0
 new-page: true
-on-arrival: unemployed += 5; workers_spd*= 0.7; new_middle_spd -= 15; old_middle_spd -= 15; unemployed_spd*=0.7; rural_spd -= 15; pro_republic -= 15; capital_strike_seen = 1; z_relation -= 10; dvp_relation -= 10; workers_nsdap += 8; unemployed_nsdap += 10; new_middle_nsdap += 15; old_middle_nsdap += 15; rural_nsdap += 15; economic_growth -= 4; capital_strike_timer = 24
 tags: event
+go-to: reformist if spd_reformist; rest if not spd_reformist
+
+@reformist
+
+= Capital Strike
+
+The Government's economic measures have provoked sharp opposition from industry. Investment has declined, factories stand idle, and production has stalled. Meanwhile, the bourgeois press has mounted a sustained campaign against the Government's economic policy.
+
+Industrial leaders have indicated, however, that a settlement is possible in view of the party's moderate course. Which concessions is the Government prepared to make?
+
+- @socialization: Return socialized enterprises to private ownership.
+- @concede_councils
+- @concede_cooperatives
+- @concede_rich_taxes
+- @concede_regressive
+- @concede_hours
+- @concede_safety
+- @concede_insurance
+
+@reformist
+
+= Capital Strike
+
+Our policies have greatly angered the capitalists. Investment has fallen, and factories are idling, preventing the workers from fulfilling their jobs. Meanwhile, the bourgeois press is a constant chorus of venomous invective directed at us and our economic policies.
+
+However, capitalists are willing to compromise with us (owing to our reformist nature). What are we willing to sacrifice?
+
+- @socialization: Return socialized enterprises to private ownership.
+- @concede_councils
+- @concede_cooperatives
+- @concede_rich_taxes
+- @concede_regressive
+- @concede_hours
+- @concede_safety
+- @concede_insurance
+- @rest: We won't do any concessions.
+
+@socialization
+view-if: socializations > 0 or nationalization_progress > 0
+subtitle: The party withdraws from its programme of socialization.
+on-arrival: socializations = 0 if socializations > 0; nationalization_progress = 0 if nationalization_progress > 1; workers_spd *= 0.8; unemployed_spd *= 0.5; unemployed += 3; left_dissent += 30; capital_strike_progress -= 12
+
+The enterprises previously brought under public ownership have been returned to their former owners. The left wing of the party regards the measure as a capitulation.
+
+@concede_councils
+title: Curtail the authority of the works councils.
+subtitle: Industry rejects worker representation in management.
+view-if: works_councils > 0
+on-arrival: works_councils -= 1; economic_democracy -= 1 if economic_democracy > 0; labor_strength -= 8; labor_dissent += 6; workers_spd *= 0.85; left_dissent += 15; dvp_relation += 8; economic_growth += 1; capital_strike_progress -= 4; capital_strike_timer = 24
+
+The powers of the works councils have been reduced, and decisions on investment and hiring have returned to management. Industry is satisfied. The trade unions regard the measure as a breach of faith.
+
+@concede_cooperatives
+title: Withdraw state support for cooperatives.
+subtitle: +1 budget. Industry regards the cooperatives as unfair competition.
+view-if: cooperatives > 0 or rural_cooperatives > 0
+on-arrival: cooperatives = 0 if cooperatives > 0; rural_cooperatives = 0 if rural_cooperatives > 0; economic_democracy -= 1 if economic_democracy > 0; budget += 1; unemployed_spd *= 0.85; rural_spd -= 5; new_middle_spd -= 3; dvp_relation += 5; economic_growth += 0.5; capital_strike_timer = 24
+
+Subsidies and preferential credit for the cooperatives have been withdrawn. The banks and cartels welcome the decision, and the budget benefits. Small farmers and consumers dependent on the cooperatives do not.
+
+@concede_rich_taxes
+title: Reduce taxes on high incomes.
+subtitle: -2 budget. Industry demands relief on investment income.
+view-if: upper_tax_rates > 0
+choose-if: budget >= 2
+unavailable-subtitle: The Treasury cannot absorb the loss of revenue.
+on-arrival: budget -= 2; upper_tax_rates -= 1; new_middle_spd += 3; old_middle_spd += 3; workers_spd -= 3; dvp_relation += 6; z_relation += 4; left_dissent += 5; labor_dissent += 3; capital_strike_progress -= 8; inflation += 0.6; economic_growth += 1; capital_strike_timer = 24
+
+Taxes on high incomes and property have been reduced. Investment has resumed, though many in our ranks question why those who withheld it should be rewarded.
+
+@concede_regressive
+title: Shift the tax burden to consumption.
+subtitle: Overall revenue is unchanged. The cost falls on the workers.
+choose-if: upper_tax_rates >= -5 and lower_tax_rates <= 5
+unavailable-subtitle: Tax rates cannot be adjusted further.
+on-arrival: upper_tax_rates -= 1; lower_tax_rates += 1; workers_spd -= 6; unemployed_spd -= 3; new_middle_spd += 3; old_middle_spd += 3; dvp_relation += 5; z_relation += 4; labor_dissent += 5; left_dissent += 5; capital_strike_progress -= 8; economic_growth += 1; capital_strike_timer = 24
+
+Taxes on high incomes have been lowered, with the lost revenue recovered through consumption taxes. Industry is satisfied. The burden falls on the working population.
+
+@concede_hours
+title: Permit overtime exceptions to the 40-hour week.
+subtitle: Employers request greater flexibility in scheduling.
+view-if: working_hours > 0
+on-arrival: working_hours -= 1; labor_strength -= 5; labor_dissent += 8; left_dissent += 5; workers_spd -= 6; dvp_relation += 4; inflation -= 0.1; economic_growth += 0.5; capital_strike_progress -= 4; capital_strike_timer = 24
+
+Enforcement of the working-hours limit has been relaxed. Production has resumed, but compulsory overtime is returning to the factories.
+
+@concede_safety
+title: Relax safety regulations.
+subtitle: Employers describe the regulations as an obstacle to production.
+view-if: workers_safety > 0
+on-arrival: workers_safety -= 1; labor_strength -= 2; labor_dissent += 5; workers_spd -= 4; dvp_relation += 3; economic_growth += 0.3; capital_strike_progress -= 4; capital_strike_timer = 24
+
+Inspections and standards in the mines and factories have been relaxed. Costs to employers are reduced, and the risk is borne by the workforce.
+
+@concede_insurance
+title: Reduce employer contributions to unemployment insurance.
+subtitle: +1 budget. The shortfall will be met through reduced benefits.
+on-arrival: welfare -= 1; budget += 1; unemployed_spd -= 4; workers_spd -= 3; unemployed_kpd += 3; left_dissent += 8; labor_dissent += 8; dvp_relation += 6; economic_growth += 0.5; capital_strike_progress -= 4; capital_strike_timer = 24
+
+The employers' share of the insurance fund has been reduced and benefits curtailed to compensate. Industry is relieved. The unemployed are not.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@rest
+on-arrival: unemployed += 5; workers_spd*= 0.7; new_middle_spd -= 15; old_middle_spd -= 15; unemployed_spd*=0.7; rural_spd -= 15; pro_republic -= 15; capital_strike_seen = 1; z_relation -= 10; dvp_relation -= 10; workers_nsdap += 8; unemployed_nsdap += 10; new_middle_nsdap += 15; old_middle_nsdap += 15; rural_nsdap += 15; economic_growth -= 4; capital_strike_timer = 24
 
 = Capital Strike
 
@@ -27,7 +144,7 @@ If the capitalists are going to attack us, then we must hit them back. We have e
 
 @capital_controls
 title: Enact capital controls to lessen the impact.
-choose-if: judicial_reform >= 2
+choose-if: judicial_reform >= 8
 unavailable-subtitle: The judiciary would never allow this.
 on-arrival: unemployed -= 1.5; workers_spd += 6*(1-dissent); unemployed_spd += 6*(1-dissent); economic_growth += 2;
 
@@ -37,9 +154,9 @@ Capital controls might blunt some of the worst economic components of the capita
 
 @propaganda
 title: Launch a propaganda campaign blaming the capitalists for the crisis.
-subtitle: -1 resources
-choose-if: (radio >= 2 or commercialized_media >= 3) and resources >= 1
-unavailable-subtitle: [? if radio < 2 and commercialized_media < 3 : We have not built up our media enough. ?] [? if resources < 1: We do not have enough resources. ?]
+subtitle: -5 resources
+choose-if: (radio >= 3 or commercialized_media >= 5) and resources >= 5
+unavailable-subtitle: [? if radio < 3 and commercialized_media < 5 : We have not built up our media enough. ?] [? if resources < 5: We do not have enough resources. ?]
 on-arrival: workers_spd += 7*(1-dissent); new_middle_spd += 6*(1-dissent); unemployed_spd += 6*(1-dissent); pro_republic += 5*(1-dissent); resources -= 1
 
 We launch a counter-propaganda campaign to blame the economic crisis on the capitalists, using all of our media channels to do so. Because of our existing media framework, this is moderately successful in directing popular criticisms towards the capitalists and away from us.
