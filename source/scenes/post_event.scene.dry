@@ -1556,6 +1556,8 @@ go-to: events_choice if has_event = 1; main if has_event = 0 and difficulty == 0
 
 @events_choice
 
+= [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
+
 - #event
 
 # This scene is solely for updating numbers after events, and routing to special events.
