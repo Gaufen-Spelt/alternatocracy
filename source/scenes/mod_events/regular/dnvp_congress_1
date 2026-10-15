@@ -1,0 +1,25 @@
+title: DNVP Congress
+subtitle: Main theme: Parliamentary defeat, Hugenberg's surge and Lambach's article.
+tags: event
+view-if: year >= 1928 and month >= 10 and not dnvp_banned and not extended_content
+max-visits: 1
+new-page: true
+on-arrival: dnvp_loss_1 = old_dnvp_r - dnvp_r;
+
+= DNVP Congress
+
+Following the last election, DNVP has suffered heavy loss of the votes from all parties represented in the Reichstag, losing about [+ dnvp_loss_1 +] of representation.
+
+This defeat disheartened DNVP's current leader Kuno von Westarp, who has stepped down from his position to let new congress proceed. However, what actually happened was the pressure from Hugenberg's wing (right wing of the party, that believed that reconciliation with Republic was wrong and harmful), which caused this downfall. Moderates so far have remained beheaded and begun chaotically gather around to find possible opposition against Hugenberg, especially inflammated by the Lambach's article.
+
+Nationalist party now remains between keeping their heart on Republic or taking the turn towards the **Katastrophenpolitik**, unorganized group of thoughts aimed at destablizing the Republic and eventual polarization of German politics.
+
+- @result: The congress results in...
+
+@result
+on-arrival: {!
+
+Q.hugenberg_points = 0;
+Q.westarp_points = 0;
+
+// Republic
