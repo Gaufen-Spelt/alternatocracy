@@ -9,17 +9,17 @@ on-arrival: ideologimus_timer = 12
 
 = Internal power struggle
 
-Our currents are fighting for the control over the party. Which way should we support?
+Our currents are fighting for control over the party. Our party is split mostly between our left, center [? if not neorevisionism: and ?] [? if neorevisionism:, ?] right [? if neorevisionism: and neorevisionists, who are to the right of everyone else ?]. Which way should we support?
 
-Left - Supports revolutionary course, reconciliation with KPD and class war against bourgeiouisie.
+​Left – Supports a revolutionary course, reconciliation with the KPD, and class war against the bourgeoisie.
 
-Center - Supports middle course, insisting that the conditions of revolution must come.
+​Center – Supports a middle course, insisting that the necessary conditions for revolution must arrive first. [? if year >= 1928: Recently, this line has been dropped by Hilferding and Naphtali, who at the recent ADGB conference supported Hilferding's **Organized Capitalism** idea, believing that the centralization of capital makes a transition to socialism possible. ?]
 
-Labor - Pragmatic unionists, advocating for uncompromissive stance on rights of workers.
+​Labor – Pragmatic reformists advocating for an uncompromising stance on workers' rights and their expansion.
 
-Reformist - Pragmatic reformists, advocating for the governance to push forward socialist policies and eventual transition of economy.
+​Reformist – Pragmatic reformists advocating for governance to push forward socialist policies through cooperation with bourgeouisie. They are concentrated primarily in Prussian branch of our party.
 
-[? if neorevisionism: Neorevisionism - Supports the militant republicanism to save the republic from the claws of extremism and seeks to limit it by any means given. ?]
+​[? if neorevisionism: Neorevisionism – Nationally minded revisionists and militant republicans have banded together to form the Neorevisionist wing, whose goal is to protect, reform, and serve the republic. Their rhetoric closely resembles that of the nationalists on the right, which our members often compare to that of Lassalle. ?]
 
 - @left
 - @center
