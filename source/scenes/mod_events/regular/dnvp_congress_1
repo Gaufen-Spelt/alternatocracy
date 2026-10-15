@@ -10,7 +10,7 @@ on-arrival: dnvp_loss_1 = old_dnvp_r - dnvp_r;
 
 Following the last election, DNVP has suffered heavy loss of the votes from all parties represented in the Reichstag, losing about [+ dnvp_loss_1 +] of representation.
 
-This defeat disheartened DNVP's current leader Kuno von Westarp, who has stepped down from his position to let new congress proceed. However, what actually happened was the pressure from Hugenberg's wing (right wing of the party, that believed that reconciliation with Republic was wrong and harmful), which caused this downfall. Moderates so far have remained beheaded and begun chaotically gather around to find possible opposition against Hugenberg, especially inflammated by the Lambach's article.
+This defeat disheartened DNVP's current leader Kuno von Westarp, who has stepped down from his position to let new congress proceed. However, what actually happened was the pressure from Hugenberg's wing (right wing of the party, that believed that reconciliation with Republic was wrong and harmful), which caused this downfall. Moderates so far have remained beheaded and begun chaotically gather around to find possible opposition against Hugenberg, especially inflammated by the Lambach's article. [? if tariffs < 0: Recent government's actions aimed at opening market to foreign products have threatened the positions of rural populace and Junkers; those groups representing these interests have rallies against Hugenberg. ?] [? if dnvp_in_government: Nonetheless, recent entrance into the government has emboldened the moderates, though another electoral defeat will guarantee the victory of Hugenberg. ?]
 
 Nationalist party now remains between keeping their heart on Republic or taking the turn towards the **Katastrophenpolitik**, unorganized group of thoughts aimed at destablizing the Republic and eventual polarization of German politics.
 
@@ -23,3 +23,43 @@ Q.hugenberg_points = 0;
 Q.westarp_points = 0;
 
 // Republic
+
+if (Q.tariffs < 0) Q.westarp_points += Math.abs(Q.tariffs);
+if (Q.dnvp_in_government) Q.westarp_points += 3;
+if (Q.pro_republic >= 70) Q.westarp_points += 1;
+if (Q.dnvp_r >= 16.5) Q.westarp_points += 2;
+if (Q.z_relation + Q.ddp_relation + Q.dvp_relation < 130) Q.westarp_points += 1;
+if (Q.z_relation < 30) Q.westarp_points += 1;
+if (Q.ideology == "Reformist") Q.westarp_points += 1;
+
+// Hugenberg
+
+// Base
+Q.hugenberg_points += 1;
+
+if (Q.nationalism >= 60) Q.hugenberg_points += 1;
+if (!Q.dnvp_in_government) Q.hugenberg_points += 3;
+if (Q.dnvp_r < 15.4) Q.hugenberg_points += 2;
+if (Q.dnvp_r > 15.4 && Q.dnvp_r < 16.5) Q.hugenberg_points += 1;
+if (Q.spd_r >= 30) Q.hugenberg_points += 2;
+if (Q.ideology == "Left) Q.hugenberg_points += 2;
+
+if (Q.hugenberg_points > Q.westarp_points + 2) {
+    Q.dnvp_congress_result_0 = "Hugenbergite"
+} else if (Q.westarp_points > Q.hugenberg_points + 2) {
+    Q.dnvp_congress_result_0 = "Westarpite"
+} else {
+    Q.dnvp_congress_result_0 = "Triumvirate"
+}
+
+!}
+go-to: westarp if dnvp_congress_result_0 = "Westarpite"; hugenberg if dnvp_congress_result_0 = "Hugenbergite"; triumvirate if dnvp_congress_result_0 = "Triumvirate"
+
+@westarp
+on-arrival:
+
+@hugenberg
+on-arrival: dnvp_party_leader = "Hugenberg"
+
+@triumvirate
+on-arrival: 
