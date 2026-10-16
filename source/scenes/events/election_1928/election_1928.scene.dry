@@ -383,7 +383,7 @@ There are some potential coalition arrangements.
 - @republican_concentration
 
 @republican_concentration
-title: Republican Concentration
+title: The Republican Concentration
 subtitle: [+ srpd_name +] + Z + BVP + [+ ddp_name +] [? if not dvp_rightist: + DVP ?]: [+ republican_concentration +]%
 view-if: srpd_formed and republican_concentration >= 50
 choose-if: z_relation >= 30 and ddp_relation >= 30 and srpd_formed
@@ -412,7 +412,7 @@ We have gone into opposition against the Republican Concentration. The new gover
 @social_christian_coalition
 title: Social-Christian Coalition
 subtitle: SPD + Z: [+ spd_r + z_r +]%
-view-if: spd_r + z_r >= 50
+view-if: spd_r + z_r >= 50 and spd_reformizt
 choose-if: z_r + 10 >= spd_r and z_relation >= 40
 unavailable-subtitle: SPD + Z: [+ spd_r + z_r +]% - [? if z_r + 10 < spd_r : The Center Party is unwilling to be junior partner in a coalition where we hold such a dominant position. ?][? if z_relation < 40 : Our relationship with the Center Party is not good enough. ?] 
 on-arrival: in_social_christian_coalition = 1; spd_in_government = 1; z_in_government = 1; in_weimar_coalition = 0; in_grand_coalition = 0; in_popular_front = 0; in_left_front = 0; foreign_minister_party = "Z"; interior_minister_party = "Z"; justice_minister_party = "SPD"; labor_minister_party = "SPD"; reichswehr_minister_party = "I"; economic_minister_party = "Z"; finance_minister_party = "Z"; agriculture_minister_party = "Z"
