@@ -120,4 +120,4 @@ choose-if: left_strength + center_strength < 50
 unavailable-subtitle: [? if left_strength + center_strength >= 50: Radicals have persuaded us from pursuing this direction. ?]
 on-arrival: message_radio = "reformist"; new_middle_spd += 3*(1-dissent); old_middle_spd += 1*(1-dissent); workers_spd += 2*(0.5-dissent); workers_spd -= 1*(socialism*0.05) if socialism / 2 >= spd_votes; socialism -= 2; pro_republic += 3; reformist_strength += 5; reformist_dissent -= 5; left_dissent += 5; peoples_party_progress += 1; media_timer = 8
 
-We have translated reformist message with the purpose of awakening class consciousness amongst white collars, at the cost of dropping openly socialist rhetoric.
+We have translated reformist message with the purpose of creating image of moderate and sensible party of responsibility amongst white collars, at the cost of dropping openly socialist rhetoric.
