@@ -24,6 +24,7 @@ Q.westarp_points = 0;
 
 // Republic
 
+Q.westarp_points += Math.round(Q.pro_republic / 15);
 if (Q.tariffs < 0) Q.westarp_points += Math.abs(Q.tariffs);
 if (Q.dnvp_in_government) Q.westarp_points += 3;
 if (Q.pro_republic >= 70) Q.westarp_points += 1;
@@ -36,6 +37,7 @@ if (Q.ideology == "Reformist") Q.westarp_points += 1;
 
 // Base
 Q.hugenberg_points += 1;
+Q.hugenberg_points += Math.round(Q.nationalism / 10);
 
 if (Q.nationalism >= 60) Q.hugenberg_points += 1;
 if (!Q.dnvp_in_government) Q.hugenberg_points += 3;
@@ -56,10 +58,16 @@ if (Q.hugenberg_points > Q.westarp_points + 2) {
 go-to: westarp if dnvp_congress_result_0 = "Westarpite"; hugenberg if dnvp_congress_result_0 = "Hugenbergite"; triumvirate if dnvp_congress_result_0 = "Triumvirate"
 
 @westarp
-on-arrival:
+on-arrival: pro_republic += 5; dnvp_status = "Westarpite"
+
+= Westarp secures the victory!
 
 @hugenberg
-on-arrival: dnvp_party_leader = "Hugenberg"
+on-arrival: dnvp_party_leader = "Hugenberg"; dnvp_status = "Hugenbergite"; nationalism += 5
+
+= Hugenberg takes the mantle!
 
 @triumvirate
-on-arrival: 
+on-arrival: dnvp_status = "Triumvirate"
+
+= Triumvirate is formed!
