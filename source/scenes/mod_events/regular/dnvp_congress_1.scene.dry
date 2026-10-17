@@ -44,15 +44,15 @@ if (!Q.dnvp_in_government) Q.hugenberg_points += 3;
 if (Q.dnvp_r < 15.4) Q.hugenberg_points += 2;
 if (Q.dnvp_r > 15.4 && Q.dnvp_r < 16.5) Q.hugenberg_points += 1;
 if (Q.spd_r >= 30) Q.hugenberg_points += 2;
-if (Q.ideology == "Left) Q.hugenberg_points += 2;
+if (Q.ideology == "Left") Q.hugenberg_points += 2;
 
 if (Q.hugenberg_points > Q.westarp_points + 2) {
-    Q.dnvp_congress_result_0 = "Hugenbergite"
+    Q.dnvp_congress_result_0 = "Hugenbergite";
 } else if (Q.westarp_points > Q.hugenberg_points + 2) {
-    Q.dnvp_congress_result_0 = "Westarpite"
+    Q.dnvp_congress_result_0 = "Westarpite";
 } else {
-    Q.dnvp_congress_result_0 = "Triumvirate"
-}
+    Q.dnvp_congress_result_0 = "Triumvirate";
+};
 
 !}
 go-to: westarp if dnvp_congress_result_0 = "Westarpite"; hugenberg if dnvp_congress_result_0 = "Hugenbergite"; triumvirate if dnvp_congress_result_0 = "Triumvirate"
