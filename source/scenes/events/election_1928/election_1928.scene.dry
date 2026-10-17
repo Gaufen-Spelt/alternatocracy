@@ -1017,20 +1017,38 @@ go-to: no_majority_bruning if chancellor = "Brüning" or chancellor = "Wirth"; n
 @right_coalition
 title: Refuse to form a government, so that a right-wing coalition may be formed.
 subtitle: Z + BVP + DVP + DNVP + Others ([+ right_coalition +]%)
-unavailable-subtitle: The DNVP is not interested in a coalition with the Center.
+unavailable-subtitle: Hugenberg's DNVP is not willing to enter the government, according to their **Katastrophenpolitik** policy.
 view-if: right_coalition >= 50
-choose-if: year < 1929
+choose-if: dnvp_congress_result_0 = "Hugenbergite"
+on-arrival: {!
+// Does the SPD have any other workable coalition?
+var alt = false;
+if (Q.spd_r >= 50) alt = true;
+if (Q.weimar_coalition >= 50 && (Q.z_relation + Q.ddp_relation) >= 50) alt = true;
+if (Q.grand_coalition >= 50 && !Q.grand_coalition_failed && !Q.dvp_rightist && Q.dvp_relation > 20) alt = true;
+if (Q.spd_r + Q.z_r >= 50 && Q.spd_reformizt && Q.z_r + 10 >= Q.spd_r && Q.z_relation >= 40) alt = true;
+if (Q.neo_weimar_coalition >= 50 && Q.grand_coalition < 50 && Q.z_relation >= 50 && Q.dvp_relation >= 30) alt = true;
+if (Q.z_party_leader == "Joos" && Q.neo_weimar_coalition >= 50 && Q.weimar_coalition < 50 && Q.z_relation >= 10) alt = true;
+if (Q.srpd_formed && Q.republican_concentration >= 50 && Q.z_relation >= 30 && Q.ddp_relation >= 30) alt = true;
+if (Q.left_coalition >= 50 && (Q.kpd_relation >= 50 || (Q.kpd_party_leader == "Conciliators" && Q.kpd_relation >= 40)) && Q.communist_coalition >= 3) alt = true;
+if (Q.popular_front_coalition >= 50) {
+    var kpdOk = (Q.kpd_relation >= 65 && Q.kpd_party_leader == "Thälmann") || (Q.kpd_relation >= 45 && Q.kpd_party_leader == "Conciliators");
+    var zOk = (Q.z_relation >= 45 && Q.z_party_leader == "Joos") || (Q.z_relation >= 65 && Q.z_party_leader != "Joos" && Q.kpd_party_leader != "Conciliators") || (Q.z_relation >= 55 && Q.z_party_leader != "Joos" && Q.kpd_party_leader == "Conciliators");
+    if ((kpdOk && zOk && Q.ddp_relation >= 50 && Q.communist_coalition >= 3) || (Q.z_party_leader == "Joos" && Q.kpd_party_leader == "Conciliators" && Q.z_relation >= 30 && Q.kpd_relation >= 30)) alt = true;
+}
+if (Q.president == "Braun") alt = true; // emergency options exist
+Q.spd_no_alternatives = alt ? 0 : 1;
+!}
 
-There are enough votes for a right-wing coalition of the Center (+ BVP), DVP, DNVP, and minor conservative parties. [? if largest_party == "SPD": However, this will be seen as abdicating responsibility for government, as we are the largest party. ?]
+There are enough votes for a right-wing coalition of the Center (+ BVP), DVP, DNVP, and minor conservative parties. [? if largest_party == "SPD" and spd_no_alternatives == 0: However, this will be seen as abdicating responsibility for government, as we are the largest party. ?][? if spd_no_alternatives == 1: We have no workable coalition of our own, so stepping aside is the only realistic course. ?]
 
 - @right_coalition_sure: Yes, we will abdicate our responsibility for government formation, and let a right-wing coalition take power.
 - @grand_coalition: Actually, we wish to form a grand coalition after all.
 
 @right_coalition_sure
-subtitle: This will be extremely unpopular within our party.
-on-arrival: pro_republic -= 5; center_dissent += 15; left_dissent += 10; labor_dissent += 25; reformist_dissent += 25; neorevisionist_dissent += 15; z_relation -= 5; ddp_relation -= 5; dvp_relation -= 5
+subtitle: [? if spd_no_alternatives == 0 : This will be extremely unpopular within our party. ?][? if spd_no_alternatives == 1 : We have no other options, so the party will understand. ?]
+on-arrival: pro_republic -= 5 if spd_no_alternatives == 0; center_dissent += 15 if spd_no_alternatives == 0; left_dissent += 10 if spd_no_alternatives == 0; labor_dissent += 25 if spd_no_alternatives == 0; reformist_dissent += 25 if spd_no_alternatives == 0; neorevisionist_dissent += 15 if spd_no_alternatives == 0; z_relation -= 5 if spd_no_alternatives == 0; ddp_relation -= 5 if spd_no_alternatives == 0; dvp_relation -= 5 if spd_no_alternatives == 0
 go-to: right_coalition_2
-
 
 @popular_front_success
 on-arrival: spd_in_government = 1; in_popular_front = 1; chancellor = "Breitscheid"; chancellor_party = "SPD"; kpd_relation += 10; coup_progress += 2; in_left_front = 0; in_weimar_coalition = 0; in_grand_coalition = 0; coalition_dissent = 0;
@@ -1336,7 +1354,7 @@ go-to: no_govt_2
 
 @no_govt_2
 on-arrival: reformist_dissent += 25; center_dissent += 10; labor_dissent += 25; neorevisionist_dissent += 25; in_weimar_coalition = 0; in_grand_coalition = 0; chancellor = "Brüning" if chancellor == "Marx"; spd_in_government = 0; grand_coalition_failed = 1
-go-to: right_coalition_post_spd if right_coalition >= 50 and president != "Braun" and year < 1929; new_elections_spd if (right_coalition < 50 or year >= 1929) and president != "Braun"; brauns_dilemma if president == "Braun"
+go-to: right_coalition_post_spd if right_coalition >= 50 and president != "Braun"; new_elections_spd if (right_coalition < 50 or year >= 1929) and president != "Braun"; brauns_dilemma if president == "Braun"
 
 
 @right_coalition_post_spd
