@@ -1019,7 +1019,7 @@ title: Refuse to form a government, so that a right-wing coalition may be formed
 subtitle: Z + BVP + DVP + DNVP + Others ([+ right_coalition +]%)
 unavailable-subtitle: Hugenberg's DNVP is not willing to enter the government, according to their **Katastrophenpolitik** policy.
 view-if: right_coalition >= 50
-choose-if: dnvp_congress_result_0 = "Hugenbergite"
+choose-if: dnvp_congress_result_0 != "Hugenbergite"
 on-arrival: {!
 // Does the SPD have any other workable coalition?
 var alt = false;
