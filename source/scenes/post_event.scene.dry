@@ -131,6 +131,7 @@ Q.capped_var_ranges = {
     democratization:           [-10, 10],
 
     confronting_antisemitism:  [-1, 2],
+    neorevisionism:            [-1, 1],
 
     workers_aid:               [0, 15],
     campaign_media:            [0, 15],
@@ -221,6 +222,12 @@ function tickTimers() {
         if (Q[timer + '_timer'] && Q[timer + '_timer'] > 0) {
             Q[timer + '_timer'] -= 1;
         }
+    }
+    // THIS ONE INSTEAD INCREASES TIMER
+
+    if (Q.ideology = "Neorevisionist") {
+        if (!Q.spd_future_timer) Q.spd_future_timer = 0;
+        Q.spd_future_timer += 1;
     }
 }
 
