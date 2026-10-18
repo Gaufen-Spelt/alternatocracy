@@ -1849,7 +1849,7 @@ body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
   margin: 0 0 8px 0;
 }
 .leader-row {
-  transform: translateY(-10px);
+  transform: translateY(-8px);
 }
 
 #content hr.ui-divider { display: none; }
