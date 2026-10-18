@@ -2,27 +2,7 @@ title: Next month
 is-hand: true
 new-page: true
 on-arrival: {!
-// Pinned-cards text, as a function so the clock can refresh it live.
-window.computePinnedDescription = function() {
-    var Qs = dendryUI.dendryEngine.state.qualities;
-    var s;
-    if (Qs.advisor_action_timer <= 0) {
-        s = 'Advisors - an action is available.';
-    } else if (Qs.advisor_action_timer == 1) {
-        s = 'Advisors - next action available in 1 turn.';
-    } else {
-        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
-    }
 
-    if (Qs.fundraiser_timer == 1) {
-        s += '\n- next fundraiser in 1 turn';
-    } else {
-        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
-    }
-
-    Qs.pinnedCardsDescription = s;
-    $('.pinned-text-description').text(s);
-};
 window.computePinnedDescription();
 window.updateLeaderImages();
 
@@ -138,27 +118,7 @@ title: Next month
 is-hand: true
 new-page: true
 on-arrival: {!
-// Pinned-cards text, as a function so the clock can refresh it live.
-window.computePinnedDescription = function() {
-    var Qs = dendryUI.dendryEngine.state.qualities;
-    var s;
-    if (Qs.advisor_action_timer <= 0) {
-        s = 'Advisors - an action is available.';
-    } else if (Qs.advisor_action_timer == 1) {
-        s = 'Advisors - next action available in 1 turn.';
-    } else {
-        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
-    }
 
-    if (Qs.fundraiser_timer == 1) {
-        s += '\n- next fundraiser in 1 turn';
-    } else {
-        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
-    }
-
-    Qs.pinnedCardsDescription = s;
-    $('.pinned-text-description').text(s);
-};
 window.computePinnedDescription();
 window.updateLeaderImages();
 
@@ -291,27 +251,7 @@ title: Next month
 is-hand: true
 new-page: true
 on-arrival: {!
-// Pinned-cards text, as a function so the clock can refresh it live.
-window.computePinnedDescription = function() {
-    var Qs = dendryUI.dendryEngine.state.qualities;
-    var s;
-    if (Qs.advisor_action_timer <= 0) {
-        s = 'Advisors - an action is available.';
-    } else if (Qs.advisor_action_timer == 1) {
-        s = 'Advisors - next action available in 1 turn.';
-    } else {
-        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
-    }
 
-    if (Qs.fundraiser_timer == 1) {
-        s += '\n- next fundraiser in 1 turn';
-    } else {
-        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
-    }
-
-    Qs.pinnedCardsDescription = s;
-    $('.pinned-text-description').text(s);
-};
 window.computePinnedDescription();
 window.updateLeaderImages();
 
@@ -441,27 +381,7 @@ title: Next month
 is-hand: true
 new-page: true
 on-arrival: {!
-// Pinned-cards text, as a function so the clock can refresh it live.
-window.computePinnedDescription = function() {
-    var Qs = dendryUI.dendryEngine.state.qualities;
-    var s;
-    if (Qs.advisor_action_timer <= 0) {
-        s = 'Advisors - an action is available.';
-    } else if (Qs.advisor_action_timer == 1) {
-        s = 'Advisors - next action available in 1 turn.';
-    } else {
-        s = 'Advisors - next action available in ' + Qs.advisor_action_timer + ' turns.';
-    }
 
-    if (Qs.fundraiser_timer == 1) {
-        s += '\n- next fundraiser in 1 turn';
-    } else {
-        s += '\n- next fundraiser in ' + Qs.fundraiser_timer + ' turns.';
-    }
-
-    Qs.pinnedCardsDescription = s;
-    $('.pinned-text-description').text(s);
-};
 window.computePinnedDescription();
 window.updateLeaderImages();
 
