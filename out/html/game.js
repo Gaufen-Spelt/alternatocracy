@@ -608,6 +608,26 @@ window.tagCards = function() {
 
 
 
+
+
+  window.updateLeaderImages = function() {
+  var Q = dendryUI.dendryEngine.state.qualities;
+  var name = Q.spd_party_leader;
+  var img = name
+    ? 'img/portraits/' + name.toString().toLowerCase().replace(/\s+/g, '_') + '.jpg'
+    : null;
+  var ids = Object.keys((dendryUI.game.tagLookup || {}).leader || {});
+  ids.forEach(function(id) {
+    var scene = dendryUI.game.scenes[id];
+    if (scene) { scene.cardImage = img; scene.faceImage = img; }
+  });
+};
+
+
+
+
+
+
 window.buildLeadershipBoard = function() {
   $('#content .leadership-board').remove();
   var $pinned = $('#content ul.pinned-cards');
