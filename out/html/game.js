@@ -52,7 +52,8 @@ var main = function(dendryUI) {
     var original = ui[name];
     ui[name] = function(cards, extra) {
       var r = original.call(ui, fixCards(cards), extra);
-      window.tagCards();          
+      window.tagCards();
+      if (name === 'displayPinnedCards') { window.buildLeadershipBoard(); }
       return r;
     };
   });
@@ -606,6 +607,43 @@ window.tagCards = function() {
 
 
 
+
+window.buildLeadershipBoard = function() {
+  $('#content .leadership-board').remove();
+  var $pinned = $('#content ul.pinned-cards');
+  if (!$pinned.length) return;
+
+  var $leader   = $pinned.find('li.tag-leader');
+  var $advisors = $pinned.find('li.tag-advisor');
+  if (!$leader.length && !$advisors.length) return;
+
+  var $board = $('<div>').addClass('leadership-board');
+  var $leaderRow = $('<ul>').addClass('pinned-cards leader-row').append($leader);
+  var $advisorRow = $('<ul>').addClass('pinned-cards advisor-row').append($advisors);
+  if ($leader.length) $board.append($leaderRow);
+  if ($advisors.length) $board.append($advisorRow);
+
+  var $desc = $('#content .pinned-text-description').first();
+  var $hr = $desc.prev('hr');
+  ($hr.length ? $hr : $desc).before($board);
+
+  if (!$pinned.not('.leader-row, .advisor-row').children().length) {
+    $pinned.not('.leader-row, .advisor-row').hide();
+    $desc.hide();
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+  
 
   
 
