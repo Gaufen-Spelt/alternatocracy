@@ -1833,8 +1833,8 @@ body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin: 10px 0;
+  gap: 28px;
+  margin: 24px 0 28px 0;
 }
 .leadership-board ul {
   display: flex;
@@ -1846,16 +1846,42 @@ body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
 }
 .leadership-board > hr {
   width: 100%;
-  margin: 0 0 8px 0;
-}
-.leader-row {
-  transform: translateY(-8px);
+  margin: 0 0 12px 0;
 }
 
 #content hr.ui-divider { display: none; }
 
 .leadership-board ul { gap: 1em; }
 .leadership-board li { flex: 0 0 calc((100% - 2em) / 3); }
+
+.leader-row {
+  transform: none;
+  margin: 24px 0;
+}
+.leader-row li {
+  flex: 0 0 auto;
+}
+.leader-row a.card {
+  width: 160px;
+  height: 200px;
+}
+.leader-row .card-img {
+  width: 160px;
+  height: 200px;
+}
+.leader-row .card-caption {
+  font-size: 1.1em;
+}
+
 @media screen and (max-width: 560px) {
   .leadership-board li { flex-basis: calc((100% - 0.5em) / 2); }
+
+  .leader-row li {
+    flex-basis: auto;
+  }
+  .leader-row a.card,
+  .leader-row .card-img {
+    width: 130px;
+    height: 162px;
+  }
 }
