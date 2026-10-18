@@ -756,6 +756,21 @@ div.blank-card {
   box-shadow: none;
 }
 
+/* Unavailable leader is not actually unavailable colored. */
+
+li.tag-leader.unavailable-card {
+  color: var(--text-color);
+  background-color: transparent;
+}
+li.tag-leader.unavailable-card .card-img,
+li.tag-leader.unavailable-card .card-caption {
+  opacity: 1;
+}
+li.tag-leader.unavailable-card a.card {
+  border-color: var(--card-border-color);
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+}
+
 
 
 
