@@ -48,15 +48,16 @@ var main = function(dendryUI) {
     }
 
     ['displayHand', 'displayDecks', 'displayPinnedCards', 'displayMyNewRow']
-  .forEach(function(name) {
-    var original = ui[name];
-    ui[name] = function(cards, extra) {
-      var r = original.call(ui, fixCards(cards), extra);
-      window.tagCards();
-      if (name === 'displayPinnedCards') { window.buildLeadershipBoard(); }
-      return r;
-    };
-  });
+      .forEach(function(name) {
+        var original = ui[name];
+        ui[name] = function(cards, extra) {
+          var r = original.call(ui, fixCards(cards), extra);
+          $('#content > hr').not('#read-marker, .live-content').addClass('ui-divider');
+          window.tagCards();
+          if (name === 'displayPinnedCards') { window.buildLeadershipBoard(); }
+          return r;
+        };
+      });
 
 
     var originalDisplayChoices = ui.displayChoices;
@@ -647,10 +648,15 @@ window.buildLeadershipBoard = function() {
   var $advisors = $pinned.find('li.tag-advisor');
   if (!$leader.length && !$advisors.length) return;
 
+  var lname = dendryUI.dendryEngine.state.qualities.spd_party_leader;
+  if (lname && $leader.length) {
+    $leader.find('img.card-img').attr('src',
+      'img/portraits/' + lname.toString().toLowerCase().replace(/\s+/g, '_') + '.jpg');
+  }
+
   var $desc = $('#content .pinned-text-description').first();
   var $board = $('<div>').addClass('leadership-board');
 
-  $board.append('<hr>');
   if ($leader.length) {
     $board.append($('<ul>').addClass('pinned-cards leader-row').append($leader));
   }
@@ -663,12 +669,9 @@ window.buildLeadershipBoard = function() {
     $board.append($('<ul>').addClass('pinned-cards advisor-row').append($advisors));
   }
 
-  $desc.prev('hr').remove();
   ($desc.length ? $desc : $pinned.first()).before($board);
 
-  if ($pinned.children().length) {
-    $board.append('<hr>');
-  } else {
+  if (!$pinned.children().length) {
     $pinned.hide();
     $desc.hide();
   }
