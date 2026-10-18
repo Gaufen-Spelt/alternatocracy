@@ -654,9 +654,9 @@ window.buildLeadershipBoard = function() {
       'img/portraits/' + lname.toString().toLowerCase().replace(/\s+/g, '_') + '.jpg');
   }
 
-  $board.append('<hr>');
   var $desc = $('#content .pinned-text-description').first();
   var $board = $('<div>').addClass('leadership-board');
+  $board.append('<hr>');
 
   if ($leader.length) {
     $board.append($('<ul>').addClass('pinned-cards leader-row').append($leader));
