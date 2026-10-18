@@ -3,9 +3,10 @@ subtitle: Party leader
 new-page: true
 is-pinned-card: true
 tags: leader
+choose-if: 1 == 0
 
 = [+ spd_party_leader +]
 
-Well.
+Well. if You got here, go back.
 
 - @root: Go back.
