@@ -1,0 +1,29 @@
+title: Party Congress 
+subtitle: Factions are vying for control.
+tags: event
+view-if: party_congress_month = month and party_congress_year >= year
+new-page: true
+
+= Party Congress has been declared
+
+The new party congress is open.
+
+- @count
+
+@count
+on-arrival: {!
+Q.left_r = Q.left_strength;
+Q.center_r = Q.center_strength;
+Q.labor_r = Q.labor_strength;
+Q.ref_r = Q.reformist_strength;
+Q.neo_r = Q.neorevisionist_strength;
+
+if (Q.socialpatriotism >= 1) {
+    Q.soc_r = Q.socialpatriot_strength
+}
+
+if (Q.ethical_socialism >= 1) {
+    Q.eth_r = Q.ethical_strength;
+}
+
+!}
