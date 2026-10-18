@@ -626,7 +626,17 @@ window.tagCards = function() {
 
 
 
+window.computePinnedDescription = function() {
+  var Qs = dendryUI.dendryEngine.state.qualities;
+  var a = Qs.advisor_action_timer, f = Qs.fundraiser_timer;
+  var adv = a <= 0 ? 'Advisors - an action is available.'
+    : 'Advisors - next action available in ' + a + (a == 1 ? ' turn.' : ' turns.');
+  var fund = 'Next fundraiser in ' + f + (f == 1 ? ' turn.' : ' turns.');
 
+  Qs.pinnedCardsDescription = fund;               // bottom row text
+  $('.pinned-text-description').text(fund);
+  $('.advisor-text-description').text(adv);       // advisor row heading
+};
 
 window.buildLeadershipBoard = function() {
   $('#content .leadership-board').remove();
@@ -637,22 +647,34 @@ window.buildLeadershipBoard = function() {
   var $advisors = $pinned.find('li.tag-advisor');
   if (!$leader.length && !$advisors.length) return;
 
-  var $board = $('<div>').addClass('leadership-board');
-  var $leaderRow = $('<ul>').addClass('pinned-cards leader-row').append($leader);
-  var $advisorRow = $('<ul>').addClass('pinned-cards advisor-row').append($advisors);
-  if ($leader.length) $board.append($leaderRow);
-  if ($advisors.length) $board.append($advisorRow);
-
   var $desc = $('#content .pinned-text-description').first();
-  var $hr = $desc.prev('hr');
-  ($hr.length ? $hr : $desc).before($board);
+  var $board = $('<div>').addClass('leadership-board');
 
-  if (!$pinned.not('.leader-row, .advisor-row').children().length) {
-    $pinned.not('.leader-row, .advisor-row').hide();
+  $board.append('<hr>');
+  if ($leader.length) {
+    $board.append($('<ul>').addClass('pinned-cards leader-row').append($leader));
+  }
+  if ($advisors.length) {
+    $board.append(
+      $('<p>').attr('class', $desc.attr('class') || '')
+        .removeClass('pinned-text-description')
+        .addClass('advisor-text-description')
+    );
+    $board.append($('<ul>').addClass('pinned-cards advisor-row').append($advisors));
+  }
+
+  $desc.prev('hr').remove();
+  ($desc.length ? $desc : $pinned.first()).before($board);
+
+  if ($pinned.children().length) {
+    $board.append('<hr>');
+  } else {
+    $pinned.hide();
     $desc.hide();
   }
-};
 
+  window.computePinnedDescription();
+};
 
 
 
