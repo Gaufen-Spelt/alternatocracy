@@ -1,0 +1,11 @@
+title: [+ spd_party_leader +]
+subtitle: Party leader
+new-page: true
+is-pinned-card: true
+tags: leader
+
+= [+ spd_party_leader +]
+
+Well.
+
+- @root: Go back.
