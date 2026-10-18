@@ -115,6 +115,7 @@ max-cards: 4
 - @party
 - @govt
 - #advisor
+- #leader
 - @shuffle_leadership_pinned
 - @fundraising
 
@@ -250,6 +251,7 @@ max-cards: 6
 - @party
 - @govt
 - #advisor
+- #leader
 - @shuffle_leadership_pinned
 - @fundraising
 
@@ -402,6 +404,7 @@ max-cards: 2
 - @party
 - @govt
 - #advisor
+- #leader
 - @shuffle_leadership_pinned
 - @fundraising
 
@@ -551,6 +554,7 @@ max-cards: 3
 - @party
 - @govt
 - #advisor
+- #leader
 - @shuffle_leadership_pinned
 - @fundraising
 
