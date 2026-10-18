@@ -4,6 +4,7 @@ new-page: true
 is-pinned-card: true
 tags: leader
 choose-if: 1 == 0
+unavailable-subtitle: [? if spd_party_leader = "Collective": Collective rule of Wels, Muller and Crispien. ?]
 
 = [+ spd_party_leader +]
 
