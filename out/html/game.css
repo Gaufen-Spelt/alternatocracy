@@ -834,6 +834,8 @@ a.card:hover .card-tooltip {
     order: 3;
 }
 
+.card-in-hand:not([class*="tag-"]) { order: 9; }
+
 /* =====================================================================
    FACE FIGURE
    ===================================================================== */
@@ -1828,5 +1830,13 @@ body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
   margin: 0;
 }
 .leader-row {
-  transform: translateY(-8px);
+  transform: translateY(-10px);
+}
+
+#content hr.ui-divider { display: none; }
+
+.leadership-board ul { gap: 1em; }
+.leadership-board li { flex: 0 0 calc((100% - 2em) / 3); }
+@media screen and (max-width: 560px) {
+  .leadership-board li { flex-basis: calc((100% - 0.5em) / 2); }
 }
