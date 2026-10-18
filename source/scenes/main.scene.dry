@@ -24,6 +24,7 @@ window.computePinnedDescription = function() {
     $('.pinned-text-description').text(s);
 };
 window.computePinnedDescription();
+window.updateLeaderImages();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -158,6 +159,7 @@ window.computePinnedDescription = function() {
     $('.pinned-text-description').text(s);
 };
 window.computePinnedDescription();
+window.updateLeaderImages();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -309,6 +311,7 @@ window.computePinnedDescription = function() {
     $('.pinned-text-description').text(s);
 };
 window.computePinnedDescription();
+window.updateLeaderImages();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -457,6 +460,7 @@ window.computePinnedDescription = function() {
     $('.pinned-text-description').text(s);
 };
 window.computePinnedDescription();
+window.updateLeaderImages();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
