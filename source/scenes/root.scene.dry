@@ -47,6 +47,7 @@ Q.ddp_banned = 0; Q.z_banned = 0; Q.bvp_banned = 0;
 Q.dvp_banned = 0; Q.dnvp_banned = 0;
 
 Q.ideology = "Centrist";
+Q.spd_party_leader = "Collective";
 Q.spd_centrist = 1;
 Q.spd_world = 0;
 Q.youth_crisis_spd = 1;
