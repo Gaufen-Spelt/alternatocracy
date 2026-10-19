@@ -1,7 +1,7 @@
 title: Party Congress 
 subtitle: Factions are vying for control.
 tags: event
-view-if: party_congress_month = month and party_congress_year >= year
+view-if: year > party_congress_year or (year = party_congress_year and month >= party_congress_month)
 new-page: true
 on-arrival: party_congress_year = year + 4
 
