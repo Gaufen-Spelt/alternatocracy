@@ -91,4 +91,366 @@ if (Q.highest_r <= 30) {
 
 = [+ spd_party_leader +] has been selected to the Leadership.
 
-Highest value faction wins lmao.
+Highest value faction wins.
+
+- @advisors: Now, advisors...
+
+@advisors
+on-arrival: {!
+
+// 1. Reset factional advisors (independent slot untouched)
+var names = ["levi", "sender", "rosenfeld", "seydewitz", "siemsen",
+             "hilferding", "wels", "muller", "breitscheid",
+             "severing", "braun", "juchacz", "pfulf",
+             "leipart", "aufhauser", "wissell", "woytinsky",
+             "mierendorff", "leber", "schumacher"];
+
+for (var i = 0; i < names.length; i++) {
+    Q[names[i] + "_advisor"] = 0;
+}
+
+Q.n_advisors = 0;
+Q.left_advisors = 0;
+Q.center_advisors = 0;
+Q.labor_advisors = 0;
+Q.ref_advisors = 0;
+Q.neo_advisors = 0;
+
+// 2. Rank factions (soc/eth join once they have advisor pools)
+var f = [
+    {k: "left",   r: Q.left_r},
+    {k: "center", r: Q.center_r},
+    {k: "labor",  r: Q.labor_r},
+    {k: "ref",    r: Q.ref_r},
+    {k: "neo",    r: Q.neo_r}
+];
+if (Q.socialpatriotism >= 1 && Q.has_soc_advisors) {
+    f.push({k: "soc", r: Q.soc_r});
+}
+if (Q.ethical_socialism >= 1 && Q.has_eth_advisors) {
+    f.push({k: "eth", r: Q.eth_r});
+}
+
+f.sort(function(a, b) { return b.r - a.r; });
+
+// 3. Allocate 3 slots
+var slots = {left: 0, center: 0, labor: 0, ref: 0, neo: 0, soc: 0, eth: 0};
+var lead1 = f[0].r - f[1].r;
+var lead2 = f[1].r - f[2].r;
+
+if (Q.spd_centrist) {
+    // Center Marxist leadership holds the advisorship
+    slots.center = 3;
+} else if (lead1 >= 30) {
+    slots[f[0].k] = 3;
+} else if (lead1 >= 15) {
+    slots[f[0].k] = 2;
+    slots[f[1].k] = 1;
+} else if (lead2 >= 15) {
+    slots[f[0].k] = 1;
+    slots[f[1].k] = 2;
+} else {
+    slots[f[0].k] = 1;
+    slots[f[1].k] = 1;
+    slots[f[2].k] = 1;
+}
+
+// 4. Cap slots by how many advisors are actually available
+var pool = {left: 0, center: 0, labor: 0, ref: 0, neo: 0, soc: 0, eth: 0};
+
+pool.left   = Q.left_split ? 0 : (Q.levi_dead ? 4 : 5);
+pool.center = Q.centrists_resign ? 1 : (Q.muller_dead ? 3 : 4);
+pool.ref    = Q.reformists_resign ? 1 : 4;
+pool.labor  = Q.unions_independent ? 1 : 4;
+pool.neo    = (Q.neorevisionism > 0) ? (Q.neorev_split ? 2 : 3) : 0;
+
+for (var key in slots) {
+    slots[key] = Math.min(slots[key], pool[key]);
+}
+
+Q.left_slots = slots.left;
+Q.center_slots = slots.center;
+Q.labor_slots = slots.labor;
+Q.ref_slots = slots.ref;
+Q.neo_slots = slots.neo;
+Q.soc_slots = slots.soc;
+Q.eth_slots = slots.eth;
+
+Q.total_slots = slots.left + slots.center + slots.labor
+              + slots.ref + slots.neo + slots.soc + slots.eth;
+!}
+go-to: advisor_menu
+
+@advisor_menu
+title: Appoint advisors
+tags: center_advisor, left_advisor, reformist_advisor, labor_advisor, neorev_advisor, nonfactional_advisor
+
+The congress has apportioned the advisory seats by faction strength.
+
+[? if left_slots > 0 : Left: [+ left_advisors +]/[+ left_slots +]. ?][? if center_slots > 0 : Center: [+ center_advisors +]/[+ center_slots +]. ?][? if labor_slots > 0 : Labor: [+ labor_advisors +]/[+ labor_slots +]. ?][? if ref_slots > 0 : Reformist: [+ ref_advisors +]/[+ ref_slots +]. ?][? if neo_slots > 0 : Neorevisionist: [+ neo_advisors +]/[+ neo_slots +]. ?]
+
+- #center_advisor
+- #left_advisor
+- #reformist_advisor
+- #labor_advisor
+- #neorev_advisor
+- #nonfactional_advisor
+- @advisors_done
+
+@advisors_done
+title: Conclude the congress
+choose-if: n_advisors >= total_slots
+unavailable-subtitle: Every faction seat must be filled first.
+go-to: root
+
+################### centrists
+
+@add_hilferding
+title: Rudolf Hilferding
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/HilferdingRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Hilferding is an economist and a disciple of Karl Kautsky. Originating from Vienna, Austria, he trained as a medical doctor, but later became involved in Marxist economics as a discipline. He has been the lead ideologist of our party since the Heidelberg Program of 1925.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Against Right and Left, Defending Toleration, Fiscal Policy, Economic Democracy ?]
+tags: center_advisor
+view-if: hilferding_advisor = 0 and center_advisors < center_slots and centrists_resign = 0
+on-arrival: hilferding_advisor = 1; n_advisors += 1; center_advisors += 1
+go-to: advisor_menu
+
+Rudolf Hilferding is now an advisor.
+
+@add_wels
+title: Otto Wels
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/WelsOtto.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Wels is the long-time chairman of the SPD. He is a gifted organizer and a member of the centrist faction.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions -  Clear the Agenda, Party Discipline , The Republican Synthesis ?]
+tags: center_advisor
+view-if: wels_advisor = 0 and center_advisors < center_slots and centrists_resign = 0
+on-arrival: wels_advisor = 1; n_advisors += 1; center_advisors += 1
+go-to: advisor_menu
+
+Otto Wels is now an advisor.
+
+@add_muller
+title: Hermann Müller
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/MüllerHermann.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Müller is a former [? if chancellor = "Müller": and current ?] Chancellor, and is a long-time Social Democratic leader.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Negotiating with the Coalition, Defending Toleration ?]
+tags: center_advisor
+view-if: muller_advisor = 0 and muller_dead = 0 and center_advisors < center_slots and centrists_resign = 0
+on-arrival: muller_advisor = 1; n_advisors += 1; center_advisors += 1
+go-to: advisor_menu
+
+Hermann Müller is now an advisor.
+
+@add_breitscheid
+title: Rudolf Breitscheid
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/BreitscheidRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Breitscheid is a long-time SPD leader, who was at one time part of the anti-war USPD. He came from a working-class family, but has a doctorate degree and started his political career as a liberal.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - International Relations, Foreign Policy, Party Discipline ?]
+tags: center_advisor
+view-if: breitscheid_advisor = 0 and center_advisors < center_slots
+on-arrival: breitscheid_advisor = 1; n_advisors += 1; center_advisors += 1
+go-to: advisor_menu
+
+Rudolf Breitscheid is now an advisor.
+
+################### reformists
+
+@add_severing
+title: Carl Severing
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/SeveringCarl.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Severing has been Interior Minister for both the German Republic and for the state of Prussia, and his priority is using the security services to target the enemies of the republic.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Prussian Bulwark, Police Affairs ?]
+tags: reformist_advisor
+view-if: severing_advisor = 0 and ref_advisors < ref_slots and reformists_resign = 0
+on-arrival: severing_advisor = 1; n_advisors += 1; ref_advisors += 1; reformist_strength += 5
+go-to: advisor_menu
+
+Carl Severing is now an advisor.
+
+@add_braun
+title: Otto Braun
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/BraunOtto.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Braun [? if spd_prussia = 1 : is ?][? if spd_prussia = 0 : was ?] the Minister-President of Prussia, the largest state in Germany. He is a reformist leader who seeks to work with the bourgeois parties.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Prussian Bulwark, Negotiating with the Coalition ?]
+tags: reformist_advisor
+view-if: braun_advisor = 0 and ref_advisors < ref_slots
+on-arrival: braun_advisor = 1; n_advisors += 1; ref_advisors += 1; reformist_strength += 5
+go-to: advisor_menu
+
+Otto Braun is now an advisor.
+
+@add_juchacz
+title: Marie Juchacz
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/JuchaczMarie.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Juchacz is the founder of the Worker's Welfare, our mutual aid organization; her experiences as a single mother in poverty led her to socialism. She is the most senior woman among the SPD leadership, who is often treated as the "go-to" when the predominantly male leadership sought out womens' voices.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Worker's Welfare, Organizing Women, Solidarity Network ?]
+tags: reformist_advisor
+view-if: juchacz_advisor = 0 and ref_advisors < ref_slots and reformists_resign = 0
+on-arrival: juchacz_advisor = 1; n_advisors += 1; ref_advisors += 1; reformist_strength += 5
+go-to: advisor_menu
+
+Marie Juchacz is now an advisor.
+
+@add_pfulf
+title: Antonie Pfülf
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/PfülfAntonie.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Pfülf is a former teacher from Bavaria who came from a conservative Catholic family. She is an activist for women's rights and for broadening the support of the SPD.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Support a People's Party, Women's Rights ?]
+tags: reformist_advisor
+view-if: pfulf_advisor = 0 and ref_advisors < ref_slots and reformists_resign = 0
+on-arrival: pfulf_advisor = 1; n_advisors += 1; ref_advisors += 1
+go-to: advisor_menu
+
+Antonie Pfülf is now an advisor.
+
+################### left
+
+@add_levi
+title: Paul Levi
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/LeviPaul.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Levi is a former leader of the KPD who left over their devotion to violence and revolutionary adventurism.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Building the Left, Cooperation with the KPD ?]
+tags: left_advisor
+view-if: levi_advisor = 0 and levi_dead = 0 and left_advisors < left_slots and left_split = 0
+on-arrival: levi_advisor = 1; n_advisors += 1; left_advisors += 1; left_strength += 5
+go-to: advisor_menu
+
+Paul Levi is now an advisor.
+
+@add_sender
+title: Toni Sender
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/SenderToni.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Toni Sender is an organizer and writer who came from a bourgeois family, but was radicalized into socialism after her experiences in the workforce. She was a member of the anti-war USPD, but did not support armed revolution.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Left-Center Unity, Organizing Women, Against Toleration, Addressing the Economic Crisis ?]
+tags: left_advisor
+view-if: sender_advisor = 0 and left_advisors < left_slots and left_split = 0
+on-arrival: sender_advisor = 1; n_advisors += 1; left_advisors += 1; left_strength += 5
+go-to: advisor_menu
+
+Toni Sender is now an advisor.
+
+@add_rosenfeld
+title: Kurt Rosenfeld
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/RosenfeldKurt.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Rosenfeld works as a lawyer in Berlin who defends left-wing individuals and causes. He favors cooperation with the KPD and a path of class struggle for the SPD.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Building the Left, Cooperation with the KPD, Against Toleration ?]
+tags: left_advisor
+view-if: rosenfeld_advisor = 0 and left_advisors < left_slots and left_split = 0
+on-arrival: rosenfeld_advisor = 1; n_advisors += 1; left_advisors += 1; left_strength += 5
+go-to: advisor_menu
+
+Kurt Rosenfeld is now an advisor.
+
+@add_seydewitz
+title: Max Seydewitz
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/SeydewitzMax.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Max Seydewitz is a former leader of the youth wing, current supporter of the left wing of the SPD, and advocates for class struggle.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Rally for Class Struggle, Socialist Youth, Against Toleration ?]
+tags: left_advisor
+view-if: seydewitz_advisor = 0 and left_advisors < left_slots and left_split = 0
+on-arrival: seydewitz_advisor = 1; n_advisors += 1; left_advisors += 1; left_strength += 5
+go-to: advisor_menu
+
+Max Seydewitz is now an advisor.
+
+@add_siemsen
+title: Anna Siemsen
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/SiemsenAnna.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Anna Siemsen is an educational reform advocate and pacifist, who was one of the few German women to receive a PhD in the pre-war period. She was a former member of the USPD.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Rally for Pacifism, Educational Curriculum, Educational Structure ?]
+tags: left_advisor
+view-if: siemsen_advisor = 0 and left_advisors < left_slots and left_split = 0
+on-arrival: siemsen_advisor = 1; n_advisors += 1; left_advisors += 1; left_strength += 5
+go-to: advisor_menu
+
+Anna Siemsen is now an advisor.
+
+################### labor
+
+@add_leipart
+title: Theodor Leipart
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/LeipartTheodor.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Leipart is a leader of the ADGB, the largest federation of socialist trade unions.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Organizing Workers, Addressing the Economic Crisis ?]
+tags: labor_advisor
+view-if: leipart_advisor = 0 and labor_advisors < labor_slots and unions_independent = 0
+on-arrival: leipart_advisor = 1; n_advisors += 1; labor_advisors += 1; labor_strength += 5
+go-to: advisor_menu
+
+Theodor Leipart is now an advisor.
+
+@add_aufhauser
+title: Siegfried Aufhäuser
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/AufhäuserSiegfried.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Aufhäuser is a leader of the AfA-Bund, the federation of socialist white-collar trade unions.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Organizing White-Collar Workers, Union-Party Coordination, Addressing the Economic Crisis ?]
+tags: labor_advisor
+view-if: aufhauser_advisor = 0 and labor_advisors < labor_slots
+on-arrival: aufhauser_advisor = 1; n_advisors += 1; labor_advisors += 1; labor_strength += 5
+go-to: advisor_menu
+
+Siegfried Aufhäuser is now an advisor.
+
+@add_wissell
+title: Rudolf Wissell
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/WissellRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Wissell is a labor economist working for the ADGB, the federation of free trade unions, and has been a labor minister on multiple occasions. His priority is to improve conditions for organized workers.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Union-Party Coordination, Labor Rights ?]
+tags: labor_advisor
+view-if: wissell_advisor = 0 and labor_advisors < labor_slots and unions_independent = 0
+on-arrival: wissell_advisor = 1; n_advisors += 1; labor_advisors += 1; labor_strength += 3
+go-to: advisor_menu
+
+Rudolf Wissell is now an advisor.
+
+@add_woytinsky
+title: Wladimir Woytinsky
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/WoytinskyWladimir.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Wladimir Woytinsky is a Russian Menshevik in exile, and the chief economist of the socialist trade union federation. His primary idea is to use massive government spending as a way of stimulating demand to extricate us from the depression.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Emergency Deficit Budget, Addressing the Economic Crisis, Carrying Out the Economic Plan ?]
+tags: labor_advisor
+view-if: woytinsky_advisor = 0 and labor_advisors < labor_slots and unions_independent = 0
+on-arrival: woytinsky_advisor = 1; n_advisors += 1; labor_advisors += 1; labor_strength += 3
+go-to: advisor_menu
+
+Wladimir Woytinsky is now an advisor.
+
+################### neorevisionists
+
+@add_mierendorff
+title: Carlo Mierendorff
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/MierendorffCarlo.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Carlo Mierendorff is the founder of the neo-revisionist ideological tendency, and supports both democratic reforms and extra-parliamentary action to combat the Nazis and authoritarian parties. He is from a middle-class, academic background, and is one of our youngest leaders.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Build the Iron Front, Warning About the Nazis ?]
+tags: neorev_advisor
+view-if: mierendorff_advisor = 0 and neorevisionism > 0 and neo_advisors < neo_slots and neorev_split = 0
+on-arrival: mierendorff_advisor = 1; n_advisors += 1; neo_advisors += 1; neorevisionist_strength += 5
+go-to: advisor_menu
+
+Carlo Mierendorff is now an advisor.
+
+@add_schumacher
+title: Kurt Schumacher
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/SchumacherKurt.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>A Great War veteran and a neorevisionist leader, Kurt Schumacher argues for a strong resistance against the Nazis.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Emergency Fundraising, Building the Reichsbanner, Addressing the Economic Crisis ?]
+tags: neorev_advisor
+view-if: schumacher_advisor = 0 and neorevisionism > 0 and neo_advisors < neo_slots
+on-arrival: schumacher_advisor = 1; n_advisors += 1; neo_advisors += 1; neorevisionist_strength += 5
+go-to: advisor_menu
+
+Kurt Schumacher is now an advisor.
+
+@add_leber
+title: Julius Leber
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/LeberJulius.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Leber is a former army officer who turned against the military leaders of the Kapp Putsch in 1920, helping us put down the army's attempted coup. He is in favor of expanded democracy and building a broad popular base for the SPD.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Rally for Democracy, Military Affairs, Building a People's Party ?]
+tags: neorev_advisor
+view-if: leber_advisor = 0 and neorevisionism > 0 and neo_advisors < neo_slots
+on-arrival: leber_advisor = 1; n_advisors += 1; neo_advisors += 1; neorevisionist_strength += 5
+go-to: advisor_menu
+
+Julius Leber is now an advisor.
+
+################### independent (4th slot, always player-selected)
+
+@add_baade
+title: Fritz Baade
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/BaadeFritz.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Baade is one of the few agricultural experts in the SPD, and an unorthodox economist.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Agricultural Policy, Rural Campaigning, Addressing the Economic Crisis ?]
+tags: nonfactional_advisor
+view-if: baade_advisor = 0 and n_nonfactional_advisors < 1
+on-arrival: baade_advisor = 1; n_nonfactional_advisors += 1
+go-to: advisor_menu
+
+Fritz Baade is now an advisor.
+
+@add_hirschfeld
+title: Magnus Hirschfeld
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/HirschfeldMagnus.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Magnus Hirschfeld is the founder of the Institut für Sexualwissenschaft and an advocate for the rights of sexual minorities.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Homosexual Rights, Women's Rights, Science Funding ?]
+tags: nonfactional_advisor
+view-if: hirschfeld_advisor = 0 and n_nonfactional_advisors < 1
+on-arrival: hirschfeld_advisor = 1; n_nonfactional_advisors += 1
+go-to: advisor_menu
+
+Magnus Hirschfeld is now an advisor.
+
+@add_radbruch
+title: Gustav Radbruch
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/RadbruchGustav.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Gustav Radbruch is a renowned legal scholar and long-time SPD justice minister.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Judicial Affairs, Constitutional Reform ?]
+tags: nonfactional_advisor
+view-if: radbruch_advisor = 0 and n_nonfactional_advisors < 1
+on-arrival: radbruch_advisor = 1; n_nonfactional_advisors += 1
+go-to: advisor_menu
+
+Gustav Radbruch is now an advisor.
+
+@add_stampfer
+title: Friedrich Stampfer
+subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/StampferFriedrich.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Friedrich Stampfer is the long-time editor-in-chief of Vorwärts, our party newspaper, and also a Reichstag member. He was historically part of the Majority SPD that supported our participation in the Great War, but also supports cooperation with the KPD to save the Republic.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Media, Editorial Line, Cooperation with the KPD ?]
+tags: nonfactional_advisor
+view-if: stampfer_advisor = 0 and n_nonfactional_advisors < 1
+on-arrival: stampfer_advisor = 1; n_nonfactional_advisors += 1
+go-to: advisor_menu
+
+Friedrich Stampfer is now an advisor.
