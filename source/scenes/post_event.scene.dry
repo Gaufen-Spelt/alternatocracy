@@ -225,7 +225,7 @@ function tickTimers() {
     }
     // THIS ONE INSTEAD INCREASES TIMER
 
-    if (Q.ideology = "Neorevisionist") {
+    if (Q.ideology == "Neorevisionist") {
         if (!Q.spd_future_timer) Q.spd_future_timer = 0;
         Q.spd_future_timer += 1;
     }
