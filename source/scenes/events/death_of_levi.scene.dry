@@ -2,11 +2,33 @@ title: The Death of Paul Levi
 view-if: year == 1930 and month >= 2
 frequency: 1000
 max-visits: 1
-on-arrival: levi_dead = 1; n_advisors -= 1 if levi_advisor == 1; levi_advisor = 0
 tags: event
 new-page: true
 face-image: img/portraits/LeviPaul.jpg
+on-arrival: {!
+Q.levi_dead = 1;
+
+if (Q.levi_advisor == 1) {
+    Q.levi_advisor = 0;
+    Q.n_advisors -= 1;
+    Q.left_advisors -= 1;
+}
+
+if (Q.spd_party_leader == "Levi") {
+    Q.spd_party_leader = "Rosenfeld";
+}
+!}
 
 = The Death of Paul Levi
 
 Paul Levi, a leader of the left wing of our party, has died in an unfortunate accident. He will be missed.
+
+[? if left_advisors < left_slots : The Left must name a replacement advisor. ?]
+
+- @adv: Appoint a replacement
+- @continue: Continue
+
+@adv
+title: Appoint a replacement
+view-if: left_advisors < left_slots
+go-to: advisor_menu
