@@ -3,10 +3,22 @@ view-if: year = 1931 and month >= 3
 frequency: 1000
 max-visits: 1
 tags: event
-go-to: pm if chancellor = "Müller"; not_pm if chancellor != "Müller"
-on-arrival: muller_dead = 1; n_advisors -= 1 if muller_advisor == 1; muller_advisor = 0;
 new-page: true
 face-image: img/portraits/MüllerHermann.jpg
+on-arrival: {!
+Q.muller_dead = 1;
+
+if (Q.muller_advisor == 1) {
+    Q.muller_advisor = 0;
+    Q.n_advisors -= 1;
+    Q.center_advisors -= 1;
+}
+
+Q.center_slots = Math.min(Q.center_slots, Q.centrists_resign ? 1 : 3);
+Q.total_slots = Q.left_slots + Q.center_slots + Q.labor_slots
+              + Q.ref_slots + Q.neo_slots + Q.soc_slots + Q.eth_slots;
+!}
+go-to: pm if chancellor = "Müller"; not_pm if chancellor != "Müller"
 
 = The Death of Hermann Müller
 
@@ -28,6 +40,8 @@ subtitle: The Center Party is worried about having so much power in one man.
 
 Our coalition partners are reluctant to accept the new Chancellor, but they do not make loud objections.
 
+- @adv: Appoint a replacement advisor
+
 
 @wels_chancellor
 on-arrival: chancellor = "Wels"; chancellor_party = "SPD"; z_relation -= 3; dvp_relation -= 3
@@ -35,17 +49,23 @@ subtitle: He is a good organizer, but is he also a good chancellor?
 
 Our coalition partners are reluctant to accept the new Chancellor, but they do not make loud objections.
 
+- @adv: Appoint a replacement advisor
+
 @breitscheid_chancellor
 on-arrival: chancellor = "Breitscheid"; chancellor_party = "SPD"; z_relation -= 5; dvp_relation -= 5; kpd_relation += 1
 subtitle: The Center Party is worried about his left-leaning tendencies.
 
 Our coalition partners are reluctant to accept the new Chancellor, but they do not make loud objections.
 
+- @adv: Appoint a replacement advisor
+
 @bruning_chancellor
 on-arrival: chancellor = "Brüning"; chancellor_party = "Z"; z_relation += 5; dvp_relation += 5
 subtitle: The Center Party claims it is their turn...
 
 The Center Party is grateful that we have supported Brüning for Chancellor.
+
+- @adv: Appoint a replacement advisor
 
 @wirth_chancellor
 on-arrival: chancellor = "Wirth"; chancellor_party = "Z"; z_relation += 5; dvp_relation += 2
@@ -54,7 +74,14 @@ subtitle: As a moderate member of the Center Party, he could represent unity.
 
 Our coalition partners accept Joseph Wirth of the Center Party as the new Chancellor.
 
+- @adv: Appoint a replacement advisor
 
 @not_pm
 
 Herman Müller, one of the SPD's long-time leaders, has died. He will be greatly missed.
+
+- @adv: Appoint a replacement advisor
+
+@adv
+go-to: advisor_menu
+view-if: center_advisors < center_slots and in_congress = 0
