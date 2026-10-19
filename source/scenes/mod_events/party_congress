@@ -3,15 +3,25 @@ subtitle: Factions are vying for control.
 tags: event
 view-if: party_congress_month = month and party_congress_year >= year
 new-page: true
+on-arrival: party_congress_year = year + 4
 
 = Party Congress has been declared
 
 The new party congress is open.
 
-- @count
+- @count: And...
 
 @count
 on-arrival: {!
+
+Q.left_r = 0;
+Q.center_r = 0;
+Q.labor_r = 0;
+Q.ref_r = 0;
+Q.neo_r = 0;
+Q.soc_r = 0;
+Q.eth_r = 0;
+
 Q.left_r = Q.left_strength;
 Q.center_r = Q.center_strength;
 Q.labor_r = Q.labor_strength;
@@ -19,11 +29,66 @@ Q.ref_r = Q.reformist_strength;
 Q.neo_r = Q.neorevisionist_strength;
 
 if (Q.socialpatriotism >= 1) {
-    Q.soc_r = Q.socialpatriot_strength
+    Q.soc_r = Q.socialpatriot_strength;
 }
 
 if (Q.ethical_socialism >= 1) {
     Q.eth_r = Q.ethical_strength;
 }
 
+// 3. Find the highest value and signal it
+var r_values = {
+    left: Q.left_r,
+    center: Q.center_r,
+    labor: Q.labor_r,
+    ref: Q.ref_r,
+    neo: Q.neo_r,
+    soc: Q.soc_r,
+    eth: Q.eth_r
+};
+
+var top_name = "";
+var top_value = -Infinity;
+
+for (var key in r_values) {
+    if (r_values[key] > top_value) {
+        top_value = r_values[key];
+        top_name = key;
+    }
+}
+
+Q.highest_r = top_value;     // the highest value
+Q.highest_faction = top_name; // which faction holds it
+
+if (Q.highest_r <= 30) {
+    Q.spd_party_leader = "collective";
+} else {
+    switch (Q.highest_faction) {
+        case "left":
+            Q.spd_party_leader = Q.levi_dead ? "Rosenfeld" : "Levi";
+            break;
+        case "center":
+            Q.spd_party_leader = "Hilferding";
+            break;
+        case "labor":
+            Q.spd_party_leader = "Leipart";
+            break;
+        case "ref":
+            Q.spd_party_leader = "Braun";
+            break;
+        case "neo":
+            Q.spd_party_leader = "Mierendorff";
+            break;
+        case "eth":
+            Q.spd_party_leader = "Eichler";
+            break;
+        case "soc":
+            Q.spd_party_leader = "Heller";
+            break;
+    }
+}
 !}
+
+= [+ spd_party_leader +] has been selected to the Leadership.
+
+Highest value faction wins lmao.
