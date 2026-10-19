@@ -12,6 +12,9 @@ go-to: sandbox_menu
 
 @technical
 
+- @set
+- @set_p
+- @set_c
 - @goto: Go to any scene
 - @setvar: Set variable
 - @getvar: Get variable
@@ -20,8 +23,6 @@ go-to: sandbox_menu
 - @null: Null variables?
 - @sanity_check: Sanity_check
 - @setpath: General JS, paths, States.
-- @set
-- @set_p
 - @timers
 - @t_timers: All timers
 - @sandbox_menu: Back
@@ -1062,7 +1063,24 @@ go-to: technical
 
 
 
+@set_c
+title: Party Congress time to default
 
+Set party congress time to default?
+
+- @yesc: Yes.
+- @technical: No.
+
+@yesc
+on-arrival: {!
+Q.party_congress_month = Q.month + 2;
+Q.party_congress_year = Q.year;
+if (Q.party_congress_month > 12) {
+    Q.party_congress_month -= 12;
+    Q.party_congress_year += 1;
+}
+!}
+go-to: technical
 
 
 
