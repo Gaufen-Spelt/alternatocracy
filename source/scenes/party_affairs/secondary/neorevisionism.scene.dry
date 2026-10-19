@@ -12,7 +12,6 @@ max-visits: 1
 
 Several young socialists, led by Carlo Mierendorff, are calling for a "new revisionism" in response to the Nazi threat. This political tendency calls for a mass movement in favor of democracy in order to counter the Nazi and Communist movements, and to update our rhetoric and imagery to appeal to emotion and not just reason.
 
-#- @shuffle_leadership: It's time to change our advisors to take into account new ideas.
 - @support_neo: Support the neorevisionist movement.
 - @no_new_ideas: We don't need new ideas.
 - @easy_discard
@@ -22,7 +21,6 @@ on-arrival: neorevisionist_strength += 10; nazi_urgency += 1; neorevisionism = 1
 
 We support the new leaders, and start using new-style propaganda techniques in our campaigns. The results are uncertain so far...
 
-- @shuffle_leadership: We should use this opportunity to change the party's leadership.
 - @root: Continue...
 
 
