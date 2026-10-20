@@ -549,7 +549,6 @@ Q.n_advisors = 3;
 // let's just put all of the timers here...
 // most party affairs and government affairs cards are on a timer.
 Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
-            'fundraising', 'ideology',
             'inter_party_relationships', 'international_relations',
             'iron_front', 'media', 'enemies',
             'party_organizations', 'rally', 'reichsbanner',
@@ -572,14 +571,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'kpd_policy', 'kpd_ultimatum', 'popular_front_dispute',
             'high_inflation', 'banking_crisis', 'march_on_berlin',
             'understanding_enemy', 'schleichers_schemes',
-            'hindenburg_dismissal', 'fundraiser', 'capital_strike', 'business_confidence',
-            // advisor burned timers - prevents immediately re-adding a removed advisor
-            'hilferding_burned', 'wels_burned', 'muller_burned', 'breitscheid_burned',
-            'severing_burned', 'braun_burned', 'juchacz_burned', 'pfulf_burned',
-            'leipart_burned', 'aufhauser_burned', 'wissell_burned', 'woytinsky_burned',
-            'levi_burned', 'sender_burned', 'rosenfeld_burned', 'seydewitz_burned', 'siemsen_burned',
-            'mierendorff_burned', 'leber_burned', 'schumacher_burned',
-            'baade_burned', 'hirschfeld_burned', 'radbruch_burned', 'stampfer_burned'];
+            'hindenburg_dismissal', 'fundraiser', 'capital_strike', 'business_confidence' ];
 Q.advisor_action_timer = 0;
 Q.business_confidence_timer = 0;
 Q.capital_strike_timer = 0;
@@ -588,7 +580,6 @@ Q.ideologimus_timer = 0;
 Q.confronting_nazis_timer = 0;
 Q.crisis_program_timer = 0;
 Q.fundraising_timer = 0;
-Q.ideology_timer = 0;
 Q.inter_party_relationships_timer = 0;
 Q.international_relations_timer = 0;
 Q.iron_front_timer = 0;
