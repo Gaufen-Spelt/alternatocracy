@@ -83,5 +83,5 @@ Herman Müller, one of the SPD's long-time leaders, has died. He will be greatly
 - @adv: Appoint a replacement advisor
 
 @adv
-go-to: advisor_menu
+go-to: party_congress.advisor_menu
 view-if: center_advisors < center_slots and in_congress = 0
