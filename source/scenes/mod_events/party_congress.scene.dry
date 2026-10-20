@@ -1,7 +1,102 @@
+title: Party Congress 
+subtitle: Factions are vying for control.
+tags: event
+view-if: year > party_congress_year or (year = party_congress_year and month >= party_congress_month)
+new-page: true
+on-arrival: party_congress_year = year + 4
+
+= Party Congress has been declared
+
+The new party congress is open. Factions are voicing their opinions and the struggle for the control has begun.
+
+- @count: And...
+
+@count
+on-arrival: {!
+
+Q.left_r = 0;
+Q.center_r = 0;
+Q.labor_r = 0;
+Q.ref_r = 0;
+Q.neo_r = 0;
+Q.soc_r = 0;
+Q.eth_r = 0;
+
+Q.left_r = Q.left_strength;
+Q.center_r = Q.center_strength;
+Q.labor_r = Q.labor_strength;
+Q.ref_r = Q.reformist_strength;
+Q.neo_r = Q.neorevisionist_strength;
+
+if (Q.socialpatriotism >= 1) {
+    Q.soc_r = Q.socialpatriot_strength;
+}
+
+if (Q.ethical_socialism >= 1) {
+    Q.eth_r = Q.ethical_strength;
+}
+
+// 3. Find the highest value and signal it
+var r_values = {
+    left: Q.left_r,
+    center: Q.center_r,
+    labor: Q.labor_r,
+    ref: Q.ref_r,
+    neo: Q.neo_r,
+    soc: Q.soc_r,
+    eth: Q.eth_r
+};
+
+var top_name = "";
+var top_value = -Infinity;
+
+for (var key in r_values) {
+    if (r_values[key] > top_value) {
+        top_value = r_values[key];
+        top_name = key;
+    }
+}
+
+Q.highest_r = top_value;     // the highest value
+Q.highest_faction = top_name; // which faction holds it
+
+if (Q.highest_r <= 30) {
+    Q.spd_party_leader = "collective";
+} else {
+    switch (Q.highest_faction) {
+        case "left":
+            Q.spd_party_leader = Q.levi_dead ? "Rosenfeld" : "Levi";
+            break;
+        case "center":
+            Q.spd_party_leader = Q.economic_minister == "Naphtali" ? "Hilferding" : "Wels";
+            break;
+        case "labor":
+            Q.spd_party_leader = "Leipart";
+            break;
+        case "ref":
+            Q.spd_party_leader = "Braun";
+            break;
+        case "neo":
+            Q.spd_party_leader = "Mierendorff";
+            break;
+        case "eth":
+            Q.spd_party_leader = "Eichler";
+            break;
+        case "soc":
+            Q.spd_party_leader = "Heller";
+            break;
+    }
+}
+!}
+
+= [+ spd_party_leader +] has been selected to the Leadership.
+
+- @advisors: Now, advisors...
+
 @advisors
 on-arrival: {!
 
-// 1. Reset factional advisors (independent slot untouched)
+// Reset factional advisors
 var names = ["levi", "sender", "rosenfeld", "seydewitz", "siemsen",
              "hilferding", "wels", "muller", "breitscheid",
              "severing", "braun", "juchacz", "pfulf",
@@ -19,7 +114,7 @@ Q.labor_advisors = 0;
 Q.ref_advisors = 0;
 Q.neo_advisors = 0;
 
-// 2. Rank factions (soc/eth join once they have advisor pools)
+// Rank factions
 var f = [
     {k: "left",   r: Q.left_r},
     {k: "center", r: Q.center_r},
@@ -36,7 +131,7 @@ if (Q.ethical_socialism >= 1 && Q.has_eth_advisors) {
 
 f.sort(function(a, b) { return b.r - a.r; });
 
-// 3. Allocate 3 slots
+// Allocate 3 slots
 var slots = {left: 0, center: 0, labor: 0, ref: 0, neo: 0, soc: 0, eth: 0};
 var lead1 = f[0].r - f[1].r;
 var lead2 = f[1].r - f[2].r;
@@ -55,7 +150,7 @@ if (lead1 >= 30) {
     slots[f[2].k] = 1;
 }
 
-// 4. Cap slots by how many advisors are actually available
+// Cap slots by how many advisors are actually available
 var pool = {left: 0, center: 0, labor: 0, ref: 0, neo: 0, soc: 0, eth: 0};
 
 pool.left   = Q.left_split ? 0 : (Q.levi_dead ? 4 : 5);
