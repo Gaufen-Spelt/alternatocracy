@@ -26,7 +26,6 @@ Paul Levi, a leader of the left wing of our party, has died in an unfortunate ac
 [? if left_advisors < left_slots : The Left must name a replacement advisor. ?]
 
 - @adv: Appoint a replacement
-- @continue: Continue
 
 @adv
 title: Appoint a replacement
