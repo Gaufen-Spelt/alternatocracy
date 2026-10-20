@@ -36,7 +36,7 @@ if (Q.ethical_socialism >= 1) {
     Q.eth_r = Q.ethical_strength;
 }
 
-// 3. Find the highest value and signal it
+// Find the highest value and signal it
 var r_values = {
     left: Q.left_r,
     center: Q.center_r,
@@ -57,9 +57,10 @@ for (var key in r_values) {
     }
 }
 
-Q.highest_r = top_value;     // the highest value
-Q.highest_faction = top_name; // which faction holds it
+Q.highest_r = top_value;
+Q.highest_faction = top_name;
 
+// ---- Party leader ----
 if (Q.highest_r <= 30) {
     Q.spd_party_leader = "collective";
 } else {
@@ -87,9 +88,101 @@ if (Q.highest_r <= 30) {
             break;
     }
 }
+
+Q.ideology_changed = 0;
+
+if (Q.highest_r > 30) {
+    var prev_ideology = Q.ideology;
+    var new_ideology = "";
+    var new_spd_ideology = "";
+    var winner_dissent = "";
+
+    switch (Q.highest_faction) {
+        case "left":
+            new_ideology = "Left";
+            new_spd_ideology = "Social Democracy (Revolutionary)";
+            winner_dissent = "left_dissent";
+            break;
+        case "center":
+            new_ideology = "Centrist";
+            new_spd_ideology = "Social Democracy (Center Marxist)";
+            winner_dissent = "center_dissent";
+            break;
+        case "labor":
+            new_ideology = "Labor";
+            new_spd_ideology = "Laborism";
+            winner_dissent = "labor_dissent";
+            break;
+        case "ref":
+            new_ideology = "Reformist";
+            new_spd_ideology = "Social Democracy (Reformist)";
+            winner_dissent = "reformist_dissent";
+            break;
+        case "neo":
+            new_ideology = "Neorevisionist";
+            new_spd_ideology = "Social Republicanism";
+            winner_dissent = "neorevisionist_dissent";
+            break;
+        case "eth":
+            new_ideology = "Ethical";
+            new_spd_ideology = "Social Democracy (New Way)";
+            winner_dissent = "ethical_dissent";
+            break;
+        case "soc":
+            new_ideology = "Statism";
+            new_spd_ideology = "Social Democracy (Statist)";
+            winner_dissent = "socialpatriot_dissent";
+            break;
+    }
+
+    if (new_ideology != "" && prev_ideology != new_ideology) {
+        Q.ideology = new_ideology;
+        Q.spd_ideology = new_spd_ideology;
+
+        if (prev_ideology) {
+            Q.ideology_changed = 1;
+        }
+
+        Q[winner_dissent] = (Q[winner_dissent] || 0) - 10;
+
+        switch (new_ideology) {
+            case "Left":
+                Q.left_strength += 10; Q.communist_coalition += 1;
+                Q.z_relation -= 3; Q.dvp_relation -= 5; Q.nationalization_support += 1;
+                Q.kpd_relation += 3; Q.socialism += 3;
+                break;
+            case "Centrist":
+                Q.center_strength += 10;
+                Q.kpd_relation += 5; Q.sapd_relation += 10;
+                break;
+            case "Labor":
+                Q.labor_strength += 10; Q.wtb_support += 1;
+                Q.kpd_relation -= 3;
+                break;
+            case "Reformist":
+                Q.reformist_strength += 10; Q.democratization += 1;
+                Q.z_relation += 5; Q.dvp_relation += 5; Q.kpd_relation -= 8;
+                Q.moderate_plan_support += 1;
+                break;
+            case "Neorevisionist":
+                Q.neorevisionist_strength += 5;
+                Q.peoples_party_support += 6;
+                Q.neorevisionism = 1; Q.socialism -= Q.spd_votes; Q.pro_republic += Q.spd_votes;
+                break;
+            case "Ethical":
+                Q.ethical_strength += 5;
+                break;
+            case "Statism":
+                Q.socialpatriot_strength += 5;
+                break;
+        }
+    }
+}
 !}
 
 = [+ spd_party_leader +] has been selected to the Leadership.
+
+[? if ideology_changed = 1 and ideology = "Left" : The radical left carries the congress. The party commits to class struggle and a possible reconciliation with the Communists. ?][? if ideology_changed = 1 and ideology = "Centrist" : The Center Marxists carry the congress. The party steers a middle course of preparing for revolution while building working-class consciousness and taking advantage of capitalism. ?][? if ideology_changed = 1 and ideology = "Labor" : The trade union wing carries the congress. The party commits to staying in government to win benefits for workers and to public works for employment. ?][? if ideology_changed = 1 and ideology = "Reformist" : The reformists carry the congress. The party commits to preserving the Republic and to coalitions with the other pro-democracy parties. ?][? if ideology_changed = 1 and ideology = "Neorevisionist" : Social republicanism has finally eclipsed social democracy. Perhaps this transformation was inevitable? ?][? if ideology_changed = 1 and ideology = "Ethical" : The ethical socialists carry the congress. The party seeks a new way, grounded in moral conviction rather than economic determinism. ?][? if ideology_changed = 1 and ideology = "Statism" : The socialist patriots carry the congress. The party embraces a strong state and national responsibility. ?][? if ideology_changed = 0 : The congress leaves the party's ideological line unchanged. ?]
 
 - @advisors: Now, advisors...
 
@@ -180,7 +273,7 @@ go-to: advisor_menu
 title: Appoint advisors
 on-display: {!
 
-var TOTAL_SEATS = Q.total_seats || 100;  // seats in the chart
+var TOTAL_SEATS = Q.total_seats || 100;  
 
 var factions = [
     { id: 'left',       label: 'Klassenkampf Linke',                  val: Q.left_strength,       color: '#B30000' },
@@ -233,7 +326,7 @@ var chartData = factions.filter(function(f) { return f.seats > 0; }).map(functio
     return { id: f.id, name: f.label, seats: f.seats, color: f.color, outline: '#222' };
 });
 
-var svgEl = d3.select('#parliament-chart');
+var svgEl = d3.select('#pc-parliament-chart');
 if (!svgEl.empty() && chartData.length) {
     var w = 600;
 
@@ -263,7 +356,7 @@ if (!svgEl.empty() && chartData.length) {
         legend += '<div><span style="display:inline-block;width:10px;height:10px;background:' +
                   d.color + ';margin-right:6px;"></span>' + d.name + ' (' + d.seats + ')</div>';
     });
-    d3.select('#parliament-legend').html(legend);
+    d3.select('#pc-parliament-legend').html(legend);
 }
 
 // ---- Faction strengths ----
@@ -275,13 +368,13 @@ factions.forEach(function(f) {
              '<div style="background:' + f.color + ';height:8px;width:' + Math.min(100, f.val) + '%;"></div>' +
              '</div></div>';
 });
-d3.select('#faction-strengths').html(fhtml);
+d3.select('#pc-faction-strengths').html(fhtml);
 
 !}
 
-<svg id="parliament-chart"></svg>
-<div id="parliament-legend"></div>
-<div id="faction-strengths"></div>
+<svg id="pc-parliament-chart"></svg>
+<div id="pc-parliament-legend"></div>
+<div id="pc-faction-strengths"></div>
 
 The congress has apportioned the advisory seats by faction strength.
 
