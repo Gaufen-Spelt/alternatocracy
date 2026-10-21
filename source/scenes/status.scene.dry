@@ -78,27 +78,27 @@ Q.cabinet_table_display = html;
 [? if reaction_activated: Class war has begun. ?]
 
 [? if reaction_activated: {!
-<div class="react-panel" style="text-align:center;margin:1em 0;">
-  <div style="display:flex;justify-content:center;align-items:flex-end;gap:4px;padding:0 4px;border-bottom:4px solid #111;">
-    <div class="react-col" data-q="reaction_paramilitaries" style="flex:1;max-width:80px;">
-      <div class="react-bar" style="height:35px;border-radius:0;background:repeating-linear-gradient(45deg,#6b4423 0 6px,#4a2e16 6px 12px);border:3px solid #111;border-bottom:none;box-shadow:inset 0 3px 0 rgba(255,255,255,0.15);"></div>
-      <div class="react-label" style="font-size:0.65em;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;background:#111;color:#eee;padding:2px 0;">Paramil.</div>
+<div class="react-panel" style="margin:1em 0;box-sizing:border-box;width:100%;overflow:hidden;">
+  <div style="display:flex;align-items:flex-end;gap:3px;border-bottom:4px solid #111;box-sizing:border-box;width:100%;">
+    <div class="react-col" data-q="reaction_paramilitaries" style="flex:1 1 0;min-width:0;">
+      <div class="react-bar" style="height:35px;box-sizing:border-box;background:repeating-linear-gradient(45deg,#8a8a8a 0 4px,#6e6e6e 4px 8px);border:2px solid #111;border-bottom:none;"></div>
+      <div class="react-label" style="font-size:0.55em;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;text-align:center;overflow:hidden;background:#111;color:#eee;padding:2px 0;">Para.</div>
     </div>
-    <div class="react-col" data-q="reaction_military" style="flex:1;max-width:80px;">
-      <div class="react-bar" style="height:70px;border-radius:0;background:repeating-linear-gradient(45deg,#5a6055 0 6px,#3f443a 6px 12px);border:3px solid #111;border-bottom:none;box-shadow:inset 0 3px 0 rgba(255,255,255,0.15);"></div>
-      <div class="react-label" style="font-size:0.65em;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;background:#111;color:#eee;padding:2px 0;">Military</div>
+    <div class="react-col" data-q="reaction_military" style="flex:1 1 0;min-width:0;">
+      <div class="react-bar" style="height:70px;box-sizing:border-box;background:repeating-linear-gradient(45deg,#6a6a6a 0 4px,#4f4f4f 4px 8px);border:2px solid #111;border-bottom:none;"></div>
+      <div class="react-label" style="font-size:0.55em;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;text-align:center;overflow:hidden;background:#111;color:#eee;padding:2px 0;">Mil.</div>
     </div>
-    <div class="react-col" data-q="reaction_bureaucracy" style="flex:1;max-width:80px;">
-      <div class="react-bar" style="height:85px;border-radius:0;background:repeating-linear-gradient(45deg,#3b4658 0 6px,#262e3b 6px 12px);border:3px solid #111;border-bottom:none;box-shadow:inset 0 3px 0 rgba(255,255,255,0.15);"></div>
-      <div class="react-label" style="font-size:0.65em;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;background:#111;color:#eee;padding:2px 0;">Bureaucracy</div>
+    <div class="react-col" data-q="reaction_bureaucracy" style="flex:1 1 0;min-width:0;">
+      <div class="react-bar" style="height:85px;box-sizing:border-box;background:repeating-linear-gradient(45deg,#3a3a3a 0 4px,#222 4px 8px);border:2px solid #111;border-bottom:none;"></div>
+      <div class="react-label" style="font-size:0.55em;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;text-align:center;overflow:hidden;background:#111;color:#eee;padding:2px 0;">State</div>
     </div>
-    <div class="react-col" data-q="reaction_industrialists" style="flex:1;max-width:80px;">
-      <div class="react-bar" style="height:70px;border-radius:0;background:repeating-linear-gradient(45deg,#2b2b2b 0 6px,#171717 6px 12px);border:3px solid #111;border-bottom:none;box-shadow:inset 0 3px 0 rgba(255,255,255,0.15);"></div>
-      <div class="react-label" style="font-size:0.65em;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;background:#111;color:#eee;padding:2px 0;">Industry</div>
+    <div class="react-col" data-q="reaction_industrialists" style="flex:1 1 0;min-width:0;">
+      <div class="react-bar" style="height:70px;box-sizing:border-box;background:repeating-linear-gradient(45deg,#6a6a6a 0 4px,#4f4f4f 4px 8px);border:2px solid #111;border-bottom:none;"></div>
+      <div class="react-label" style="font-size:0.55em;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;text-align:center;overflow:hidden;background:#111;color:#eee;padding:2px 0;">Ind.</div>
     </div>
-    <div class="react-col" data-q="reaction_junkers" style="flex:1;max-width:80px;">
-      <div class="react-bar" style="height:35px;border-radius:0;background:repeating-linear-gradient(45deg,#4d5a2c 0 6px,#36401f 6px 12px);border:3px solid #111;border-bottom:none;box-shadow:inset 0 3px 0 rgba(255,255,255,0.15);"></div>
-      <div class="react-label" style="font-size:0.65em;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;background:#111;color:#eee;padding:2px 0;">Junkers</div>
+    <div class="react-col" data-q="reaction_junkers" style="flex:1 1 0;min-width:0;">
+      <div class="react-bar" style="height:35px;box-sizing:border-box;background:repeating-linear-gradient(45deg,#8a8a8a 0 4px,#6e6e6e 4px 8px);border:2px solid #111;border-bottom:none;"></div>
+      <div class="react-label" style="font-size:0.55em;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;text-align:center;overflow:hidden;background:#111;color:#eee;padding:2px 0;">Junk.</div>
     </div>
   </div>
 </div>
