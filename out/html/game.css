@@ -1493,10 +1493,22 @@ body.dark-mode tr.row-neutral   { background-color: rgba(120, 120, 120, 0.10); }
    ===================================================================== */
 
 #achievement-popup-container {
+
   position: fixed;
-  bottom: 20px;
+  top: auto;
+  left: auto;
   right: 20px;
-  z-index: 10000;
+  bottom: 20px;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+  color: inherit;
+
+  z-index: 2147483647;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
