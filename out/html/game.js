@@ -187,16 +187,7 @@ var main = function(dendryUI) {
         window.dendryUI.dendryEngine.goToScene('credits');
     }
   };
-
-  window.showMods = function() {
-    window.hideOptions();
-    if (window.dendryUI.dendryEngine.state.sceneId.startsWith('mod_loader')) {
-        window.dendryUI.dendryEngine.goToScene('backSpecialScene');
-    } else {
-        window.dendryUI.dendryEngine.goToScene('mod_loader');
-    }
-  };
-
+  
     window.updateSandboxLink = function() {
     var sandboxLink = document.getElementById('sandbox-link');
     if (!sandboxLink) return;
