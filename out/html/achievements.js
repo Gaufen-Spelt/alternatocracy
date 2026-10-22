@@ -5,7 +5,14 @@
   // e.g. 'img/achievements/base/'. Leave '' to use the star glyph.
   var BASE_ICON_DIR = '';
 
-  // [achievement id (without "achievement_" prefix), title, description]
+  // Folder for mod/horizon icons. Icons containing a "/" are used as-is.
+  var ICON_DIR = 'img/achievements/';
+
+  // ========================================================================
+  // DATA
+  // ========================================================================
+
+  // BASE: [achievement id (without "achievement_" prefix), title, description]
   var BASE_ACHIEVEMENTS = [
     ["eiserne_front", "Eiserne Front", "Form the Iron Front."],
     ["civil_war", "Bürgerkrieg", "Enter a long civil war."],
@@ -62,8 +69,146 @@
     ["stolperstein", "Stolperstein", "We lost, but history might memorialize us..."]
   ];
 
-  // ------------------------------------------------------------------------
+  // MOD / HORIZON fields:
+  //   id, title, desc, icon, section (mod only)
+  //   cls     extra CSS class(es) on the card, e.g. 'ach-red'
+  //   bg      inline background for the card (unlocked only)
+  //   iconBg  inline background for the icon box (unlocked only)
+  //   shadow  inline box-shadow (unlocked only)
+  //   locked  overrides when locked: {title, desc, icon, cls}
+  var MOD_ACHIEVEMENTS = [
+    // ---- Grand achievements ----
+    { section: 'Grand achievements', id: 'winterschwelen', title: 'Winterschwelen',
+      desc: 'The cold and despairly winter envelops the landvolk...',
+      icon: 'winterschwelen.png',
+      bg: 'rgba(140,200,235,0.15)', iconBg: 'rgba(140,200,235,0.35)' },
+    { section: 'Grand achievements', id: 'landlicher_zorn', title: 'Ländlicher Zorn',
+      desc: 'Rural wrath engulfes Germany...',
+      icon: 'landlicher_zorn.png',
+      bg: 'rgba(46,79,46,0.15)', iconBg: 'rgba(20,20,20,0.35)' },
+    { section: 'Grand achievements', id: 'karl_hepp_rlb', title: 'Landpopulistenurteil',
+      desc: 'Karl Hepp has been elected as president of the Reichslandbund (RLB).',
+      icon: 'karlhepprlb.png',
+      bg: 'rgba(88,112,48,0.20)', iconBg: 'rgba(88,112,48,0.45)' },
+    { section: 'Grand achievements', id: 'gesamtlandliche_vertretung', title: 'Gesamtlandliche Vertretung',
+      desc: 'The Green Front encompasses the maximum amount of members possible.',
+      icon: 'gesamtlandliche_vertretung.png',
+      bg: 'linear-gradient(90deg,rgba(20,20,20,0.15) 0%,rgba(120,180,120,0.15) 33%,rgba(30,90,30,0.15) 66%,rgba(10,40,10,0.15) 100%)',
+      iconBg: 'rgba(90,90,90,0.3)' },
+    { section: 'Grand achievements', id: 'annahmeerklarung', title: 'Annahmeerklärung',
+      desc: 'Republicans by the dishonority, not of the reason.',
+      icon: 'annahmeerklarung.png',
+      bg: 'rgba(15,35,70,0.15)', iconBg: 'rgba(15,35,70,0.35)' },
+    { section: 'Grand achievements', id: 'herbstingwer', title: 'Herbstingwer',
+      desc: 'Ernst Niekisch and his national socialists have survived the test of the time.',
+      icon: 'herbstingwer.png',
+      bg: 'rgba(225,135,25,0.15)', iconBg: 'rgba(225,135,25,0.35)' },
+    { section: 'Grand achievements', id: 'schachtmatt', title: 'Schachtmatt',
+      desc: "Survive Hjalmar Schacht's siege successfully.",
+      icon: 'schachtmatt.png',
+      bg: 'rgba(15,15,15,0.4)', iconBg: 'rgba(15,15,15,0.7)' },
+    { section: 'Grand achievements', id: 'im_staub_der_zeit', title: 'Im Staub der Zeit',
+      desc: 'Ultimate failure of the fortunes.',
+      icon: 'im_staub_der_zeit.png',
+      bg: 'rgba(128,0,0,0.94)', iconBg: 'rgba(225,135,25,0.35)' },
+    { section: 'Grand achievements', id: 'die_uhr_bremst', title: 'Die Uhr Bremst',
+      desc: 'Time slows down...',
+      icon: 'hitler.png',
+      cls: 'ach-uhrbremst',
+      locked: { cls: 'ach-locked-hitler' } },
+    { section: 'Grand achievements', id: 'liberalismus', title: 'United Liberalism',
+      desc: 'Liberal movement has been unified.',
+      icon: 'img/liberalismus.png',
+      bg: 'linear-gradient(90deg,rgba(0,0,0,0.06),rgba(0,60,120,0.06))' },
+    { section: 'Grand achievements', id: 'lambachreich', title: 'Großer Korporatismus',
+      desc: 'Walther Lambach has managed to consolidate power under himself.',
+      icon: 'lambachreich.jpg',
+      bg: 'rgba(40,40,40,0.15)', iconBg: 'rgba(40,40,40,0.3)' },
+
+    // ---- Minor achievements ----
+    { section: 'Minor achievements', id: 'strelitz', title: 'Erste Welle',
+      desc: 'Secure majority in Mecklenburg - Strelitz.',
+      icon: 'strelitz.png',
+      bg: 'rgba(200,0,0,0.1)', iconBg: 'rgba(200,0,0,0.25)' },
+    { section: 'Minor achievements', id: 'ruhrland', title: 'Rheinland in Flammen',
+      desc: 'Young Plan goes horribly wrong...',
+      icon: 'ruhrland.png', cls: 'ach-red' },
+    { section: 'Minor achievements', id: 'tyrole_danubia', title: 'Tirol-Donau-Pakt',
+      desc: 'Italy and Germany have signed a non aggression treaty.',
+      icon: 'tyrole_danubia.png',
+      bg: 'rgba(0,146,70,0.1)', iconBg: 'rgba(0,146,70,0.25)' },
+    { section: 'Minor achievements', id: 'new_axis', title: 'Achsenmächte',
+      desc: 'New European counterweight.',
+      icon: 'new_axis.jpg', cls: 'ach-red' },
+    { section: 'Minor achievements', id: 'revolution_own', title: 'Revolution der drei Speere',
+      desc: 'SPD has launched the revolution.',
+      icon: 'revolution_own.png', cls: 'ach-red' },
+    { section: 'Minor achievements', id: 'popular_frontier', title: 'Volksfront',
+      desc: 'The Popular Front theses has been established.',
+      icon: 'popular_frontier.png', cls: 'ach-red' },
+
+    // ---- Unfinished / Unobtainable ----
+    { section: 'Unfinished / Unobtainable achievements', id: 'jugendrevolution', title: 'Jugendrevolution',
+      desc: 'Grandmaster Mahraun ascends the nationalist movement.',
+      icon: 'jugendrevolution.png',
+      bg: 'rgba(60,60,60,0.15)', iconBg: 'rgba(60,60,60,0.35)' },
+    { section: 'Unfinished / Unobtainable achievements', id: 'neue_generation', title: 'Neue Generation',
+      desc: 'Passing the mantle.',
+      icon: 'neue_generation.png',
+      bg: 'rgba(60,60,60,0.15)', iconBg: 'rgba(60,60,60,0.35)' },
+    { section: 'Unfinished / Unobtainable achievements', id: 'zwei_patrioten', title: 'Zwei Patrioten – einer zu viel',
+      desc: 'Only one shall lead the way.',
+      icon: 'zwei_patrioten.png',
+      bg: 'rgba(60,60,60,0.15)', iconBg: 'rgba(60,60,60,0.35)' },
+    { section: 'Unfinished / Unobtainable achievements', id: 'volksgemeinschaft', title: 'Volksgemeinschaft',
+      desc: 'All differences are none before Germany.',
+      icon: 'volksgemeinschaft.png',
+      bg: 'rgba(0,91,150,0.12)', iconBg: 'rgba(0,91,150,0.25)' },
+    { section: 'Unfinished / Unobtainable achievements', id: 'christian_revolution', title: 'Kreuz und Arbeit',
+      desc: 'Overcoming the German odds.',
+      icon: 'christian_revolution.png',
+      bg: 'rgba(212,175,55,0.12)', iconBg: 'rgba(212,175,55,0.3)' },
+    { section: 'Unfinished / Unobtainable achievements', id: 'national_rejuvenation', title: 'Nationale Erneuerung',
+      desc: 'Three pillars, two faiths, one nation - elevated above all differences.',
+      icon: 'national_rejuvenation.png',
+      bg: 'rgba(255,215,0,0.15)', iconBg: 'rgba(255,215,0,0.3)',
+      shadow: 'inset 0 0 10px rgba(255,215,0,0.3)' },
+
+    // ---- For future plans ----
+    { section: 'For future plans', id: 'morgengrauen', title: 'Morgengrauen',
+      desc: 'Across the western horizon, a dark dawn looms...',
+      icon: 'francais.jpg',
+      bg: 'rgba(45,12,18,0.5)', iconBg: 'rgba(85,20,30,0.65)' }
+  ];
+
+  var HORIZON_ACHIEVEMENTS = [
+    { id: 'end', title: 'End', desc: 'Merely first page...',
+      icon: 'end.png', cls: 'ach-end',
+      locked: { desc: 'Is like opening the new chapter.' } },
+    { id: 'spatialanomaly', title: 'Anomaly', desc: 'New divergence.',
+      icon: 'stren2.png', cls: 'ach-glitch',
+      locked: { desc: 'Anomaly in time.', icon: 'stren.png' } },
+    { id: 'fatamorgana', title: 'Fata Morgana',
+      desc: 'Far away somewhere, you might wanna ask your questions.',
+      icon: 'fatamorgana.png', cls: 'ach-fatamorgana',
+      locked: { desc: 'Insidiousness.' } },
+    { id: 'firstwessel', title: 'Nocturnal', desc: 'New wessel.',
+      icon: 'nocturnal.png', cls: 'ach-wessel',
+      locked: { title: 'Breakthrough', desc: 'First gate of this world.', icon: 'firstwessel.png' } },
+    { id: 'sanctuary', title: 'Zuflucht', desc: 'Take a close look again.',
+      icon: 'psychosis.png', cls: 'ach-sanctuary',
+      locked: { desc: 'Come back, when you find the true meaning behind this...', icon: 'sanctuary.png' } }
+  ];
+
+  var LISTS = { mod: MOD_ACHIEVEMENTS, horizon: HORIZON_ACHIEVEMENTS };
+
+  window.BASE_ACHIEVEMENTS = BASE_ACHIEVEMENTS;
+  window.MOD_ACHIEVEMENTS = MOD_ACHIEVEMENTS;
+  window.HORIZON_ACHIEVEMENTS = HORIZON_ACHIEVEMENTS;
+
+  // ========================================================================
   // 1. Tab navigation
+  // ========================================================================
 
   function resolveSceneId(name) {
     var scenes = window.dendryUI.dendryEngine.game.scenes;
@@ -98,8 +243,9 @@
     window.achGoTo(btn.getAttribute('data-ach-goto'));
   });
 
-  // ------------------------------------------------------------------------
-  // 2. Base game achievements
+  // ========================================================================
+  // 2. Rendering
+  // ========================================================================
 
   function esc(s) {
     return String(s)
@@ -109,7 +255,13 @@
       .replace(/"/g, '&quot;');
   }
 
-  function renderBaseAchievements(container) {
+  function iconPath(icon) {
+    if (!icon) { return ''; }
+    return icon.indexOf('/') >= 0 ? icon : ICON_DIR + icon;
+  }
+
+  // ---- Base (.bach) ----
+  function renderBase(container) {
     var engine = window.dendryUI && window.dendryUI.dendryEngine;
     if (!engine || !engine.state) { return; }
     var Q = engine.state.qualities;
@@ -142,50 +294,115 @@
       ' unlocked</div>' + cards;
   }
 
-  // ------------------------------------------------------------------------
-  // 3. Mod cards: split "<strong>Title</strong> - description" into
-  //    .ach-title / .ach-subtitle (idempotent).
+  // ---- Mod / Horizon (.ach) ----
+  function modCardHtml(a, Q) {
+    var got = !!Q['achievement_' + a.id];
+    var isNew = !!Q['game_achievement_' + a.id];
+    var L = (!got && a.locked) ? a.locked : {};
 
-  function restructureModCards() {
-    document.querySelectorAll('.ach').forEach(function (div) {
-      var body = div.querySelector('.ach-body');
-      if (!body || body.querySelector('.ach-title')) { return; }
-      var strongEl = body.querySelector('strong');
-      if (!strongEl) { return; }
-      var badgeEl = body.querySelector('.ach-new');
-      var subtitleText = '';
-      var passedStrong = false;
-      Array.from(body.childNodes).forEach(function (node) {
-        if (node === strongEl) { passedStrong = true; return; }
-        if (badgeEl && node === badgeEl) { return; }
-        if (passedStrong) { subtitleText += node.textContent; }
-      });
-      subtitleText = subtitleText.replace(/^[\s\u2013\u2014-]+/, '').trim();
-      body.innerHTML = '';
-      var titleDiv = document.createElement('div');
-      titleDiv.className = 'ach-title';
-      titleDiv.appendChild(strongEl);
-      if (badgeEl) { titleDiv.appendChild(badgeEl); }
-      var subDiv = document.createElement('div');
-      subDiv.className = 'ach-subtitle';
-      subDiv.textContent = subtitleText;
-      body.appendChild(titleDiv);
-      body.appendChild(subDiv);
+    var title = L.title || a.title;
+    var desc = L.desc || a.desc;
+    var icon = iconPath(L.icon || a.icon);
+
+    var cls = 'ach';
+    if (a.cls) { cls += ' ' + a.cls; }
+    if (!got) {
+      cls += ' ach-locked';
+      if (L.cls) { cls += ' ' + L.cls; }
+    }
+
+    var cardStyle = '';
+    var iconStyle = '';
+    if (got) {
+      if (a.bg) { cardStyle += 'background:' + a.bg + ';'; }
+      if (a.shadow) { cardStyle += 'box-shadow:' + a.shadow + ';'; }
+      if (a.iconBg) { iconStyle += 'background:' + a.iconBg + ';'; }
+    }
+
+    return '<div class="' + esc(cls) + '"' +
+             (cardStyle ? ' style="' + esc(cardStyle) + '"' : '') + '>' +
+             '<div class="ach-icon-box"' +
+               (iconStyle ? ' style="' + esc(iconStyle) + '"' : '') + '>' +
+               '<img class="ach-icon" src="' + esc(icon) + '" alt="">' +
+             '</div>' +
+             '<div class="ach-body">' +
+               '<div class="ach-title"><strong>' + esc(title) + '</strong>' +
+                 (got && isNew ? '<span class="ach-new">New!</span>' : '') +
+               '</div>' +
+               '<div class="ach-subtitle">' + esc(desc) + '</div>' +
+             '</div>' +
+           '</div>';
+  }
+
+  function renderModList(container, kind) {
+    var engine = window.dendryUI && window.dendryUI.dendryEngine;
+    if (!engine || !engine.state) { return; }
+    var Q = engine.state.qualities;
+    var list = LISTS[kind];
+    if (!list) { return; }
+
+    var html = '';
+    var lastSection = null;
+    var unlocked = 0;
+    list.forEach(function (a) {
+      if (Q['achievement_' + a.id]) { unlocked++; }
+      if (a.section && a.section !== lastSection) {
+        html += '<h2 style="margin:20px 0 12px 0;">' + esc(a.section) + '</h2>';
+        lastSection = a.section;
+      }
+      html += modCardHtml(a, Q);
+    });
+
+    container.innerHTML =
+      '<div class="bach-summary">' + unlocked + ' / ' + list.length + ' unlocked</div>' + html;
+  }
+
+  // ========================================================================
+  // 3. Popup registry (game.js Achievements.registry) from the same data
+  // ========================================================================
+
+  function mergeRegistry() {
+    var A = window.Achievements;
+    if (!A || !A.registry) { return; }
+
+    BASE_ACHIEVEMENTS.forEach(function (b) {
+      A.registry[b[0]] = {
+        title: b[1],
+        description: b[2],
+        icon: BASE_ICON_DIR ? BASE_ICON_DIR + b[0] + '.png' : null
+      };
+    });
+    MOD_ACHIEVEMENTS.concat(HORIZON_ACHIEVEMENTS).forEach(function (a) {
+      A.registry[a.id] = {
+        title: a.title,
+        description: a.desc,
+        icon: iconPath(a.icon)
+      };
     });
   }
 
-  // ------------------------------------------------------------------------
-  
+  // ========================================================================
+  // 4. Scan + start
+  // ========================================================================
+
   function scan() {
-    var lists = document.querySelectorAll('[data-ach-list="base"]:not([data-rendered])');
-    for (var i = 0; i < lists.length; i++) {
-      lists[i].setAttribute('data-rendered', '1');
-      renderBaseAchievements(lists[i]);
+    var base = document.querySelectorAll('[data-ach-list="base"]:not([data-rendered])');
+    for (var i = 0; i < base.length; i++) {
+      base[i].setAttribute('data-rendered', '1');
+      renderBase(base[i]);
     }
-    restructureModCards();
+    ['mod', 'horizon'].forEach(function (kind) {
+      var lists = document.querySelectorAll(
+        '[data-ach-list="' + kind + '"]:not([data-rendered])');
+      for (var j = 0; j < lists.length; j++) {
+        lists[j].setAttribute('data-rendered', '1');
+        renderModList(lists[j], kind);
+      }
+    });
   }
 
   function start() {
+    mergeRegistry();
     var content = document.getElementById('content');
     if (!content) { return; }
     new MutationObserver(scan).observe(content, { childList: true, subtree: true });
