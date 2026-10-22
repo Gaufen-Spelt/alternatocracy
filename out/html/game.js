@@ -842,6 +842,90 @@ window.updateSidebar = function() {
       return bar;
   };
 
+  // ---------- Achievement popups ----------
+var ACH_SHOW_MS = 5000;   // how long it stays on screen
+var ACH_FADE_MS = 400;    // must match the CSS transition (0.35s)
+
+function getAchContainer() {
+  var c = document.getElementById('achievement-popup-container');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'achievement-popup-container';
+    document.body.appendChild(c);
+  }
+  return c;
+}
+
+window.showAchievementPopup = function(title, desc, icon) {
+  var popup = document.createElement('div');
+  popup.className = 'achievement-popup';
+
+  var iconEl;
+  if (icon) {
+    iconEl = document.createElement('img');
+    iconEl.className = 'achievement-popup-icon';
+    iconEl.src = icon;
+    iconEl.onerror = function() {
+      var d = document.createElement('div');
+      d.className = 'achievement-popup-icon achievement-popup-icon-default';
+      d.textContent = '★';
+      iconEl.replaceWith(d);
+    };
+  } else {
+    iconEl = document.createElement('div');
+    iconEl.className = 'achievement-popup-icon achievement-popup-icon-default';
+    iconEl.textContent = '★';
+  }
+
+  var text = document.createElement('div');
+  text.className = 'achievement-popup-text';
+  var label = document.createElement('div');
+  label.className = 'achievement-popup-label';
+  label.textContent = 'Achievement Unlocked';
+  var t = document.createElement('div');
+  t.className = 'achievement-popup-title';
+  t.textContent = title;
+  var d = document.createElement('div');
+  d.className = 'achievement-popup-desc';
+  d.textContent = desc || '';
+  text.appendChild(label);
+  text.appendChild(t);
+  text.appendChild(d);
+
+  popup.appendChild(iconEl);
+  popup.appendChild(text);
+  getAchContainer().appendChild(popup);
+
+  var dismissed = false;
+  function dismiss() {
+    if (dismissed) return;
+    dismissed = true;
+    popup.classList.remove('active');
+    popup.classList.add('leaving');
+    setTimeout(function() {
+      if (popup.parentNode) popup.parentNode.removeChild(popup);
+    }, ACH_FADE_MS);
+  }
+
+  popup.addEventListener('click', dismiss);
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { popup.classList.add('active'); });
+  });
+  setTimeout(dismiss, ACH_SHOW_MS);
+};
+
+
+window.unlockAchievement = function(id, title, desc, icon) {
+  var key = 'achievements_' + 'social_democracy';
+  var unlocked = {};
+  try { unlocked = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+  if (unlocked[id]) return;               // already have it
+  unlocked[id] = true;
+  try { localStorage.setItem(key, JSON.stringify(unlocked)); } catch (e) {}
+  window.showAchievementPopup(title, desc, icon);
+};
+
 
   window.justLoaded = true;
   window.statusTab = "status";
