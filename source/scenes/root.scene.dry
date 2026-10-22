@@ -46,6 +46,13 @@ Q.sapd_banned = 0; Q.srpd_banned = 0; Q.spd_banned = 0;
 Q.ddp_banned = 0; Q.z_banned = 0; Q.bvp_banned = 0;
 Q.dvp_banned = 0; Q.dnvp_banned = 0;
 
+Q.adgb_strength = 4500;
+Q.afa_bund_strength = 450;
+Q.adb_strength = 180;
+Q.hdg_strength = 150;
+
+
+
 Q.ideology = "Centrist";
 Q.spd_party_leader = "Collective";
 Q.spd_centrist = 1;
