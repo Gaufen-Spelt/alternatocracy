@@ -842,89 +842,7 @@ window.updateSidebar = function() {
       return bar;
   };
 
-  // ---------- Achievement popups ----------
-var ACH_SHOW_MS = 5000;   // how long it stays on screen
-var ACH_FADE_MS = 400;    // must match the CSS transition (0.35s)
-
-function getAchContainer() {
-  var c = document.getElementById('achievement-popup-container');
-  if (!c) {
-    c = document.createElement('div');
-    c.id = 'achievement-popup-container';
-    document.body.appendChild(c);
-  }
-  return c;
-}
-
-window.showAchievementPopup = function(title, desc, icon) {
-  var popup = document.createElement('div');
-  popup.className = 'achievement-popup';
-
-  var iconEl;
-  if (icon) {
-    iconEl = document.createElement('img');
-    iconEl.className = 'achievement-popup-icon';
-    iconEl.src = icon;
-    iconEl.onerror = function() {
-      var d = document.createElement('div');
-      d.className = 'achievement-popup-icon achievement-popup-icon-default';
-      d.textContent = '★';
-      iconEl.replaceWith(d);
-    };
-  } else {
-    iconEl = document.createElement('div');
-    iconEl.className = 'achievement-popup-icon achievement-popup-icon-default';
-    iconEl.textContent = '★';
-  }
-
-  var text = document.createElement('div');
-  text.className = 'achievement-popup-text';
-  var label = document.createElement('div');
-  label.className = 'achievement-popup-label';
-  label.textContent = 'Achievement Unlocked';
-  var t = document.createElement('div');
-  t.className = 'achievement-popup-title';
-  t.textContent = title;
-  var d = document.createElement('div');
-  d.className = 'achievement-popup-desc';
-  d.textContent = desc || '';
-  text.appendChild(label);
-  text.appendChild(t);
-  text.appendChild(d);
-
-  popup.appendChild(iconEl);
-  popup.appendChild(text);
-  getAchContainer().appendChild(popup);
-
-  var dismissed = false;
-  function dismiss() {
-    if (dismissed) return;
-    dismissed = true;
-    popup.classList.remove('active');
-    popup.classList.add('leaving');
-    setTimeout(function() {
-      if (popup.parentNode) popup.parentNode.removeChild(popup);
-    }, ACH_FADE_MS);
-  }
-
-  popup.addEventListener('click', dismiss);
-
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() { popup.classList.add('active'); });
-  });
-  setTimeout(dismiss, ACH_SHOW_MS);
-};
-
-
-window.unlockAchievement = function(id, title, desc, icon) {
-  var key = 'achievements_' + 'social_democracy';
-  var unlocked = {};
-  try { unlocked = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
-  if (unlocked[id]) return;               // already have it
-  unlocked[id] = true;
-  try { localStorage.setItem(key, JSON.stringify(unlocked)); } catch (e) {}
-  window.showAchievementPopup(title, desc, icon);
-};
+  
 
 
   window.justLoaded = true;
@@ -970,3 +888,269 @@ window.unlockAchievement = function(id, title, desc, icon) {
   };
 
 }());
+
+
+
+
+
+
+
+window.Achievements = (function () {
+
+  // ── Registry: ─────────────────────────
+  // key: id, value: {title, description, icon}
+    var REGISTRY = {
+    ruhrland: {
+      title: 'Rheinland in Fire',
+      description: 'French reoccupy the Rheinland following catastrophe of Young Plan.',
+      icon: 'img/achievements/ruhrland.png'
+    },
+    tyrole_danubia: {
+      title: 'Tyrol - Danubian Pact',
+      description: 'Italy and Germany has signed non aggression treaty.',
+      icon: 'img/achievements/tyrole_danubia.png'
+    },
+    revolution_own: {
+      title: 'Revolution of Three Spears',
+      description: 'SPD has launched the revolution.',
+      icon: 'img/achievements/revolution_own.png'
+    },
+    popular_frontier: {
+      title: 'Popular Front',
+      description: 'Popular Front theses has been established.',
+      icon: 'img/achievements/popular_frontier.png'
+    },
+    winterschwelen: {
+      title: 'Winterschwelen',
+      description: 'The cold and despairly winter envelops the landvolk...',
+      icon: 'img/achievements/winterschwelen.png'
+    },
+    landlicher_zorn: {
+      title: 'Ländlicher Zorn',
+      description: 'Rural wrath engulfes the Germany...',
+      icon: 'img/achievements/landlicher_zorn.png'
+    },
+    karl_hepp_rlb: {
+      title: 'Landpopulistenurteil',
+      description: 'Karl Hepp has been elected as the Reichslandbund (RLB) president.',
+      icon: 'img/achievements/karlhepprlb.png'
+    },
+    gesamtlandliche_vertretung: {
+      title: 'Gesamtlandliche Vertretung',
+      description: 'Green Front encompasses maximal amount of members possible.',
+      icon: 'img/achievements/gesamtlandliche_vertretung.png'
+    },
+    annahmeerklarung: {
+      title: 'Annahmeerklärung',
+      description: 'Republicans by the dishonority, not of the reason.',
+      icon: 'img/achievements/annahmeerklarung.png'
+    },
+    herbstingwer: {
+      title: 'Herbstingwer',
+      description: 'Ernst Niekisch and his national socialists have survived the test of the time.',
+      icon: 'img/achievements/herbstingwer.png'
+    },
+    im_staub_der_zeit: {
+      title: 'Im Staub der Zeit',
+      description: 'Ultimate failure of the fortunes.',
+      icon: 'img/achievements/im_staub_der_zeit.png'
+    },
+    liberalismus: {
+      title: 'United Liberalism',
+      description: 'Liberal movement has been unified.',
+      icon: 'img/achievements/liberalismus.png'
+    },
+    lambachreich: {
+      title: 'Großer Korporatismus',
+      description: 'Walther Lambach consolidates all power under himself.',
+      icon: 'img/achievements/lambachreich.png'
+    },
+    jugendrevolution: {
+      title: 'Jugendrevolution',
+      description: 'Grandmaster Mahraun ascends the nationalist movement.',
+      icon: 'img/achievements/jugendrevolution.png'
+    },
+    neue_generation: {
+      title: 'Neue Generation',
+      description: 'Passing the mantle.',
+      icon: 'img/achievements/neue_generation.png'
+    },
+    volksgemeinschaft: {
+      title: 'Volksgemeinschaft',
+      description: 'All differences are none before Germany.',
+      icon: 'img/achievements/volksgemeinschaft.png'
+    },
+    christian_revolution: {
+      title: 'Kreuz und Arbeit',
+      description: 'Overcoming the German odds.',
+      icon: 'img/achievements/christian_revolution.png'
+    },
+    national_rejuvenation: {
+      title: 'Nationale Erneuerung',
+      description: 'Three pillars, two faiths, one nation - elevated above all differences.',
+      icon: 'img/achievements/national_rejuvenation.png'
+    },
+    sanctuary: {
+      title: 'Zuflucht',
+      description: 'Come back, when you find the true meaning behind this...',
+      icon: 'img/achievements/sanctuary.png'
+    }
+  };
+
+
+  var _queue = [];
+  var _showing = false;
+  var _container = null;
+
+  function _init() {
+  if (!_container) {
+    _container = document.createElement('div');
+    _container.id = 'achievement-popup-container';
+  }
+  if (_container.parentNode !== document.body) document.body.appendChild(_container);
+
+  if (typeof _container.showPopover === 'function') {
+    if (!_container.hasAttribute('popover')) _container.setAttribute('popover', 'manual');
+    try {
+      if (!_container.matches(':popover-open')) _container.showPopover();
+    } catch (e) {}
+  }
+}
+
+  function _getUnlocked() {
+    var engine = window.dendryUI && window.dendryUI.dendryEngine;
+    if (!engine) return {};
+    if (!engine.state.achievementsUnlocked) {
+      engine.state.achievementsUnlocked = {};
+    }
+    return engine.state.achievementsUnlocked;
+  }
+
+  function isUnlocked(id) {
+    return !!_getUnlocked()[id];
+  }
+
+  function getAll() {
+    return REGISTRY;
+  }
+
+  function getUnlockedList() {
+    var unlocked = _getUnlocked();
+    return Object.keys(REGISTRY).filter(function (id) { return unlocked[id]; });
+  }
+
+  // ── Unlock + queue a popup ────────────────────────────────────────
+  function unlock(id, opts) {
+    opts = opts || {};
+    var def = REGISTRY[id] || {};
+    var title = opts.title || def.title || id;
+    var description = opts.description || def.description || '';
+    var icon = opts.icon || def.icon || null;
+    var allowRepeat = opts.allowRepeat === true;
+    var duration = opts.duration != null ? opts.duration : 5000;
+
+    var unlocked = _getUnlocked();
+    if (unlocked[id] && !allowRepeat) {
+      return false; // already unlocked, don't re-notify
+    }
+    unlocked[id] = true;
+
+    _queue.push({ title: title, description: description, icon: icon, duration: duration });
+    _runQueue();
+    return true;
+  }
+
+  function _runQueue() {
+    if (_showing || _queue.length === 0) return;
+    _showing = true;
+    var item = _queue.shift();
+    _show(item, function () {
+      _showing = false;
+      _runQueue();
+    });
+  }
+
+  function _show(item, onDone) {
+    _init();
+
+    var el = document.createElement('div');
+    el.className = 'achievement-popup';
+
+    var iconHtml = item.icon
+      ? '<img class="achievement-popup-icon" src="' + item.icon + '" alt="">'
+      : '<div class="achievement-popup-icon achievement-popup-icon-default">&#9733;</div>';
+
+    el.innerHTML =
+      iconHtml +
+      '<div class="achievement-popup-text">' +
+        '<div class="achievement-popup-label">Achievement Unlocked</div>' +
+        '<div class="achievement-popup-title"></div>' +
+        (item.description ? '<div class="achievement-popup-desc"></div>' : '') +
+      '</div>';
+
+    el.querySelector('.achievement-popup-title').textContent = item.title;
+    if (item.description) {
+      el.querySelector('.achievement-popup-desc').textContent = item.description;
+    }
+
+    _container.appendChild(el);
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        el.classList.add('active');
+      });
+    });
+
+    var closeTimer = setTimeout(function () { _hide(el, onDone); }, item.duration);
+
+    el.addEventListener('click', function () {
+      clearTimeout(closeTimer);
+      _hide(el, onDone);
+    });
+  }
+
+  function _hide(el, onDone) {
+    el.classList.remove('active');
+    el.classList.add('leaving');
+    setTimeout(function () {
+      el.remove();
+      if (onDone) onDone();
+    }, 400);
+  }
+
+  return {
+    unlock: unlock,
+    isUnlocked: isUnlocked,
+    getAll: getAll,
+    getUnlockedList: getUnlockedList,
+    registry: REGISTRY
+  };
+
+})();
+
+var _achievePatchInterval = setInterval(function() {
+  if (!window.dendryUI || !window.dendryUI.dendryEngine) return;
+  clearInterval(_achievePatchInterval);
+
+  var engine = window.dendryUI.dendryEngine;
+  if (typeof engine.achieve !== 'function') {
+    console.warn('Achievements: engine.achieve() not found — check dendry version.');
+    return;
+  }
+
+  var _originalAchieve = engine.achieve.bind(engine);
+  engine.achieve = function(name) {
+    var alreadyHad = !!(this.state.achievements && this.state.achievements[name]);
+    var result = _originalAchieve(name);
+
+    if (!alreadyHad) {
+      var def = Achievements.registry[name] || {};
+      Achievements.unlock(name, {
+        title: def.title || name,
+        description: def.description || '',
+        icon: def.icon || null
+      });
+    }
+    return result;
+  };
+}, 100);
