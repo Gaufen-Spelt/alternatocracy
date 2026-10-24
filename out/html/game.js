@@ -498,6 +498,13 @@ window.hidePartyTooltip = function() {
     }
 };
 
+
+
+
+
+
+  
+
   window.change_var = function(variable, amount, min, max) {
     var q = dendryUI.dendryEngine.state.qualities;
     var newVal = (q[variable] || 0) + amount;
@@ -505,6 +512,25 @@ window.hidePartyTooltip = function() {
     if (max !== undefined) newVal = Math.min(max, newVal);
     q[variable] = newVal;
     window.updateSidebar();
+};
+
+
+  window.SidebarRemoval = function() {
+  var page = document.getElementById('page');
+  var wrapper = document.getElementById('tools_wrapper');
+  if (!page || !wrapper) return;
+  wrapper.style.display = 'none';
+  page.style.gridTemplateColumns = '1fr';
+  page.style.gridTemplateAreas = '"main"';
+};
+
+window.SidebarAdd = function() {
+  var page = document.getElementById('page');
+  var wrapper = document.getElementById('tools_wrapper');
+  if (!page || !wrapper) return;
+  wrapper.style.removeProperty('display');
+  page.style.removeProperty('grid-template-columns');
+  page.style.removeProperty('grid-template-areas');
 };
 
 
