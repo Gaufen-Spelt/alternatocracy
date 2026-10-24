@@ -163,14 +163,8 @@ var main = function(dendryUI) {
   
   };
 
-  var TITLE = "Social Democracy: An Alternate History" + '_' + "Autumn Chen";
+  var TITLE = "Weimar History: An Alternate Perspective" + '_' + "GaufenSpelt";
 
-  // the url is a link to game.json
-  // test url: https://aucchen.github.io/social_democracy_mods/v0.1.json
-  // TODO; 
-  window.loadMod = function(url) {
-      ui.loadGame(url);
-  };
 
   window.showStats = function() {
     if (window.dendryUI.dendryEngine.state.sceneId.startsWith('library')) {
@@ -518,8 +512,10 @@ window.hidePartyTooltip = function() {
   window.SidebarRemoval = function() {
   var page = document.getElementById('page');
   var wrapper = document.getElementById('tools_wrapper');
+  var bottom = document.getElementById('bottom_panel');
   if (!page || !wrapper) return;
   wrapper.style.display = 'none';
+  if (bottom) bottom.style.display = 'none';
   page.style.gridTemplateColumns = '1fr';
   page.style.gridTemplateAreas = '"main"';
 };
@@ -527,8 +523,10 @@ window.hidePartyTooltip = function() {
 window.SidebarAdd = function() {
   var page = document.getElementById('page');
   var wrapper = document.getElementById('tools_wrapper');
+  var bottom = document.getElementById('bottom_panel');
   if (!page || !wrapper) return;
   wrapper.style.removeProperty('display');
+  if (bottom) bottom.style.removeProperty('display');
   page.style.removeProperty('grid-template-columns');
   page.style.removeProperty('grid-template-areas');
 };
