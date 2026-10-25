@@ -333,7 +333,8 @@ header h2::before {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  margin-top: 25px;
+  margin-top: 0px;
+  margin-bottom: 25px;
 }
 
 #bottom_panel h1,
@@ -1145,7 +1146,7 @@ body.dark-mode tr.row-neutral   { background-color: rgba(120, 120, 120, 0.10); }
     margin: 0.4em;
   }
 
-  #bottom_panel { padding: 1em; margin-top: 15px; }
+  #bottom_panel { padding: 1em; margin-top: 0px; margin-bottom: 15px; }
 
   ul.decks, ul.hand, ul.pinned-cards {
     grid-template-columns: repeat(2, 1fr);
