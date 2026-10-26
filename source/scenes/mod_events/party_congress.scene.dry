@@ -3,7 +3,7 @@ subtitle: Factions are vying for control.
 tags: event
 view-if: year > party_congress_year or (year = party_congress_year and month >= party_congress_month)
 new-page: true
-on-arrival: party_congress_year = year + 4
+on-arrival: party_congress_year = year + 2
 
 = Party Congress has been declared
 
@@ -125,12 +125,12 @@ if (Q.highest_r > 30) {
             break;
         case "eth":
             new_ideology = "Ethical";
-            new_spd_ideology = "Social Democracy (New Way)";
+            new_spd_ideology = "Ethical Socialism";
             winner_dissent = "ethical_dissent";
             break;
         case "soc":
             new_ideology = "Statism";
-            new_spd_ideology = "Social Democracy (Statist)";
+            new_spd_ideology = "Patriotic Socialism";
             winner_dissent = "socialpatriot_dissent";
             break;
     }
