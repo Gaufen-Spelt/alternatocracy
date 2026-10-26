@@ -326,9 +326,9 @@ go-to: coalition_menu
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
 {!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px; outline-style: solid;'> </div> !} **SPD:** {!</td><td>!} **[+ spd_r +]%** {!</td><td>!} **[+ str_change_spd +]** {!</td></tr>!}
 
-[+ srpd_row_html +]
-
 [? if sapd_formed : {!<tr><td><div class="box" style='background-color:#C40000'> </div> !}SAPD: {!</td><td>!} [+ sapd_r +]% {!</td><td>!} [+ str_change_sapd +] {!</td></tr>!} ?]
+
+[? if srpd_formed: [+ srpd_row_html +] ]
 
 {!<tr><td><div class="box" style='background-color:#8B0000'> </div> !}KPD: {!</td><td>!} [+ kpd_r +]% {!</td><td>!} [+ str_change_kpd +] {!</td></tr>!}
 
@@ -412,7 +412,7 @@ We have gone into opposition against the Republican Concentration. The new gover
 @social_christian_coalition
 title: Social-Christian Coalition
 subtitle: SPD + Z: [+ spd_r + z_r +]%
-view-if: spd_r + z_r >= 50 and spd_reformizt
+view-if: spd_r + z_r >= 50 and (spd_reformist or spd_neorevisionist or spd_ethical or spd_patriot)
 choose-if: z_r + 10 >= spd_r and z_relation >= 40
 unavailable-subtitle: SPD + Z: [+ spd_r + z_r +]% - [? if z_r + 10 < spd_r : The Center Party is unwilling to be junior partner in a coalition where we hold such a dominant position. ?][? if z_relation < 40 : Our relationship with the Center Party is not good enough. ?] 
 on-arrival: in_social_christian_coalition = 1; spd_in_government = 1; z_in_government = 1; in_weimar_coalition = 0; in_grand_coalition = 0; in_popular_front = 0; in_left_front = 0; foreign_minister_party = "Z"; interior_minister_party = "Z"; justice_minister_party = "SPD"; labor_minister_party = "SPD"; reichswehr_minister_party = "I"; economic_minister_party = "Z"; finance_minister_party = "Z"; agriculture_minister_party = "Z"

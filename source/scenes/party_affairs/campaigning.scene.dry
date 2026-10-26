@@ -40,10 +40,10 @@ We have put leaflets on the streets in the hope someone would pick it up. Whethe
 
 @workers
 view-if: not spd_neorevisionist
-subtitle: -[+ campaign_rate +] resources
+subtitle: -[+ campaign_rate +] resources. This will slightly strengthen left and labor.
 choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: workers_spd += 4*(1-dissent)*campaign_rate; workers_spd -= 1 if unemployed >= 15; workers_spd -= 1 if unemployed >= 25; workers_spd += 4*(1-dissent) if wtb_adopted = 1; resources -= campaign_rate; workers_spd += 2*(1-dissent) if nationalization_progress >= 1; workers_spd -= 2 if spd_reformist or peoples_party; {!
+on-arrival: workers_spd += 4*(1-dissent)*campaign_rate; workers_spd -= 1 if unemployed >= 15; workers_spd -= 1 if unemployed >= 25; workers_spd += 4*(1-dissent) if wtb_adopted = 1; resources -= campaign_rate; workers_spd += 2*(1-dissent) if nationalization_progress >= 1; workers_spd -= 2 if spd_reformist or peoples_party; labor_strength += 2; left_strength += 2; {!
 document.querySelectorAll('.rate-buttons').forEach(function(el){ el.style.display = 'none'; });
 !}
 
@@ -52,11 +52,11 @@ We have increased our campaigning among the workers. [? if unemployed >= 15: The
 [? if peoples_party: Unfortunately, our conversion to **Volkspartei** has alienated much of the workers to consider intensive campaigning amongst them. ?] [? if spd_reformist: Our shift to the right does not bode well with our proletarian base. ?]
 
 @new_middle
-subtitle: -[+ campaign_rate +] resources
+subtitle: -[+ campaign_rate +] resources. This will slightly strengthen labor and reformists.
 view-if: not spd_left
 choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: new_middle_spd += 3*(1-dissent)*campaign_rate; new_middle_spd += 5 if new_middle_consciousness; new_middle_spd -= 2 if socialism <= 49 and peoples_party == 0 and new_middle_consciousness == 0; resources -= campaign_rate;  {!
+on-arrival: labor_strength += 2; reformist_strength += 2; new_middle_spd += 3*(1-dissent)*campaign_rate; new_middle_spd += 5 if new_middle_consciousness; new_middle_spd -= 2 if socialism <= 49 and peoples_party == 0 and new_middle_consciousness == 0; resources -= campaign_rate;  {!
 document.querySelectorAll('.rate-buttons').forEach(function(el){ el.style.display = 'none'; });
 !}
 
@@ -64,10 +64,10 @@ We have increased our campaigning among the new middle class. [? if socialism <=
 
 @old_middle
 view-if: not spd_left and not spd_centrist
-subtitle: -[+ campaign_rate +] resources
+subtitle: -[+ campaign_rate +] resources. This will slightly strengthen reformists.
 choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: old_middle_spd += 3*(1-dissent)*campaign_rate; resources -= campaign_rate; old_middle_spd -= 2 if nationalism >= 51 and peoples_party == 0; {!
+on-arrival: reformist_strength += 2; old_middle_spd += 3*(1-dissent)*campaign_rate; resources -= campaign_rate; old_middle_spd -= 2 if nationalism >= 51 and peoples_party == 0; {!
 document.querySelectorAll('.rate-buttons').forEach(function(el){ el.style.display = 'none'; });
 !}
 
@@ -75,10 +75,10 @@ We have increased our campaigning among the old middle class. [? if nationalism 
 
 @rural
 view-if: not spd_left and not spd_labor
-subtitle: -[+ campaign_rate +] resources
+subtitle: -[+ campaign_rate +] resources. This will slightly strengthen reformists.
 choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: rural_spd += 3*(1-dissent)*campaign_rate; rural_spd -= 2*(1-dissent) if peoples_party == 0; resources -= campaign_rate; rural_spd += 2*(1-dissent) if rural_policy >= 2; {!
+on-arrival: reformist_strength += 2; rural_spd += 3*(1-dissent)*campaign_rate; rural_spd -= 2*(1-dissent) if peoples_party == 0; resources -= campaign_rate; rural_spd += 2*(1-dissent) if rural_policy >= 2; {!
 document.querySelectorAll('.rate-buttons').forEach(function(el){ el.style.display = 'none'; });
 !}
 
@@ -86,10 +86,10 @@ We have increased our campaigning among farmers. [? if peoples_party == 0: We ha
 
 @unemployed
 view-if: not spd_reformist
-subtitle: -[+ campaign_rate +] resources
+subtitle: -[+ campaign_rate +] resources. This will slightly strengthen left.
 choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: unemployed_spd += 5*(1-dissent)*campaign_rate; resources -= campaign_rate; unemployed_spd -= 2 if welfare < 0; unemployed_spd += 3*(1-dissent) if wtb_adopted = 1; unemployed_spd += 2*(1-dissent) if welfare >= 2; {!
+on-arrival: left_strength += 2; unemployed_spd += 5*(1-dissent)*campaign_rate; resources -= campaign_rate; unemployed_spd -= 2 if welfare < 0; unemployed_spd += 3*(1-dissent) if wtb_adopted = 1; unemployed_spd += 2*(1-dissent) if welfare >= 2; {!
 document.querySelectorAll('.rate-buttons').forEach(function(el){ el.style.display = 'none'; });
 !}
 

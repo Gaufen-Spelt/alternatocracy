@@ -383,13 +383,13 @@ function applyYearlyShifts() {
 
     if (Q.year == 1928) {
         if (Q.dnvp_in_government == 1) {
-            Q.rural_dnvp -= 8/12;
-            Q.rural_other += 6/12;
+            Q.rural_dnvp -= 5/12;
+            Q.rural_other += 5/12;
         }
         Q.workers_z -= 0.5/12;
         Q.workers_nsdap -= 1/12;
-        Q.rural_dnvp -= 3/12;
-        Q.old_middle_dnvp -= 6/12;
+        Q.rural_dnvp -= 6/12;
+        Q.old_middle_dnvp -= 8/12;
         Q.new_middle_dnvp -= 6/12;
         Q.rural_other += 8/12;
         Q.old_middle_other += 9/12;
@@ -795,7 +795,9 @@ const strengthMap = {
     Centrist: "center_strength",
     Labor: "labor_strength",
     Reformist: "reformist_strength",
-    Neorev: "neorevisionist_strength"
+    Neorev: "neorevisionist_strength",
+    Ethical: "ethical_strength",
+    Socialpatriot: "socialpatriot_strength"
 };
 const ideologyStrengthKey = strengthMap[Q.ideology];
 if (ideologyStrengthKey && Q[ideologyStrengthKey] < 40) {
@@ -856,6 +858,8 @@ Q.spd_centrist       = (Q.ideology == "Centrist") ? 1 : 0;
 Q.spd_reformist      = (Q.ideology == "Reformist") ? 1 : 0;
 Q.spd_labor          = (Q.ideology == "Labor") ? 1 : 0;
 Q.spd_neorevisionist = (Q.ideology == "Neorevisionist") ? 1 : 0;
+Q.spd_ethical        = (Q.ideology == "Ethical") ? 1 : 0;
+Q.spd_patriot        = (Q.ideology == "Socialpatriot") ? 1 : 0;
 
 if (Q.youth_crisis_spd >= 1) {
     Q.workers_spd -= 0.1;
