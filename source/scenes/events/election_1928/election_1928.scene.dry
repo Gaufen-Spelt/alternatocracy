@@ -328,7 +328,7 @@ go-to: coalition_menu
 
 [? if sapd_formed : {!<tr><td><div class="box" style='background-color:#C40000'> </div> !}SAPD: {!</td><td>!} [+ sapd_r +]% {!</td><td>!} [+ str_change_sapd +] {!</td></tr>!} ?]
 
-[? if srpd_formed: [+ srpd_row_html +] ]
+[? if srpd_formed: [+ srpd_row_html +] ?]
 
 {!<tr><td><div class="box" style='background-color:#8B0000'> </div> !}KPD: {!</td><td>!} [+ kpd_r +]% {!</td><td>!} [+ str_change_kpd +] {!</td></tr>!}
 
