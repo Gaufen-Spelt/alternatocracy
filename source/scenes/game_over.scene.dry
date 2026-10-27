@@ -313,3 +313,8 @@ go-to: eg_menu
 
 We have helped to form a European Union to bring peace and prosperity to the continent. Time will tell how effective it will be.
 
+
+
+
+@end_game
+game-over: true
