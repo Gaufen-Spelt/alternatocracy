@@ -430,7 +430,7 @@ function applyYearlyShifts() {
         Q.old_middle_ddp -= (4.5/12) * s;
         Q.new_middle_nsdap += (7.5/12) * s;
         Q.old_middle_nsdap += (7.5/12) * s;
-        Q.new_middle_other -= (3/12) * s;
+        Q.new_middle_other -= (6/12) * s;
         Q.old_middle_other -= (3/12) * s;
         Q.unemployed_nsdap += (6/12) * s;
         Q.old_middle_other -= 6/12 * s;
@@ -444,7 +444,7 @@ function applyYearlyShifts() {
         if (!Q.works_program) {
             Q.rural_nsdap += (2.25/12) * s;
             Q.old_middle_nsdap += (3.75/12) * s;
-            Q.workers_nsdap += (1.5/12) * s;
+            Q.workers_nsdap += (1/12) * s;
             Q.workers_other += (3.75/12) * s;
             Q.workers_kpd += (1.5/12) * s;
         }
@@ -1285,6 +1285,7 @@ function financeAction(o)  { return govAction('finance_minister', o); }
 function interiorAction(o) { return govAction('interior_minister', o); }
 function foreignAction(o) { return govAction('foreign_minister', o); }
 function justiceAction(o) { return govAction('justice_minister', o); }
+function agricultureAction(o) { return govAction('agriculture_minister', 0); }
  
 function clampLoyalty() {
     Q.interior_police_loyalty = Math.min(1, Math.max(0, Q.interior_police_loyalty || 0));
@@ -1633,115 +1634,102 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         }
     }),
 
-        // ---- FOREIGN ------------------------------------------------------------
+    // ---- FOREIGN: counterweights (right-wing / hawkish) ----------------------
+    // These get heavier as relations rise, so the AI drifts back down instead of maxing out.
 
-    fp_improve_west: foreignAction({
-        ideoMin: 1, ideoMax: 16,
-        weight: () => scaledWeight(1.20, Q.west_relation, 5, 2),
-        desc: ', at the Foreign Ministry, has pursued rapprochement with France and the Western Allies.',
-        eligible: () => Q.west_relation < 8,
-        effects: { west_relation: 2, reparations_negotiation: 1 }
-    }),
-
-    fp_improve_east: foreignAction({
-        ideoMin: 1, ideoMax: 13,
-        weight: () => scaledWeight(1.00, Q.east_relation, 4, 2),
-        desc: ', at the Foreign Ministry, has reassured Poland and Czechoslovakia of Germany\'s peaceful intentions.',
-        eligible: () => Q.east_relation < 8,
-        effects: { east_relation: 2 }
-    }),
-
-    fp_soviet_aid: foreignAction({
-        ideoMin: 1, ideoMax: 5,
-        weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
-        desc: ', at the Foreign Ministry, has extended economic aid to the Soviet Union in the spirit of Rapallo.',
-        eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
-        effects: { budget: -1, soviet_relation: 2, west_relation: -0.5 }
-    }),
-
-    fp_soviet_military: foreignAction({
-        ideoMin: 15, ideoMax: 20,
-        weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
-        desc: ', at the Foreign Ministry, has traded aid to the Soviets for secret training and equipment for the Reichswehr.',
-        eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
-        effects: { budget: -1, soviet_relation: 1, reichswehr_militancy: 0.2, reichswehr_loyalty: 0.05, west_relation: -1 }
-    }),
-
-    fp_negotiate_versailles: foreignAction({
-        ideoMin: 1, ideoMax: 13,
-        weight: () => 1.80,
-        desc: ', at the Foreign Ministry, has opened talks with the Western powers on Germany\'s remaining Versailles obligations.',
-        eligible: () => Q.reparations > -2 && Q.reparations_negotiation < 3,
-        effects: { west_relation: 1, reparations_negotiation: 1 },
-        extra: () => {
-            if (Q.pacifism >= 3) Q.reparations_negotiation += 1;
-            if (Q.nationalism <= 50) Q.reparations_negotiation += 1;
-            if (Q.west_relation >= 3) Q.reparations_negotiation += 1;
-        }
-    }),
-
-    fp_reduce_reparations: foreignAction({
-        ideoMin: 1, ideoMax: 20,
-        weight: () => 3.00,
-        desc: ', at the Foreign Ministry, has secured a pause on reparations payments from the Western Allies.',
-        eligible: () => Q.reparations_negotiation >= 3 && Q.black_thursday_seen == 1 && Q.reparations > -2,
-        effects: { west_relation: 1, budget: 1, economic_growth: 0.7, coup_progress: -1 },
-        support: { workers: 4, old_middle: 3, new_middle: 3, rural: 3 },
-        extra: () => { Q.reparations = -2; }
-    }),
-
-    fp_expose_rearmament: foreignAction({
-        ideoMin: 1, ideoMax: 11,
-        weight: () => 1.60,
-        desc: ', at the Foreign Ministry, has exposed the secret rearmament program of the previous government.',
-        eligible: () => Q.rearmament_exposed < 1,
-        effects: { west_relation: 2, east_relation: 1, nationalism: -5, pro_republic: 5, rearmament_exposed: 1, reparations_negotiation: 3, coup_progress: 2 }
-    }),
-
-    fp_customs_union: foreignAction({
-        ideoMin: 14, ideoMax: 20,
-        weight: () => 1.50,
-        desc: ', at the Foreign Ministry, has forged a customs union with Austria in defiance of Versailles and France.',
-        eligible: () => Q.black_thursday_seen == 1 && Q.customs_union == 0 && Q.eu == 0,
-        effects: { customs_union: 1, west_relation: -2, east_relation: -2, z_relation: 6, dvp_relation: 6, nationalism: 3, coup_progress: -1 },
-        extra: () => { Q.banking_crisis_timer = 2; }
-    }),
-
-    fp_revisionist_posture: foreignAction({
+    fp_reichswehr_buildup: foreignAction({
         ideoMin: 17, ideoMax: 20,
+        weight: () => linearWeight(1.10, Q.nationalism, 50, 2),
+        desc: ', at the Foreign Ministry, has pressed ahead with Reichswehr expansion in defiance of Versailles limits.',
+        eligible: () => Q.rearmament_exposed < 1,
+        effects: { reichswehr_militancy: 0.2, pacifism: -1, nationalism: 1, west_relation: -0.5, east_relation: -0.5, coup_progress: 0.5 }
+    }),
+
+    fp_snub_west: foreignAction({
+        ideoMin: 15, ideoMax: 20,
+        weight: () => linearWeight(1.20, Q.west_relation, 5, 2),
+        desc: ', at the Foreign Ministry, has snubbed the Western Allies and stalled the "policy of fulfillment".',
+        eligible: () => Q.west_relation > -5,
+        effects: { west_relation: -2, reparations_negotiation: -1, nationalism: 1 }
+    }),
+
+    fp_reparations_defiance: foreignAction({
+        ideoMin: 18, ideoMax: 20,
+        weight: () => 1.00,
+        desc: ', at the Foreign Ministry, has refused to honor reparations obligations, calling them a "tribute of slavery".',
+        eligible: () => Q.reparations > -2 && Q.west_relation > -4,
+        effects: { west_relation: -2, reparations_negotiation: -2, nationalism: 2, budget: 1 }
+    }),
+
+    fp_east_revisionism: foreignAction({
+        ideoMin: 16, ideoMax: 20,
+        weight: () => linearWeight(1.00, Q.east_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has demanded revision of the eastern borders, alarming Poland and Czechoslovakia.',
+        eligible: () => Q.east_relation > -5,
+        effects: { east_relation: -2, nationalism: 2 }
+    }),
+
+    fp_anti_comintern: foreignAction({
+        ideoMin: 12, ideoMax: 20,
+        weight: () => linearWeight(1.00, Q.soviet_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has frozen ties with Moscow and denounced the Comintern\'s subversion of Germany.',
+        eligible: () => Q.soviet_relation > -5,
+        effects: { soviet_relation: -2, kpd_relation: -1, west_relation: 0.5 }
+    }),
+
+    fp_eu_sabotage: foreignAction({
+        ideoMin: 15, ideoMax: 20,
+        weight: () => linearWeight(1.30, Q.eu_progress, 2, 2),
+        desc: ', at the Foreign Ministry, has obstructed the European Union talks, warning against surrendering German sovereignty.',
+        eligible: () => Q.eu == 0 && Q.eu_progress > 0,
+        effects: { eu_progress: -1, nationalism: 1, west_relation: -1 }
+    }),
+
+    // ---- FOREIGN: counterweights (left / pacifist) ---------------------------
+
+    fp_disarmament_push: foreignAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => scaledWeight(1.10, Math.max(Q.pacifism, 0) + 1, 5, 2),
+        desc: ', at the Foreign Ministry, has championed multilateral disarmament and the outlawing of war at Geneva.',
+        eligible: () => Q.pacifism < 10,
+        effects: { pacifism: 1, nationalism: -2, west_relation: 1, east_relation: 1, reichswehr_militancy: -0.1 },
+        extra: () => { Q.reichswehr_militancy = Math.max(0, Q.reichswehr_militancy || 0); }
+    }),
+
+    fp_league_diplomacy: foreignAction({
+        ideoMin: 7, ideoMax: 13,
         weight: () => 1.20,
-        desc: ', at the Foreign Ministry, has taken a defiant revisionist line against Versailles and the neighbors.',
-        eligible: () => Q.west_relation > -5 && Q.east_relation > -5,
-        effects: { nationalism: 2, west_relation: -1, east_relation: -1, reparations_negotiation: -1 }
+        desc: ', at the Foreign Ministry, has worked through the League of Nations to rebuild Germany\'s standing as a trusted partner.',
+        eligible: () => Q.pacifism < 8,
+        effects: { pacifism: 0.5, pro_republic: 1, west_relation: 1, east_relation: 1 }
     }),
 
-    fp_european_union: foreignAction({
-        ideoMin: 1, ideoMax: 10,
-        weight: () => 1.70,
-        desc: ', at the Foreign Ministry, has pushed multilateral talks toward a European Union.',
-        eligible: () => Q.reparations <= -2 && Q.eu == 0 && Q.west_relation >= 5 && Q.east_relation >= 4,
-        effects: { eu_progress: 1, west_relation: 1 },
-        extra: () => {
-            if (Q.eu_progress < 2) return;
-            Q.eu = 1;
-            Q.pro_republic += 5; Q.nationalism -= 5;
-            Q.budget += 1; Q.economic_growth += 1;
-            if (Q.unemployed >= 10) Q.unemployed -= 2;
-        }
+    fp_oppose_concordat: foreignAction({
+        ideoMin: 1, ideoMax: 5,
+        weight: () => 0.90,
+        desc: ', at the Foreign Ministry, has stalled the Vatican negotiations, wary of clerical influence over the Republic.',
+        eligible: () => Q.reichskonkordat == 0 && Q.reichskonkordat_progress > 0,
+        effects: { reichskonkordat_progress: -1, z_relation: -3 }
     }),
 
-    fp_concordat: foreignAction({
-        ideoMin: 9, ideoMax: 14,
-        weight: () => 1.40,
-        desc: ', at the Foreign Ministry, has advanced negotiations on a Concordat with the Vatican.',
-        eligible: () => Q.prussian_concordat == 1 && Q.reichskonkordat == 0,
-        effects: { reichskonkordat_progress: 2},
-        extra: () => {
-            if (Q.reichskonkordat_progress < 4) return;
-            Q.reichskonkordat = 1;
-            Q.z_relation += 10;
-            Q.catholics_z += 5;
-        }
+    // ---- FOREIGN: repair and economic diplomacy ------------------
+
+    // Centrists patch up the worst relation instead of chasing a new initiative
+    fp_repair_relations: foreignAction({
+        ideoMin: 7, ideoMax: 16,
+        weight: () => scaledWeight(1.50, Math.min(Q.west_relation, Q.east_relation) + 5, 5, 2),
+        desc: ', at the Foreign Ministry, has dispatched envoys to mend strained relations with Germany\'s neighbors.',
+        eligible: () => Q.west_relation < 1 || Q.east_relation < 1,
+        effects: { west_relation: 1, east_relation: 1 }
+    }),
+
+    fp_trade_agreements: foreignAction({
+        ideoMin: 1, ideoMax: 16,
+        weight: () => linearWeight(1.20, Q.unemployed, 10, 2),
+        desc: ', at the Foreign Ministry, has signed new trade agreements to open export markets for German industry.',
+        eligible: () => Q.unemployed > 5 && Q.west_relation >= 2,
+        effects: { economic_growth: 0.3, unemployed: -0.5 },
+        support: { workers: 2, new_middle: 2 }
     }),
 
         // ---- JUSTICE: reform ----------------------------------------------------

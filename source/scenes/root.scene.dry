@@ -15,7 +15,7 @@ window.SidebarRemoval()
 
 - @start: Start game
 - @mod_info: About
-- @game_over.achievements
+- @achievements
 
 
 @start
