@@ -16,7 +16,7 @@ new-page: true
 
 
 @router
-go-to: eg_menu if started == 1;root.start_menu_2 if started == 0
+go-to: game_over.eg_menu if started == 1;root.start_menu_2 if started == 0
 
 @end_game
 game-over: true
