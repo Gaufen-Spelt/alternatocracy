@@ -24,11 +24,13 @@ As with the state police units and the Reichswehr, the internal police tends to 
 
 @loyalty
 view-if: interior_police_loyalty < 1
-on-arrival: interior_police_loyalty += 0.1
+on-arrival: interior_police_loyalty += 0.1 if not spd_leftist; interior_police_loyalty += 0.05 if spd_leftist
 
 As with the Prussian state police, there are measures we can take to root out reactionary and anti-democratic sentiment in the police. We can improve training and recruiting procedures, and identify and remove known fascists and the like.
 
 Current interior police loyalty: [+ interior_police_loyalty : loyalty +]
+
+[? if spd_leftist: With a leftist SPD leadership, the reforms meet resistance from police officials and the civil service, who distrust the party's intentions. ?]
 
 @invesigate_schacht
 view-if: interior_police_loyalty > 0.60

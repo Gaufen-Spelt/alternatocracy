@@ -747,6 +747,7 @@ if (Q.reaction_activated !== 1) {
     if (Q.factory_takeovers >= 1) Q.reaction_progress += Q.factory_takeovers;
     if (Q.kpd_in_government >= 1) Q.reaction_progress += 3;
     if (Q.socialism >= 65) Q.reaction_progress += 1;
+    if (Q.organized_capitalism > 0) Q.reaction_progress += Q.organized_capitalism / 2;
 }
 
 Q.junker_land_reform_enabled = (
@@ -843,6 +844,12 @@ if (Q.ideology == "Centrist") {
     if (Q.ethical_dissent >= 30) Q.ethical_dissent -= 0.5;
     if (Q.socialpatriot_dissent >= 30) Q.socialpatriot_dissent -= 0.5;
 }
+
+if (Q.youth_crisis_spd >= 1) {
+    Q.workers_spd -= 0.1;
+    Q.new_middle_spd -= 0.05;
+    Q.unemployed_spd -= 0.05;
+}
     
 
 // ---- Flags -----------------------------------------------------------------
@@ -860,12 +867,6 @@ Q.spd_labor          = (Q.ideology == "Labor") ? 1 : 0;
 Q.spd_neorevisionist = (Q.ideology == "Neorevisionist") ? 1 : 0;
 Q.spd_ethical        = (Q.ideology == "Ethical") ? 1 : 0;
 Q.spd_patriot        = (Q.ideology == "Socialpatriot") ? 1 : 0;
-
-if (Q.youth_crisis_spd >= 1) {
-    Q.workers_spd -= 0.1;
-    Q.new_middle_spd -= 0.05;
-    Q.unemployed_spd -= 0.05;
-}
 
 // ---- Timer registration ----------------------------------------------------
 

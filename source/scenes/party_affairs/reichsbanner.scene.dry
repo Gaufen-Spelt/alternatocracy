@@ -24,8 +24,8 @@ The *Reichsbanner Schwarz-Rot-Gold* is a mass organization for the defense of th
 #- Orient reichsbanner towards anti-fascism (only available if we have prioritized anti fascism)
 
 @militant
-choose-if: resources >= rb_militarization_cost
-unavailable-subtitle: Not enough resources ([+ rb_militarization_cost +] needed).
+choose-if: resources >= rb_militarization_cost and (not spd_reformist or spd_militancy <= 0.15)
+unavailable-subtitle: Not enough resources ([+ rb_militarization_cost +] needed). [? if spd_reformist and spd_militancy > 0.15: We may no longer militarize beyond this point. ?]
 subtitle: -[+ rb_militarization_cost +] resources
 on-arrival: resources -= rb_militarization_cost; rb_investment += 1; rb_strength += 100; rb_militancy += 0.05; left_strength += 2; left_dissent -= 2; reformist_dissent += 5; spd_militancy += 0.05; workers_spd += 2*(1-dissent); unemployed_spd += 2*(1-dissent); z_relation -= 5 if historical_mode 
 

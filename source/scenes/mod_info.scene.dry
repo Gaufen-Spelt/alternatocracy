@@ -8,3 +8,21 @@ Welcome to the modification, my dear player. Would you like to see Redux but in 
 This modification's purpose is very general - to be expansion to the base game. 
 
 - @root: That's all?
+- @versions: Versions
+
+@versions
+go-to: mod_info
+
+Version 0.0.1.
+
+Added:
+Reformist, left and center paths were added.
+Substantial nerfs to lot of actions.
+Time is twice as slower.
+Party congresses. Shuffle leadership is removed.
+DNVP and DVP congresses.
+New factions. 
+Reaction from establishment.
+Lot of QOL and balance changes.
+
+

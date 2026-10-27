@@ -132,18 +132,19 @@ Instead of seizing private factories directly, we use government contracts to fa
 
 @lower_agricultural_tariffs
 title: Lower agricultural tariffs on foreign grain and livestock.
-subtitle: Lower food costs for city workers, despite anger from rural landowners.
+subtitle: Lower food costs for city workers, despite anger from rural landowners. [? if tariffs <= -5 : There are no tariffs left to cut. ?]
 view-if: agrarian_tariffs_lowered == 0
-on-arrival: organized_capitalism += 1; agrarian_tariffs_lowered = 1; workers_spd += 5*(1-dissent); tariffs -= 1; unemployed_spd += 3*(1-dissent); inflation -= 0.5; rural_spd -= 3; dnvp_relation -= 12; coalition_dissent += 1 if in_grand_coalition
+choose-if: tariffs > -5
 max-visits: 1
+on-arrival: organized_capitalism += 1; agrarian_tariffs_lowered = 1; tariffs -= 1; inflation -= 0.5; economic_growth += 0.4; workers_spd += 5*(1-dissent); unemployed_spd += 3*(1-dissent); rural_spd -= 3; old_middle_spd -= 2; dnvp_relation -= 12; west_relation += 1; east_relation += 1; eu_progress += 1 if eu_progress > 0; coalition_dissent += 1 if in_grand_coalition
 
-Bread and meat prices are political prices. By cutting tariffs on imported food, we lower the cost of living for city workers—even though wealthy Junker landowners accuse us of betraying German agriculture.
+Bread and meat prices are political prices. By cutting tariffs on imported food, we lower the cost of living for city workers, even though wealthy Junker landowners accuse us of betraying German agriculture
 
 @nationalize_banks_crisis
 title: Secure banking supervision and prepare state guarantees.
 subtitle: Set up strict oversight over commercial banks to prepare for financial instability.
 view-if: bank_control == 0
-on-arrival: organized_capitalism += 1; bank_control = 1; capital_strike_progress += 1; dvp_relation -= 6
+on-arrival: organized_capitalism += 1; bank_control = 1; capital_strike_progress += 2; dvp_relation -= 6
 max-visits: 1
 
 While treaties limit our ability to nationalize major banks during normal times, we institute strict auditing over commercial bank reserves. If a banking crisis occurs, the government will be ready to intervene and protect deposits.
