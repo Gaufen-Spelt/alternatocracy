@@ -16,8 +16,8 @@ Of course, this criticism is unfounded, but the bourgeois establishment does not
 - @hilferding_resign: Hilferding must resign.
 
 @expose_him
-view-if: investigate_far_right >= 1
-go-to: weak if investigate_far_right >= 1 and investigate_corruption < 1; dvp_oppose if investigate_far_right >= 1 and investigate_corruption >= 1 and dvp_in_government and dvp_relation < 50; nice if investigate_far_right >= 1 and investigate_corruption >= 1 and ((not dvp_in_government) or (dvp_in_government and dvp_relation >= 50))
+view-if: schacht_investigated >= 1
+go-to: weak if schacht_investigated >= 1 and investigate_corruption < 1; dvp_oppose if schacht_investigated >= 1 and investigate_corruption >= 1 and dvp_in_government and dvp_relation < 50; nice if schacht_investigated >= 1 and investigate_corruption >= 1 and ((not dvp_in_government) or (dvp_in_government and dvp_relation >= 50))
 
 @weak
 
@@ -40,6 +40,13 @@ We expose to the public Schacht's dealings with the Nazis. For better or worse, 
 After a second budget proposal, Schacht still considers Hilferding's budget to be unacceptable, despite more regressive taxes and expenditure cuts.
 
 - @hilferding_resign: Hilferding must resign.
+- @hilferding_resist: Hilferding will not resign.
+
+@hilferding_resist
+view-if: economic_democracy >= 3 and center_strength + left_strength > 60 and not dvp_in_government
+on-arrival: coalition_dissent += 1; schacht_siege = 1
+
+We have refused to step down.
 
 @hilferding_resign
 on-arrival: finance_minister_party = "DVP" if in_grand_coalition; finance_minister_party = "I" if in_weimar_coalition or in_popular_front or in_left_front; finance_minister = "Moldenhauer"; hilferding_resign = 1; economic_minister_granted = 1 if economic_minister_party != "SPD"; economic_minister_party = "SPD" if economic_minister_party != "SPD"; economic_minister = "Schmidt" if economic_minister_party = "SPD"
