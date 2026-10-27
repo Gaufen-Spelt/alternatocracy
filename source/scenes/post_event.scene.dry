@@ -1243,44 +1243,55 @@ for (const party of Q.parties) {
     }
 }
 
-// ---- Party government actions ---------------------------------------------
+// GOVT
 
 Q.MINISTRIES = [
-    'transport_minister',
-    'agriculture_minister',
-    'finance_minister',
-    'economic_minister',
-    'labor_minister',
-    'justice_minister',
-    'foreign_minister'
+    'transport_minister', 'agriculture_minister', 'finance_minister',
+    'economic_minister', 'labor_minister', 'justice_minister',
+    'foreign_minister', 'interior_minister'
 ];
-
+ 
 function holdsMinistry(party, ministry) {
     return Q[ministry + '_party'] && Q[ministry + '_party'].toLowerCase() === party.toLowerCase();
 }
-
+ 
 function holdsAnyMinistry(party) {
     return Q.MINISTRIES.some(m => holdsMinistry(party, m));
 }
-
+ 
 function isChancellorParty(party) {
     return Q.chancellor_party && Q.chancellor_party.toLowerCase() === party.toLowerCase();
 }
-
-// Builds a simple ministry action that adds a little government stability.
-function ministryAction(ministry, weight, timer, description) {
+ 
+// One builder for every portfolio-gated action.
+// o: { ideoMin, ideoMax, weight, desc, eligible, timer, effects, support, extra }
+function govAction(ministry, o) {
     return {
-        ideoMin: 1, ideoMax: 20,
-        weight: () => weight,
-        description: (party) => partyLabel(party) + description,
-        eligible: (party) => holdsMinistry(party, ministry),
-        timer: timer,
-        apply: () => { Q.government_stability += 0.5; }
+        ideoMin: o.ideoMin, ideoMax: o.ideoMax,
+        weight: o.weight,
+        description: (party) => partyLabel(party) + o.desc,
+        eligible: (party) => holdsMinistry(party, ministry) && (!o.eligible || o.eligible(party)),
+        timer: o.timer || 10,
+        apply: (party) => {
+            for (var k in (o.effects || {})) Q[k] = (Q[k] || 0) + o.effects[k];
+            addSupport(party, o.support || {});
+            Q.government_stability += 0.5;
+            if (o.extra) o.extra(party);
+        }
     };
 }
-
+ 
+function financeAction(o)  { return govAction('finance_minister', o); }
+function interiorAction(o) { return govAction('interior_minister', o); }
+function foreignAction(o) { return govAction('foreign_minister', o); }
+function justiceAction(o) { return govAction('justice_minister', o); }
+ 
+function clampLoyalty() {
+    Q.interior_police_loyalty = Math.min(1, Math.max(0, Q.interior_police_loyalty || 0));
+}
+ 
 Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
-
+ 
     chancellery_agenda_push: {
         ideoMin: 1, ideoMax: 20,
         weight: () => 1.00,
@@ -1289,134 +1300,556 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         timer: 8,
         apply: () => { Q.government_stability += 1; }
     },
-
-    finance_budget_maneuver:       ministryAction('finance_minister',     0.40, 8,  ', controlling the Finance Ministry, has maneuvered the budget to favor its base.'),
-    
-fin_tax_rich: financeAction({
-    ideoMin: 1, ideoMax: 8,
-    weight: () => scaledWeight(2.50, Q.budget, 5),
-    desc: ', at the Finance Ministry, has pushed through higher income and property taxes on the wealthy.',
-    eligible: () => Q.upper_tax_rates <= 5,
-    effects: { upper_tax_rates: 1, budget: 2, capital_strike_progress: 1, inflation: -0.6, economic_growth: -0.4, unemployed: 1 },
-    support: { workers: 3, old_middle: -3, new_middle: -3 }
-}),
-
-fin_tax_consumption: financeAction({
-    ideoMin: 9, ideoMax: 17,
-    weight: () => scaledWeight(2.20, Q.budget, 5),
-    desc: ', at the Finance Ministry, has raised consumption taxes to plug the budget hole, a burden that falls hardest on workers.',
-    eligible: () => Q.lower_tax_rates <= 5,
-    effects: { lower_tax_rates: 1, budget: 2, inflation: -0.4 },
-    support: { workers: -4, unemployed: -3 }
-}),
-
-fin_shared_sacrifice: financeAction({
-    ideoMin: 7, ideoMax: 13,
-    weight: () => scaledWeight(2.30, Q.budget, 4),
-    desc: ', at the Finance Ministry, has called for "shared sacrifice" and raised taxes across the board.',
-    eligible: () => Q.upper_tax_rates <= 5 && Q.lower_tax_rates <= 5,
-    effects: { upper_tax_rates: 1, lower_tax_rates: 1, budget: 3, unemployed: 2, inflation: -1.1, economic_growth: -0.6 },
-    support: { workers: -3, old_middle: -3, new_middle: -3 }
-}),
-
-// TAXES -- cuts
-
-fin_cut_rich: financeAction({
-    ideoMin: 14, ideoMax: 20,
-    weight: () => linearWeight(2.40, Q.budget, 8),
-    desc: ', at the Finance Ministry, has cut income and property taxes on business and the propertied classes.',
-    eligible: () => Q.budget >= 2 && Q.upper_tax_rates >= -5,
-    effects: { upper_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4, dvp_right: 5 },
-    support: { old_middle: 4, new_middle: 4, workers: -2 }
-}),
-
-fin_cut_overall: financeAction({
-    ideoMin: 9, ideoMax: 16,
-    weight: () => linearWeight(2.30, Q.budget, 10),
-    desc: ', at the Finance Ministry, has delivered a broad tax cut, drawing applause from business and the middle classes.',
-    eligible: () => Q.budget >= 3 && Q.upper_tax_rates >= -5 && Q.lower_tax_rates >= -5,
-    effects: { upper_tax_rates: -1, lower_tax_rates: -1, budget: -3, inflation: 1, economic_growth: 0.6 },
-    support: { new_middle: 4, old_middle: 4, workers: 3 }
-}),
-
-fin_cut_poor: financeAction({
-    ideoMin: 1, ideoMax: 8,
-    weight: () => linearWeight(2.20, Q.budget, 8),
-    desc: ', at the Finance Ministry, has trimmed consumption taxes to relieve working-class households.',
-    eligible: () => Q.budget >= 2 && Q.lower_tax_rates >= -5,
-    effects: { lower_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4 },
-    support: { workers: 5, unemployed: 3 }
-}),
-
-// TAXES -- budget-neutral rebalancing (ideological, flat weight)
-
-fin_progressive_shift: financeAction({
-    ideoMin: 1, ideoMax: 6,
-    weight: () => 1.20,
-    desc: ', at the Finance Ministry, has shifted the tax burden upward, raising levies on the rich while easing them for the poor.',
-    eligible: () => Q.upper_tax_rates <= 5 && Q.lower_tax_rates >= -5,
-    effects: { upper_tax_rates: 1, lower_tax_rates: -1, capital_strike_progress: 1 },
-    support: { workers: 5, old_middle: -3, new_middle: -3 }
-}),
-
-fin_regressive_shift: financeAction({
-    ideoMin: 15, ideoMax: 20,
-    weight: () => 1.20,
-    desc: ', at the Finance Ministry, has lowered taxes on the rich while raising consumption taxes, shifting the burden onto workers.',
-    eligible: () => Q.upper_tax_rates >= -5 && Q.lower_tax_rates <= 5,
-    effects: { upper_tax_rates: -1, lower_tax_rates: 1, dvp_right: 5 },
-    support: { old_middle: 4, new_middle: 4, workers: -5 }
-}),
-
-// TARIFFS
-
-fin_raise_tariffs: financeAction({
-    ideoMin: 14, ideoMax: 20,
-    weight: () => scaledWeight(2.00, Q.budget, 5) + linearWeight(0.30, Q.unemployed, 5, 3),
-    desc: ', at the Finance Ministry, has raised import duties, shielding farmers and small producers while prices climb.',
-    eligible: () => Q.tariffs < 5,
-    effects: { tariffs: 1, budget: 2, inflation: 0.7, unemployed: 1.5, economic_growth: -0.4, west_relation: -1, east_relation: -1, reparations_negotiation: -2 },
-    support: { rural: 4, old_middle: 3, workers: -4, unemployed: -4 }
-}),
-
-fin_lower_tariffs: financeAction({
-    ideoMin: 1, ideoMax: 13,
-    weight: () => linearWeight(1.80, Q.budget, 8) + linearWeight(0.30, Q.inflation, 3, 3),
-    desc: ', at the Finance Ministry, has lowered import duties, cheapening basic goods and improving ties with trading partners.',
-    eligible: () => Q.budget >= 2 && Q.tariffs > -5,
-    effects: { tariffs: -1, budget: -2, inflation: -0.5, economic_growth: 0.4, west_relation: 1, east_relation: 1 },
-    support: { workers: 4, unemployed: 4, rural: -5, old_middle: -3 }
-}),
-
-    economic_policy_shift:         ministryAction('economic_minister',    0.40, 8,  ', at the head of the Economics Ministry, has shifted regulatory policy in its favored direction.'),
-    labor_dispute_mediation:       ministryAction('labor_minister',       0.40, 8,  ', running the Labor Ministry, has intervened in ongoing industrial disputes.'),
-    justice_appointments:          ministryAction('justice_minister',     0.40, 10, ', in charge of the Justice Ministry, has steered key judicial appointments.'),
-    foreign_policy_initiative:     ministryAction('foreign_minister',     0.40, 10, ', holding the Foreign Ministry, has advanced a diplomatic initiative abroad.'),
-    agriculture_relief_measure:    ministryAction('agriculture_minister', 0.45, 8,  ', controlling the Agriculture Ministry, has enacted relief measures for farmers.'),
-    transport_infrastructure_deal: ministryAction('transport_minister',   0.45, 8,  ', overseeing the Transport Ministry, has brokered an infrastructure deal.'),
-
-    cabinet_coordination: {
+ 
+    // Fallback for any minister with nothing better to do (replaces the six empty
+    // per-ministry stubs and cabinet_coordination).
+    ministry_routine: {
         ideoMin: 1, ideoMax: 20,
-        weight: () => scaledWeight(0.10, Q.government_stability, 10),
-        description: (party) => partyLabel(party) + ' has worked behind the scenes to keep the coalition cabinet aligned.',
-        eligible: (party) => inReichGovernment(party),
-        timer: 6,
-        apply: () => { Q.government_stability += 0.25; }
+        weight: () => 0.30,
+        description: (party) => partyLabel(party) + ' has kept its ministries running and the coalition cabinet aligned.',
+        eligible: (party) => holdsAnyMinistry(party),
+        timer: 8,
+        apply: () => { Q.government_stability += 0.5; }
     },
+ 
+    // ---- FINANCE: taxes -----------------------------------------------------
+ 
+    fin_tax_rich: financeAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => scaledWeight(2.50, Q.budget, 5),
+        desc: ', at the Finance Ministry, has pushed through higher income and property taxes on the wealthy.',
+        eligible: () => Q.upper_tax_rates <= 5,
+        effects: { upper_tax_rates: 1, budget: 2, capital_strike_progress: 1, inflation: -0.6, economic_growth: -0.4, unemployed: 1 },
+        support: { workers: 3, old_middle: -3, new_middle: -3 }
+    }),
+ 
+    fin_tax_consumption: financeAction({
+        ideoMin: 9, ideoMax: 17,
+        weight: () => scaledWeight(2.20, Q.budget, 5),
+        desc: ', at the Finance Ministry, has raised consumption taxes to plug the budget hole, a burden that falls hardest on workers.',
+        eligible: () => Q.lower_tax_rates <= 5,
+        effects: { lower_tax_rates: 1, budget: 2, inflation: -0.4 },
+        support: { workers: -4, unemployed: -3 }
+    }),
+ 
+    fin_shared_sacrifice: financeAction({
+        ideoMin: 7, ideoMax: 13,
+        weight: () => scaledWeight(2.30, Q.budget, 4),
+        desc: ', at the Finance Ministry, has called for "shared sacrifice" and raised taxes across the board.',
+        eligible: () => Q.upper_tax_rates <= 5 && Q.lower_tax_rates <= 5,
+        effects: { upper_tax_rates: 1, lower_tax_rates: 1, budget: 3, unemployed: 2, inflation: -1.1, economic_growth: -0.6 },
+        support: { workers: -3, old_middle: -3, new_middle: -3 }
+    }),
+ 
+    // ---- FINANCE: cuts ------------------------------------------------------
+ 
+    fin_cut_rich: financeAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: () => linearWeight(2.40, Q.budget, 8),
+        desc: ', at the Finance Ministry, has cut income and property taxes on business and the propertied classes.',
+        eligible: () => Q.budget >= 2 && Q.upper_tax_rates >= -5,
+        effects: { upper_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4, dvp_right: 5 },
+        support: { old_middle: 4, new_middle: 4, workers: -2 }
+    }),
+ 
+    fin_cut_overall: financeAction({
+        ideoMin: 9, ideoMax: 16,
+        weight: () => linearWeight(2.30, Q.budget, 10),
+        desc: ', at the Finance Ministry, has delivered a broad tax cut, drawing applause from business and the middle classes.',
+        eligible: () => Q.budget >= 3 && Q.upper_tax_rates >= -5 && Q.lower_tax_rates >= -5,
+        effects: { upper_tax_rates: -1, lower_tax_rates: -1, budget: -3, inflation: 1, economic_growth: 0.6 },
+        support: { new_middle: 4, old_middle: 4, workers: 3 }
+    }),
+ 
+    fin_cut_poor: financeAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => linearWeight(2.20, Q.budget, 8),
+        desc: ', at the Finance Ministry, has trimmed consumption taxes to relieve working-class households.',
+        eligible: () => Q.budget >= 2 && Q.lower_tax_rates >= -5,
+        effects: { lower_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4 },
+        support: { workers: 5, unemployed: 3 }
+    }),
+ 
+    // ---- FINANCE: budget-neutral rebalancing --------------------------------
+ 
+    fin_progressive_shift: financeAction({
+        ideoMin: 1, ideoMax: 6,
+        weight: () => 1.20,
+        desc: ', at the Finance Ministry, has shifted the tax burden upward, raising levies on the rich while easing them for the poor.',
+        eligible: () => Q.upper_tax_rates <= 5 && Q.lower_tax_rates >= -5,
+        effects: { upper_tax_rates: 1, lower_tax_rates: -1, capital_strike_progress: 1 },
+        support: { workers: 5, old_middle: -3, new_middle: -3 }
+    }),
+ 
+    fin_regressive_shift: financeAction({
+        ideoMin: 15, ideoMax: 20,
+        weight: () => 1.20,
+        desc: ', at the Finance Ministry, has lowered taxes on the rich while raising consumption taxes, shifting the burden onto workers.',
+        eligible: () => Q.upper_tax_rates >= -5 && Q.lower_tax_rates <= 5,
+        effects: { upper_tax_rates: -1, lower_tax_rates: 1, dvp_right: 5 },
+        support: { old_middle: 4, new_middle: 4, workers: -5 }
+    }),
+ 
+    // ---- FINANCE: tariffs ---------------------------------------------------
+ 
+    fin_raise_tariffs: financeAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: () => scaledWeight(2.00, Q.budget, 5) + linearWeight(0.30, Q.unemployed, 5, 3),
+        desc: ', at the Finance Ministry, has raised import duties, shielding farmers and small producers while prices climb.',
+        eligible: () => Q.tariffs < 5,
+        effects: { tariffs: 1, budget: 2, inflation: 0.7, unemployed: 1.5, economic_growth: -0.4, west_relation: -1, east_relation: -1, reparations_negotiation: -2 },
+        support: { rural: 4, old_middle: 3, workers: -4, unemployed: -4 }
+    }),
+ 
+    fin_lower_tariffs: financeAction({
+        ideoMin: 1, ideoMax: 13,
+        weight: () => linearWeight(1.80, Q.budget, 8) + linearWeight(0.30, Q.inflation, 3, 3),
+        desc: ', at the Finance Ministry, has lowered import duties, cheapening basic goods and improving ties with trading partners.',
+        eligible: () => Q.budget >= 2 && Q.tariffs > -5,
+        effects: { tariffs: -1, budget: -2, inflation: -0.5, economic_growth: 0.4, west_relation: 1, east_relation: 1 },
+        support: { workers: 4, unemployed: 4, rural: -5, old_middle: -3 }
+    }),
+ 
+    // ---- INTERIOR -----------------------------------------------------------
+    // Weights: scaledWeight = bigger when the value is LOW, linearWeight = bigger when HIGH.
+ 
+    int_strengthen_loyalty: interiorAction({
+        ideoMin: 1, ideoMax: 12,
+        weight: () => scaledWeight(1.80, Q.interior_police_loyalty * 10, 5),
+        desc: ', at the Interior Ministry, has reformed police recruitment and training and removed known anti-republicans from the ranks.',
+        eligible: () => Q.interior_police_loyalty < 0.95,
+        effects: { interior_police_loyalty: 0.05, pro_republic: 0.5 },
+        extra: clampLoyalty
+    }),
+ 
+    int_reactionary_purge: interiorAction({
+        ideoMin: 16, ideoMax: 20,
+        weight: () => linearWeight(1.60, Q.interior_police_loyalty * 10, 5),
+        desc: ', at the Interior Ministry, has purged republican officials from the security services and promoted nationalist officers.',
+        eligible: () => Q.interior_police_loyalty > 0.2,
+        effects: { interior_police_loyalty: -0.06, nationalism: 1 },
+        extra: clampLoyalty
+    }),
+ 
+    int_investigate_far_right: interiorAction({
+        ideoMin: 1, ideoMax: 12,
+        weight: () => linearWeight(1.50, Q.sa_strength, 500, 3) + linearWeight(0.50, Q.coup_progress, 5, 3),
+        desc: ', at the Interior Ministry, has opened investigations into SA arms caches and plots against the constitution.',
+        eligible: () => Q.interior_police_loyalty >= 0.5,
+        effects: { sa_strength: -15, coup_progress: -0.5 },
+        support: { workers: 1 }
+    }),
+ 
+    int_look_away: interiorAction({
+        ideoMin: 17, ideoMax: 20,
+        weight: () => 1.40,
+        desc: ', at the Interior Ministry, has quietly shelved investigations into far-right paramilitaries.',
+        effects: { sa_strength: 15, sh_strength: 10, coup_progress: 0.3 }
+    }),
+ 
+    int_ban_sa: interiorAction({
+        ideoMin: 1, ideoMax: 11,
+        weight: () => linearWeight(3.50, Q.sa_strength * Q.sa_militancy, 500),
+        desc: ', at the Interior Ministry, has banned the SA nationwide.',
+        eligible: () => Q.sa_banned < 1 && Q.interior_police_loyalty >= 0.5,
+        effects: { sa_strength: -150, nationalism: -1 },
+        extra: () => { Q.sa_banned = 1; Q.sa_militancy *= 0.85; }
+    }),
+ 
+    int_ban_rfb: interiorAction({
+        ideoMin: 8, ideoMax: 20,
+        weight: () => linearWeight(3.50, Q.rfb_strength * Q.rfb_militancy, 500),
+        desc: ', at the Interior Ministry, has banned the Roter Frontkämpferbund nationwide.',
+        eligible: () => Q.rfb_banned < 1,
+        effects: { rfb_strength: -100 },
+        extra: () => { Q.rfb_banned = 1; Q.rfb_militancy *= 0.90; }
+    }),
+ 
+    int_ban_rb: interiorAction({
+        ideoMin: 17, ideoMax: 20,
+        weight: () => linearWeight(3.00, Q.rb_strength * Q.rb_militancy, 500),
+        desc: ', at the Interior Ministry, has banned the Reichsbanner, citing public order.',
+        eligible: () => Q.rb_banned < 1,
+        effects: { rb_strength: -100 },
+        extra: () => { Q.rb_banned = 1; Q.rb_militancy *= 0.90; }
+    }),
+ 
+    // ---- AGRICULTURE --------------------------------------------------------
+ 
+    ag_land_reform: agricultureAction({
+        ideoMin: 1, ideoMax: 6,
+        weight: () => linearWeight(1.80, Q.budget, 6),
+        desc: ', at the Agriculture Ministry, has expropriated large estates and handed the land to farmworkers and smallholders.',
+        eligible: () => Q.junker_land_reform_enabled == 1 && Q.judicial_reform >= 8 && Q.budget > 0 && Q.land_reform < 10,
+        effects: { budget: -1, land_reform: 1, rural_policy: 1, rural_nsdap: -4, coup_progress: 1 },
+        support: { rural: 5 }
+    }),
+ 
+    ag_finance: agricultureAction({
+        ideoMin: 5, ideoMax: 16,
+        weight: (party) => scaledWeight(1.00, Q['rural_' + party + '_normalized'], 20, 2) + linearWeight(0.30, Q.budget, 6, 2),
+        desc: ', at the Agriculture Ministry, has expanded agricultural credit and crop insurance for small farmers.',
+        eligible: () => Q.budget >= 1 && Q.agricultural_finance < 10,
+        effects: { budget: -1, agricultural_finance: 1, rural_policy: 1, rural_nsdap: -3, economic_growth: 0.2 },
+        support: { rural: 5 }
+    }),
+ 
+    ag_food_procurement: agricultureAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: (party) => scaledWeight(1.00, Q['workers_' + party + '_normalized'], 25, 2) + linearWeight(0.30, Q.budget, 6, 2),
+        desc: ', at the Agriculture Ministry, has bought up food staples and sold them cheaply to urban workers and the poor.',
+        eligible: () => Q.budget >= 1 && Q.pro_consumer < 10,
+        effects: { budget: -1, pro_consumer: 1, economic_growth: 0.2 },
+        support: { workers: 4, unemployed: 4 }
+    }),
+ 
+    ag_state_buyer: agricultureAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => 1.30,
+        desc: ', at the Agriculture Ministry, has created a state grain monopoly, guaranteeing prices for farmers and stable bread prices for consumers.',
+        eligible: () => Q.state_buyer < 1 && Q.budget >= 2 && Q.judicial_reform >= 4 && Q.junker_land_reform_enabled == 1,
+        effects: { budget: -2, state_buyer: 1, rural_policy: 2, rural_nsdap: -3, capital_strike_progress: 1, economic_growth: 0.4 },
+        support: { rural: 5, workers: 4, unemployed: 5 }
+    }),
+ 
+    // Right-wing counterpart: relief for the big estates (Osthilfe-style)
+    ag_estate_relief: agricultureAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: (party) => scaledWeight(1.00, Q['rural_' + party + '_normalized'], 20, 2) + linearWeight(0.40, Q.budget, 6, 2),
+        desc: ', at the Agriculture Ministry, has channeled debt relief and subsidies to the large estates, to the delight of the agrarian lobby.',
+        eligible: () => Q.budget >= 2,
+        effects: { budget: -2, nationalism: 0.5 },
+        support: { rural: 6, workers: -2 }
+    }),
+
+        // ---- FOREIGN ------------------------------------------------------------
+
+    fp_improve_west: foreignAction({
+        ideoMin: 1, ideoMax: 16,
+        weight: () => scaledWeight(1.20, Q.west_relation, 5, 2),
+        desc: ', at the Foreign Ministry, has pursued rapprochement with France and the Western Allies.',
+        eligible: () => Q.west_relation < 8,
+        effects: { west_relation: 2, reparations_negotiation: 1 }
+    }),
+
+    fp_improve_east: foreignAction({
+        ideoMin: 1, ideoMax: 13,
+        weight: () => scaledWeight(1.00, Q.east_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has reassured Poland and Czechoslovakia of Germany\'s peaceful intentions.',
+        eligible: () => Q.east_relation < 8,
+        effects: { east_relation: 2 }
+    }),
+
+    fp_soviet_aid: foreignAction({
+        ideoMin: 1, ideoMax: 5,
+        weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has extended economic aid to the Soviet Union in the spirit of Rapallo.',
+        eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
+        effects: { budget: -1, soviet_relation: 2, west_relation: -0.5 }
+    }),
+
+    fp_soviet_military: foreignAction({
+        ideoMin: 15, ideoMax: 20,
+        weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has traded aid to the Soviets for secret training and equipment for the Reichswehr.',
+        eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
+        effects: { budget: -1, soviet_relation: 1, reichswehr_militancy: 0.2, reichswehr_loyalty: 0.05, west_relation: -1 }
+    }),
+
+    fp_negotiate_versailles: foreignAction({
+        ideoMin: 1, ideoMax: 13,
+        weight: () => 1.80,
+        desc: ', at the Foreign Ministry, has opened talks with the Western powers on Germany\'s remaining Versailles obligations.',
+        eligible: () => Q.reparations > -2 && Q.reparations_negotiation < 3,
+        effects: { west_relation: 1, reparations_negotiation: 1 },
+        extra: () => {
+            if (Q.pacifism >= 3) Q.reparations_negotiation += 1;
+            if (Q.nationalism <= 50) Q.reparations_negotiation += 1;
+            if (Q.west_relation >= 3) Q.reparations_negotiation += 1;
+        }
+    }),
+
+    fp_reduce_reparations: foreignAction({
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 3.00,
+        desc: ', at the Foreign Ministry, has secured a pause on reparations payments from the Western Allies.',
+        eligible: () => Q.reparations_negotiation >= 3 && Q.black_thursday_seen == 1 && Q.reparations > -2,
+        effects: { west_relation: 1, budget: 1, economic_growth: 0.7, coup_progress: -1 },
+        support: { workers: 4, old_middle: 3, new_middle: 3, rural: 3 },
+        extra: () => { Q.reparations = -2; }
+    }),
+
+    fp_expose_rearmament: foreignAction({
+        ideoMin: 1, ideoMax: 11,
+        weight: () => 1.60,
+        desc: ', at the Foreign Ministry, has exposed the secret rearmament program of the previous government.',
+        eligible: () => Q.rearmament_exposed < 1,
+        effects: { west_relation: 2, east_relation: 1, nationalism: -5, pro_republic: 5, rearmament_exposed: 1, reparations_negotiation: 3, coup_progress: 2 }
+    }),
+
+    fp_customs_union: foreignAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: () => 1.50,
+        desc: ', at the Foreign Ministry, has forged a customs union with Austria in defiance of Versailles and France.',
+        eligible: () => Q.black_thursday_seen == 1 && Q.customs_union == 0 && Q.eu == 0,
+        effects: { customs_union: 1, west_relation: -2, east_relation: -2, z_relation: 6, dvp_relation: 6, nationalism: 3, coup_progress: -1 },
+        extra: () => { Q.banking_crisis_timer = 2; }
+    }),
+
+    fp_revisionist_posture: foreignAction({
+        ideoMin: 17, ideoMax: 20,
+        weight: () => 1.20,
+        desc: ', at the Foreign Ministry, has taken a defiant revisionist line against Versailles and the neighbors.',
+        eligible: () => Q.west_relation > -5 && Q.east_relation > -5,
+        effects: { nationalism: 2, west_relation: -1, east_relation: -1, reparations_negotiation: -1 }
+    }),
+
+    fp_european_union: foreignAction({
+        ideoMin: 1, ideoMax: 10,
+        weight: () => 1.70,
+        desc: ', at the Foreign Ministry, has pushed multilateral talks toward a European Union.',
+        eligible: () => Q.reparations <= -2 && Q.eu == 0 && Q.west_relation >= 5 && Q.east_relation >= 4,
+        effects: { eu_progress: 1, west_relation: 1 },
+        extra: () => {
+            if (Q.eu_progress < 2) return;
+            Q.eu = 1;
+            Q.pro_republic += 5; Q.nationalism -= 5;
+            Q.budget += 1; Q.economic_growth += 1;
+            if (Q.unemployed >= 10) Q.unemployed -= 2;
+        }
+    }),
+
+    fp_concordat: foreignAction({
+        ideoMin: 9, ideoMax: 14,
+        weight: () => 1.40,
+        desc: ', at the Foreign Ministry, has advanced negotiations on a Concordat with the Vatican.',
+        eligible: () => Q.prussian_concordat == 1 && Q.reichskonkordat == 0,
+        effects: { reichskonkordat_progress: 2, z_relation: 3 },
+        extra: () => {
+            if (Q.reichskonkordat_progress < 4) return;
+            Q.reichskonkordat = 1;
+            Q.z_relation += 10;
+            Q.catholics_z += 5;
+        }
+    }),
+
+        // ---- FOREIGN ------------------------------------------------------------
+
+    fp_improve_west: foreignAction({
+        ideoMin: 1, ideoMax: 16,
+        weight: () => scaledWeight(1.20, Q.west_relation, 5, 2),
+        desc: ', at the Foreign Ministry, has pursued rapprochement with France and the Western Allies.',
+        eligible: () => Q.west_relation < 8,
+        effects: { west_relation: 2, reparations_negotiation: 1 }
+    }),
+
+    fp_improve_east: foreignAction({
+        ideoMin: 1, ideoMax: 13,
+        weight: () => scaledWeight(1.00, Q.east_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has reassured Poland and Czechoslovakia of Germany\'s peaceful intentions.',
+        eligible: () => Q.east_relation < 8,
+        effects: { east_relation: 2 }
+    }),
+
+    fp_soviet_aid: foreignAction({
+        ideoMin: 1, ideoMax: 5,
+        weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has extended economic aid to the Soviet Union in the spirit of Rapallo.',
+        eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
+        effects: { budget: -1, soviet_relation: 2, west_relation: -0.5 }
+    }),
+
+    fp_soviet_military: foreignAction({
+        ideoMin: 15, ideoMax: 20,
+        weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
+        desc: ', at the Foreign Ministry, has traded aid to the Soviets for secret training and equipment for the Reichswehr.',
+        eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
+        effects: { budget: -1, soviet_relation: 1, reichswehr_militancy: 0.2, reichswehr_loyalty: 0.05, west_relation: -1 }
+    }),
+
+    fp_negotiate_versailles: foreignAction({
+        ideoMin: 1, ideoMax: 13,
+        weight: () => 1.80,
+        desc: ', at the Foreign Ministry, has opened talks with the Western powers on Germany\'s remaining Versailles obligations.',
+        eligible: () => Q.reparations > -2 && Q.reparations_negotiation < 3,
+        effects: { west_relation: 1, reparations_negotiation: 1 },
+        extra: () => {
+            if (Q.pacifism >= 3) Q.reparations_negotiation += 1;
+            if (Q.nationalism <= 50) Q.reparations_negotiation += 1;
+            if (Q.west_relation >= 3) Q.reparations_negotiation += 1;
+        }
+    }),
+
+    fp_reduce_reparations: foreignAction({
+        ideoMin: 1, ideoMax: 20,
+        weight: () => 3.00,
+        desc: ', at the Foreign Ministry, has secured a pause on reparations payments from the Western Allies.',
+        eligible: () => Q.reparations_negotiation >= 3 && Q.black_thursday_seen == 1 && Q.reparations > -2,
+        effects: { west_relation: 1, budget: 1, economic_growth: 0.7, coup_progress: -1 },
+        support: { workers: 4, old_middle: 3, new_middle: 3, rural: 3 },
+        extra: () => { Q.reparations = -2; }
+    }),
+
+    fp_expose_rearmament: foreignAction({
+        ideoMin: 1, ideoMax: 11,
+        weight: () => 1.60,
+        desc: ', at the Foreign Ministry, has exposed the secret rearmament program of the previous government.',
+        eligible: () => Q.rearmament_exposed < 1,
+        effects: { west_relation: 2, east_relation: 1, nationalism: -5, pro_republic: 5, rearmament_exposed: 1, reparations_negotiation: 3, coup_progress: 2 }
+    }),
+
+    fp_customs_union: foreignAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: () => 1.50,
+        desc: ', at the Foreign Ministry, has forged a customs union with Austria in defiance of Versailles and France.',
+        eligible: () => Q.black_thursday_seen == 1 && Q.customs_union == 0 && Q.eu == 0,
+        effects: { customs_union: 1, west_relation: -2, east_relation: -2, z_relation: 6, dvp_relation: 6, nationalism: 3, coup_progress: -1 },
+        extra: () => { Q.banking_crisis_timer = 2; }
+    }),
+
+    fp_revisionist_posture: foreignAction({
+        ideoMin: 17, ideoMax: 20,
+        weight: () => 1.20,
+        desc: ', at the Foreign Ministry, has taken a defiant revisionist line against Versailles and the neighbors.',
+        eligible: () => Q.west_relation > -5 && Q.east_relation > -5,
+        effects: { nationalism: 2, west_relation: -1, east_relation: -1, reparations_negotiation: -1 }
+    }),
+
+    fp_european_union: foreignAction({
+        ideoMin: 1, ideoMax: 10,
+        weight: () => 1.70,
+        desc: ', at the Foreign Ministry, has pushed multilateral talks toward a European Union.',
+        eligible: () => Q.reparations <= -2 && Q.eu == 0 && Q.west_relation >= 5 && Q.east_relation >= 4,
+        effects: { eu_progress: 1, west_relation: 1 },
+        extra: () => {
+            if (Q.eu_progress < 2) return;
+            Q.eu = 1;
+            Q.pro_republic += 5; Q.nationalism -= 5;
+            Q.budget += 1; Q.economic_growth += 1;
+            if (Q.unemployed >= 10) Q.unemployed -= 2;
+        }
+    }),
+
+    fp_concordat: foreignAction({
+        ideoMin: 9, ideoMax: 14,
+        weight: () => 1.40,
+        desc: ', at the Foreign Ministry, has advanced negotiations on a Concordat with the Vatican.',
+        eligible: () => Q.prussian_concordat == 1 && Q.reichskonkordat == 0,
+        effects: { reichskonkordat_progress: 2},
+        extra: () => {
+            if (Q.reichskonkordat_progress < 4) return;
+            Q.reichskonkordat = 1;
+            Q.z_relation += 10;
+            Q.catholics_z += 5;
+        }
+    }),
+
+        // ---- JUSTICE: reform ----------------------------------------------------
+    // judicial_reform runs -10..10, so "+ 11" keeps the value positive for the weight helpers.
+
+    jus_minor_reforms: justiceAction({
+        ideoMin: 1, ideoMax: 13,
+        weight: () => 1.20,
+        desc: ', at the Justice Ministry, has quietly removed the most openly biased and corrupt jurists while leaving the system intact.',
+        eligible: () => Q.full_reform != 1 && Q.judicial_reform < 10,
+        effects: { judicial_reform: 1, democratization: 1, pro_republic: 3 },
+        support: { workers: 3 }
+    }),
+
+    jus_reform: justiceAction({
+        ideoMin: 1, ideoMax: 10,
+        weight: () => scaledWeight(1.80, Q.judicial_reform + 11, 11, 2),
+        desc: ', at the Justice Ministry, has purged biased jurists and replaced them with democratically-minded judges, enraging conservatives.',
+        eligible: () => Q.budget >= 1 && Q.full_reform != 1 && Q.judicial_reform < 10,
+        effects: { budget: -1, judicial_reform: 2, democratization: 2, pro_republic: 5, coup_progress: 1 },
+        support: { workers: 5 }
+    }),
+
+    jus_full_reform: justiceAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => 2.50,
+        desc: ', at the Justice Ministry, has completed the republicanization of the judiciary, barring monarchists and nationalists from the bench.',
+        eligible: () => Q.budget >= 2 && Q.judicial_reform >= 10 && Q.full_reform != 1,
+        effects: { budget: -2, democratization: 2, pro_republic: 10 },
+        support: { workers: 5 },
+        extra: () => { Q.full_reform = 1; }
+    }),
+
+    jus_prosecute_far_right: justiceAction({
+        ideoMin: 1, ideoMax: 12,
+        weight: () => linearWeight(1.30, Q.sa_strength, 500, 2) + linearWeight(0.40, Q.coup_progress, 5, 2),
+        desc: ', at the Justice Ministry, has pushed through prosecutions of Nazi and nationalist agitators and paramilitary leaders.',
+        eligible: () => Q.judicial_reform >= 5,
+        effects: { sa_strength: -20, coup_progress: -0.5, pro_republic: 1 },
+        support: { workers: 1 }
+    }),
+
+    jus_amnesty_prisoners: justiceAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => 1.00,
+        desc: ', at the Justice Ministry, has amnestied political prisoners jailed for pacifism and leftist agitation.',
+        eligible: () => Q.pacifism < 10,
+        effects: { pacifism: 1, democratization: 1, kpd_relation: 2, nationalism: -1 },
+        support: { workers: 2, unemployed: 2 }
+    }),
+
+    jus_republic_protection: justiceAction({
+        ideoMin: 7, ideoMax: 13,
+        weight: () => 1.20,
+        desc: ', at the Justice Ministry, has pressed a republic protection law against extremists of left and right.',
+        eligible: () => Q.pro_republic < 60,
+        effects: { pro_republic: 2, sa_strength: -10, rfb_strength: -10, democratization: 0.5 }
+    }),
+
+    // ---- JUSTICE: counterweights --------------------------------------------
+    // Heavier the more reformed the courts already are, so the AI claws things back.
+
+    jus_reactionary_appointments: justiceAction({
+        ideoMin: 15, ideoMax: 20,
+        weight: () => linearWeight(1.60, Q.judicial_reform + 11, 11, 2),
+        desc: ', at the Justice Ministry, has filled the courts with monarchist and nationalist jurists.',
+        eligible: () => Q.judicial_reform > -10,
+        effects: { judicial_reform: -1, democratization: -1, pro_republic: -1, nationalism: 1 }
+    }),
+
+    jus_lenient_far_right: justiceAction({
+        ideoMin: 17, ideoMax: 20,
+        weight: () => 1.30,
+        desc: ', at the Justice Ministry, has seen putschists and Nazi thugs walk free with token sentences.',
+        effects: { sa_strength: 15, coup_progress: 0.3, nationalism: 1, pro_republic: -1 }
+    }),
+
+    jus_persecute_left: justiceAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: () => 1.10,
+        desc: ', at the Justice Ministry, has pursued treason and sedition cases against pacifists, journalists and communists.',
+        eligible: () => Q.pacifism > -10,
+        effects: { pacifism: -1, socialism: -2, rfb_strength: -20, democratization: -0.5 },
+        support: { workers: -2, unemployed: -2 }
+    }),
+
+    jus_sedition_crackdown: justiceAction({
+        ideoMin: 12, ideoMax: 18,
+        weight: () => linearWeight(0.90, Q.socialism, 50, 2),
+        desc: ', at the Justice Ministry, has tightened sedition and press laws against radical agitation.',
+        eligible: () => Q.democratization > -10,
+        effects: { socialism: -2, nationalism: -1, democratization: -1, rfb_strength: -10, sa_strength: -10 }
+    }),
 };
 
+ 
 function runPartyGovernmentActions(party) {
     var timerKey = party + '_government_action_timer';
     var descKey = party + '_government_action_description';
-
+ 
     if (Q[timerKey] > 0 || Q[party + '_banned']) return;
     if (!inReichGovernment(party)) return;
-
+ 
     var pool = {};
     for (var key in Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS) {
         var action = Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS[key];
         if (!inIdeoRange(party, action.ideoMin, action.ideoMax)) continue;
-
+ 
         pool[key] = {
             weight: action.weight(party),
             eligible: action.eligible ? action.eligible(party) : true,
@@ -1424,25 +1857,26 @@ function runPartyGovernmentActions(party) {
             description: action.description(party)
         };
     }
-
+ 
     var chosen = PickHighest(pool, 'weight');
-
+ 
     if (chosen === null) {
         Q[timerKey] = 6;
         Q[descKey] = partyLabel(party) + ' takes no notable government action for the time being.';
         return;
     }
-
+ 
     Q[timerKey] = pool[chosen].timer;
     Q[descKey] = pool[chosen].description;
     Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS[chosen].apply(party);
     Q[party + '_government_flavor_action_timer'] = 3;
 }
-
+ 
 for (const party of Q.parties) {
     if (party === 'spd') continue;
     runPartyGovernmentActions(party);
 }
+
 
 // ---- Daily events ----------------------------------------------------------
 

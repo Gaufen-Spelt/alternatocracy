@@ -77,21 +77,29 @@ new-page: true
 @actions
 on-arrival: {!
 
-Q.flavor_display_text = '';
-for (const party of Q.parties) {
-    var flavorTimerKey = party + '_flavor_action_timer';
-    var descKey = party + '_action_description';
-    if (Q[flavorTimerKey] >= 1) {
-        Q.flavor_display_text += Q[descKey] + '<br>';
-    }
+function titleCase(s) {
+    return s.replace(/_/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
 }
 
-Q.government_flavor_display_text = '';
+Q.party_sections_text = '';
+
 for (const party of Q.parties) {
-    var govFlavorTimerKey = party + '_government_flavor_action_timer';
-    var govDescKey = party + '_government_action_description';
-    if (Q[govFlavorTimerKey] >= 1) {
-        Q.government_flavor_display_text += Q[govDescKey] + '<br>';
+    var partyLines = '';
+
+    // Party action
+    if (Q[party + '_flavor_action_timer'] >= 1) {
+        partyLines += Q[party + '_action_description'] + '<br>';
+    }
+
+    // Government action
+    if (Q[party + '_government_flavor_action_timer'] >= 1) {
+        partyLines += Q[party + '_government_action_description'] + '<br>';
+    }
+
+    // Only show a party's section if it did something
+    if (partyLines !== '') {
+        var partyName = Q[party + '_name'] || titleCase(party);
+        Q.party_sections_text += '<h3>' + partyName + '</h3>' + partyLines;
     }
 }
 
@@ -99,13 +107,9 @@ Q.daily_event_display_text = Q.daily_event_description || '';
 
 !}
 
-= Party Actions
+= Actions
 
-[? if flavor_display_text != 0: [+ flavor_display_text +] ?]
-
-= Government Actions
-
-[? if government_flavor_display_text != 0: [+ government_flavor_display_text +] ?]
+[+ party_sections_text +]
 
 = Daily events
 

@@ -54,8 +54,8 @@ Corruption in big business is rampant, of course. We have uncovered a number of 
 Unfortunately, our investigations have failed to turn up anything. Rumors are that the targets of our investigation were tipped off by infiltrators within the police.
 
 @investigate_far_right
-view-if: (year <= 1929 and investigate_far_right < 1) or (year > 1929 and investigate_far_right >= 1)
-go-to: investigate_far_right_success if interior_police_loyalty >= 0.60; investigate_far_right_failure if interior_police_loyalty < 0.55
+view-if: (year <= 1929 and investigate_far_right < 1) or (year > 1929 and investigate_far_right >= 1) or investigate_far_right == 0 
+go-to: investigate_far_right_success if interior_police_loyalty >= 0.60; investigate_far_right_failure if interior_police_loyalty < 0.60
 
 @investigate_far_right_success
 on-arrival: investigate_far_right += 1; sa_strength -= 20; workers_nsdap -= 3; new_middle_nsdap -= 3; nazi_urgency += 1 if investigate_far_right == 2; nazi_urgency += 2 if investigate_far_right == 3; workers_nsdap -= 3 if investigate_far_right == 3; new_middle_nsdap -= 3 if investigate_far_right == 3; old_middle_nsdap -= 3 if investigate_far_right == 3; unemployed_spd -= 3 if investigate_far_right == 3; coup_progress -= 1 if coup_progress >= 7
