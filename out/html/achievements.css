@@ -142,12 +142,28 @@
 .ach-wessel .ach-icon-box { background: linear-gradient(135deg, rgba(230, 40, 0, 0.5), rgba(255, 200, 0, 0.3)); }
 .ach-wessel .ach-title strong { color: rgb(255, 190, 40); text-shadow: 0 0 8px rgba(255, 80, 0, 0.6); }
 
+
+
+
+
+
 .ach-sanctuary {
-  background: rgba(20, 20, 20, 0.85);
-  border-color: rgba(0, 200, 255, 0.3);
-  box-shadow: 0 0 10px rgba(0, 200, 255, 0.2);
+  background: linear-gradient(135deg, rgba(10,14,22,0.92), rgba(24,10,22,0.9));
+  border-color: rgba(0,200,255,0.45);
+  box-shadow: 0 0 14px rgba(0,200,255,0.3), 0 0 22px rgba(255,0,80,0.15);
+  color: #dcecf5;
+}
+.ach-sanctuary .ach-title strong {
+  color: #8fe8ff;
+  text-shadow: 0 0 8px rgba(0,200,255,0.7);
 }
 .ach-sanctuary .ach-icon-box { background: linear-gradient(135deg, rgba(255, 0, 80, 0.25), rgba(0, 200, 255, 0.25)); }
+
+
+
+
+
+
 
 /* Hitlerubicon */
 .ach-uhrbremst {
