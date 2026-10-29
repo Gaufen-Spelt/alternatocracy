@@ -3,6 +3,7 @@ is-hand: true
 new-page: true
 on-arrival: {!
 
+window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
 
@@ -118,6 +119,7 @@ is-hand: true
 new-page: true
 on-arrival: {!
 
+window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
 
@@ -250,6 +252,7 @@ is-hand: true
 new-page: true
 on-arrival: {!
 
+window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
 
@@ -379,6 +382,7 @@ is-hand: true
 new-page: true
 on-arrival: {!
 
+window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
 
