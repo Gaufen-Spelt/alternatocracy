@@ -194,6 +194,9 @@
     { id: 'firstwessel', title: 'Nocturnal', desc: 'New wessel.',
       icon: 'nocturnal.png', cls: 'ach-wessel',
       locked: { title: 'Breakthrough', desc: 'First gate of this world.', icon: 'firstwessel.png' } },
+    { id: 'conc', title: 'Superconsciousness', desc: 'Parasitic nature of this phenomenon, and the force behind it.',
+      icon: 'skull.jpg', cls: 'ach-sanctuary',
+      locked: { desc: 'Unsolved question of the humanity.', icon: 'skull.jpg' } },
     { id: 'sanctuary', title: 'Zuflucht', desc: 'Take a close look again.',
       icon: 'psychosis.png', cls: 'ach-sanctuary',
       locked: { desc: 'Come back, when you find the true meaning behind this...', icon: 'sanctuary.png' } }
