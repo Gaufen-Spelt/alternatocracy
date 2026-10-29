@@ -387,7 +387,8 @@ function applyYearlyShifts() {
             Q.rural_other += 5/12;
         }
         Q.workers_z -= 0.5/12;
-        Q.workers_nsdap -= 1/12;
+        Q.workers_nsdap -= 3/12;
+        Q.catholics_nsdap -= 3/12;
         Q.rural_dnvp -= 6/12;
         Q.old_middle_dnvp -= 8/12;
         Q.new_middle_dnvp -= 6/12;
