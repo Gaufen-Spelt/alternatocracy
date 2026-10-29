@@ -40,7 +40,7 @@ Let us hope this does not backfire.
 @post_election_1928
 on-arrival: {!
 // ============================================================================
-// VOTE SHARES
+// VOTE SHARES: set old results, apply electoral threshold, banned parties
 // ============================================================================
 var new_party_sum = 0;
 for (var party of Q.parties) {
@@ -88,42 +88,17 @@ if (Q.electoral_threshold && Q.electoral_threshold > 0) {
 }
  
 // ============================================================================
-// REICHSTAG SEATS
+// REICHSTAG SEATS: vanilla, fixed 500 seats (1 seat per 0.2% of the vote)
 // ============================================================================
-Q.VOTES_PER_SEAT = 60000;
- 
-// Electorate grows over time; turnout rises with crisis and polarization
-// (real turnout: 1928 75.6%, 1930 82.0%, Jul 1932 84.1%, Mar 1933 88.8%)
-Q.electorate = Math.round(41200000 * (1 + 0.012 * (Q.year - 1928)));
-var polarization = (Q.nsdap_normalized || 0) + (Q.kpd_normalized || 0);
-Q.turnout = Math.min(0.90, Math.max(0.72,
-    0.76 + 0.04 * Math.min(Q.severity || 0, 1.5) + 0.08 * polarization));
-Q.valid_votes = Math.round(Q.electorate * Q.turnout * 0.99);
- 
-// Remainder votes were partly wasted (real seats ~97% of valid votes / 60,000).
-// Splinter parties wasted more because they rarely held district seats.
-var REMAINDER_LOSS = 0.97;
-var SEAT_EFFICIENCY = { other: 0.85 };
- 
-var r_sum = 0;
-for (var party of Q.parties) r_sum += Q[party + '_r'] || 0;
+Q.TOTAL_SEATS = 500;
  
 Q.total_seats = 0;
 for (var party of Q.parties) {
     Q['old_' + party + '_seats'] = Q[party + '_seats'] || 0;
- 
-    var seat_share = r_sum > 0 ? (Q[party + '_r'] || 0) / r_sum : 0;
-    var party_votes = Q.valid_votes * seat_share;
-    var eff = (SEAT_EFFICIENCY[party] ?? 1) * REMAINDER_LOSS;
- 
-    Q[party + '_vote_count'] = Math.round(party_votes);
-    Q[party + '_seats'] = Q[party + '_banned'] ? 0 : Math.round(party_votes * eff / Q.VOTES_PER_SEAT);
+    Q[party + '_seats'] = Q[party + '_banned'] ? 0 : Math.round((Q[party + '_r'] || 0) * Q.TOTAL_SEATS / 100);
     Q['change_' + party + '_seats'] = Q[party + '_seats'] - Q['old_' + party + '_seats'];
     Q.total_seats += Q[party + '_seats'];
 }
-Q.majority_seats = Math.floor(Q.total_seats / 2) + 1;
- 
-function seatsOf(list) { return list.reduce(function(s, p) { return s + (Q[p + '_seats'] || 0); }, 0); }
  
 // ============================================================================
 // LARGEST PARTY
@@ -168,7 +143,7 @@ if (Q.kpd_relation >= 30) {
 }
  
 // ============================================================================
-// COALITIONS (seats).
+// COALITIONS (seats). Use these for actual majority checks.
 // ============================================================================
 Q.weimar_seats          = Q.spd_seats + srpd_seat_share + Q.ddp_seats + Q.z_seats;
 Q.grand_seats           = Q.weimar_seats + Q.dvp_seats + Q.bvp_seats;
@@ -418,8 +393,6 @@ go-to: coalition_menu
  
 {!<tr><td><div class="box" style='background-color:#954B00'> </div> !} NSDAP: {!</td><td>!} [+ nsdap_r_disp +]% {!</td><td>!} [+ str_change_nsdap +] {!</td><td>!} [+ nsdap_seats +] {!</td></tr>!}
 {!</table>!}
- 
-The new Reichstag has **[+ total_seats +]** seats; a majority is **[+ majority_seats +]**.
  
 **Potential coalitions:**
  

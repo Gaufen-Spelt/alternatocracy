@@ -185,7 +185,7 @@ Q.party_ideology_leadership_html = ideologyHtml;
 !}
 on-display: {!
 
-var TOTAL_SEATS = Q.total_seats || 100;  // seats in the chart
+var TOTAL_SEATS = Q.total_seats || 150;  // seats in the chart
 
 var factions = [
     { id: 'left',       label: 'Klassenkampf Linke',                  val: Q.left_strength,       color: '#B30000' },

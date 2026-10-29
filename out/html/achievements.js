@@ -20,7 +20,6 @@
     ["einigkeit_und_recht", "Einigkeit und Recht", "Reach the end of the game without a civil war on normal."],
     ["einigkeit_und_recht_und_freiheit", "Einigkeit und Recht und Freiheit", "Reach the end of the game without a civil war on hard."],
     ["schwarz_rot_gold", "Schwarz-Rot-Gold", "Reach the end of the game without a civil war on historical mode."],
-    ["in_kummernis_und_dunkelheit", "In Kümmernis und Dunkelheit", "Reach the end of the game without a civil war on the hardest possible custom difficulty."],
     ["victory_for_the_republic", "Sieg für die Republik", "Win the civil war."],
     ["bollwerk_der_demokratie", "Bollwerk der Demokratie", "Resist the Prussian Coup and win."],
     ["red_tzar_of_prussia", "Roter Zar von Preußen", "Otto Braun is President, Chancellor, and Minister-President."],
