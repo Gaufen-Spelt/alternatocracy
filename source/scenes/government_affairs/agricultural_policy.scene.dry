@@ -28,6 +28,11 @@ on-arrival: budget -= 1; land_reform += 1; coalition_dissent += 1; rural_spd += 
 
 With our policy of land reform, we are acquiring farmland from large estates, and giving the land to farmworkers' associations and small peasants. In essence, this brings class struggle to the countryside, breaking the semi-feudal property relations present in East Prussia and other areas with large estates. The bourgeois parties and large farmers despise our intrusion into the sacredness of private property, while leftists are cautiously optimistic.
 
+@price_floor
+title: Price floor
+subtitle: -1 budget. Impose the price floor to protect the rights of farmers in crisis times.
+choose-if: budget >= 1
+
 
 @agricultural_finance
 title: Agricultural Financing

@@ -195,8 +195,8 @@ var factions = [
 ];
 
 var neorevLabel = (Q.social_patriotism == 1)
-    ? 'Social Republicans / Militant Democrats'
-    : 'Neorevisionist / Militant Democrats';
+    ? 'Social Republicans'
+    : 'Neorevisionists';
 
 if (Q.ethical_socialism >= 1) {
     factions.push({

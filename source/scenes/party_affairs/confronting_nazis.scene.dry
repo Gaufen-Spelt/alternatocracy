@@ -31,6 +31,7 @@ go-to: crisis_program
 
 @major_crisis
 view-if: nazi_urgency < 8
+subtitle: Our progress: [+ nazi_urgency +] / 8
 on-arrival: nazi_urgency += 1; neorevisionist_dissent -= 5; neorevisionist_strength += 5
 
 The Nazis are one of the foremost threats to the German republic. However, we are still formulating a strategy to confront them, and still trying to build up consensus within our party for action. Check back on this later.

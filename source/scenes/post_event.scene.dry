@@ -397,7 +397,7 @@ function applyYearlyShifts() {
         Q.new_middle_other += 9/12;
         Q.old_middle_dvp -= 8/12;
         Q.new_middle_dvp -= 8/12;
-        Q.old_middle_ddp -= 8/12;
+        Q.old_middle_ddp -= 6/12;
         Q.new_middle_ddp -= 4/12;
         Q.workers_kpd += 2/12;
         Q.workers_spd += 2/12;

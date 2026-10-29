@@ -78,7 +78,12 @@ new-page: true
 on-arrival: {!
 
 function titleCase(s) {
-    return s.replace(/_/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    return String(s)
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/[_\-]+/g, ' ')
+        .trim()
+        .toLowerCase()
+        .replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); });
 }
 
 Q.party_sections_text = '';
@@ -86,19 +91,17 @@ Q.party_sections_text = '';
 for (const party of Q.parties) {
     var partyLines = '';
 
-    // Party action
     if (Q[party + '_flavor_action_timer'] >= 1) {
         partyLines += Q[party + '_action_description'] + '<br>';
     }
 
-    // Government action
     if (Q[party + '_government_flavor_action_timer'] >= 1) {
         partyLines += Q[party + '_government_action_description'] + '<br>';
     }
 
-    // Only show a party's section if it did something
     if (partyLines !== '') {
-        var partyName = Q[party + '_name'] || titleCase(party);
+        var rawName = (Q[party + '_name'] || '').toString().trim();
+        var partyName = rawName !== '' ? rawName : titleCase(party);
         Q.party_sections_text += '<h3>' + partyName + '</h3>' + partyLines;
     }
 }
