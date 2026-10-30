@@ -1264,14 +1264,16 @@ function isChancellorParty(party) {
     return Q.chancellor_party && Q.chancellor_party.toLowerCase() === party.toLowerCase();
 }
  
-// One builder for every portfolio-gated action.
+// Generic builder: gate is (party) => bool.
 // o: { ideoMin, ideoMax, weight, desc, eligible, timer, effects, support, extra }
-function govAction(ministry, o) {
+// effects are applied as static additive deltas; anything conditional on live
+// state belongs in extra(), which runs when the action fires.
+function portfolioAction(gate, o) {
     return {
         ideoMin: o.ideoMin, ideoMax: o.ideoMax,
         weight: o.weight,
         description: (party) => partyLabel(party) + o.desc,
-        eligible: (party) => holdsMinistry(party, ministry) && (!o.eligible || o.eligible(party)),
+        eligible: (party) => gate(party) && (!o.eligible || o.eligible(party)),
         timer: o.timer || 10,
         apply: (party) => {
             for (var k in (o.effects || {})) Q[k] = (Q[k] || 0) + o.effects[k];
@@ -1281,12 +1283,23 @@ function govAction(ministry, o) {
         }
     };
 }
+
+// One builder for every ministry-gated action.
+function govAction(ministry, o) {
+    return portfolioAction((party) => holdsMinistry(party, ministry), o);
+}
  
-function financeAction(o)  { return govAction('finance_minister', o); }
-function interiorAction(o) { return govAction('interior_minister', o); }
-function foreignAction(o) { return govAction('foreign_minister', o); }
-function justiceAction(o) { return govAction('justice_minister', o); }
-function agricultureAction(o) { return govAction('agriculture_minister', 0); }
+function financeAction(o)     { return govAction('finance_minister', o); }
+function interiorAction(o)    { return govAction('interior_minister', o); }
+function foreignAction(o)     { return govAction('foreign_minister', o); }
+function justiceAction(o)     { return govAction('justice_minister', o); }
+function agricultureAction(o) { return govAction('agriculture_minister', o); }
+
+// Science funding needs the Economic Ministry
+function scienceAction(o)     { return govAction('economic_minister', o); }
+
+// Education structure/curriculum need the Chancellery
+function educationAction(o)   { return portfolioAction((party) => isChancellorParty(party), o); }
  
 function clampLoyalty() {
     Q.interior_police_loyalty = Math.min(1, Math.max(0, Q.interior_police_loyalty || 0));
@@ -1303,8 +1316,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         apply: () => { Q.government_stability += 1; }
     },
  
-    // Fallback for any minister with nothing better to do (replaces the six empty
-    // per-ministry stubs and cabinet_coordination).
+    // Fallback for any minister with nothing better to do.
     ministry_routine: {
         ideoMin: 1, ideoMax: 20,
         weight: () => 0.30,
@@ -1524,7 +1536,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { rural: 6, workers: -2 }
     }),
 
-        // ---- FOREIGN ------------------------------------------------------------
+    // ---- FOREIGN ------------------------------------------------------------
 
     fp_improve_west: foreignAction({
         ideoMin: 1, ideoMax: 16,
@@ -1733,7 +1745,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { workers: 2, new_middle: 2 }
     }),
 
-        // ---- JUSTICE: reform ----------------------------------------------------
+    // ---- JUSTICE: reform ----------------------------------------------------
     // judicial_reform runs -10..10, so "+ 11" keeps the value positive for the weight helpers.
 
     jus_minor_reforms: justiceAction({
@@ -1823,6 +1835,153 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         desc: ', at the Justice Ministry, has tightened sedition and press laws against radical agitation.',
         eligible: () => Q.democratization > -10,
         effects: { socialism: -2, nationalism: -1, democratization: -1, rfb_strength: -10, sa_strength: -10 }
+    }),
+
+    // ---- SCIENCE (Economic Ministry) ----------------------------------------
+
+    sci_fund_kwg: scienceAction({
+        ideoMin: 1, ideoMax: 14,
+        weight: () => linearWeight(1.20, Q.budget, 6, 2) + scaledWeight(0.50, Q.science_funding + 1, 4, 2),
+        desc: ', at the Economic Ministry, has funded the Kaiser Wilhelm Society for basic research.',
+        eligible: () => Q.budget >= 1 && Q.science_funding < 10,
+        effects: { budget: -1, science: 1, kwg_research: 1, science_funding: 1, west_relation: 1, ddp_relation: 5 },
+        support: { new_middle: 5 },
+        extra: () => {
+            if (Q.economic_growth <= 8) Q.economic_growth += 0.3;
+            if (Q.unemployed >= 4) Q.unemployed -= 0.2;
+        }
+    }),
+
+    sci_fund_applied: scienceAction({
+        ideoMin: 1, ideoMax: 20,
+        weight: () => linearWeight(1.40, Q.budget, 6, 2) + linearWeight(0.40, Q.unemployed, 8, 3),
+        desc: ', at the Economic Ministry, has funded applied research with industry to spur growth.',
+        eligible: () => Q.budget >= 1 && Q.science_funding < 10,
+        effects: { budget: -1, science: 1, applied_research: 1, science_funding: 1, ddp_relation: 5 },
+        support: { new_middle: 5, workers: 3 },
+        extra: () => {
+            if (Q.applied_research > 1) Q.economic_growth += 3;
+            else if (Q.economic_growth <= 8) Q.economic_growth += 0.5;
+            if (Q.unemployed >= 4) Q.unemployed -= 0.5;
+            if (Q.capital_strike_progress > 1) Q.capital_strike_progress -= 1;
+        }
+    }),
+
+    sci_fund_medical: scienceAction({
+        ideoMin: 1, ideoMax: 13,
+        weight: () => linearWeight(1.00, Q.budget, 6, 2),
+        desc: ', at the Economic Ministry, has funded biomedical research at hospitals and medical schools.',
+        eligible: () => Q.budget >= 1 && Q.science_funding < 10,
+        effects: { budget: -1, science: 1, medical_research: 1, science_funding: 1, ddp_relation: 5 },
+        support: { new_middle: 5, workers: 3 },
+        extra: () => {
+            if (Q.economic_growth <= 8) Q.economic_growth += 0.4;
+            if (Q.unemployed >= 4) Q.unemployed -= 0.2;
+        }
+    }),
+
+    sci_cut_funding: scienceAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: () => scaledWeight(1.80, Q.budget, 5) + linearWeight(0.40, Q.science_funding, 4, 2),
+        desc: ', at the Economic Ministry, has slashed science budgets, idling researchers.',
+        eligible: () => Q.science_funding >= 1,
+        effects: { budget: 1, science: -1, science_funding: -1, applied_research: -0.33, kwg_research: -0.33, medical_research: -0.33, economic_growth: -0.5, unemployed: 0.3, ddp_relation: -5 },
+        support: { new_middle: -5, workers: -2 }
+    }),
+
+    // ---- EDUCATION: structure (Chancellery) ---------------------------------
+
+    edu_public_hs: educationAction({
+        ideoMin: 1, ideoMax: 9,
+        weight: () => linearWeight(1.50, Q.budget, 6, 2) + scaledWeight(0.50, Q.public_hs + 1, 3, 2),
+        desc: ', through the Chancellery, has funded public secondary schools for working-class children.',
+        eligible: () => Q.budget >= 1 && Q.public_hs < 3,
+        effects: { budget: -1, public_hs: 1, prussian_police_loyalty: 0.04, education_science: 0.5, unemployed: -0.2, economic_growth: 0.2, pro_republic: 4 },
+        support: { workers: 6, unemployed: 3 }
+    }),
+
+    edu_school_boards: educationAction({
+        ideoMin: 1, ideoMax: 12,
+        weight: () => 1.10,
+        desc: ', through the Chancellery, has created elected school boards with local control of schools.',
+        eligible: () => Q.school_boards == 0,
+        effects: { school_boards: 1, education_science: 0.2 },
+        support: { workers: 3, new_middle: 3, old_middle: 2 }
+    }),
+
+    edu_secularize: educationAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => 1.40,
+        desc: ', through the Chancellery, has replaced denominational schools with secular community schools, enraging the Center Party.',
+        eligible: () => Q.budget >= 1 && Q.secularized == 0,
+        effects: { budget: -1, secularized: 1, z_relation: -15, dvp_relation: 6, ddp_relation: 6, kpd_relation: 6, education_science: 0.5, new_middle_ddp: 4, new_middle_dvp: 4 },
+        support: { new_middle: 3, workers: 3 }
+        // The scene triggers an instant VONC here; hook that into your AI-coalition collapse logic if you want parity.
+    }),
+
+    // Right-wing counterweight: undo secularization
+    edu_confessional_schools: educationAction({
+        ideoMin: 12, ideoMax: 20,
+        weight: () => 1.30,
+        desc: ', through the Chancellery, has restored denominational schools and religious instruction.',
+        eligible: () => Q.secularized == 1,
+        effects: { secularized: -1, z_relation: 10, dvp_relation: 3, kpd_relation: -4, education_science: -0.3 },
+        support: { old_middle: 3, rural: 3 }
+    }),
+
+    // ---- EDUCATION: curriculum (shared lockout via curriculum_timer) ---------
+
+    edu_curr_democratic: educationAction({
+        ideoMin: 1, ideoMax: 8,
+        weight: () => scaledWeight(1.60, Q.pro_republic, 60, 2),
+        desc: ', through the Chancellery, has introduced a democratic curriculum built on critical thinking and civic duty.',
+        eligible: () => Q.curriculum_timer <= 0,
+        effects: { pro_republic: 5, democratization: 1, pacifism: 1, education_science: 0.3 },
+        support: { workers: 3 },
+        extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "democratic"; Q.minor_curriculum = "scientific"; }
+    }),
+
+    edu_curr_scientific: educationAction({
+        ideoMin: 5, ideoMax: 14,
+        weight: () => 1.40,
+        desc: ', through the Chancellery, has overhauled the curriculum around science and mathematics.',
+        eligible: () => Q.curriculum_timer <= 0,
+        effects: { education_science: 1 },
+        support: { new_middle: 3, workers: 2 },
+        extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "scientific"; Q.minor_curriculum = "vocational"; }
+    }),
+
+    edu_curr_humanist: educationAction({
+        ideoMin: 6, ideoMax: 14,
+        weight: () => 1.10,
+        desc: ', through the Chancellery, has refocused schooling on literature, history and philosophy.',
+        eligible: () => Q.curriculum_timer <= 0,
+        effects: { education_science: 0.2 },
+        support: { new_middle: 4 },
+        extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "humanist"; Q.minor_curriculum = "democratic"; }
+    }),
+
+    edu_curr_vocational: educationAction({
+        ideoMin: 5, ideoMax: 16,
+        weight: () => linearWeight(1.00, Q.unemployed, 8, 2) + 0.60,
+        desc: ', through the Chancellery, has pivoted schools toward vocational training for working life.',
+        eligible: () => Q.curriculum_timer <= 0,
+        effects: { unemployed: -0.1, education_science: 0.5 },
+        support: { workers: 4, rural: 2, unemployed: 3, new_middle: -1 },
+        extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "vocational"; Q.minor_curriculum = "scientific"; }
+    }),
+
+    edu_curr_traditional: educationAction({
+        ideoMin: 14, ideoMax: 20,
+        weight: () => 1.70,
+        desc: ', through the Chancellery, has restored a traditional curriculum of classics, discipline and national pride.',
+        eligible: () => Q.curriculum_timer <= 0,
+        effects: { pro_republic: -5, education_science: 0.2 },
+        support: { old_middle: 3, rural: 3 },
+        extra: () => {
+            if (Q.pacifism > 0) Q.pacifism -= 1;
+            Q.curriculum_timer = 50; Q.major_curriculum = "traditional"; Q.minor_curriculum = "humanist";
+        }
     }),
 };
 

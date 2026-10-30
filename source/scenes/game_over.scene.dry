@@ -316,5 +316,77 @@ We have helped to form a European Union to bring peace and prosperity to the con
 
 
 
+
+
+
+
+
+
+
+@judiciary_republicanized
+title: The courts serve the Republic.
+view-if: full_reform == 1
+tags: endings
+go-to: eg_menu
+
+The judiciary has been purged of monarchists and nationalists.
+
+@land_reform_done
+title: The great estates have been broken up.
+view-if: land_reform >= 5
+tags: endings
+go-to: eg_menu
+
+The land of the East Elbian Junkers has been distributed to farmworkers and smallholders. Their long political dominance is over.
+
+
+@welfare_state
+title: A German welfare state is taking shape.
+view-if: welfare > 0 and family_law >= 1
+tags: endings
+go-to: eg_menu
+
+Our social insurance and family reforms are the beginning of a modern welfare state.
+
+@womens_rights_advanced
+title: German women have new rights.
+view-if: womens_rights >= 3
+tags: endings
+go-to: eg_menu
+
+German women have more rights and opportunities than ever before.
+
+@lgbt_rights
+title: Germany leads in sexual freedom.
+view-if: homosexual_rights >= 2
+tags: endings
+go-to: eg_menu
+
+Homosexuals and transsexuals face less persecution in Germany than anywhere else in the world. [? if change_sex : Surgeons at the Institute for Sexual Science are pioneering gender-affirming care. ?]
+
+@pacifist_germany
+title: Germany has turned toward peace.
+view-if: pacifism >= 5
+tags: endings
+go-to: eg_menu
+
+Pacifism has become a mainstream view.
+
+@science_flourishing
+title: German science is flourishing.
+view-if: science_funding >= 3
+tags: endings
+go-to: eg_menu
+
+Our investment in research has paid off. [? if kwg_research >= 1 : The Kaiser Wilhelm Society is producing groundbreaking work in basic science. ?][? if applied_research >= 1 : Industry and the laboratories are collaborating on technologies that German firms can sell abroad. ?][? if medical_research >= 1 : German hospitals and medical schools are leading the world in treating disease. ?]
+
+@science_neglected
+title: German science is stagnating.
+view-if: science_funding <= 0 and year >= 1931 and economic_minister_party == "SPD"
+tags: endings
+go-to: eg_menu
+
+We neglected science while we held the Economic Ministry. Some of Germany's best researchers are looking at positions abroad.
+
 @end_game
 game-over: true

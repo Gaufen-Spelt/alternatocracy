@@ -77,15 +77,6 @@ new-page: true
 @actions
 on-arrival: {!
 
-function titleCase(s) {
-    return String(s)
-        .replace(/([a-z])([A-Z])/g, '$1 $2')
-        .replace(/[_\-]+/g, ' ')
-        .trim()
-        .toLowerCase()
-        .replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); });
-}
-
 Q.party_sections_text = '';
 
 for (const party of Q.parties) {
@@ -100,8 +91,9 @@ for (const party of Q.parties) {
     }
 
     if (partyLines !== '') {
-        var rawName = (Q[party + '_name'] || '').toString().trim();
-        var partyName = rawName !== '' ? rawName : titleCase(party);
+        var rawName = Q[party + '_name'];
+        var hasName = typeof rawName === 'string' && rawName.trim() !== '';
+        var partyName = hasName ? rawName.trim() : party.toUpperCase();
         Q.party_sections_text += '<h3>' + partyName + '</h3>' + partyLines;
     }
 }
