@@ -149,7 +149,7 @@
     // ---- Unfinished / Unobtainable ----
     { section: 'Unfinished / Unobtainable achievements', id: 'jugendrevolution', title: 'Jugendrevolution',
       desc: 'Grandmaster Mahraun ascends the nationalist movement.',
-      icon: 'jugendrevolution.png',
+      icon: 'jugendrevolution.jpg',
       bg: 'rgba(60,60,60,0.15)', iconBg: 'rgba(60,60,60,0.35)' },
     { section: 'Unfinished / Unobtainable achievements', id: 'neue_generation', title: 'Neue Generation',
       desc: 'Passing the mantle.',
