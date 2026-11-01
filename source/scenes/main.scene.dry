@@ -98,7 +98,8 @@ max-cards: 4
 - #advisor
 - #leader
 - @fundraising
-
+- @cabinet
+- @executive
 
 
 
@@ -214,6 +215,8 @@ max-cards: 6
 - #advisor
 - #leader
 - @fundraising
+- @cabinet
+- @executive
 
 
 
@@ -347,7 +350,8 @@ max-cards: 2
 - #advisor
 - #leader
 - @fundraising
-
+- @cabinet
+- @executive
 
 
 
@@ -477,7 +481,8 @@ max-cards: 3
 - #advisor
 - #leader
 - @fundraising
-
+- @cabinet
+- @executive
 
 @party
 title: Party Affairs
