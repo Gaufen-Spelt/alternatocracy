@@ -21,7 +21,7 @@ As we have control over the Interior Ministry, we can direct police and intellig
 - @ban_rfb: Ban the Communist RFB.
 - @unban_rfb: Unban the RFB.
 - @persecute_rfb
-- @interior
+- @interior: Go back.
 - @return: Take no action for now.
 
 @interior
