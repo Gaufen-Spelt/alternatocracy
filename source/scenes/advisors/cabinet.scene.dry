@@ -15,4 +15,4 @@ With an SPD chancellor and SPD cabinet members, we can direct the affairs of the
 
 @back
 on-arrival: last_cabinet_action = 0
-go-to: root
+go-to: return
