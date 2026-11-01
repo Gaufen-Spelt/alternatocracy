@@ -1,6 +1,6 @@
 title: Businesses Lose Confidence
 subtitle: Big businesses are losing confidence in our government's policies.
-view-if: business_confidence_met = 1 and spd_in_government = 1 and business_confidence_timer <= 0
+view-if: business_confidence_met = 1 and spd_in_government = 1 and business_confidence_timer <= 0 and not reaction_activated
 new-page: true
 on-arrival: unemployed += 2; new_middle_spd -= 6; old_middle_spd -= 6; rural_spd -= 5; workers_spd -= 4; unemployed_spd -= 4; dvp_relation -= 6; economic_growth -= 1; business_confidence_timer = 12
 tags: event

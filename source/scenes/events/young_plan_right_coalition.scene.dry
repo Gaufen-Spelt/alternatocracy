@@ -2,7 +2,7 @@ title: Young Plan
 new-page: true
 subtitle: The right-wing coalition has collapsed...
 tags: event
-view-if: year = 1929 and month >= 7 and young_plan_seen = 0 and in_right_coalition
+view-if: year = 1929 and month >= 7 and young_plan_seen = 0 and in_right_coalition and dnvp_congress_result_0 == "Hugenbergite"
 on-arrival: young_plan_seen = 1
 max-visits: 1
 

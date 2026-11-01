@@ -1,9 +1,10 @@
 title: Capital Strike
 subtitle: Germany's industries are idling...
-view-if: spd_in_government and capital_strike_met and capital_strike_timer <= 0
+view-if: spd_in_government and capital_strike_met and capital_strike_timer <= 0 and not reaction_activated
 new-page: true
 tags: event
 go-to: reformist if spd_reformist; rest if not spd_reformist
+on-arrival: capital_strike_count += 1
 
 @reformist
 

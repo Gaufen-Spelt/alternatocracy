@@ -28,13 +28,13 @@ Eventually...
 @crushed
 title: The rebellious Schutzbund has been crushed.
 on-arrival: austria_defeat = 1
-view-if: sdapo_strength < 4
+view-if: sdapo_strength < 6
 
 The uprising lasted for no more than a few days before it was crushed. The Schutzbund and SDAPÖ were too weak and too divided to stand against the forces of the state.
 
 @long_war
 title: It is a civil war.
-view-if: sdapo_strength = 5 or sdapo_strength = 4
+view-if: sdapo_strength = 7 or sdapo_strength = 6
 on-arrival: austria_civil_war = 1
 
 Neither side is backing down, and the SDAPÖ have formed an alternative government after defeating the government troops in some cities. Austria is in a state of civil war.
@@ -49,7 +49,7 @@ title: As a party, the SPD will provide the SDAPÖ with support.
 subtitle: -2 resources
 choose-if: resources >= 2
 on-arrival: resources -= 2; sdapo_strength += 1
-go-to: sdapo_victory if sdapo_strength >= 6; long_war_2 if sdapo_strength < 6
+go-to: sdapo_victory if sdapo_strength >= 8; long_war_2 if sdapo_strength < 6
 
 The SPD raises its resources to provide arms and volunteers for the SDAPÖ.
 
@@ -57,13 +57,13 @@ The SPD raises its resources to provide arms and volunteers for the SDAPÖ.
 title: The Foreign Ministry will support the democratic Austrian forces.
 view-if: spd_in_government and foreign_minister_party = "SPD"
 on-arrival: sdapo_strength += 1
-go-to: sdapo_victory if sdapo_strength >= 6; long_war_2 if sdapo_strength < 6
+go-to: sdapo_victory if sdapo_strength >= 8; long_war_2 if sdapo_strength < 6
 
 We provide diplomatic and some financial and material support to the SDAPÖ forces.
 
 @force_peace
 title: Can we bring the sides together for a peace?
-view-if: spd_in_government and foreign_minister_party = "SPD" and sdapo_strength = 5
+view-if: spd_in_government and foreign_minister_party = "SPD" and sdapo_strength = 6
 on-arrival: austria_peace = 1; pro_republic += 3; coup_progress -= 1
 achievement: arbeiter_von_wien
 
@@ -81,7 +81,7 @@ No matter our efforts, the war continues. Too many lives are extinguished. Refug
 @sdapo_victory
 title: The Austrofascists are backing down!
 on-arrival: pro_republic += 5; west_relation += 1; east_relation += 1; austria_victory = 1; reichswehr_loyalty += 0.1; coup_progress -= 2
-view-if: sdapo_strength >= 6
+view-if: sdapo_strength >= 8
 achievement: arbeiter_von_wien
 
 The result is that the Austrofascists have backed down! Caught in an untenable position domestically and abroad, they have agreed to restore the National Council and resign from government, holding new elections. Now begins the long work of reconstruction. Our countries are likely to be brought closer together as a result.
