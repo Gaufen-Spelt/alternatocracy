@@ -15,9 +15,9 @@ The *Reichsbanner Schwarz-Rot-Gold* is a mass organization for the defense of th
 
 - @militant: Fund more military-style training and equipment for the Reichsbanner.
 - @militant_2: Use our existing resources to support more training for the Reichsbanner.
-- @same: Keep the Reichsbanner as it is.
 - @cut_rb: Cut funding for the Reichsbanner.
 - @women_rb
+- @same: Keep the Reichsbanner as it is.
 - @easy_discard
 - @cancel_advisor_action
 
@@ -39,13 +39,6 @@ view-if: funded_reichsbanner >= 1
 on-arrival: rb_militancy += 0.02; funded_reichsbanner -= 1
 
 As we have already funded resources towards the Reichsbanner, we can invest in building up their militancy.
-
-
-@same
-
-The Reichsbanner is already serving the purpose it needs to serve. There is no reason to change what already works.
-
-- @return: Continue...
 
 
 @cut_rb
@@ -71,3 +64,11 @@ After allowing women to join, the number of comrades who leave is more than bala
 
 @homosexual
 achievement: anders_als_die_andern
+
+
+
+@same
+
+The Reichsbanner is already serving the purpose it needs to serve. There is no reason to change what already works.
+
+- @return: Continue...

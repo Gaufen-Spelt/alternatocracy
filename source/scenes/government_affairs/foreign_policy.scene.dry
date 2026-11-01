@@ -28,7 +28,7 @@ What should our foreign policy priority be?
 - @restart: Restart the inquiry.
 - @support_austria
 - @support_austria_2
-- @root: Do not enact any policies for now.
+- @return: Do not enact any policies for now.
 - @easy_discard
 - @cancel_advisor_action
 

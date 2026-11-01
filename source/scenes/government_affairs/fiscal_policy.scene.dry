@@ -28,7 +28,7 @@ Lower-income tax rates: [+ lower_tax_rates : taxation +]
 - @raise_progressive: Make the tax system more progressive by raising taxes on the rich and cutting them for the poor.
 - @regressive
 - @tariffs
-- @root: Do not change the tax system.
+- @return: Do not change the tax system.
 - @easy_discard
 - @cancel_advisor_action
 

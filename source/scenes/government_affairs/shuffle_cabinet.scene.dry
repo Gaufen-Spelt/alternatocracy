@@ -27,7 +27,7 @@ Reichswehr: [+ reichswehr_minister_party +]
 Agriculture: [+ agriculture_minister_party +]
 
 - @shuffle: Yes, do it.
-- @root: No, there is no need.
+- @return: No, there is no need.
 - @easy_discard
 - @cancel_advisor_action
 

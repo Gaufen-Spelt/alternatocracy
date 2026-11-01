@@ -16,7 +16,7 @@ How do we reduce tensions with the coalition?
 - @promise_cuts: Agree to the bourgeois plans to cut welfare.
 - @resources: Use our party resources to support our allies.
 - @bring_down: Instead, we will bring down the government with a no-confidence vote, and call for new elections.
-- @no_change: Take none of these actions.
+- @return: We will not waste our time on these matters.
 - @easy_discard
 
 
@@ -33,10 +33,6 @@ choose-if: resources >= 2
 on-arrival: resources -= 2; coalition_dissent -= 1
 
 By transferring campaign funds to our coalition partners, we can make our policies more acceptable to them. Some would call this corruption, but perhaps it is necessary to save democracy.
-
-@no_change
-
-No. We will not do this.
 
 @bring_down
 subtitle: Bring down this government before our opponents do.

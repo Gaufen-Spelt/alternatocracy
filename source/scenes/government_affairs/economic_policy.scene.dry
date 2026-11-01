@@ -20,7 +20,7 @@ We have already formulated an economic plan. Now we have to implement it.
 - @nationalize_2
 - @moderate_plan
 - @moderate_plan_limited_budget
-- @root: Do not implement the economic plan.
+- @return: Do not implement the economic plan.
 - @easy_discard
 - @cancel_advisor_action
 

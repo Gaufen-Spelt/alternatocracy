@@ -1,7 +1,7 @@
 title: Party Disunity
 new-page: true
 is-card: true
-view-if: party_disunity_timer = 0 and (dissent >= 0.3 or (reformist_dissent > 30) or (center_dissent > 30) or (left_dissent > 30) or (labor_dissent > 30) or (neorevisionist_dissent > 30 and neorevisionism)) and (reformists_resign or left_split or centrists_resign or neorev_split or unions_independent)
+view-if: party_disunity_timer = 0 and (dissent >= 0.3 or (reformist_dissent > 30) or (center_dissent > 30) or (left_dissent > 30) or (labor_dissent > 30) or (neorevisionist_dissent > 30 and neorevisionism)) or (reformists_resign or left_split or centrists_resign or neorev_split or unions_independent)
 on-arrival: month_actions += 1; party_disunity_timer = 12
 card-image: img/Reichstagsfraktion_der_SPD.jpg
 frequency: 200
@@ -38,6 +38,7 @@ Something must be done to reinforce party unity.
 - @expel_left
 - @expel_reformists
 - @expel_neorevisionists
+- @return: We will not address the internal dissent.
 - @easy_discard
 
 

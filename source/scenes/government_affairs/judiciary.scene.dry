@@ -19,7 +19,7 @@ The Judiciary is one of the most reactionary components of the government, along
 - @full_reform: Reform the judiciary definitely.
 - @reform: Carry out substantial judicial reforms.
 - @minor_reforms: Carry out minor judicial reforms.
-- @as_is: Leave the judiciary as it is.
+- @return: Leave the judiciary as it is.
 - @easy_discard
 - @cancel_advisor_action
 
@@ -47,5 +47,3 @@ on-arrival: democratization += 1; workers_spd += 2*(1-dissent) if democratizatio
 
 We try to remove the most obviously biased and corrupt jurists, while leaving most of the system intact. It is slow work reforming the judiciary.
 
-@as_is
-go-to: root

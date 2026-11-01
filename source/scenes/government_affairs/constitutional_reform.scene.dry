@@ -26,7 +26,7 @@ A constitutional reform requires either a two-thirds supermajority in the Reichs
 - @vote_threshold: Change the vote threshold.
 - @constructive_vonc: Ban non-constructive votes of no confidence.
 - @presidential_powers: Reduce presidential powers.
-- @as_is: Do not pursue constitutional reform.
+- @return: Do not pursue constitutional reform.
 - @easy_discard
 - @cancel_advisor_action
 #- @constitutional_bans: Allow the banning of anti-constitutional parties.
@@ -131,5 +131,3 @@ We have successfully passed a constitutional amendment to limit presidential pow
 # Temporarily disable this for now - how would this interact with the already-extant law for the protection of the republic? This 
 
 
-@as_is
-go-to: root

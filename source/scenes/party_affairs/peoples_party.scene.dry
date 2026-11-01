@@ -17,7 +17,7 @@ In order to build a socialist majority, many reformists and neorevisionists are 
 - @build_support: We must build additional support before becoming a people's party.
 - @support_peoples_party_hard: Despite strong opposition from the Center and Left factions, we will become a people's party.
 - @no_new_ideas: No, we will always be a party of the working class.
-- @root: Perhaps we can discuss this at a later time.
+- @return: Perhaps we can discuss this at a later time.
 - @easy_discard
 - @cancel_advisor_action
 
