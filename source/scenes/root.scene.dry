@@ -278,11 +278,11 @@ Q.budget = 4;
 Q.workers = 48; // industry and trade
 Q.old_middle = 13; // "old mittelstand"
 // 16.4 trade & commerce, 6.6 public and private services, 4.4 domestic help
-Q.new_middle = 14; // "new mittelstand"
+Q.new_middle = 18; // "new mittelstand"
 Q.rural = 25; // agriculture and forestry employment... but many of those are proletarians so...
 // source: https://surface.syr.edu/cgi/viewcontent.cgi?filename=3&article=1016&context=books&type=additional page 43, table 3.3
 Q.unemployed = 8.6;
-Q.catholics = 30;
+Q.catholics = 20;
 
 // unemployment: 1929 - 13.3, 1930 - 22.7, 1931 - 34.3, 1932 - 43.8 (same source as above)
 
@@ -367,8 +367,8 @@ Q.unemployed_other = 7;
 
 Q.catholics_spd = 14;
 Q.catholics_kpd = 2;
-Q.catholics_z = 52;
-Q.catholics_bvp = 6;
+Q.catholics_z = 70;
+Q.catholics_bvp = 10;
 Q.catholics_ddp = 1;
 Q.catholics_dvp = 4;
 Q.catholics_dnvp = 6;
@@ -643,8 +643,6 @@ Q.fundraiser_timer = 24;
 Q.wels_advisor = 1; // Otto Wels
 Q.muller_advisor = 1; // Hermann Müller
 Q.muller_dead = 0;
-// okay I know Arthur Crispien was a leader irl but i couldn't find much interesting about him...
-Q.crispien_advisor = 0; // Arthur Crispien
 Q.hilferding_advisor = 1; // Rudolf Hilferding
 
 // left advisors
@@ -736,6 +734,20 @@ set-bg: img/weimar.jpg
 audio: shuffle music/1928_1930/FruhlingsliedMendelssohn.mp3 music/1928_1930/AUF_HOHEN_BERGEN_noise_reduced.mp3 music/1928_1930/MarekWeber.mp3 music/1928_1930/BAUERNKAPELLE.mp3 music/1928_1933/DERLINDENBAUM_normalized.mp3 music/1928_1933/ZurSonne_zurFreiheit.mp3 music/1928_1933/arbeiter_marseille.mp3 music/1928_1933/Wann_wir_schreiten_Seit_an_Seit.mp3 music/1930_1933/Internationale-de_normalized.ogg music/1928_1930/LiedDerPompadour.mp3 music/1928_1933/SozialistenMarsch.mp3
 new-page: true
 go-to: post_event
+on-arrival: {! if (Q.industrial_mod == 1) {
+    Q.rural = 60;
+    Q.old_middle = 30;
+    Q.workers = 10;
+    Q.new_middle = 1;
+    Q.catholics = 10;
+    Q.unemployed = 3;
+    Q.economic_growth = -2;
+    Q.inflation = -3;
+    Q.budget = 1;
+    Q.resources = 5;
+    Q.workers_spd = 90;
+  }
+!}
 
 
 
@@ -749,8 +761,31 @@ new-page: true
 
 WIP: Expanded content, modifiers, addons and etcetera.
 
+- @gamemodes
 - @seed: Seed.
 - @menum: Back
+
+@gamemodes
+new-page: true
+
+= gamemodes
+
+Gamemodes:
+
+- @industrial: Capitalism has just begun it's rise...
+- @industrial_0: Capitalism has just begun it's rise...
+
+@industrial
+subtitle: Dominant conservative populace. (Turned off)
+view-if: industrial_mod = 0
+on-arrival: industrial_mod = 1
+go-to: gamemodes
+
+@industrial_0
+subtitle: Dominant conservative populace. (Turned on)
+view-if: industrial_mod = 1
+on-arrival: industrial_mod = 0
+go-to: gamemodes
 
 @seed
 title: Seed
