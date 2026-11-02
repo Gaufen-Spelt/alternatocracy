@@ -756,6 +756,7 @@ on-arrival: {! if (Q.industrial_mod == 1) {
 
 
 @addon
+title: Back to menu
 subtitle: Additional content for those who want to enjoy more than that.
 new-page: true
 
