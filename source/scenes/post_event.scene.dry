@@ -616,6 +616,13 @@ function applyNsdapDecay() {
 // ============================================================================
 
 if (Q.month_actions >= 1) {
+
+
+    for (var party of Q.parties) {
+        Q[party + '_prev_votes'] = (Q[party + '_normalized'] || 0) * 100;
+    }
+
+
     advanceDate();
     collectPartyIncome();
     tickTimers();
@@ -681,7 +688,15 @@ for (var party of Q.parties) {
     Q[party + '_normalized'] = frac;
     Q[party + '_votes'] = Math.round(frac * 100);
     Q[party + '_votes_display'] = Math.round(decimal_factor * frac * 100) / decimal_factor;
+
+    // Change since last turn
+    var prev = Q[party + '_prev_votes'];
+    var change = (prev === undefined) ? 0 : Math.round(decimal_factor * (frac * 100 - prev)) / decimal_factor;
+    if (change === 0) change = 0; // normalizes -0
+    Q[party + '_votes_change'] = change;
+    Q[party + '_votes_change_display'] = (change > 0 ? '+' : '') + change;
 }
+
 
 // Faction dissent
 for (var f of Q.factions) {
