@@ -94,7 +94,7 @@ We do not fund any party organizations.
 
 @rural_help
 unavailable-subtitle: [? if spd_leftist or spd_centrist: Despite agricultural workers being apart of proletariat, industrial working class remains our main priority and therefore we won't waste resources on less conscious members of proletariat.  ?] [if center_strength + left_strength >= 50: Marxist factions dissuade us from doing this. ]  [? if commercialized_media < 1: We have no influence amongst agricultural proletariat. Perhaps, expanding our media could solve this issue? ?] [? if resources < 1: Not enough resources. ?]
-view-f: not spd_centrist and not spd_leftist and commercialized_media >= 1 and center_strength + left_strength < 50
+view-if: not spd_centrist and not spd_leftist and commercialized_media >= 1 and center_strength + left_strength < 50
 choose-if: resources >= 1
 subtitle: -1 resources.
 on-arrival: resources -= 1; socialism += rural / 4; rural_spd += 6*(1 - dissent); workers_spd += 3*(1 - dissent); rural_dnvp -= 2; labor_dissent -= 5; labor_strength += 4 
