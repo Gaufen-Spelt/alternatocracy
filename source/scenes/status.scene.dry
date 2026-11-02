@@ -551,7 +551,13 @@ for (var i = 0; i < Q.parties.length; i++) {
     var p = Q.parties[i];
     var votes = Q[p + '_votes_display'];
     if (votes !== undefined && votes > 1) {
-        Q.projected_results += fmtLine(Q.party_labels[p], votes);
+        var change = Q[p + '_votes_change'] || 0;
+        var changeText = '';
+        if (change > 0)      changeText = ' <span style="color:#4caf50">(+' + change + ')</span>';
+        else if (change < 0) changeText = ' <span style="color:#e53935">(' + change + ')</span>';
+        else                 changeText = ' <span style="color:#888">(±0)</span>';
+
+        Q.projected_results += "- " + Q.party_labels[p] + ": " + votes + "%" + changeText + "<br>";
     }
 }
 
