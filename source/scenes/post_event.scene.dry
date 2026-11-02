@@ -1587,7 +1587,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         ideoMin: 1, ideoMax: 20,
         weight: () => 3.00,
         desc: ', at the Foreign Ministry, has secured a pause on reparations payments from the Western Allies.',
-        eligible: () => Q.reparations_negotiation >= 3 && Q.black_thursday_seen == 1 && Q.reparations > -2,
+        eligible: () => Q.reparations_negotiation >= 5 && Q.black_thursday_seen == 1 && Q.reparations > -2,
         effects: { west_relation: 1, budget: 1, economic_growth: 0.7, coup_progress: -1 },
         support: { workers: 4, old_middle: 3, new_middle: 3, rural: 3 },
         extra: () => { Q.reparations = -2; }
@@ -1648,7 +1648,6 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
     }),
 
     // ---- FOREIGN: counterweights (right-wing / hawkish) ----------------------
-    // These get heavier as relations rise, so the AI drifts back down instead of maxing out.
 
     fp_reichswehr_buildup: foreignAction({
         ideoMin: 17, ideoMax: 20,

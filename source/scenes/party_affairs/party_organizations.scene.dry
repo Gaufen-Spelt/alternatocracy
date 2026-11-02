@@ -23,19 +23,11 @@ Sozialistische Arbeiter-Jugend (SAJ – Socialist Workers' Youth) strength: [+ s
 - @newspapers: Fund more newspapers and journalists.
 - @welfare: Fund more mutual aid and welfare programs.
 - @culture: Fund sports leagues, educational, and cultural programs.
+- @rural_help: Use DLV (Deutscher Landarbeiter-Verband) to fund agricultural workers.
 - @youth: We have the reputation of being a party for old men. Support the youth organizations.
 - @spd_world_1: German Athletic Club invites us to co-operate with them. This will also open our own sub-world to the rest of Germany.
 - @nothing: Do not increase funding for any program.
 - @easy_discard
-
-@spd_world_1
-subtitle: Are we sure about that?
-view-if: spd_world == 0
-choose-if: resources >= 3 and reformist_strength + neorevisionist_strength >= 60 and socialism < pro_republic and ideology != "Left" and ideology != "Centrist" and (peoples_party or new_middle_consciousness = 1)
-unavailable-subtitle: [? if resources < 3: Not enough resources. ?] [? if reformist_strength + neorevisionist_strength < 60: Currently, this idea has no sufficient enough of support to consider doing this. ?] [? if ideology == Left or ideology == "Centrist": As the primarily marxist party, this can't possibly happen. ?] [? if not peoples_party or new_middle_consciousness = 1: We must expand our broad outlook on electorate. ?] [? if socialism >= pro_republic: With socialism trending, we can't possibly spend our efforts on working with unpopular bourgeouis. ?]
-on-arrival: spd_world = 1; nationalism += 5 if nationalism > socialism; socialism += 5 if socialism > nationalism; pro_republic += 5; workers_spd += 5; workers += 1; neorevisionist_strength += 5; ddp_relation += 3; z_relation += 3; dvp_relation += 3; dnvp_relation += 2; rural_spd += 5 if peoples_party; old_middle_spd += 5 if peoples_party; new_middle_spd += 8 if peoples_party or new_middle_consciousness; socialism += 5; workers_dnvp += 3 if peoples_party; workers_dvp += 3 if peoples_party; workers_ddp += 3 if peoples_party
-
-Our Workers’ Sports Federation has accepted German Athletic Club's proposal to co-operate after countless attempts of to do so. For the better or worse, the rest will follow the suit and unite the Germany's cultural world.
 
 @newspapers
 subtitle: Doubles party organizations timer.
@@ -97,3 +89,24 @@ We have funded the SAJ. Its members are loyal to the party leadership and fill o
 We do not fund any party organizations.
 
 - @return: Continue...
+
+
+
+@rural_help
+unavailable-subtitle: [? if spd_leftist or spd_centrist: Despite agricultural workers being apart of proletariat, industrial working class remains our main priority and therefore we won't waste resources on less conscious members of proletariat.  ?] [if center_strength + left_strength >= 50: Marxist factions dissuade us from doing this. ]  [? if commercialized_media < 1: We have no influence amongst agricultural proletariat. Perhaps, expanding our media could solve this issue? ?] [? if resources < 1: Not enough resources. ?]
+view-f: not spd_centrist and not spd_leftist and commercialized_media >= 1 and center_strength + left_strength < 50
+choose-if: resources >= 1
+subtitle: -1 resources.
+on-arrival: resources -= 1; socialism += rural / 4; rural_spd += 6*(1 - dissent); workers_spd += 3*(1 - dissent); rural_dnvp -= 2; labor_dissent -= 5; labor_strength += 4 
+
+Using our ties with ADGB's affiliate German Agricultural Workers' Union (DLV), we have funded DLV's rural newspapers and helped them expand or create new local networks. Junkers are displeased at our intervention.
+
+@spd_world_1
+subtitle: Are we sure about that? -3 resources
+view-if: spd_world == 0
+choose-if: resources >= 3 and reformist_strength + neorevisionist_strength >= 60 and socialism < pro_republic and ideology != "Left" and ideology != "Centrist" and (peoples_party or new_middle_consciousness = 1)
+unavailable-subtitle: [? if resources < 3: Not enough resources. ?] [? if reformist_strength + neorevisionist_strength < 60: Currently, this idea has no sufficient enough of support to consider doing this. ?] [? if ideology == Left or ideology == "Centrist": As the primarily marxist party, this can't possibly happen. ?] [? if not peoples_party or new_middle_consciousness = 1: We must expand our broad outlook on electorate. ?] [? if socialism >= pro_republic: With socialism trending, we can't possibly spend our efforts on working with unpopular bourgeouis. ?]
+on-arrival: resources -= 3; spd_world = 1; nationalism += 5 if nationalism > socialism; socialism += 5 if socialism > nationalism; pro_republic += 5; workers_spd += 5; workers += 1; neorevisionist_strength += 5; ddp_relation += 3; z_relation += 3; dvp_relation += 3; dnvp_relation += 2; rural_spd += 5 if peoples_party; old_middle_spd += 5 if peoples_party; new_middle_spd += 8 if peoples_party or new_middle_consciousness; socialism += 5; workers_dnvp += 3 if peoples_party; workers_dvp += 3 if peoples_party; workers_ddp += 3 if peoples_party
+
+Our Workers’ Sports Federation has accepted German Athletic Club's proposal to co-operate after countless attempts of to do so. For the better or worse, the rest will follow the suit and unite the Germany's cultural world.
+
