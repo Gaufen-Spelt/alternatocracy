@@ -511,7 +511,58 @@ window.renderReichstagMini = function(svgId, barId) {
     }
 };
 
+// ---- Compact history charts (election / party support / economy) ----
+window.renderHistoryMini = function() {
+    var Q = window.dendryUI.dendryEngine.state.qualities;
+    if (!window.d3 || !d3.linegraph) return;
+
+    var partyColors = {'spd': '#E3000F', 'kpd': '#8B0000', 'ddp': '#DCCA4A', 'z': '#000', 'dvp': '#D5AC27', 'dnvp': '#3f7bc1', 'nsdap': '#954B00', 'other': '#a0a0a0', 'sapd': '#c40000'};
+    var partyNames  = {'spd': 'SPD', 'kpd': 'KPD', 'ddp': Q.ddp_name || 'DDP', 'z': 'Z + BVP', 'dvp': 'DVP', 'dnvp': 'DNVP', 'nsdap': 'NSDAP', 'other': 'Others', 'sapd': 'SAPD'};
+
+    function sizeSvg(id, h) {
+        var el = document.getElementById(id);
+        if (!el) return null;
+        var w = Math.min(280, el.parentElement.offsetWidth || 280);
+        el.style.width = w + 'px';
+        el.style.height = h + 'px';
+        el.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        el.style.overflow = 'visible';
+        el.innerHTML = '';
+        return { w: w, h: h };
+    }
+
+    // Election history
+    var s1 = sizeSvg('election-history-mini', 170);
+    if (s1 && Q.election_records && Q.election_records.length > 0) {
+        var l1 = d3.linegraph(false, false, Q.parties, partyColors, partyNames);
+        l1.width(s1.w).height(s1.h);
+        d3.select('#election-history-mini').datum(Q.election_records).call(l1);
+    }
+
+    // Party support history
+    var s2 = sizeSvg('party-support-history-mini', 170);
+    if (s2 && (!Q.historical_mode || Q.game_over) && Q.party_support_records && Q.party_support_records.length > 0) {
+        var l2 = d3.linegraph(true, true, Q.parties, partyColors, partyNames);
+        l2.width(s2.w).height(s2.h);
+        d3.select('#party-support-history-mini').datum(Q.party_support_records).call(l2);
+    }
+
+    // Economic history
+    var s3 = sizeSvg('economic-history-mini', 150);
+    if (s3 && Q.economic_records && Q.economic_records.length > 0) {
+        var minInflation = d3.min(Q.economic_records, function(d) { return d.inflation; });
+        var maxUnemployment = d3.max(Q.economic_records, function(d) { return d.unemployment; });
+        var l3 = d3.linegraph(true, true, ['inflation', 'unemployment'],
+            {'inflation': '#0000FF', 'unemployment': '#FF0000'},
+            {'inflation': 'Inflation', 'unemployment': 'Unemployment'},
+            maxUnemployment + 5, minInflation - 5, 21);
+        l3.width(s3.w).height(s3.h);
+        d3.select('#economic-history-mini').datum(Q.economic_records).call(l3);
+    }
+};
+
 window.renderReichstagMini && window.renderReichstagMini('reichstag-mini', 'party-color-bar-mini');
+window.renderHistoryMini && window.renderHistoryMini();
 !}
 on-arrival: {!
 
@@ -588,7 +639,7 @@ Q.classes_breakdown_display = buildClassSection(Q.classes);
 
 = Reichstag
 
-{!<svg id="reichstag-mini" style="width: 600px; height: 300px;"> </svg>
+{!<svg id="reichstag-mini" style="width: 280px; height: 140px;"> </svg>
 <div id="party-color-bar-mini"></div>!}
 
 [+ party_results_list +]
@@ -601,11 +652,34 @@ Q.classes_breakdown_display = buildClassSection(Q.classes);
 
 <hr>
 
+= Election history
+
+[? if year = 1928 and month < 5 : No new elections yet. ?]
+
+{!<svg id="election-history-mini" style="width: 280px; height: 170px;"> </svg>!}
+
+<hr>
+
+= Party support history
+
+[? if historical_mode: Not available in historical mode. ?]
+
+{!<svg id="party-support-history-mini" style="width: 280px; height: 170px;"> </svg>!}
+
+<hr>
+
+= Economic history
+
+{!<svg id="economic-history-mini" style="width: 280px; height: 150px;"> </svg>!}
+
+<hr>
+
 **Detailed results for each demographic**
 
 [+ classes_breakdown_display +]
 
 <hr>
+
 
 
 
