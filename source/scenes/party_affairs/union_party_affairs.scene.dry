@@ -1,0 +1,30 @@
+title: Union - Party affairs
+tags: party_affairs
+is-card: true
+new-page: true
+view-if: union_party_affairs_timer <= 0
+card-image: img/labor_party.png
+face-image: img/labor_party.png
+on-arrival: union_party_affairs_timer += 8
+
+= Union - party affairs
+
+Allgemeiner Deutscher Gewerkschaftsbund / General German Trade Union Federation or better known as ADGB, is our associated umbrella of trade unions and alongside with them, we form two pillars of **Social Democracy**. Despite our deep ties, they are not bound to our policies and yield their own principles, as far as even accepting members of KPD and other radical socialist parties.
+
+What should we do?
+
+- @influence_adgb: Influence ADGB's policies.
+- @influence_spd: Unions pressure us to do their biding.
+- @return: Leave
+- @easy_discard
+
+@influence_spd
+subtitle: Labor has gotten considerably strong and with their resistance, they require more control and voice in the matter of party politics.
+view-if: labor_strength >= 35 and labor_dissent >= 30
+on-arrival: labor_strength += 15; labor_dissent -= 20; center_dissent += 20; center_strength -= 20; reformist_dissent += 10; reformist_strength -= 10
+
+ADGB has installed some of their representatives. ggbain
+
+@influence_adgb
+
+Sus amogus

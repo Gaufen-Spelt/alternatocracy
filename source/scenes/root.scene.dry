@@ -567,7 +567,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'iron_front', 'media', 'enemies',
             'party_organizations', 'rally', 'reichsbanner',
             'shuffle_leadership', 'streetfighting', 'peoples_party',
-            'party_disunity', 'ideologimus', 
+            'party_disunity', 'ideologimus', 'union_party_affairs', 
             // govt
             'agricultural_policy', 'domestic_enemies', 'fiscal_policy',
             'foreign_policy', 'judiciary', 'labor_affairs', 'military_policy',
@@ -591,6 +591,7 @@ Q.business_confidence_timer = 0;
 Q.capital_strike_timer = 0;
 // party affairs timers
 Q.ideologimus_timer = 0;
+Q.union_party_affairs_timer = 0;
 Q.confronting_nazis_timer = 0;
 Q.crisis_program_timer = 0;
 Q.fundraising_timer = 0;
