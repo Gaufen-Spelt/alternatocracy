@@ -52,6 +52,11 @@ Q.adgb_strength = 4500;
 Q.afa_bund_strength = 450;
 Q.adb_strength = 180;
 Q.hdg_strength = 150;
+Q.spd_left_win = 0;
+Q.spd_labor_win = 0;
+Q.spd_neorev_win = 0;
+Q.spd_reformist_win = 0;
+Q.spd_center_win = 0;
 
 
 

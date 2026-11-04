@@ -67,18 +67,23 @@ if (Q.highest_r <= 30) {
     switch (Q.highest_faction) {
         case "left":
             Q.spd_party_leader = Q.levi_dead ? "Rosenfeld" : "Levi";
+            Q.spd_left_win += 1;
             break;
         case "center":
             Q.spd_party_leader = Q.economic_minister == "Naphtali" ? "Hilferding" : "Wels";
+            Q.spd_center_win += 1;
             break;
         case "labor":
             Q.spd_party_leader = "Leipart";
+            Q.spd_labor_win += 1;
             break;
         case "ref":
             Q.spd_party_leader = "Braun";
+            Q.spd_reformist_win += 1;
             break;
         case "neo":
             Q.spd_party_leader = "Mierendorff";
+            Q.spd_neorev_win += 1;
             break;
         case "eth":
             Q.spd_party_leader = "Eichler";
