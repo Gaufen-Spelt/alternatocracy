@@ -20,14 +20,14 @@ What should we do?
 
 @influence_spd
 subtitle: Labor has gotten considerably strong and with their resistance, they require more control and voice in the matter of party politics.
-view-if: labor_strength >= 40 and labor_dissent >= 30
+view-if: labor_strength >= 35 and labor_dissent >= 30
 on-arrival: labor_strength += 15; labor_dissent -= 20; center_dissent += 20; center_strength -= 20; reformist_dissent += 10; reformist_strength -= 10
 
 ADGB has installed some of their representatives. 
 
 @influence_adgb
 subtitle: We promised to not intervene in ADGB's affairs outside of political coordination. 
-view-if: labor_strength <= 39 and labor_dissent < 30
+view-if: labor_strength <= 34 and labor_dissent < 30
 on-arrival: labor_strength -= 10; labor_dissent += 10
 
 We have influenced ADGB to align with our policies. Union members are, obviously, pissed off at such intervention.
