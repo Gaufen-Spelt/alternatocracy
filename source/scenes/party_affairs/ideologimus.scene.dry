@@ -88,7 +88,7 @@ Hamburg SPD (including Artur Zickler and Hans von Eckardt) and Young Socialists,
 @left
 title: Support the **Left**.
 subtitle: Revolutionary course is the only way.
-on-arrival: left_strength += 9; left_dissent -= 5; radicalization += 1; democratization += 1; reformist_strength -= 5; reformist_dissent += 5; labor_dissent += 5; neorevisionist_dissent += 7
+on-arrival: left_strength += 9; center_strength -= 3; left_dissent -= 5; radicalization += 1; democratization += 1; reformist_strength -= 5; reformist_dissent += 5; labor_dissent += 5; neorevisionist_dissent += 7
 
 We have supported the leftist course, for bourgeouisie is the main threat. Reformists, laborites [? if neorevisionism: and neorevisionists ?] are mad at our decision to support the leftists.
 

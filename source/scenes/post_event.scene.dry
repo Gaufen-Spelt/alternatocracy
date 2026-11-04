@@ -859,6 +859,7 @@ if (Q.ideology == "Centrist") {
     if (Q.neorevisionist_dissent >= 30) Q.neorevisionist_dissent -= 0.5;
     if (Q.ethical_dissent >= 30) Q.ethical_dissent -= 0.5;
     if (Q.socialpatriot_dissent >= 30) Q.socialpatriot_dissent -= 0.5;
+    Q.center_strength += 0.5;
 }
 
 if (Q.youth_crisis_spd >= 1) {

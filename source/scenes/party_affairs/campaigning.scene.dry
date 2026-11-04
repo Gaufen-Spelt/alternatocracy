@@ -43,7 +43,7 @@ view-if: not spd_neorevisionist
 subtitle: -[+ campaign_rate +] resources. This will slightly strengthen left and labor.
 choose-if: resources >= campaign_rate
 unavailable-subtitle: Not enough resources.
-on-arrival: workers_spd += 4*(1-dissent)*campaign_rate; workers_spd -= 1 if unemployed >= 15; workers_spd -= 1 if unemployed >= 25; workers_spd += 4*(1-dissent) if wtb_adopted = 1; resources -= campaign_rate; workers_spd += 2*(1-dissent) if nationalization_progress >= 1; workers_spd -= 2 if spd_reformist or peoples_party; labor_strength += 2; left_strength += 2; {!
+on-arrival: workers_spd += 4*(1-dissent)*campaign_rate; workers_spd -= 1 if unemployed >= 15; workers_spd -= 1 if unemployed >= 25; workers_spd += 4*(1-dissent) if wtb_adopted = 1; resources -= campaign_rate; workers_spd += 2*(1-dissent) if nationalization_progress >= 1; workers_spd -= 2 if spd_reformist or peoples_party; labor_strength += 2; left_strength += 3; {!
 document.querySelectorAll('.rate-buttons').forEach(function(el){ el.style.display = 'none'; });
 !}
 
