@@ -79,6 +79,12 @@ on-arrival: {!
 
 Q.party_sections_text = '';
 
+if (Q.leader_event_flavor_timer >= 1 && Q.leader_event_description) {
+    var spdRaw = Q.spd_name;
+    var spdName = (typeof spdRaw === 'string' && spdRaw.trim() !== '') ? spdRaw.trim() : 'SPD';
+    Q.party_sections_text += '<h3>' + spdName + ' Leadership</h3>' + Q.leader_event_description + '<br>';
+}
+
 for (const party of Q.parties) {
     var partyLines = '';
 

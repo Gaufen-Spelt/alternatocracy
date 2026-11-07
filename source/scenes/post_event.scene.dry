@@ -886,27 +886,30 @@ Q.spd_ethical        = (Q.ideology == "Ethical") ? 1 : 0;
 Q.spd_patriot        = (Q.ideology == "Socialpatriot") ? 1 : 0;
 
 // ---- Timer registration ----------------------------------------------------
-
+ 
 function ensureTimer(name) {
     if (!Q.timers.includes(name)) Q.timers.push(name);
     if (Q[name + '_timer'] === undefined) Q[name + '_timer'] = 0;
 }
-
+ 
 for (const party of Q.parties) {
     ensureTimer(party + '_action');
     ensureTimer(party + '_flavor_action');
     ensureTimer(party + '_government_action');
     ensureTimer(party + '_government_flavor_action');
 }
-
+ 
+ensureTimer('leader_event');          // -> Q.leader_event_timer
+ensureTimer('leader_event_flavor');   // -> Q.leader_event_flavor_timer (display window for @actions)
+ 
 // ---- Shared helpers --------------------------------------------------------
-
+ 
 function isParty(party, targetParties) {
     if (!party || !targetParties) return false;
     var targets = Array.isArray(targetParties) ? targetParties : [targetParties];
     return targets.some(t => t && party.toLowerCase() === t.toLowerCase());
 }
-
+ 
 function PickHighest(list, prop) {
     var bestKey = null;
     var bestVal = -Infinity;
@@ -921,23 +924,23 @@ function PickHighest(list, prop) {
     }
     return bestKey;
 }
-
+ 
 function scaledWeight(baseWeight, currentValue, baseValue, maxMultiplier = 5) {
     var ratio = Math.min(baseValue / Math.max(currentValue, 1), maxMultiplier);
     return baseWeight * ratio;
 }
-
+ 
 function linearWeight(baseWeight, currentValue, baseValue, maxMultiplier = 5) {
     var ratio = Math.min(Math.max(currentValue, 0) / baseValue, maxMultiplier);
     return baseWeight * ratio;
 }
-
+ 
 function inIdeoRange(party, min, max) {
     var score = Q[party + '_ideo_score'];
     if (score === undefined) return false;
     return score >= min && score <= max;
 }
-
+ 
 function weakestClass(party) {
     var best = null, lowest = Infinity;
     for (const c of Q.classes) {
@@ -946,14 +949,14 @@ function weakestClass(party) {
     }
     return best;
 }
-
+ 
 function addSupport(party, deltas) {
     for (var c in deltas) {
         var key = c + '_' + party;
         Q[key] = (Q[key] || 0) + deltas[c];
     }
 }
-
+ 
 function financeAction(o) {
     return {
         ideoMin: o.ideoMin, ideoMax: o.ideoMax,
@@ -968,7 +971,7 @@ function financeAction(o) {
         }
     };
 }
-
+ 
 Q.PARTY_DISPLAY_NAMES = {
     dnvp: 'The DNVP',   dvp: 'The DVP',     kpo: 'The KPO',     sl: 'The SL',
     sapd: 'The SAPD',   srpd: 'The SRPD',   ddp: Q.ddp_name,    z: 'The Zentrum',
@@ -980,11 +983,11 @@ Q.PARTY_DISPLAY_NAMES = {
     dnf: 'The DNF',     rlb: 'The RLB',     faud: 'The FAUD',   kapd: 'The KAPD',
     pp: 'The PP',       gsrn: 'The GSRN',   uspd: 'The USPD'
 };
-
+ 
 function partyLabel(party) {
     return Q.PARTY_DISPLAY_NAMES[party] || party.toUpperCase();
 }
-
+ 
 Q.CLASS_TO_CAMPAIGN_FOCUS = {
     workers:     'workers',
     unemployed:  'unemployed',
@@ -993,11 +996,11 @@ Q.CLASS_TO_CAMPAIGN_FOCUS = {
     rural:       'rural',
     catholics:   'catholics',
 };
-
+ 
 function inReichGovernment(party) {
     return Q[party + '_in_government'] >= 1 || isChancellorParty(party) || holdsAnyMinistry(party);
 }
-
+ 
 function lobbyPressure() {
     return Math.max(0, Q.upper_tax_rates || 0) * 1.0
         + Math.max(0, Q.working_hours || 0) * 0.6
@@ -1008,11 +1011,11 @@ function lobbyPressure() {
         + (Q.cooperatives || 0) * 0.8
         + (Q.capital_strike_progress || 0) * 0.5;
 }
-
+ 
 // ---- Party actions ---------------------------------------------------------
-
+ 
 Q.GLOBAL_PARTY_ACTIONS = {
-
+ 
     stahlhelm_recruitment: {
         ideoMin: 17, ideoMax: 20,
         weight: () => scaledWeight(1.30, Q.stahlhelm_strength, 1300),
@@ -1024,7 +1027,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.sh_militancy += 0.01;
         }
     },
-
+ 
     rfb_recruitment: {
         ideoMin: 1, ideoMax: 4,
         weight: () => scaledWeight(1.30, Q.rfb_strength, 1000),
@@ -1036,7 +1039,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.rfb_militancy += 0.01;
         }
     },
-
+ 
     nationalist_campaign: {
         ideoMin: 14, ideoMax: 20,
         weight: () => scaledWeight(0.75, Q.nationalism, 5),
@@ -1045,7 +1048,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
         timer: 8,
         apply: () => { Q.nationalism += 2; }
     },
-
+ 
     socialist_campaign: {
         ideoMin: 1, ideoMax: 6,
         weight: () => scaledWeight(0.75, Q.socialism, 5),
@@ -1054,7 +1057,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
         timer: 8,
         apply: () => { Q.socialism += 3; }
     },
-
+ 
     democratic_campaign: {
         ideoMin: 7, ideoMax: 14,
         weight: () => scaledWeight(0.75, Q.pro_republic, 5),
@@ -1063,7 +1066,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
         timer: 8,
         apply: () => { Q.pro_republic += 2; }
     },
-
+ 
     prussian_counter_prussia: {
         ideoMin: 16, ideoMax: 20,
         weight: () => linearWeight(4.00, Q.prussian_republicanization, 30),
@@ -1077,7 +1080,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.nationalism += 1;
         }
     },
-
+ 
     prussian_rfb_ban: {
         ideoMin: 14, ideoMax: 20,
         weight: () => scaledWeight(4.00, Q.rfb_strength * Q.rfb_militancy, 500),
@@ -1090,7 +1093,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.rfb_militancy *= 0.95;
         }
     },
-
+ 
     prussian_rb_ban: {
         ideoMin: 17, ideoMax: 20,
         weight: () => scaledWeight(4.00, Q.rb_strength * Q.rb_militancy, 500),
@@ -1103,7 +1106,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.rb_militancy *= 0.90;
         }
     },
-
+ 
     prussian_stahlhelm_ban: {
         ideoMin: 1, ideoMax: 5,
         weight: () => scaledWeight(4.00, Q.stahlhelm_strength * Q.stahlhelm_militancy, 500),
@@ -1116,7 +1119,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.stahlhelm_militancy *= 0.95;
         }
     },
-
+ 
     prussian_sa_ban: {
         ideoMin: 1, ideoMax: 11,
         weight: () => scaledWeight(4.00, Q.sa_strength * Q.sa_militancy, 500),
@@ -1129,7 +1132,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.sa_militancy *= 0.90;
         }
     },
-
+ 
     campaigning: {
         ideoMin: 1, ideoMax: 20,
         weight: (party) => {
@@ -1161,15 +1164,15 @@ Q.GLOBAL_PARTY_ACTIONS = {
             var pct   = Q[party + '_votes'];
             var range = Math.max(0, oldR - pct);
             var bonus = 10 * range / (range + 10);
-
+ 
             var bestClass = weakestClass(party);
             if (!bestClass) return;
-
+ 
             Q[party + '_campaign_target_class'] = bestClass;
             Q[bestClass + '_' + party] = (Q[bestClass + '_' + party] || 0) + bonus;
         }
     },
-
+ 
     // DVP
     dvp_capital_strike: {
         ideoMin: 1, ideoMax: 20,
@@ -1186,7 +1189,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             Q.nationalism += 5;
         }
     },
-
+ 
     dvp_industrial_lobby: {
         ideoMin: 16, ideoMax: 20,
         weight: () => scaledWeight(1.00, lobbyPressure(), 10),
@@ -1199,14 +1202,14 @@ Q.GLOBAL_PARTY_ACTIONS = {
             if (Q.ruhr_labor > 0)             reasons.push({ label: 'the Ruhr arbitration award',      weight: 2.0 });
             if ((Q.upper_tax_rates || 0) > 0) reasons.push({ label: 'rising upper tax rates',          weight: Q.upper_tax_rates * 1.0 });
             if ((Q.cooperatives || 0) > 0)    reasons.push({ label: 'the spread of cooperatives',      weight: Q.cooperatives * 0.8 });
-
+ 
             reasons.sort((a, b) => b.weight - a.weight);
-
+ 
             var cause;
             if (reasons.length === 0)      cause = 'mounting regulatory pressure';
             else if (reasons.length === 1) cause = reasons[0].label;
             else                           cause = reasons[0].label + ' and ' + reasons[1].label;
-
+ 
             return partyLabel(party) + ' has coordinated with major industrial associations to lobby against ' + cause + ', pressing for a friendlier business climate.';
         },
         eligible: (party) => isParty(party, 'dvp'),
@@ -1217,18 +1220,18 @@ Q.GLOBAL_PARTY_ACTIONS = {
         }
     },
 };
-
+ 
 function runPartyActions(party) {
     var timerKey = party + '_action_timer';
     var descKey = party + '_action_description';
-
+ 
     if (Q[timerKey] > 0 || Q[party + '_banned']) return;
-
+ 
     var pool = {};
     for (var key in Q.GLOBAL_PARTY_ACTIONS) {
         var action = Q.GLOBAL_PARTY_ACTIONS[key];
         if (!inIdeoRange(party, action.ideoMin, action.ideoMax)) continue;
-
+ 
         pool[key] = {
             weight: action.weight(party),
             eligible: action.eligible ? action.eligible(party) : true,
@@ -1236,21 +1239,21 @@ function runPartyActions(party) {
             description: action.description(party)
         };
     }
-
+ 
     var chosen = PickHighest(pool, 'weight');
-
+ 
     if (chosen === null) {
         Q[timerKey] = 6;
         Q[descKey] = partyLabel(party) + ' remains quiet for the time being, lacking viable options to act on.';
         return;
     }
-
+ 
     Q[timerKey] = pool[chosen].timer;
     Q[descKey] = pool[chosen].description;
     Q.GLOBAL_PARTY_ACTIONS[chosen].apply(party);
     Q[party + '_flavor_action_timer'] = 3;
 }
-
+ 
 for (const party of Q.parties) {
     if (party === 'spd' || party === 'other') continue;
     try {
@@ -1259,9 +1262,9 @@ for (const party of Q.parties) {
         console.error('party action failed:', party, e);
     }
 }
-
+ 
 // GOVT
-
+ 
 Q.MINISTRIES = [
     'transport_minister', 'agriculture_minister', 'finance_minister',
     'economic_minister', 'labor_minister', 'justice_minister',
@@ -1299,7 +1302,7 @@ function portfolioAction(gate, o) {
         }
     };
 }
-
+ 
 // One builder for every ministry-gated action.
 function govAction(ministry, o) {
     return portfolioAction((party) => holdsMinistry(party, ministry), o);
@@ -1310,10 +1313,10 @@ function interiorAction(o)    { return govAction('interior_minister', o); }
 function foreignAction(o)     { return govAction('foreign_minister', o); }
 function justiceAction(o)     { return govAction('justice_minister', o); }
 function agricultureAction(o) { return govAction('agriculture_minister', o); }
-
+ 
 // Science funding needs the Economic Ministry
 function scienceAction(o)     { return govAction('economic_minister', o); }
-
+ 
 // Education structure/curriculum need the Chancellery
 function educationAction(o)   { return portfolioAction((party) => isChancellorParty(party), o); }
  
@@ -1551,9 +1554,9 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { budget: -2, nationalism: 0.5 },
         support: { rural: 6, workers: -2 }
     }),
-
+ 
     // ---- FOREIGN ------------------------------------------------------------
-
+ 
     fp_improve_west: foreignAction({
         ideoMin: 1, ideoMax: 16,
         weight: () => scaledWeight(1.20, Q.west_relation, 5, 2),
@@ -1561,7 +1564,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.west_relation < 8,
         effects: { west_relation: 2, reparations_negotiation: 1 }
     }),
-
+ 
     fp_improve_east: foreignAction({
         ideoMin: 1, ideoMax: 13,
         weight: () => scaledWeight(1.00, Q.east_relation, 4, 2),
@@ -1569,7 +1572,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.east_relation < 8,
         effects: { east_relation: 2 }
     }),
-
+ 
     fp_soviet_aid: foreignAction({
         ideoMin: 1, ideoMax: 5,
         weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
@@ -1577,7 +1580,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
         effects: { budget: -1, soviet_relation: 2, west_relation: -0.5 }
     }),
-
+ 
     fp_soviet_military: foreignAction({
         ideoMin: 15, ideoMax: 20,
         weight: () => scaledWeight(1.10, Q.soviet_relation, 4, 2),
@@ -1585,7 +1588,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.budget >= 1 && Q.soviet_relation < 8,
         effects: { budget: -1, soviet_relation: 1, reichswehr_militancy: 0.2, reichswehr_loyalty: 0.05, west_relation: -1 }
     }),
-
+ 
     fp_negotiate_versailles: foreignAction({
         ideoMin: 1, ideoMax: 13,
         weight: () => 1.80,
@@ -1598,7 +1601,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
             if (Q.west_relation >= 3) Q.reparations_negotiation += 1;
         }
     }),
-
+ 
     fp_reduce_reparations: foreignAction({
         ideoMin: 1, ideoMax: 20,
         weight: () => 3.00,
@@ -1608,7 +1611,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { workers: 4, old_middle: 3, new_middle: 3, rural: 3 },
         extra: () => { Q.reparations = -2; }
     }),
-
+ 
     fp_expose_rearmament: foreignAction({
         ideoMin: 1, ideoMax: 11,
         weight: () => 1.60,
@@ -1616,7 +1619,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.rearmament_exposed < 1,
         effects: { west_relation: 2, east_relation: 1, nationalism: -5, pro_republic: 5, rearmament_exposed: 1, reparations_negotiation: 3, coup_progress: 2 }
     }),
-
+ 
     fp_customs_union: foreignAction({
         ideoMin: 14, ideoMax: 20,
         weight: () => 1.50,
@@ -1625,7 +1628,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { customs_union: 1, west_relation: -2, east_relation: -2, nationalism: 3, coup_progress: -1 },
         extra: () => { Q.banking_crisis_timer = 2; }
     }),
-
+ 
     fp_revisionist_posture: foreignAction({
         ideoMin: 17, ideoMax: 20,
         weight: () => 1.20,
@@ -1633,7 +1636,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.west_relation > -5 && Q.east_relation > -5,
         effects: { nationalism: 2, west_relation: -1, east_relation: -1, reparations_negotiation: -1 }
     }),
-
+ 
     fp_european_union: foreignAction({
         ideoMin: 1, ideoMax: 10,
         weight: () => 1.70,
@@ -1648,7 +1651,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
             if (Q.unemployed >= 10) Q.unemployed -= 2;
         }
     }),
-
+ 
     fp_concordat: foreignAction({
         ideoMin: 9, ideoMax: 14,
         weight: () => 1.40,
@@ -1662,9 +1665,9 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
             Q.catholics_z += 5;
         }
     }),
-
+ 
     // ---- FOREIGN: counterweights (right-wing / hawkish) ----------------------
-
+ 
     fp_reichswehr_buildup: foreignAction({
         ideoMin: 17, ideoMax: 20,
         weight: () => linearWeight(1.10, Q.nationalism, 50, 2),
@@ -1672,7 +1675,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.rearmament_exposed < 1,
         effects: { reichswehr_militancy: 0.2, pacifism: -1, nationalism: 1, west_relation: -0.5, east_relation: -0.5, coup_progress: 0.5 }
     }),
-
+ 
     fp_snub_west: foreignAction({
         ideoMin: 15, ideoMax: 20,
         weight: () => linearWeight(1.20, Q.west_relation, 5, 2),
@@ -1680,7 +1683,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.west_relation > -5,
         effects: { west_relation: -2, reparations_negotiation: -1, nationalism: 1 }
     }),
-
+ 
     fp_reparations_defiance: foreignAction({
         ideoMin: 18, ideoMax: 20,
         weight: () => 1.00,
@@ -1688,7 +1691,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.reparations > -2 && Q.west_relation > -4,
         effects: { west_relation: -2, reparations_negotiation: -2, nationalism: 2, budget: 1 }
     }),
-
+ 
     fp_east_revisionism: foreignAction({
         ideoMin: 16, ideoMax: 20,
         weight: () => linearWeight(1.00, Q.east_relation, 4, 2),
@@ -1696,7 +1699,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.east_relation > -5,
         effects: { east_relation: -2, nationalism: 2 }
     }),
-
+ 
     fp_anti_comintern: foreignAction({
         ideoMin: 12, ideoMax: 20,
         weight: () => linearWeight(1.00, Q.soviet_relation, 4, 2),
@@ -1704,7 +1707,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.soviet_relation > -5,
         effects: { soviet_relation: -2, kpd_relation: -1, west_relation: 0.5 }
     }),
-
+ 
     fp_eu_sabotage: foreignAction({
         ideoMin: 15, ideoMax: 20,
         weight: () => linearWeight(1.30, Q.eu_progress, 2, 2),
@@ -1712,9 +1715,9 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.eu == 0 && Q.eu_progress > 0,
         effects: { eu_progress: -1, nationalism: 1, west_relation: -1 }
     }),
-
+ 
     // ---- FOREIGN: counterweights (left / pacifist) ---------------------------
-
+ 
     fp_disarmament_push: foreignAction({
         ideoMin: 1, ideoMax: 8,
         weight: () => scaledWeight(1.10, Math.max(Q.pacifism, 0) + 1, 5, 2),
@@ -1723,7 +1726,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { pacifism: 1, nationalism: -2, west_relation: 1, east_relation: 1, reichswehr_militancy: -0.1 },
         extra: () => { Q.reichswehr_militancy = Math.max(0, Q.reichswehr_militancy || 0); }
     }),
-
+ 
     fp_league_diplomacy: foreignAction({
         ideoMin: 7, ideoMax: 13,
         weight: () => 1.20,
@@ -1731,7 +1734,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.pacifism < 8,
         effects: { pacifism: 0.5, pro_republic: 1, west_relation: 1, east_relation: 1 }
     }),
-
+ 
     fp_oppose_concordat: foreignAction({
         ideoMin: 1, ideoMax: 5,
         weight: () => 0.90,
@@ -1739,9 +1742,9 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.reichskonkordat == 0 && Q.reichskonkordat_progress > 0,
         effects: { reichskonkordat_progress: -1, z_relation: -3 }
     }),
-
+ 
     // ---- FOREIGN: repair and economic diplomacy ------------------
-
+ 
     // Centrists patch up the worst relation instead of chasing a new initiative
     fp_repair_relations: foreignAction({
         ideoMin: 7, ideoMax: 16,
@@ -1750,7 +1753,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.west_relation < 1 || Q.east_relation < 1,
         effects: { west_relation: 1, east_relation: 1 }
     }),
-
+ 
     fp_trade_agreements: foreignAction({
         ideoMin: 1, ideoMax: 16,
         weight: () => linearWeight(1.20, Q.unemployed, 10, 2),
@@ -1759,10 +1762,10 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { economic_growth: 0.3, unemployed: -0.5 },
         support: { workers: 2, new_middle: 2 }
     }),
-
+ 
     // ---- JUSTICE: reform ----------------------------------------------------
     // judicial_reform runs -10..10, so "+ 11" keeps the value positive for the weight helpers.
-
+ 
     jus_minor_reforms: justiceAction({
         ideoMin: 1, ideoMax: 13,
         weight: () => 1.20,
@@ -1771,7 +1774,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { judicial_reform: 1, democratization: 1, pro_republic: 3 },
         support: { workers: 3 }
     }),
-
+ 
     jus_reform: justiceAction({
         ideoMin: 1, ideoMax: 10,
         weight: () => scaledWeight(1.80, Q.judicial_reform + 11, 11, 2),
@@ -1780,7 +1783,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { budget: -1, judicial_reform: 2, democratization: 2, pro_republic: 5, coup_progress: 1 },
         support: { workers: 5 }
     }),
-
+ 
     jus_full_reform: justiceAction({
         ideoMin: 1, ideoMax: 8,
         weight: () => 2.50,
@@ -1790,7 +1793,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { workers: 5 },
         extra: () => { Q.full_reform = 1; }
     }),
-
+ 
     jus_prosecute_far_right: justiceAction({
         ideoMin: 1, ideoMax: 12,
         weight: () => linearWeight(1.30, Q.sa_strength, 500, 2) + linearWeight(0.40, Q.coup_progress, 5, 2),
@@ -1799,7 +1802,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { sa_strength: -20, coup_progress: -0.5, pro_republic: 1 },
         support: { workers: 1 }
     }),
-
+ 
     jus_amnesty_prisoners: justiceAction({
         ideoMin: 1, ideoMax: 8,
         weight: () => 1.00,
@@ -1808,7 +1811,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { pacifism: 1, democratization: 1, kpd_relation: 2, nationalism: -1 },
         support: { workers: 2, unemployed: 2 }
     }),
-
+ 
     jus_republic_protection: justiceAction({
         ideoMin: 7, ideoMax: 13,
         weight: () => 1.20,
@@ -1816,10 +1819,10 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.pro_republic < 60,
         effects: { pro_republic: 2, sa_strength: -10, rfb_strength: -10, democratization: 0.5 }
     }),
-
+ 
     // ---- JUSTICE: counterweights --------------------------------------------
     // Heavier the more reformed the courts already are, so the AI claws things back.
-
+ 
     jus_reactionary_appointments: justiceAction({
         ideoMin: 15, ideoMax: 20,
         weight: () => linearWeight(1.60, Q.judicial_reform + 11, 11, 2),
@@ -1827,14 +1830,14 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.judicial_reform > -10,
         effects: { judicial_reform: -1, democratization: -1, pro_republic: -1, nationalism: 1 }
     }),
-
+ 
     jus_lenient_far_right: justiceAction({
         ideoMin: 17, ideoMax: 20,
         weight: () => 1.30,
         desc: ', at the Justice Ministry, has seen putschists and Nazi thugs walk free with token sentences.',
         effects: { sa_strength: 15, coup_progress: 0.3, nationalism: 1, pro_republic: -1 }
     }),
-
+ 
     jus_persecute_left: justiceAction({
         ideoMin: 14, ideoMax: 20,
         weight: () => 1.10,
@@ -1843,7 +1846,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { pacifism: -1, socialism: -2, rfb_strength: -20, democratization: -0.5 },
         support: { workers: -2, unemployed: -2 }
     }),
-
+ 
     jus_sedition_crackdown: justiceAction({
         ideoMin: 12, ideoMax: 18,
         weight: () => linearWeight(0.90, Q.socialism, 50, 2),
@@ -1851,9 +1854,9 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         eligible: () => Q.democratization > -10,
         effects: { socialism: -2, nationalism: -1, democratization: -1, rfb_strength: -10, sa_strength: -10 }
     }),
-
+ 
     // ---- SCIENCE (Economic Ministry) ----------------------------------------
-
+ 
     sci_fund_kwg: scienceAction({
         ideoMin: 1, ideoMax: 14,
         weight: () => linearWeight(1.20, Q.budget, 6, 2) + scaledWeight(0.50, Q.science_funding + 1, 4, 2),
@@ -1866,7 +1869,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
             if (Q.unemployed >= 4) Q.unemployed -= 0.2;
         }
     }),
-
+ 
     sci_fund_applied: scienceAction({
         ideoMin: 1, ideoMax: 20,
         weight: () => linearWeight(1.40, Q.budget, 6, 2) + linearWeight(0.40, Q.unemployed, 8, 3),
@@ -1881,7 +1884,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
             if (Q.capital_strike_progress > 1) Q.capital_strike_progress -= 1;
         }
     }),
-
+ 
     sci_fund_medical: scienceAction({
         ideoMin: 1, ideoMax: 13,
         weight: () => linearWeight(1.00, Q.budget, 6, 2),
@@ -1894,7 +1897,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
             if (Q.unemployed >= 4) Q.unemployed -= 0.2;
         }
     }),
-
+ 
     sci_cut_funding: scienceAction({
         ideoMin: 14, ideoMax: 20,
         weight: () => scaledWeight(1.80, Q.budget, 5) + linearWeight(0.40, Q.science_funding, 4, 2),
@@ -1903,9 +1906,9 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { budget: 1, science: -1, science_funding: -1, applied_research: -0.33, kwg_research: -0.33, medical_research: -0.33, economic_growth: -0.5, unemployed: 0.3, ddp_relation: -5 },
         support: { new_middle: -5, workers: -2 }
     }),
-
+ 
     // ---- EDUCATION: structure (Chancellery) ---------------------------------
-
+ 
     edu_public_hs: educationAction({
         ideoMin: 1, ideoMax: 9,
         weight: () => linearWeight(1.50, Q.budget, 6, 2) + scaledWeight(0.50, Q.public_hs + 1, 3, 2),
@@ -1914,7 +1917,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { budget: -1, public_hs: 1, prussian_police_loyalty: 0.04, education_science: 0.5, unemployed: -0.2, economic_growth: 0.2, pro_republic: 4 },
         support: { workers: 6, unemployed: 3 }
     }),
-
+ 
     edu_school_boards: educationAction({
         ideoMin: 1, ideoMax: 12,
         weight: () => 1.10,
@@ -1923,7 +1926,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { school_boards: 1, education_science: 0.2 },
         support: { workers: 3, new_middle: 3, old_middle: 2 }
     }),
-
+ 
     edu_secularize: educationAction({
         ideoMin: 1, ideoMax: 8,
         weight: () => 1.40,
@@ -1933,7 +1936,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { new_middle: 3, workers: 3 }
         // The scene triggers an instant VONC here; hook that into your AI-coalition collapse logic if you want parity.
     }),
-
+ 
     // Right-wing counterweight: undo secularization
     edu_confessional_schools: educationAction({
         ideoMin: 12, ideoMax: 20,
@@ -1943,9 +1946,9 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         effects: { secularized: -1, z_relation: 10, dvp_relation: 3, kpd_relation: -4, education_science: -0.3 },
         support: { old_middle: 3, rural: 3 }
     }),
-
+ 
     // ---- EDUCATION: curriculum (shared lockout via curriculum_timer) ---------
-
+ 
     edu_curr_democratic: educationAction({
         ideoMin: 1, ideoMax: 8,
         weight: () => scaledWeight(1.60, Q.pro_republic, 60, 2),
@@ -1955,7 +1958,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { workers: 3 },
         extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "democratic"; Q.minor_curriculum = "scientific"; }
     }),
-
+ 
     edu_curr_scientific: educationAction({
         ideoMin: 5, ideoMax: 14,
         weight: () => 1.40,
@@ -1965,7 +1968,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { new_middle: 3, workers: 2 },
         extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "scientific"; Q.minor_curriculum = "vocational"; }
     }),
-
+ 
     edu_curr_humanist: educationAction({
         ideoMin: 6, ideoMax: 14,
         weight: () => 1.10,
@@ -1975,7 +1978,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { new_middle: 4 },
         extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "humanist"; Q.minor_curriculum = "democratic"; }
     }),
-
+ 
     edu_curr_vocational: educationAction({
         ideoMin: 5, ideoMax: 16,
         weight: () => linearWeight(1.00, Q.unemployed, 8, 2) + 0.60,
@@ -1985,7 +1988,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         support: { workers: 4, rural: 2, unemployed: 3, new_middle: -1 },
         extra: () => { Q.curriculum_timer = 50; Q.major_curriculum = "vocational"; Q.minor_curriculum = "scientific"; }
     }),
-
+ 
     edu_curr_traditional: educationAction({
         ideoMin: 14, ideoMax: 20,
         weight: () => 1.70,
@@ -1999,7 +2002,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         }
     }),
 };
-
+ 
  
 function runPartyGovernmentActions(party) {
     var timerKey = party + '_government_action_timer';
@@ -2039,12 +2042,12 @@ for (const party of Q.parties) {
     if (party === 'spd') continue;
     runPartyGovernmentActions(party);
 }
-
-
+ 
+ 
 // ---- Daily events ----------------------------------------------------------
-
+ 
 Q.GLOBAL_DAILY_EVENTS = {
-
+ 
     generic_daily_event: {
         weight: () => scaledWeight(1.00, Q.nationalism, 10),
         description: () => 'A generic development has occurred, reflecting shifting conditions across the Reich.',
@@ -2052,19 +2055,19 @@ Q.GLOBAL_DAILY_EVENTS = {
         timer: 6,
         apply: () => { Q.nationalism += 0; }
     },
-
+ 
 };
-
+ 
 function runDailyEvents() {
     var timerKey = 'daily_event_timer';
     var descKey = 'daily_event_description';
-
+ 
     if (Q[timerKey] > 0) return;
-
+ 
     var pool = {};
     for (var key in Q.GLOBAL_DAILY_EVENTS) {
         var event = Q.GLOBAL_DAILY_EVENTS[key];
-
+ 
         pool[key] = {
             weight: event.weight(),
             eligible: event.eligible ? event.eligible() : true,
@@ -2072,26 +2075,36 @@ function runDailyEvents() {
             description: event.description()
         };
     }
-
+ 
     var chosen = PickHighest(pool, 'weight');
-
+ 
     if (chosen === null) {
         Q[timerKey] = 6;
         Q[descKey] = 'No notable developments occur today.';
         return;
     }
-
+ 
     Q[timerKey] = pool[chosen].timer;
     Q[descKey] = pool[chosen].description;
     Q.GLOBAL_DAILY_EVENTS[chosen].apply();
 }
-
+ 
 runDailyEvents();
-
+ 
 // ---- Leadership events ----------------------------------------------------------
-
+ 
+// Leader helpers
+function lvIsLeader() {
+    var names = Array.prototype.slice.call(arguments);
+    return names.indexOf(Q.spd_party_leader) !== -1;
+}
+function lvAdd(key, delta) { Q[key] = (Q[key] || 0) + delta; }
+function lvStr(key, delta) { Q[key] = Math.max(0, Math.min(100, (Q[key] || 0) + delta)); }
+function lvJitter()        { return 0.75 + Math.random() * 0.5; }
+function lvW(base, extra)  { return (base + (extra || 0)) * lvJitter(); }
+ 
 Q.LEADER_EVENTS = {
-
+ 
     wels_party_discipline: {
         weight: () => lvW(1.0, linearWeight(1.5, Q.left_dissent, 10, 3)),
         description: () => 'Wels tightens the screws on the apparatus and threatens the rebels.',
@@ -2104,44 +2117,45 @@ Q.LEADER_EVENTS = {
             lvAdd('reformist_dissent', -3);
         }
     },
-
-
+ 
 };
-
+ 
 function runLeaderEvents() {
     var timerKey = 'leader_event_timer';
     var descKey = 'leader_event_description';
-
+ 
     if (Q[timerKey] > 0) return;
-
+    if (!Q.spd_party_leader) return;  
+ 
     var pool = {};
     for (var key in Q.LEADER_EVENTS) {
         var event = Q.LEADER_EVENTS[key];
-
+ 
         pool[key] = {
-            weight: event.weight(),
+            weight: event.weight() * (key === Q.leader_last_event ? 0.35 : 1),
             eligible: event.eligible ? event.eligible() : true,
             timer: event.timer,
             description: event.description()
         };
     }
-
+ 
     var chosen = PickHighest(pool, 'weight');
-
+ 
     if (chosen === null) {
         Q[timerKey] = 6;
-        Q[descKey] = 'No notable developments occur today.';
+        Q[descKey] = 'The party leadership has no new initiative at the moment.';
         return;
     }
-
+ 
     Q[timerKey] = pool[chosen].timer;
     Q[descKey] = pool[chosen].description;
+    Q.leader_last_event = chosen;
     Q.LEADER_EVENTS[chosen].apply();
+    Q.leader_event_flavor_timer = 3;   
 }
-
+ 
 runLeaderEvents();
 
-}
 
 
 // ============================================================================
