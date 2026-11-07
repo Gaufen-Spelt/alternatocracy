@@ -483,7 +483,7 @@ go-to: root
 title: Rudolf Hilferding
 subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/HilferdingRudolf.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Hilferding is an economist and a disciple of Karl Kautsky. Originating from Vienna, Austria, he trained as a medical doctor, but later became involved in Marxist economics as a discipline. He has been the lead ideologist of our party since the Heidelberg Program of 1925.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Against Right and Left, Defending Toleration, Fiscal Policy, Economic Democracy ?]
 tags: center_advisor
-view-if: hilferding_advisor = 0 and center_advisors < center_slots and centrists_resign = 0
+view-if: hilferding_advisor = 0 and center_advisors < center_slots and centrists_resign = 0 and spd_party_leader != "Hilferding"
 on-arrival: hilferding_advisor = 1; n_advisors += 1; center_advisors += 1
 go-to: advisor_menu
 
@@ -493,7 +493,7 @@ Rudolf Hilferding is now an advisor.
 title: Otto Wels
 subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/WelsOtto.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Wels is the long-time chairman of the SPD. He is a gifted organizer and a member of the centrist faction.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions -  Clear the Agenda, Party Discipline , The Republican Synthesis ?]
 tags: center_advisor
-view-if: wels_advisor = 0 and center_advisors < center_slots and centrists_resign = 0
+view-if: wels_advisor = 0 and center_advisors < center_slots and centrists_resign = 0 and spd_party_leader != "Wels"
 on-arrival: wels_advisor = 1; n_advisors += 1; center_advisors += 1
 go-to: advisor_menu
 
@@ -535,7 +535,7 @@ Carl Severing is now an advisor.
 title: Otto Braun
 subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/BraunOtto.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Braun [? if spd_prussia = 1 : is ?][? if spd_prussia = 0 : was ?] the Minister-President of Prussia, the largest state in Germany. He is a reformist leader who seeks to work with the bourgeois parties.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Prussian Bulwark, Negotiating with the Coalition ?]
 tags: reformist_advisor
-view-if: braun_advisor = 0 and ref_advisors < ref_slots
+view-if: braun_advisor = 0 and ref_advisors < ref_slots and spd_party_leader != "Braun"
 on-arrival: braun_advisor = 1; n_advisors += 1; ref_advisors += 1
 go-to: advisor_menu
 
@@ -567,7 +567,7 @@ Antonie Pfülf is now an advisor.
 title: Paul Levi
 subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/LeviPaul.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Levi is a former leader of the KPD who left over their devotion to violence and revolutionary adventurism.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Building the Left, Cooperation with the KPD ?]
 tags: left_advisor
-view-if: levi_advisor = 0 and levi_dead = 0 and left_advisors < left_slots and left_split = 0
+view-if: levi_advisor = 0 and levi_dead = 0 and left_advisors < left_slots and left_split = 0 and spd_party_leader != "Levi"
 on-arrival: levi_advisor = 1; n_advisors += 1; left_advisors += 1
 go-to: advisor_menu
 
@@ -587,7 +587,7 @@ Toni Sender is now an advisor.
 title: Kurt Rosenfeld
 subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/RosenfeldKurt.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Rosenfeld works as a lawyer in Berlin who defends left-wing individuals and causes. He favors cooperation with the KPD and a path of class struggle for the SPD.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Building the Left, Cooperation with the KPD, Against Toleration ?]
 tags: left_advisor
-view-if: rosenfeld_advisor = 0 and left_advisors < left_slots and left_split = 0
+view-if: rosenfeld_advisor = 0 and left_advisors < left_slots and left_split = 0 and spd_party_leader != "Rosenfeld"
 on-arrival: rosenfeld_advisor = 1; n_advisors += 1; left_advisors += 1
 go-to: advisor_menu
 
@@ -619,7 +619,7 @@ Anna Siemsen is now an advisor.
 title: Theodor Leipart
 subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/LeipartTheodor.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Leipart is a leader of the ADGB, the largest federation of socialist trade unions.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Organizing Workers, Addressing the Economic Crisis ?]
 tags: labor_advisor
-view-if: leipart_advisor = 0 and labor_advisors < labor_slots and unions_independent = 0
+view-if: leipart_advisor = 0 and labor_advisors < labor_slots and unions_independent = 0 and spd_party_leader != "Leipart"
 on-arrival: leipart_advisor = 1; n_advisors += 1; labor_advisors += 1
 go-to: advisor_menu
 
@@ -661,7 +661,7 @@ Wladimir Woytinsky is now an advisor.
 title: Carlo Mierendorff
 subtitle: <span style="display: flex; align-items: flex-start; gap: 12px;"><img src="img/portraits/MierendorffCarlo.jpg" style="width: 25%; height: auto; object-fit: cover; border: 5px solid #000000ff; flex-shrink: 0;"><span>Carlo Mierendorff is the founder of the neo-revisionist ideological tendency, and supports both democratic reforms and extra-parliamentary action to combat the Nazis and authoritarian parties. He is from a middle-class, academic background, and is one of our youngest leaders.</span></span>{!<br><br>!}[? if difficulty < 0 : Actions - Build the Iron Front, Warning About the Nazis ?]
 tags: neorev_advisor
-view-if: mierendorff_advisor = 0 and neorevisionism > 0 and neo_advisors < neo_slots and neorev_split = 0
+view-if: mierendorff_advisor = 0 and spd_party_leader != "Mierendorff" and neorevisionism > 0 and neo_advisors < neo_slots and neorev_split = 0
 on-arrival: mierendorff_advisor = 1; n_advisors += 1; neo_advisors += 1
 go-to: advisor_menu
 
