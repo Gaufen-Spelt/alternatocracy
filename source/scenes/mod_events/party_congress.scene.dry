@@ -135,7 +135,7 @@ if (Q.highest_r > 30) {
             break;
         case "soc":
             new_ideology = "Statism";
-            new_spd_ideology = "Patriotic Socialism";
+            new_spd_ideology = "Socialist Patriotism;
             winner_dissent = "socialpatriot_dissent";
             break;
     }
@@ -265,6 +265,18 @@ pool.ref    = Q.reformists_resign ? 1 : 4;
 pool.labor  = Q.unions_independent ? 1 : 4;
 pool.neo    = (Q.neorevisionism > 0) ? (Q.neorev_split ? 2 : 3) : 0;
 
+var leaderFaction = {
+    "Levi": "left", "Rosenfeld": "left",
+    "Hilferding": "center", "Wels": "center",
+    "Braun": "ref",
+    "Leipart": "labor",
+    "Mierendorff": "neo"
+};
+var lf = leaderFaction[Q.spd_party_leader];
+if (lf && pool[lf] > 0) {
+    pool[lf] -= 1;
+}
+
 for (var key in slots) {
     slots[key] = Math.min(slots[key], pool[key]);
 }
@@ -295,7 +307,7 @@ var factions = [
     { id: 'reformist',  label: 'Reformist / Evolutionary Socialists', val: Q.reformist_strength,  color: '#E3000F' }
 ];
 
-var neorevLabel = (Q.social_patriotism == 1)
+var neorevLabel = (Q.socialpatriotism == 1)
     ? 'Social Republicans / Militant Democrats'
     : 'Neorevisionist / Militant Democrats';
 
@@ -311,7 +323,7 @@ if (Q.ethical_socialism >= 1) {
 if (Q.neorevisionism >= 1) {
     factions.push({ id: 'neorev', label: neorevLabel, val: Q.neorevisionist_strength, color: '#7A3E9D' });
 }
-if (Q.social_patriotism == 1) {
+if (Q.socialpatriotism == 1) {
     factions.push({ id: 'socialpatriot', label: "Hamburg's Group (Socialist Patriots)", val: Q.socialpatriot_strength, color: '#2E7D6B' });
 }
 

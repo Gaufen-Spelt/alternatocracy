@@ -859,7 +859,7 @@ if (Q.ideology == "Centrist") {
     if (Q.neorevisionist_dissent >= 30) Q.neorevisionist_dissent -= 0.5;
     if (Q.ethical_dissent >= 30) Q.ethical_dissent -= 0.5;
     if (Q.socialpatriot_dissent >= 30) Q.socialpatriot_dissent -= 0.5;
-    Q.center_strength += 0.5;
+    Q.center_strength += 0.2;
 }
 
 if (Q.youth_crisis_spd >= 1) {
@@ -1622,7 +1622,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => 1.50,
         desc: ', at the Foreign Ministry, has forged a customs union with Austria in defiance of Versailles and France.',
         eligible: () => Q.black_thursday_seen == 1 && Q.customs_union == 0 && Q.eu == 0,
-        effects: { customs_union: 1, west_relation: -2, east_relation: -2, z_relation: 6, dvp_relation: 6, nationalism: 3, coup_progress: -1 },
+        effects: { customs_union: 1, west_relation: -2, east_relation: -2, nationalism: 3, coup_progress: -1 },
         extra: () => { Q.banking_crisis_timer = 2; }
     }),
 
@@ -2088,6 +2088,59 @@ function runDailyEvents() {
 
 runDailyEvents();
 
+// ---- Leadership events ----------------------------------------------------------
+
+Q.LEADER_EVENTS = {
+
+    wels_party_discipline: {
+        weight: () => lvW(1.0, linearWeight(1.5, Q.left_dissent, 10, 3)),
+        description: () => 'Wels tightens the screws on the apparatus and threatens the rebels.',
+        eligible: () => lvIsLeader('Wels'),
+        timer: 8,
+        apply: () => {
+            lvStr('center_strength', 3);
+            lvAdd('left_dissent', 5);
+            lvAdd('labor_dissent', -3);
+            lvAdd('reformist_dissent', -3);
+        }
+    },
+
+
+};
+
+function runLeaderEvents() {
+    var timerKey = 'leader_event_timer';
+    var descKey = 'leader_event_description';
+
+    if (Q[timerKey] > 0) return;
+
+    var pool = {};
+    for (var key in Q.LEADER_EVENTS) {
+        var event = Q.LEADER_EVENTS[key];
+
+        pool[key] = {
+            weight: event.weight(),
+            eligible: event.eligible ? event.eligible() : true,
+            timer: event.timer,
+            description: event.description()
+        };
+    }
+
+    var chosen = PickHighest(pool, 'weight');
+
+    if (chosen === null) {
+        Q[timerKey] = 6;
+        Q[descKey] = 'No notable developments occur today.';
+        return;
+    }
+
+    Q[timerKey] = pool[chosen].timer;
+    Q[descKey] = pool[chosen].description;
+    Q.LEADER_EVENTS[chosen].apply();
+}
+
+runLeaderEvents();
+
 }
 
 
@@ -2122,7 +2175,7 @@ if (vonc_row) {
     }
 }
 
-// Capital strike thresholds: "warn" = confidence starts dropping, "strike" = strike hits
+// Capital strike thresholds
 var capital_thresholds = {
     left:      { warn: 5, strike: 8  },
     reformist: { warn: 9, strike: 12 },
