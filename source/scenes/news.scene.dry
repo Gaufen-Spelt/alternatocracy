@@ -76,26 +76,27 @@ new-page: true
 
 @actions
 on-arrival: {!
-
+ 
 Q.party_sections_text = '';
-
+Q.leader_event_display_text = '';
+ 
+// ---- SPD leadership event (shown in its own section) ----
 if (Q.leader_event_flavor_timer >= 1 && Q.leader_event_description) {
-    var spdRaw = Q.spd_name;
-    var spdName = (typeof spdRaw === 'string' && spdRaw.trim() !== '') ? spdRaw.trim() : 'SPD';
-    Q.party_sections_text += '<h3>' + spdName + ' Leadership</h3>' + Q.leader_event_description + '<br>';
+    Q.leader_event_display_text = Q.leader_event_description;
 }
-
+ 
+// ---- Other parties ----
 for (const party of Q.parties) {
     var partyLines = '';
-
+ 
     if (Q[party + '_flavor_action_timer'] >= 1) {
         partyLines += Q[party + '_action_description'] + '<br>';
     }
-
+ 
     if (Q[party + '_government_flavor_action_timer'] >= 1) {
         partyLines += Q[party + '_government_action_description'] + '<br>';
     }
-
+ 
     if (partyLines !== '') {
         var rawName = Q[party + '_name'];
         var hasName = typeof rawName === 'string' && rawName.trim() !== '';
@@ -103,15 +104,19 @@ for (const party of Q.parties) {
         Q.party_sections_text += '<h3>' + partyName + '</h3>' + partyLines;
     }
 }
-
+ 
 Q.daily_event_display_text = Q.daily_event_description || '';
-
+ 
 !}
-
+ 
+= Party leadership
+ 
+[? if leader_event_display_text != 0: [+ leader_event_display_text +] ?]
+ 
 = Actions
-
+ 
 [+ party_sections_text +]
-
+ 
 = Daily events
-
+ 
 [? if daily_event_display_text != 0: [+ daily_event_display_text +] ?]
