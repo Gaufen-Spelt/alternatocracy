@@ -135,7 +135,7 @@ if (Q.highest_r > 30) {
             break;
         case "soc":
             new_ideology = "Statism";
-            new_spd_ideology = "Socialist Patriotism;
+            new_spd_ideology = "Socialist Patriotism";
             winner_dissent = "socialpatriot_dissent";
             break;
     }

@@ -814,7 +814,7 @@ const strengthMap = {
     Reformist: "reformist_strength",
     Neorev: "neorevisionist_strength",
     Ethical: "ethical_strength",
-    Socialpatriot: "socialpatriot_strength"
+    Statism: "socialpatriot_strength"
 };
 const ideologyStrengthKey = strengthMap[Q.ideology];
 if (ideologyStrengthKey && Q[ideologyStrengthKey] < 40) {
