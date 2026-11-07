@@ -1,6 +1,6 @@
 title: Fritz Baade
 is-pinned-card: true
-tags: advisor, reformist
+tags: advisor, ind
 card-image: img/portraits/BaadeFritz.jpg
 view-if: baade_advisor = 1
 unavailable-subtitle: Will be active in [+ advisor_action_timer +] turns.
