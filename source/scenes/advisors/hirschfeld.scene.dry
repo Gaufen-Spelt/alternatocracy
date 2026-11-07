@@ -1,6 +1,6 @@
 title: Magnus Hirschfeld
 is-pinned-card: true
-tags: advisor
+tags: advisor, ind
 card-image: img/portraits/HirschfeldMagnus.jpg
 view-if: hirschfeld_advisor = 1
 new-page: true 
