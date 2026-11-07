@@ -852,19 +852,17 @@ a.card:hover .card-tooltip {
 
 .card-in-hand:not([class*="tag-"]) { order: 9; }
 
-/* Faction tag card borders */
-:is(.card-in-hand, .pinned-card, .deck).tag-left a.card           { border-color: #B30000; }
-:is(.card-in-hand, .pinned-card, .deck).tag-centrist a.card       { border-color: #E8590C; }
-:is(.card-in-hand, .pinned-card, .deck).tag-labor a.card          { border-color: #F2B705; }
-:is(.card-in-hand, .pinned-card, .deck).tag-reformist a.card      { border-color: #E3000F; }
-:is(.card-in-hand, .pinned-card, .deck).tag-neorevisionist a.card { border-color: #7A3E9D; }
+:is(.card-in-hand, .pinned-card, .deck).tag-left           { --faction-color: #B30000; order: 1; }
+:is(.card-in-hand, .pinned-card, .deck).tag-centrist       { --faction-color: #E8590C; order: 2; }
+:is(.card-in-hand, .pinned-card, .deck).tag-reformist      { --faction-color: #E3000F; order: 3; }
+:is(.card-in-hand, .pinned-card, .deck).tag-labor          { --faction-color: #F2B705; order: 4; }
+:is(.card-in-hand, .pinned-card, .deck).tag-neorevisionist { --faction-color: #7A3E9D; order: 5; }
+:is(.card-in-hand, .pinned-card, .deck).tag-ind            { --faction-color: #808080; order: 6; }
 
-:is(.card-in-hand, .pinned-card, .deck).tag-left           { order: 1; }
-:is(.card-in-hand, .pinned-card, .deck).tag-centrist       { order: 2; }
-:is(.card-in-hand, .pinned-card, .deck).tag-reformist      { order: 3; }
-:is(.card-in-hand, .pinned-card, .deck).tag-labor          { order: 4; }
-:is(.card-in-hand, .pinned-card, .deck).tag-neorevisionist { order: 5; }
-.card-in-hand:not([class*="tag-"]) { order: 9; }
+:is(.card-in-hand, .pinned-card, .deck):is(.tag-left, .tag-centrist, .tag-reformist, .tag-labor, .tag-neorevisionist, .tag-ind) a.card {
+  border-color: var(--faction-color);
+  border-width: 4px;
+}
 
 :is(.card-in-hand, .pinned-card, .deck).unavailable-card a.card {
   border-color: rgba(128, 128, 128, 0.25);
