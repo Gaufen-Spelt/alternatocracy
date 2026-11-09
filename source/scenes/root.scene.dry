@@ -276,7 +276,7 @@ Q.nsdap_banned = 0;
 Q.coup_progress = 0;
 Q.capital_strike_progress = 0;
 
-Q.budget = 4;
+Q.budget = 1;
 
 // Proportion of different social groups
 // source: https://surface.syr.edu/cgi/viewcontent.cgi?filename=3&article=1016&context=books&type=additional page 45, table 3.4 - using 1925 figures
@@ -708,11 +708,11 @@ And remember, any deviations present here do not represent original game's spiri
 - @start_menu_2: Back
 
 @1928_easy
-on-arrival: difficulty = -1; resources = 4; dues = 3; rb_strength = 2300; kpd_relation = 26; z_relation = 50; dvp_relation = 40; budget = 5;
+on-arrival: difficulty = -1; resources = 4; dues = 3; rb_strength = 2300; kpd_relation = 26; z_relation = 50; dvp_relation = 40; budget = 2;
 go-to: 1928_main
 
 @1928_hard
-on-arrival: difficulty = 1; resources = 0; dues = 1; rb_strength = 1000; reformist_dissent = 25; left_dissent = 30; labor_dissent = 25; center_dissent = 25; z_relation = 41; kpd_relation = 16; dvp_relation = 31; budget = 3;
+on-arrival: difficulty = 1; resources = 0; dues = 1; rb_strength = 1000; reformist_dissent = 25; left_dissent = 30; labor_dissent = 25; center_dissent = 25; z_relation = 41; kpd_relation = 16; dvp_relation = 31; budget = 0;
 go-to: 1928_main
 
 @1928_historical
@@ -730,7 +730,7 @@ Q.center_dissent = 25;
 Q.z_relation = 41;
 Q.kpd_relation = 16;
 Q.dvp_relation = 31;
-Q.budget = 2;
+Q.budget = -1;
 this.state.disableSaves = true;
 !}
 go-to: 1928_main

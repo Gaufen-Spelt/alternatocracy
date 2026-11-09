@@ -610,6 +610,17 @@ function applyNsdapDecay() {
     }
 }
 
+function applyEvents() {
+
+    if (Q.year == 1928 && Q.month == 2 && Q.dbp_formed != 1) {
+        Q.dbp_points = 0;
+        if (Q.rural_ddp <= 4.5) Q.dbp_points += 1;
+        if (Q.landvolkbewegung == 1 || 0) Q.dbp_points += 1;
+        if (Q.rural_dnvp <= 46.7) Q.dbp_points += 1;
+        if (Q.dbp_points >= 3) Q.dbp_formed = 1;
+    }
+}
+
 
 // ============================================================================
 // MONTHLY UPDATE
@@ -641,6 +652,7 @@ if (Q.month_actions >= 1) {
     applyYearlyShifts();
     applyLateCrisisPenalty();
     applyNsdapDecay();
+    applyEvents();
 }
 
 Q.last_advisor_action = 0;
@@ -899,8 +911,8 @@ for (const party of Q.parties) {
     ensureTimer(party + '_government_flavor_action');
 }
  
-ensureTimer('leader_event');          // -> Q.leader_event_timer
-ensureTimer('leader_event_flavor');   // -> Q.leader_event_flavor_timer (display window for @actions)
+ensureTimer('leader_event');         
+ensureTimer('leader_event_flavor');   
  
 // ---- Shared helpers --------------------------------------------------------
  
