@@ -1,7 +1,7 @@
 title: Streetfighting
 new-page: true
 is-card: true
-on-arrival: streetfighting_timer = 9; month_actions += 1; rb_militarization_cost = 2 if rb_militancy > 0.1 else rb_militarization_cost = 1; rb_militarization_cost = 3 if rb_militancy > 0.25; strife += 1
+on-arrival: streetfighting_timer = 9; month_actions += 1; rb_militarization_cost = 2 if rb_militancy > 0.1 else rb_militarization_cost = 1; rb_militarization_cost = 3 if rb_militancy > 0.25
 view-if: year >= 1930 and sa_strength >= 150 and streetfighting_timer == 0 and not return_to_normalcy
 card-image: img/blutmai_2.jpg
 tags: party_affairs; antifascism
@@ -24,14 +24,22 @@ We must do something to protect the workers against these predations.
 
 @battle_2
 view-if: battle_visited_1 and rb_militancy > 0.2
+on-arrival: strife += 2
 
 Who should we consider attacking?
 
-- @sh: Stahlhelm
-- @sa: SA
+- @sh: Stahlhelm, far right monarchist paramilitary.
+- @sa: SA, far right rabid units of NSDAP.
+- @rfb: RFB, our main opponents on the Left.
+
+@rfb
+subtitle: This is certainly unnecessary.
+on-arrival: rfb_strength -= 30; rb_strength -= 30; kpd_relation -= 9; communist_coalition -= 1
+
+RFB, despite being on smaller side of paramilitaries, gave us good fight. This also seriously impacted our relationships.
 
 @sh
-on-arrival: sh_strength -= 50; rb_strength -= 30; dvp_relation -= 3; dnvp_relation -= 6
+on-arrival: sh_strength -= 50; rb_strength -= 30; dvp_relation -= 2; dnvp_relation -= 6
 
 Stahlhelm, unlike rabid SA counterpart, is not well armed organization and thus suffered more losses than we did.
 
@@ -80,6 +88,6 @@ By not fighting, the strength of the Reichsbanner atrophies. Pacifists in the pa
 choose-if: kpd_relation >= 45
 view-if: kpd_truce == 0
 unavailable-subtitle: The KPD is not interested.
-on-arrival: kpd_truce = 1; kpd_relation += 5; rfb_strength += 50; rb_strength += 50; sa_strength += 50;
+on-arrival: kpd_truce = 1; kpd_relation += 5; rfb_strength += 50; rb_strength += 50; sa_strength += 50; strife -= 1
 
 We have made at least a temporary truce with the KPD, so that our respective paramilitaries will stop fighting.
