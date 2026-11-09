@@ -377,6 +377,8 @@ Stahlhelm: [+ sh_control +]%
 
 SA: [+ sa_control +]%
 
+Street Violence: [+ strife: strife +]
+
 = Paramilitaries
 
 {!<span class="tooltip-text" title="The Reichsbanner Schwarz-Rot-Gold is a popular organization for defending democracy, mostly affiliated with the SPD.">Reichsbanner</span>!} Strength: [+ rb_strength_2 +] thousand
