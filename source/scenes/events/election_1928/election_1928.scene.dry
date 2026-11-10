@@ -367,10 +367,6 @@ if (Q.sapd_formed && Q.sapd_r) {
 }
 Q.partyData = Q.partyData.concat([
     { id: "spd",   name: "SPD",        seats: Q.spd_seats,   color: "#E3000F", show: true },
-    { id: "ddp",   name: Q.ddp_name,   seats: Q.ddp_seats,   color: "#DCCA4A", show: true },
-    { id: "z",     name: "Center",     seats: Q.z_seats,     color: "#111111", show: true },
-    { id: "bvp",   name: "BVP",        seats: Q.bvp_seats,   color: "#69A2BE", show: true },
-    { id: "dvp",   name: "DVP",        seats: Q.dvp_seats,   color: "#D5AC27", show: true },
 ]);
 
 if (Q.dbp_formed && Q.dbp_r) {
@@ -378,6 +374,10 @@ if (Q.dbp_formed && Q.dbp_r) {
 }
 
 Q.partyData = Q.partyData.concat([
+    { id: "ddp",   name: Q.ddp_name,   seats: Q.ddp_seats,   color: "#DCCA4A", show: true },
+    { id: "z",     name: "Center",     seats: Q.z_seats,     color: "#111111", show: true },
+    { id: "bvp",   name: "BVP",        seats: Q.bvp_seats,   color: "#69A2BE", show: true },
+    { id: "dvp",   name: "DVP",        seats: Q.dvp_seats,   color: "#D5AC27", show: true },
     { id: "other", name: "Other",      seats: Q.other_seats, color: "#a0a0a0", show: true },
     { id: "dnvp",  name: "DNVP",       seats: Q.dnvp_seats,  color: "#3F7BC1", show: true },
     { id: "nsdap", name: "NSDAP",      seats: Q.nsdap_seats, color: "#954B00", show: true },
@@ -407,6 +407,8 @@ go-to: coalition_menu
  
 {!<tr><td><div class="box" style='background-color:#8B0000'> </div> !}KPD: {!</td><td>!} [+ kpd_r_disp +]% {!</td><td>!} [+ str_change_kpd +] {!</td><td>!} [+ kpd_seats +] {!</td></tr>!}
  
+[? if dbp_formed: [+ dbp_row_html +] ?]
+
 {!<tr><td><div class="box" style='background-color:#DCCA4A'> </div> !} [+ ddp_name +]: {!</td><td>!} [+ ddp_r_disp +]% {!</td><td>!} [+ str_change_ddp +] {!</td><td>!} [+ ddp_seats +] {!</td></tr>!}
  
 {!<tr><td><div class="box" style='background-color:#000'> </div> !} Z: {!</td><td>!} [+ z_r_disp +]% {!</td><td>!} [+ str_change_z +] {!</td><td>!} [+ z_seats +] {!</td></tr>!}
@@ -414,8 +416,6 @@ go-to: coalition_menu
 {!<tr><td><div class="box" style='background-color:#69A2BE'> </div> !} BVP: {!</td><td>!} [+ bvp_r_disp +]% {!</td><td>!} [+ str_change_bvp +] {!</td><td>!} [+ bvp_seats +] {!</td></tr>!}
  
 {!<tr><td><div class="box" style='background-color:#D5AC27'> </div> !} DVP: {!</td><td>!} [+ dvp_r_disp +]% {!</td><td>!} [+ str_change_dvp +] {!</td><td>!} [+ dvp_seats +] {!</td></tr>!}
-
-[? if dbp_formed: [+ dbp_row_html +] ?]
  
 {!<tr><td><div class="box" style='background-color:#a0a0a0'> </div> !} Others: {!</td><td>!} [+ other_r_disp +]% {!</td><td>!} [+ str_change_other +] {!</td><td>!} [+ other_seats +] {!</td></tr>!}
  
@@ -430,16 +430,18 @@ Weimar Coalition (SPD + [? if srpd_formed: [+ srpd_name +] + ?]Z + [+ ddp_name +
  
 Grand Coalition (SPD + [? if srpd_formed: [+ srpd_name +] + ?]Z + BVP + [+ ddp_name +] + DVP): [+ grand_coalition +]% ([+ grand_seats +] seats)
  
-Bourgeois Coalition (Z + BVP + [+ ddp_name +] + DVP + Others): [+ bourgeois_coalition +]% ([+ bourgeois_seats +] seats)
+Bourgeois Coalition (Z + BVP + [+ ddp_name +] + DVP[? if dbp_formed: + [+ dbp_name +] ?] + Others): [+ bourgeois_coalition +]% ([+ bourgeois_seats +] seats)
  
-Right-wing Coalition (Z + BVP + DVP + Others + DNVP): [+ right_coalition +]% ([+ right_seats +] seats)
+Right-wing Coalition (Z + BVP + DVP[? if dbp_formed: + [+ dbp_name +] ?] + Others + DNVP): [+ right_coalition +]% ([+ right_seats +] seats)
+
+[? if dbp_formed: Center-Right Coalition (Z + [+ ddp_name +] + DVP + [+ dbp_name +] + Others + DNVP + BVP): [+ center_right_coalition +]% ([+ center_right_seats +] seats) ?]
  
 [? if srpd_formed: Republican Concentration ([+ srpd_name +] + Z + BVP + [+ ddp_name +][? if not dvp_rightist: + DVP ?]): [+ republican_concentration +]% ([+ republican_concentration_seats +] seats) ?]
  
 [? if nazi_urgency <= 1 and nsdap_r >= 15 : The rapid rise in NSDAP votes is extremely worrying. Many had believed that the party was moribund; now, some of us consider it to be the greatest threat to democracy in Germany. ?]
  
 [? if anti_democratic_majority >= 1 : Together, the anti-democratic KPD, DNVP, and NSDAP have a majority in the Reichstag. A stable governing majority will be almost impossible. ?]
- 
+
 There are some potential coalition arrangements.
  
 @coalition_menu
