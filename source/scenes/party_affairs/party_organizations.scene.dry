@@ -59,7 +59,7 @@ It is not enough for the SPD to solely be a political party. The Worker Singer's
 choose-if: resources > 0
 unavailable-subtitle: Not enough resources.
 subtitle: -1 resources
-on-arrival: resources -= 1; rb_strength += 50; rb_militancy += 0.02; jung_side = left_strength + neorevisionist_strength; jung_side += socialpatriot_strength if social_patriotism; jung_side += ethical_strength if ethical_socialism; saj_side = reformist_strength + center_strength
+on-arrival: resources -= 1; pro_republic += 1; rb_strength += 50; rb_militancy += 0.02; jung_side = left_strength + neorevisionist_strength; jung_side += socialpatriot_strength if social_patriotism; jung_side += ethical_strength if ethical_socialism; saj_side = reformist_strength + center_strength
 
 We are drawing in a new generation of members, and many of them also join the Reichsbanner, bringing fresh energy and militancy to its ranks.
 
