@@ -388,8 +388,10 @@ function applyYearlyShifts() {
             if (Q.dbp_empowered) Q.rural_dbp += 2/12;
             if (Q.dbp_empowered) Q.rural_other -= 2/12;
         }
-        if (Q.dbp_empowered) Q.rural_dbp += 2/12;
+        if (Q.dbp_empowered) Q.rural_dbp += 4/12;
         if (Q.dbp_empowered) Q.old_middle_dbp += 1/12;
+        if (Q.dbp_empowered) Q.rural_ddp -= 2/12;
+        Q.rural_dbp += 2;
         Q.workers_z -= 0.5/12;
         Q.workers_nsdap -= 3/12;
         Q.catholics_nsdap -= 3/12;
