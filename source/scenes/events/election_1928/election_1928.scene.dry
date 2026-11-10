@@ -115,6 +115,9 @@ if (Q.kpd_r >= Q.spd_r && Q.kpd_r >= Q.nsdap_r) {
  
 var srpd_share = (Q.srpd_formed && Q.srpd_r) ? Q.srpd_r : 0;
 var srpd_seat_share = (Q.srpd_formed && Q.srpd_seats) ? Q.srpd_seats : 0;
+
+var dbp_share = (Q.dbp_formed && Q.dbp_r) ? Q.dbp_r : 0;
+var dbp_seat_share = (Q.dbp_formed && Q.dbp_seats) ? Q.dbp_seats : 0;
  
 // ============================================================================
 // COALITIONS (vote share)
@@ -123,9 +126,9 @@ Q.weimar_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r;
 Q.grand_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r + Q.dvp_r + Q.bvp_r;
 Q.neo_weimar_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
 Q.progressive_coalition = Q.spd_r + srpd_share + Q.kpd_r + Q.ddp_r + Q.sapd_r;
-Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
-Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r;
-Q.right_coalition = Q.z_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r;
+Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r + dbp_share;
+Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r + dbp_share;
+Q.right_coalition = Q.z_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r + dbp_share;
 Q.far_right_coalition = Q.dnvp_r + Q.nsdap_r;
 Q.left_coalition = Q.spd_r + Q.kpd_r + Q.sapd_r;
 // this is an absurd concept lol
@@ -145,13 +148,13 @@ if (Q.kpd_relation >= 30) {
 // ============================================================================
 // COALITIONS (seats). Use these for actual majority checks.
 // ============================================================================
-Q.weimar_seats          = Q.spd_seats + srpd_seat_share + Q.ddp_seats + Q.z_seats;
-Q.grand_seats           = Q.weimar_seats + Q.dvp_seats + Q.bvp_seats;
+Q.weimar_seats         = Q.spd_seats + srpd_seat_share + Q.ddp_seats + Q.z_seats;
+Q.grand_seats          = Q.weimar_seats + Q.dvp_seats + Q.bvp_seats;
 Q.neo_weimar_seats      = Q.grand_seats + Q.other_seats;
 Q.progressive_seats     = Q.spd_seats + srpd_seat_share + Q.kpd_seats + Q.ddp_seats + Q.sapd_seats;
-Q.bourgeois_seats       = Q.ddp_seats + Q.z_seats + Q.dvp_seats + Q.other_seats + Q.bvp_seats;
+Q.bourgeois_seats       = Q.ddp_seats + Q.z_seats + Q.dvp_seats + Q.other_seats + Q.bvp_seats + dbp_seat_share;
 Q.center_right_seats    = Q.bourgeois_seats + Q.dnvp_seats;
-Q.right_seats           = Q.z_seats + Q.dvp_seats + Q.other_seats + Q.dnvp_seats + Q.bvp_seats;
+Q.right_seats           = Q.z_seats + Q.dvp_seats + Q.other_seats + Q.dnvp_seats + Q.bvp_seats + dbp_seat_share;
 Q.far_right_seats       = Q.dnvp_seats + Q.nsdap_seats;
 Q.left_seats            = Q.spd_seats + Q.kpd_seats + Q.sapd_seats;
 Q.popular_front_seats   = Q.spd_seats + Q.kpd_seats + Q.z_seats + Q.ddp_seats + Q.sapd_seats;
@@ -235,6 +238,12 @@ if (Q.srpd_formed && Q.srpd_r) {
     Q.srpd_row_html = '<tr><td><div class="box" style="background-color:' + Q.srpd_color + '"> </div> ' +
         (Q.srpd_name || "SRPD") + ':</td><td>' + Q.srpd_r_disp + '%</td><td>' + Q.str_change_srpd + '</td><td>' + Q.srpd_seats + '</td></tr>';
 }
+
+Q.dbp_row_html = "";
+if (Q.dbp_formed && Q.dbp_r) {
+    Q.dbp_row_html = '<tr><td><div class="box" style="background-color:#1fe955"> </div> ' +
+        (Q.dbp_name || "DBP") + ':</td><td>' + Q.dbp_r_disp + '%</td><td>' + Q.str_change_dbp + '</td><td>' + Q.dbp_seats + '</td></tr>';
+}
  
 var election_result = {'date': new Date(Q.year, Q.month - 1)};
 for (var party of Q.parties) {
@@ -291,6 +300,18 @@ data = data.concat([
         "name": "DVP",
         "seats": Q.dvp_seats,
     },
+]);
+
+if (Q.dbp_formed && Q.dbp_r) {
+    data.push({
+        "id": "dbp",
+        "legend": Q.dbp_name || "DBP",
+        "name": Q.dbp_name || "DBP",
+        "seats": Q.dbp_seats,
+    });
+}
+
+data = data.concat([
     {
         "id": "other",
         "legend": "Other",
@@ -350,6 +371,13 @@ Q.partyData = Q.partyData.concat([
     { id: "z",     name: "Center",     seats: Q.z_seats,     color: "#111111", show: true },
     { id: "bvp",   name: "BVP",        seats: Q.bvp_seats,   color: "#69A2BE", show: true },
     { id: "dvp",   name: "DVP",        seats: Q.dvp_seats,   color: "#D5AC27", show: true },
+]);
+
+if (Q.dbp_formed && Q.dbp_r) {
+    Q.partyData.push({ id: "dbp", name: Q.dbp_name || "DBP", seats: Q.dbp_seats, color: "#1fe955", show: true });
+}
+
+Q.partyData = Q.partyData.concat([
     { id: "other", name: "Other",      seats: Q.other_seats, color: "#a0a0a0", show: true },
     { id: "dnvp",  name: "DNVP",       seats: Q.dnvp_seats,  color: "#3F7BC1", show: true },
     { id: "nsdap", name: "NSDAP",      seats: Q.nsdap_seats, color: "#954B00", show: true },
@@ -386,6 +414,8 @@ go-to: coalition_menu
 {!<tr><td><div class="box" style='background-color:#69A2BE'> </div> !} BVP: {!</td><td>!} [+ bvp_r_disp +]% {!</td><td>!} [+ str_change_bvp +] {!</td><td>!} [+ bvp_seats +] {!</td></tr>!}
  
 {!<tr><td><div class="box" style='background-color:#D5AC27'> </div> !} DVP: {!</td><td>!} [+ dvp_r_disp +]% {!</td><td>!} [+ str_change_dvp +] {!</td><td>!} [+ dvp_seats +] {!</td></tr>!}
+
+[? if dbp_formed: [+ dbp_row_html +] ?]
  
 {!<tr><td><div class="box" style='background-color:#a0a0a0'> </div> !} Others: {!</td><td>!} [+ other_r_disp +]% {!</td><td>!} [+ str_change_other +] {!</td><td>!} [+ other_seats +] {!</td></tr>!}
  
