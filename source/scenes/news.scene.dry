@@ -4,12 +4,11 @@ new-page: true
 
 = News 
 
+[? if year = 1928 and month = 2: With recent attempt to unite agricultural organizations across the Germany to give farmers representation and shake the monopoly of RLB, Anton Fehr of Bavarian Farmers appealed to DBS / Deutsche Bauernschaft / German Peasentry, umbrella organization representing peasants of all Germany. Speaking at a demonstration of the Silesian Peasants’ League (Schlesischer Bauernbund) in Breslau on 12 February 1928, Fehr announced that the BBB would present a full national slate of candidates under the name German Peasants’ Party (Deutsche Bauernpartei or DBP) in the Reichstag elections. These plans soon faced the wall of DDP's influence within DBS, who are attempting to undercut Fehr's plans to unite the farmers and therefore attack both liberals of DDP and national right of DNVP and RLB. ?]
 
+[? if year = 1928 and month = 2 and dbp_flavor = 1: With DDP's influence diminished, Fehr was able to force through the proposal through backdeals and manipulation, to have German Peasantry back his plans. With DBP / German Peasants' Party absorbing much of peasant organizations, including own Bavarian and Silesian groups, DBP united much of farmers outside of East Elbia, enough to run national candidates across the Reich. DDP voiced their concern over formation of new force and DNVP / RLB issued the danger of radical peasantry's populism, tied to Rural People's Movement. ?]
 
-
-
-
-
+[? if year = 1928 and month = 2 and dbp_flavor = 0: And soon, with German Peasantry sidelining Fehr's plans, Fehr was infuriated and reconstituted Bavarian Peasants as German Peasants' Party to run national slate of candidates across the Germany, but mostly in Bavaria and Silesia. ?]
 
 
 
