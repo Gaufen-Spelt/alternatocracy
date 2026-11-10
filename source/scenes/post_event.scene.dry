@@ -636,7 +636,7 @@ function applyEvents() {
             Q.parties.push('dbp');
 
             Q.dbp_name = "DBP";
-            Q.dbp_leader = "Fehr";               
+            Q.dbp_party_leader = "Fehr";               
             Q.dbp_ideology = "Liberal Agrarianismus";
 
             ['workers', 'unemployed', 'rural', 'catholics', 'new_middle', 'old_middle'].forEach(group => {
