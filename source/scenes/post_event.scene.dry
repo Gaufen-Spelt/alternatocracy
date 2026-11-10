@@ -611,42 +611,42 @@ function applyNsdapDecay() {
 }
 
 function applyEvents() {
-
     if (Q.year == 1928 && Q.month == 2 && Q.dbp_formed != 1) {
-    Q.dbp_points = 
-        (Q.rural_ddp <= 4.5) + 
-        (Q.landvolkbewegung == 1) + 
-        (Q.rural_dnvp <= 46.7) + 
-        (Q.tariffs < 0) + 
-        (Q.pro_republic >= 60);
+        Q.dbp_points = 
+            (Q.rural_ddp <= 4.5) + 
+            (Q.landvolkbewegung == 1) + 
+            (Q.rural_dnvp <= 46.7) + 
+            (Q.tariffs < 0) + 
+            (Q.pro_republic >= 60);
+            
         Q.dbp_flavor = 0;
+        Q.dbp_formed = 0;
 
-    if (Q.dbp_points >= 3) {
-        Q.dbp_formed = 1;
-        Q.dbp_flavor = 1;
+        if (Q.dbp_points >= 3) {
+            Q.dbp_formed = 1;
+            Q.dbp_flavor = 1;
+            Q.parties.push('dbp');
 
-        Q.dbp_formed = 1;
-        Q.parties.push('dbp');
+            Q.dbp_name = "DBP";
+            Q.dbp_leader = "Fehr";               
+            Q.dbp_ideology = "Liberal Agrarianismus";
 
-        Q.dbp_name = "DBP";
-        Q.dbp_leader = Fehr;
-        Q.dbp_ideology = Liberal Agrarianism;
+            ['workers', 'unemployed', 'rural', 'catholics', 'new_middle', 'old_middle'].forEach(group => {
+                Q[group + '_dbp'] = Q[group + '_dbp'] || 0;
+            });
 
-        ['workers', 'unemployed', 'rural', 'catholics', 'new_middle', 'old_middle'].forEach(group => {
-            Q[group + '_dbp'] = Q[group + '_dbp'] || 0;
-        });
+            Q.workers_dbp += 1;
+            Q.new_middle_dbp += 3;
+            Q.old_middle_dbp += 1;
+            Q.rural_dbp += 7;
+            Q.unemployed_dbp += 1;
+            Q.catholics_dbp += 1;
 
-        Q.workers_dbp += 1;
-        Q.new_middle_dbp += 3;
-        Q.old_middle_dbp += 1;
-        Q.rural_dbp += 7;
-        Q.unemployed_dbp += 1;
-        Q.catholics_dbp += 1;
-
-        Q.dbp_r = Q.old_dbp_r = 0;
-        Q.election_records.concat(Q.party_support_records).forEach(r => r['dbp'] = 0);
+            Q.dbp_r = Q.old_dbp_r = 0;
+            
+            Q.election_records.concat(Q.party_support_records).forEach(r => r['dbp'] = 0);
+        }
     }
-  }
 }
 
 
