@@ -28,6 +28,9 @@ Q.month = 10;
 Q.weeks = 0;
 // how many actions have been taken this month?
 Q.month_actions = 0;
+Q.tariffs = -1;
+
+// Market was open prior. Maybe german right can raise tariffs a bit?
 
 Q.unemployed_dues = 1;
 Q.rural_dues = 1;
@@ -547,7 +550,6 @@ Q.education_science = 0;
 // Tax rates relative to 1928 baseline
 Q.lower_tax_rates = 0;
 Q.upper_tax_rates = 0;
-Q.tariffs = 0;
 
 Q.electoral_threshold = 0;
 

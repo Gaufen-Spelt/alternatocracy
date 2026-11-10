@@ -276,6 +276,18 @@ data = data.concat([
         "name": "SPD",
         "seats": Q.spd_seats,
     },
+]);
+
+if (Q.dbp_formed && Q.dbp_r) {
+    data.push({
+        "id": "dbp",
+        "legend": Q.dbp_name || "DBP",
+        "name": Q.dbp_name || "DBP",
+        "seats": Q.dbp_seats,
+    });
+}
+
+data = data.concat([
     {
         "id": "ddp",
         "legend": Q.ddp_name,
@@ -300,18 +312,6 @@ data = data.concat([
         "name": "DVP",
         "seats": Q.dvp_seats,
     },
-]);
-
-if (Q.dbp_formed && Q.dbp_r) {
-    data.push({
-        "id": "dbp",
-        "legend": Q.dbp_name || "DBP",
-        "name": Q.dbp_name || "DBP",
-        "seats": Q.dbp_seats,
-    });
-}
-
-data = data.concat([
     {
         "id": "other",
         "legend": "Other",

@@ -624,7 +624,6 @@ function applyEvents() {
             (Q.pro_republic >= 60);
             
         Q.dbp_flavor = 0;
-        Q.dbp_formed = 0;
 
         if (Q.dbp_points >= 3) {
             Q.dbp_empowered = 1;
@@ -637,7 +636,7 @@ function applyEvents() {
 
             Q.dbp_name = "DBP";
             Q.dbp_party_leader = "Fehr";               
-            Q.dbp_ideology = "Liberal Agrarianismus";
+            Q.dbp_ideology = "Liberal Agrarianism";
 
             ['workers', 'unemployed', 'rural', 'catholics', 'new_middle', 'old_middle'].forEach(group => {
                 Q[group + '_dbp'] = Q[group + '_dbp'] || 0;
