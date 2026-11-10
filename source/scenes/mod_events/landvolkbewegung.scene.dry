@@ -4,5 +4,6 @@ new-page: true
 tags: event
 view-if: year = 1928 and month = 1 and weeks >= 2
 on-arrival: landvolkbewegung = 1
+max-visits: 1
 
 Skibidi revolt happened. Test scene for DBP trigger.
