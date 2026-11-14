@@ -58,24 +58,27 @@ window.ideologyInfo = {
 window.colorizePartyNames = function(text) {
     var parties = Object.keys(window.partyColors);
     var ideologies = Object.keys(window.ideologyInfo);
-    
-    // Sort longest-first to prevent substring collision issues
+
     parties.sort(function(a, b) { return b.length - a.length; });
     ideologies.sort(function(a, b) { return b.length - a.length; });
 
-    parties.forEach(function(party) {
-        var color = window.partyColors[party];
-        var regex = new RegExp('\\b(' + party.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b', 'g');
-        text = text.replace(regex, function(match) {
-            return '<span class="party-highlight" style="color:' + color +
-                   ';font-weight:bold;cursor:pointer;" ' +
-                   'onclick="window.showPartyTooltip(event, \'' + party + '\')">' +
-                   match + '</span>';
-        });
+    var esc = function(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); };
+
+    // Single pass over all party names (longest first)
+    var partyRegex = new RegExp('\\b(' + parties.map(esc).join('|') + ')\\b', 'g');
+    text = text.replace(partyRegex, function(match) {
+        var color = window.partyColors[match];
+        return '<span class="party-highlight" style="color:' + color +
+               ';font-weight:bold;cursor:pointer;" ' +
+               'onclick="window.showPartyTooltip(event, \'' + match + '\')">' +
+               '<img src="img/logo/' + encodeURIComponent(match) + '.jpg" alt="" ' +
+               'style="height:1em;width:auto;vertical-align:-0.15em;margin-right:0.25em;" ' +
+               'onerror="this.style.display=\'none\'">' +
+               match + '</span>';
     });
 
     ideologies.forEach(function(ideology) {
-        var regex = new RegExp('\\b(' + ideology.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b', 'g');
+        var regex = new RegExp('\\b(' + esc(ideology) + ')\\b', 'g');
         text = text.replace(regex, function(match) {
             return '<span class="ideology-highlight" style="color:#2E8B57;font-weight:bold;cursor:pointer;border-bottom: 1px dotted #2E8B57;" ' +
                    'onclick="window.showIdeologyTooltip(event, \'' + ideology + '\')">' +
