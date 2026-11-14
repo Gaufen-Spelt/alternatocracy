@@ -653,7 +653,21 @@ function buildClassSection(groupList) {
     return out;
 }
 
-Q.classes_breakdown_display = buildClassSection(Q.classes.concat('unemployed'));
+function buildUnemployedSection() {
+    var out = "unemployed (" + r1(Q.unemployed) + "% of the workforce):<br>" + breakdownFor('unemployed') + "<br>";
+    out += "<b>Who the unemployed are</b> (share of all unemployed):<br>";
+    for (var c of Q.classes) {
+        var subs = Q.subclasses[c];
+        if (!subs) { out += "- " + c + ": " + Q[c + '_unemp_share'] + "%<br>"; continue; }
+        out += "- " + c + ": " + Q[c + '_unemp_share'] + "%<br>";
+        for (var s of subs) {
+            out += "&nbsp;&nbsp;- " + s.id + ": " + Q[s.id + '_unemp_share'] + "% (" + Q[s.id + '_unemp_pct'] + "% of the group)<br>";
+        }
+    }
+    return out + "<br>";
+}
+
+Q.classes_breakdown_display = buildUnemployedSection() + buildClassSection(Q.classes);
 
 !}
 
