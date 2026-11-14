@@ -206,7 +206,23 @@ function applyUnemploymentExposure(leaves) {
         e += l.pop * l.exp; p += l.pop;
     }
     var norm = e > 0 ? p / e : 1;
-    for (var l of leaves) l.u = Math.min(0.95, Math.max(0, Q.unemployed / 100 * l.exp * norm));
+
+    var total = 0, cls = {};
+    for (var l of leaves) {
+        l.u = Math.min(0.95, Math.max(0, Q.unemployed / 100 * l.exp * norm));
+        l.n = l.pop * l.u;                       // unemployed people from this group
+        total += l.n;
+        cls[l.parent] = cls[l.parent] || { n: 0, p: 0 };
+        cls[l.parent].n += l.n; cls[l.parent].p += l.pop;
+        Q[l.id + '_unemp_pct'] = Math.round(l.u * 1000) / 10;     // % of the group unemployed
+    }
+    for (var l of leaves) {
+        Q[l.id + '_unemp_share'] = total > 0 ? Math.round(l.n / total * 1000) / 10 : 0;  // % of all unemployed
+    }
+    for (var c in cls) {
+        Q[c + '_unemp_pct'] = cls[c].p > 0 ? Math.round(cls[c].n / cls[c].p * 1000) / 10 : 0;
+        Q[c + '_unemp_share'] = total > 0 ? Math.round(cls[c].n / total * 1000) / 10 : 0;
+    }
 }
 
 function syncSubclasses() {
