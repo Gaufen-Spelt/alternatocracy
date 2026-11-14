@@ -329,6 +329,7 @@ Q.unemployment_exposure = {
 };
 Q.unemployment_flat = 0;   // 1 = everyone gets exactly Q.unemployed %
 Q.sub_sync = {};
+Q.subclass_bias = {};
 
 Q.parties = ['kpd', 'spd', 'ddp', 'z', 'bvp', 'dvp', 'other', 'dnvp', 'nsdap'];
 Q.sapd_formed = 0;
