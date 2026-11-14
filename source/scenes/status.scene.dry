@@ -614,26 +614,46 @@ for (var i = 0; i < Q.parties.length; i++) {
     }
 }
 
-function buildClassSection(groupList) {
-    var out = "";
-    for (var g = 0; g < groupList.length; g++) {
-        var group = groupList[g];
-        var breakdown = "";
-        for (var i = 0; i < Q.parties.length; i++) {
-            var p = Q.parties[i];
-            var val = Q[group + '_' + p + '_display'];
-            if (val !== undefined && val > 1) {
-                breakdown += fmtLine(Q.party_labels[p], val);
-            }
-        }
-        Q[group + '_breakdown'] = breakdown;
+function r1(x) { return Math.round(x * 10) / 10; }
 
-        out += group + " (" + Q[group] + "):<br>" + breakdown + "<br><br>";
+function breakdownFor(id) {
+    var out = "";
+    for (var i = 0; i < Q.parties.length; i++) {
+        var p = Q.parties[i];
+        var val = Q[id + '_' + p + '_display'];
+        if (val !== undefined && val > 1) out += fmtLine(Q.party_labels[p], val);
     }
     return out;
 }
 
-Q.classes_breakdown_display = buildClassSection(Q.classes);
+function buildClassSection(groupList) {
+    var out = "";
+    for (var g = 0; g < groupList.length; g++) {
+        var group = groupList[g];
+        var breakdown = breakdownFor(group);
+        Q[group + '_breakdown'] = breakdown;
+
+        var head = (group === 'unemployed')
+            ? group + " (" + r1(Q.unemployed) + "% of the workforce)"
+            : group + " (" + r1(Q[group]) + "% of the population)";
+        out += head + ":<br>" + breakdown + "<br>";
+
+        var subs = Q.subclasses && Q.subclasses[group];
+        if (subs) {
+            for (var s = 0; s < subs.length; s++) {
+                var sub = subs[s];
+                var pop = (group === 'middle') ? Q[sub.id] : Q[group] * sub.share;
+                var sb = breakdownFor(sub.id);
+                Q[sub.id + '_breakdown'] = sb;
+                out += "<b>" + sub.id + "</b> (" + r1(pop) + "%):<br>" + sb + "<br>";
+            }
+        }
+        out += "<br>";
+    }
+    return out;
+}
+
+Q.classes_breakdown_display = buildClassSection(Q.classes.concat('unemployed'));
 
 !}
 
