@@ -24,6 +24,14 @@
 }
 
 
+.party-icon {
+  height: 1em;
+  width: auto;
+  max-height: none;
+  vertical-align: -0.15em;
+  margin-right: 0.25em;
+}
+
 
 
 /* =====================================================================
