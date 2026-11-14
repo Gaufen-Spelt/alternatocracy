@@ -184,6 +184,57 @@ function calcSeverity(Q) {
     return Math.min(severity, 1.75);
 }
 
+
+
+function leafList() {
+    var out = [], mid = Q.old_middle + Q.new_middle;
+    for (var c of Q.classes) {
+        var subs = Q.subclasses[c];
+        if (!subs) { out.push({id:c, parent:c, pop:Q[c]}); continue; }
+        for (var s of subs) {
+            var w = (c === 'middle') ? (mid > 0 ? Q[s.id] / mid : 0) : s.share;
+            out.push({id:s.id, parent:c, pop:Q[c] * w});
+        }
+    }
+    return out;
+}
+
+function applyUnemploymentExposure(leaves) {
+    var tab = Q.unemployment_exposure || {}, e = 0, p = 0;
+    for (var l of leaves) {
+        l.exp = Q.unemployment_flat ? 1 : (tab[l.id] ?? 1);
+        e += l.pop * l.exp; p += l.pop;
+    }
+    var norm = e > 0 ? p / e : 1;
+    for (var l of leaves) l.u = Math.min(0.95, Math.max(0, Q.unemployed / 100 * l.exp * norm));
+}
+
+function syncSubclasses() {
+    Q.sub_sync = Q.sub_sync || {};
+    var mid = Q.old_middle + Q.new_middle;
+    for (var c in Q.subclasses) {
+        for (var party of Q.parties) {
+            var pk = c + '_' + party;
+            var delta = (Q.sub_sync[pk] === undefined) ? 0 : (Q[pk] || 0) - Q.sub_sync[pk];
+            var avg = 0;
+            for (var s of Q.subclasses[c]) {
+                var sk = s.id + '_' + party;
+                if (Q[sk] === undefined) Q[sk] = (Q[pk] || 0) + ((Q.subclass_bias[s.id] || {})[party] || 0);
+                else Q[sk] += delta;
+                Q[sk] = Math.max(0, Q[sk]);
+                avg += ((c === 'middle') ? (mid > 0 ? Q[s.id] / mid : 0) : s.share) * Q[sk];
+            }
+            Q[pk] = avg;
+            Q.sub_sync[pk] = avg;
+        }
+    }
+}
+
+
+
+
+
+
 function advanceDate() {
     Q.month_actions_2 = 1;
     Q.time += 1;
@@ -586,13 +637,12 @@ function applyNsdapDecay() {
     const target_reabsorption = {
         workers:    { spd: 0.50, kpd: 0.20, other: 0.30 },
         unemployed: { spd: 0.40, kpd: 0.40, other: 0.20 },
-        new_middle: { ddp: 0.40, dvp: 0.30, spd: 0.30 },
-        old_middle: { dvp: 0.40, other: 0.40, dnvp: 0.20 },
+        middle:     { ddp: 0.232, dvp: 0.342, spd: 0.174, other: 0.168, dnvp: 0.084 }, // old/new weighted 42/58
         rural:      { dnvp: 0.40, other: 0.40, spd: 0.20 },
         catholics:  { z: 0.80, spd: 0.20 }
     };
 
-    for (let c of Q.classes) {
+    for (let c of Q.classes.concat('unemployed')) {
         let nsdap_key = c + '_nsdap';
         let current_nsdap = Q[nsdap_key] || 0;
         if (current_nsdap <= 5) continue;
@@ -703,29 +753,49 @@ var decimal_factor = Math.pow(10, Q.use_decimals || 0);
 
 if (Q.unemployed < 1) Q.unemployed = 1;
 
-// Per-class party shares
-for (var c of Q.classes) {
-    var class_votes = 0;
+// Subclasses -> class
+Q.middle = Q.old_middle + Q.new_middle;
+syncSubclasses();
+var leaves = leafList();
+applyUnemploymentExposure(leaves);
+var sfx = Q.old_demographics ? '' : '_normalized';
+
+// Per-subclass (and unemployed bloc) shares
+for (var b of leaves.map(l => l.id).concat(['unemployed'])) {
+    var bloc_votes = 0;
     for (var party of Q.parties) {
-        var key = c + '_' + party;
+        var key = b + '_' + party;
         Q[key] = Math.max(0, Q[key] || 0);
-        class_votes += Q[key];
+        bloc_votes += Q[key];
     }
     for (var party of Q.parties) {
-        var key = c + '_' + party;
-        var share = class_votes > 0 ? 100 * Q[key] / class_votes : 0;
+        var key = b + '_' + party;
+        var share = bloc_votes > 0 ? 100 * Q[key] / bloc_votes : 0;
         Q[key + '_normalized'] = share;
         Q[key + '_display'] = Math.round(decimal_factor * share) / decimal_factor;
     }
 }
 
-// National party support
+// Class shares = employed part of its subclasses
+for (var c of Q.classes) {
+    var parts = leaves.filter(l => l.parent === c), emp = 0;
+    for (var l of parts) emp += l.pop * (1 - l.u);
+    for (var party of Q.parties) {
+        var share = 0;
+        for (var l of parts) share += l.pop * (1 - l.u) * Q[l.id + '_' + party + '_normalized'];
+        share = emp > 0 ? share / emp : 0;
+        Q[c + '_' + party + '_normalized'] = share;
+        Q[c + '_' + party + '_display'] = Math.round(decimal_factor * share) / decimal_factor;
+    }
+}
+
+// National support: employed share votes with its subclass, unemployed share with the unemployed bloc
 var total_support = 0;
 for (var party of Q.parties) {
     var party_support = 0;
-    for (var c of Q.classes) {
-        var k = c + '_' + party + (Q.old_demographics ? '' : '_normalized');
-        party_support += Q[c] * Q[k];
+    for (var l of leaves) {
+        party_support += l.pop * ((1 - l.u) * Q[l.id + '_' + party + sfx]
+                                + l.u * Q['unemployed_' + party + sfx]);
     }
     Q[party + '_support'] = party_support;
     total_support += party_support;
@@ -782,7 +852,10 @@ function normalizeKeys(keys, targetSum) {
     }
 }
 
+Q.middle = Q.old_middle + Q.new_middle;
 normalizeKeys(Q.classes, 100);
+var mid_sum = Q.old_middle + Q.new_middle;
+if (mid_sum > 0) { var mk = Q.middle / mid_sum; Q.old_middle *= mk; Q.new_middle *= mk; }
 normalizeKeys(['pro_republic', 'nationalism', 'socialism'], 150);
 
 
@@ -1194,8 +1267,7 @@ Q.GLOBAL_PARTY_ACTIONS = {
             var focusLabel = {
                 workers: 'the industrial working class',
                 unemployed: 'the unemployed',
-                old_middle: 'shopkeepers and artisans',
-                new_middle: 'white-collar workers and civil servants',
+                middle: 'white-collar workers, civil servants and shopkeepers',
                 rural: 'the countryside',
                 catholics: 'the catholics',
             }[focusClass] || 'the electorate';
