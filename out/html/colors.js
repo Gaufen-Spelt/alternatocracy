@@ -71,7 +71,7 @@ window.colorizePartyNames = function(text) {
         return '<span class="party-highlight" style="color:' + color +
                ';font-weight:bold;cursor:pointer;" ' +
                'onclick="window.showPartyTooltip(event, \'' + match + '\')">' +
-               '<img src="img/logo/' + encodeURIComponent(match) + '.jpg" alt="" ' +
+               '<img src="img/logo/' + encodeURIComponent(match.toLowerCase()) + '.jpg" alt="" ' +
                'style="height:1em;width:auto;vertical-align:-0.15em;margin-right:0.25em;" ' +
                'onerror="this.style.display=\'none\'">' +
                match + '</span>';
