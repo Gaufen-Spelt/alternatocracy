@@ -287,24 +287,22 @@ Q.workers = 48; // industry and trade
 Q.old_middle = 13; // "old mittelstand"
 // 16.4 trade & commerce, 6.6 public and private services, 4.4 domestic help
 Q.new_middle = 18; // "new mittelstand"
-Q.rural = 25; // agriculture and forestry employment... but many of those are proletarians so...
-// source: https://surface.syr.edu/cgi/viewcontent.cgi?filename=3&article=1016&context=books&type=additional page 43, table 3.3
-Q.unemployed = 8.6;
+Q.middle = 31;     // derived each month: old_middle + new_middle
+Q.rural = 25;      // agriculture and forestry employment
 Q.catholics = 20;
 
+// source: https://surface.syr.edu/cgi/viewcontent.cgi?filename=3&article=1016&context=books&type=additional page 43, table 3.3
+// Unemployed is no longer a class: this is the unemployment rate in % of the workforce.
+Q.unemployed = 8.6;
 // unemployment: 1929 - 13.3, 1930 - 22.7, 1931 - 34.3, 1932 - 43.8 (same source as above)
 
-// income for industrial workers in reichsmarks/year - 1928 = 1600 Reichsmarks/year; 1931 = 1440 Reichsmarks/year; 1933 = 1138 Reichsmarks/year - source: https://babel.hathitrust.org/cgi/pt?id=uiug.30112104147985&seq=50
+// income for industrial workers in reichsmarks/year - 1928 = 1600; 1931 = 1440; 1933 = 1138 - source: https://babel.hathitrust.org/cgi/pt?id=uiug.30112104147985&seq=50
 Q.income = 1600;
-// what about incomes for different classes? rural workers? middle-class workers?
 
-// inflation (in %; 1928: 2.9; 1929: 0; 1930: -5%; 1931: -10%; 1932: -10%) - source: https://en.wikipedia.org/wiki/File:BSPDRWeltkriseEngl.PNG, derived from https://www.destatis.de/DE/Methoden/WISTA-Wirtschaft-und-Statistik/2009/03/rezession-betrachtung-032009.pdf?__blob=publicationFile
+// inflation (in %; 1928: 2.9; 1929: 0; 1930: -5%; 1931: -10%; 1932: -10%) - source: https://en.wikipedia.org/wiki/File:BSPDRWeltkriseEngl.PNG
 Q.inflation = 2.9;
-
-// economic growth - same source as above, Table 2 (preisbereinigt) - this is also the source for the yearly changes in the great depression.
+// economic growth - same source as above, Table 2 (preisbereinigt)
 Q.economic_growth = 4.4;
-
-// economic expansion timer
 Q.economic_expansion = 0;
 
 // Quality of life (as % of 1928 baseline)
@@ -314,25 +312,63 @@ Q.unemployed_qol = 100;
 Q.old_middle_qol = 100;
 Q.new_middle_qol = 100;
 
-Q.classes = ['workers', 'unemployed', 'catholics', 'new_middle', 'rural', 'old_middle'];
-Q.parties = ['kpd', 'spd', 'ddp', 'z', 'bvp', 'dvp', 'other', 'dnvp', 'nsdap'];
+Q.classes = ['workers', 'catholics', 'middle', 'rural'];
 
-// TODO: add 'sapd' later on
+// share = fraction of the parent class (middle is derived from old_middle / new_middle)
+Q.subclasses = {
+  workers: [{id:'workers_prime', share:0.4}, {id:'workers_youth', share:0.3}, {id:'workers_pensioners', share:0.3}],
+  rural:   [{id:'rural_agri', share:0.3}, {id:'rural_farmers', share:0.6}, {id:'rural_landowners', share:0.1}],
+  middle:  [{id:'old_middle'}, {id:'new_middle'}]
+};
+
+// How exposed each group is to unemployment (relative to Q.unemployed, auto-normalized to average 1)
+Q.unemployment_exposure = {
+  workers_prime:1.3, workers_youth:1.6, workers_pensioners:0,
+  rural_agri:1.8, rural_farmers:0.7, rural_landowners:0.4,
+  old_middle:0.6, new_middle:0.5, catholics:1
+};
+Q.unemployment_flat = 0;   // 1 = everyone gets exactly Q.unemployed %
+Q.sub_sync = {};
+
+Q.parties = ['kpd', 'spd', 'ddp', 'z', 'bvp', 'dvp', 'other', 'dnvp', 'nsdap'];
 Q.sapd_formed = 0;
 
-// Estimated Support for Party by Social Group (Mid-1927 Baseline)
-// Values reflect state/local election trends & historical ecological estimates between Dec 1924 and May 1928
+// Estimated support by group (mid-1927 baseline)
 
-Q.workers_spd = 47;
-Q.workers_kpd = 22;
-Q.workers_bvp = 1;
-Q.workers_z = 6;
-Q.workers_ddp = 1;
-Q.workers_dvp = 1;
-Q.workers_dnvp = 7;
-Q.workers_nsdap = 2;
-Q.workers_other = 8;
+// ---- Workers: prime age (40%) ----
+Q.workers_prime_spd = 50;
+Q.workers_prime_kpd = 19;
+Q.workers_prime_bvp = 1;
+Q.workers_prime_z = 6;
+Q.workers_prime_ddp = 1;
+Q.workers_prime_dvp = 1;
+Q.workers_prime_dnvp = 5;
+Q.workers_prime_nsdap = 1;
+Q.workers_prime_other = 8;
 
+// ---- Workers: youth (30%) ----
+Q.workers_youth_spd = 40;
+Q.workers_youth_kpd = 30;
+Q.workers_youth_bvp = 1;
+Q.workers_youth_z = 4;
+Q.workers_youth_ddp = 1;
+Q.workers_youth_dvp = 1;
+Q.workers_youth_dnvp = 5;
+Q.workers_youth_nsdap = 4;
+Q.workers_youth_other = 8;
+
+// ---- Workers: pensioners (30%) ----
+Q.workers_pensioners_spd = 50;
+Q.workers_pensioners_kpd = 18;
+Q.workers_pensioners_bvp = 1;
+Q.workers_pensioners_z = 8;
+Q.workers_pensioners_ddp = 1;
+Q.workers_pensioners_dvp = 1;
+Q.workers_pensioners_dnvp = 12;
+Q.workers_pensioners_nsdap = 1;
+Q.workers_pensioners_other = 8;
+
+// ---- Middle: old (shopkeepers, artisans) ----
 Q.old_middle_spd = 5;
 Q.old_middle_kpd = 0;
 Q.old_middle_bvp = 3;
@@ -343,6 +379,7 @@ Q.old_middle_dnvp = 34;
 Q.old_middle_nsdap = 3;
 Q.old_middle_other = 8;
 
+// ---- Middle: new (white-collar, civil servants) ----
 Q.new_middle_spd = 7;
 Q.new_middle_kpd = 1;
 Q.new_middle_bvp = 3;
@@ -353,16 +390,40 @@ Q.new_middle_dnvp = 18;
 Q.new_middle_nsdap = 2;
 Q.new_middle_other = 2;
 
-Q.rural_spd = 8;
-Q.rural_kpd = 0;
-Q.rural_z = 5;
-Q.rural_bvp = 5;
-Q.rural_ddp = 5;
-Q.rural_dvp = 17;
-Q.rural_dnvp = 54;
-Q.rural_nsdap = 2;
-Q.rural_other = 4;
+// ---- Rural: agricultural workers (30%) ----
+Q.rural_agri_spd = 18;
+Q.rural_agri_kpd = 3;
+Q.rural_agri_bvp = 5;
+Q.rural_agri_z = 5;
+Q.rural_agri_ddp = 5;
+Q.rural_agri_dvp = 8;
+Q.rural_agri_dnvp = 40;
+Q.rural_agri_nsdap = 3;
+Q.rural_agri_other = 13;
 
+// ---- Rural: farmers (60%) ----
+Q.rural_farmers_spd = 5;
+Q.rural_farmers_kpd = 0;
+Q.rural_farmers_bvp = 5;
+Q.rural_farmers_z = 5;
+Q.rural_farmers_ddp = 5;
+Q.rural_farmers_dvp = 18;
+Q.rural_farmers_dnvp = 58;
+Q.rural_farmers_nsdap = 2;
+Q.rural_farmers_other = 2;
+
+// ---- Rural: landowners (10%) ----
+Q.rural_landowners_spd = 0;
+Q.rural_landowners_kpd = 0;
+Q.rural_landowners_bvp = 3;
+Q.rural_landowners_z = 3;
+Q.rural_landowners_ddp = 3;
+Q.rural_landowners_dvp = 22;
+Q.rural_landowners_dnvp = 66;
+Q.rural_landowners_nsdap = 2;
+Q.rural_landowners_other = 1;
+
+// ---- Unemployed bloc (votes this way for the unemployed share of every group) ----
 Q.unemployed_spd = 28;
 Q.unemployed_kpd = 48;
 Q.unemployed_z = 2;
@@ -373,6 +434,7 @@ Q.unemployed_dnvp = 6;
 Q.unemployed_nsdap = 6;
 Q.unemployed_other = 7;
 
+// ---- Catholics (no subclasses) ----
 Q.catholics_spd = 14;
 Q.catholics_kpd = 2;
 Q.catholics_z = 70;
@@ -382,6 +444,19 @@ Q.catholics_dvp = 4;
 Q.catholics_dnvp = 6;
 Q.catholics_nsdap = 1;
 Q.catholics_other = 14;
+
+// Parent class values (workers_spd, rural_dnvp, middle_z ...) are derived from the subclasses above.
+for (var c in Q.subclasses) {
+  var mid = Q.old_middle + Q.new_middle;
+  for (var party of Q.parties) {
+    var avg = 0;
+    for (var s of Q.subclasses[c]) {
+      var w = (c === 'middle') ? Q[s.id] / mid : s.share;
+      avg += w * (Q[s.id + '_' + party] || 0);
+    }
+    Q[c + '_' + party] = avg;
+  }
+}
 
 
 // Actual Reichstag Composition in 1927 (Based on December 1924 Election)
