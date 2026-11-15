@@ -17,12 +17,14 @@ window.partyColors = {
   'SRPD': '#7A3E9D',
   'SD': '#E8707E',
   'VSRPD': '#B04A8F',
-  'SAPD': '#A52A2A'
+  'SAPD': '#A52A2A',
+  'ASPD': '#C30000'
 };
 
 // Tooltip content for each party.
 
 window.partyInfo = {
+  'ASPD': 'Old Social Democratic Party of Germany',
   'SPD': 'Social Democratic Party of Germany',
   'DNVP': 'German National People\'s Party',
   'Zentrum': 'Centre Party',
