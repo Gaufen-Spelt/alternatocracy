@@ -12,8 +12,13 @@ view-if: saxony_timer <= 0
 With Saxonian SPD in critical condition between it's far left unwilling to ever peace out with bourgeoisie and it's right wing splitting into ASPD, we have lost considerable power here. 
 
 - @negotiate_asdp: Attempt to negotiate with ASPD.
+- @return: We shall not do anything here.
+- @easy_discard
+- @cancel_advisor_action
 
 @negotiate_asdp
 on-arrival: aspd_relation += 3; reformist_strength += 3; saxony_timer = 12
 
-Truk
+Trunks. 
+
+<hr>
