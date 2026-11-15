@@ -97,7 +97,7 @@ Q.daily_event_display_text = Q.daily_event_description || '';
  
 = Actions
  
-[+ party_sections_text +]
+[? if party_sections_text != 0: [+ party_sections_text +] ?]
  
 = Daily events
  
