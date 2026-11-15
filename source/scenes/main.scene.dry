@@ -95,6 +95,7 @@ max-cards: 4
 
 - @party
 - @govt
+- @regt 
 - #advisor
 - #leader
 - @fundraising
@@ -212,6 +213,7 @@ max-cards: 6
 
 - @party
 - @govt
+- @regt 
 - #advisor
 - #leader
 - @fundraising
@@ -347,6 +349,7 @@ max-cards: 2
 
 - @party
 - @govt
+- @regt 
 - #advisor
 - #leader
 - @fundraising
@@ -478,6 +481,7 @@ max-cards: 3
 
 - @party
 - @govt
+- @regt 
 - #advisor
 - #leader
 - @fundraising
@@ -498,3 +502,10 @@ card-image: img/reichstag_2.jpg
 is-deck: true
 
 - #govt_affairs
+
+@regt 
+title: Regional Affairs
+card-image: img/braun.jpg
+is-deck: true
+
+- #regional_affairs
