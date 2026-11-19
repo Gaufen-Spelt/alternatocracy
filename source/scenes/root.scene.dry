@@ -850,8 +850,32 @@ new-page: true
 WIP: Expanded content, modifiers, addons and etcetera.
 
 - @gamemodes: Gamemodes and challenges.
+- @historical: Historical mode
 - @seed: Seed.
 - @menum: Back
+
+@historical
+subtitle: Whether ahistorical events are activated or not. [+ historicity: historicity +]
+
+Should we turn it on? Mode: [+ historicity: historicity +]
+
+What are we talking about here is mostly content of other parties and events for them.
+
+- @historical_1: Historical mode
+- @historical_2: Historical mode
+- @addon
+
+@historical_1
+subtitle: [+ historicity: historicity +]
+view-if: historicity = 0
+on-arrival: historicity = 1
+go-to: historical
+
+@historical_2
+subtitle: [+ historicity: historicity +]
+view-if: historicity = 1
+on-arrival: historicity = 0
+go-to: historical
 
 @gamemodes
 new-page: true

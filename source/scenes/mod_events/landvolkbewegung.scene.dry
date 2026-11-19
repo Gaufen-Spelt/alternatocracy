@@ -3,7 +3,7 @@ subtitle: North has been enveloped in unrest...
 new-page: true
 tags: event
 view-if: year = 1928 and month = 1 and weeks >= 2
-on-arrival: landvolkbewegung = 1
+on-arrival: landvolkbewegung = 1; rural_landowners_dnvp -= 3; rural_farmers_dnvp -= 5; rural_farmers_ddp -= 3; rural_farmers_dvp -= 2; rural_farmers_other += 8
 max-visits: 1
 
-Skibidi revolt happened. Test scene for DBP trigger.
+On the January of 28th, farmers of the Northern Germany, driven by ineffectivety of their lobby organizations, debts mounted on them, cheap import and recent winter, Rural People's movement, embracing chiefly the Schleswig-Holstein peasantry, coalesced in a series of mass demonstrations that demanded higher tariffs to protect meat and dairy products, cheaper credit, and a reduction in social welfare payments. As the protests grew in size, so did their radicalism and militancy - by attacking the government officials, Junkers and banks. Rage of farmers has substantially weakened the image of DNVP amongst their main base, who, alongside with RLB, initiated emergency conference to formulate the response to this crisis. Some Rural Leagues, of Thuringia and Hessian ones, more autonomous compared to others, initiated the preparations for separation, driven by their respective protests and assault by Bavarian Farmers Party and Silesian Rural League on their positions.
