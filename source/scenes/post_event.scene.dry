@@ -462,7 +462,7 @@ function applyYearlyShifts() {
         if (Q.landvolkbewegung) Q.rural_farmers_other += 8/12;
         if (Q.landvolkbewegung) Q.rural_agri_spd += 1/12;
         Q.rural_dbp += 2/12;
-        Q.workers_z -= 0.5/12;
+        Q.workers_z -= 1/12;
         Q.workers_nsdap -= 3/12;
         Q.catholics_nsdap -= 3/12;
         Q.rural_dnvp -= 6/12;

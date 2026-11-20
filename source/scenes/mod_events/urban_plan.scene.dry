@@ -1,0 +1,50 @@
+title: Urban Plan
+subtitle: Last breakthrough of NSDAP amongst worker demographic.
+tags: event
+max-visits: 1
+new-page: true
+view-if: nsdap_votes > 0 and year == 1928 and month == 3
+faceImage: img/nsdap_worker.jpg
+
+= Urban Plan
+
+Formulated in 1925, the "Urban Plan"—or Strasserist Strategy—aims to capture the working class and confront the SPD and KPD head-on. Backed by the NSDAP’s revolutionary wing in defiance of Hitler’s inner circle, the Strasserites hope to forge a genuinely "socialist" image for the party.
+
+Following the collapse of Chancellor Marx’s cabinet and with elections rapidly approaching, Strasser has one final window to act before Hitler pivots to traditional conservative demographics. He has ordered Joseph Goebbels, the Gauleiter of Berlin, to launch an aggressive campaign in the capital to prove the strategy's viability and force Hitler’s hand.
+
+- @result: Will Urban Plan succeed?
+
+@result
+on-arrival: {!
+Q.strasser_points = 0;
+Q.hitler_points = 0;
+
+// Strasser
+if (Q.workers_nsdap > 5) Q.strasser_points += 1;
+Q.strasser_points += (Q.socialism || 0) / 10;
+Q.strasser_points += (Q.workers_nsdap || 0);
+if (Q.workers_nsdap > Q.rural_nsdap) Q.strasser_points += 3;
+
+// Hitler
+if (Q.landvolkbewegung) Q.hitler_points += 1;
+Q.hitler_points += (Q.nationalism || 0) / 10;
+Q.hitler_points += ((Q.rural_nsdap || 0) + (Q.new_middle_nsdap || 0) + (Q.old_middle_nsdap || 0)) / 3;
+if (Q.rural_nsdap > Q.workers_nsdap) Q.hitler_points += 3;
+
+if (Q.hitler_points > Q.strasser_points) {
+    Q.urban_plan = 0;
+} else {
+    Q.urban_plan = 1;
+}
+!}
+go-to: urban_success if urban_plan == 1; urban_failure if urban_plan == 0
+
+@urban_failure
+on-arrival: workers_nsdap -= 3; rural_nsdap += 3;
+
+With the socialist parties—and the powerful ADGB trade union—maintaining a tight grip on the working class, Berlin's Gauleiter has utterly failed to make inroads into the demographic. This defeat exhausted the last of Hitler's patience, leading him to declare the working class unviable due to the "Jewish-Marxist" propaganda deeply ingrained in their minds. Hitler was faced with the crucial decision to reorient the party's strategy, or else face dissolution. [? if landvolkbewegung: However, the NSDAP managed to offset these urban losses by courting protest voters among the recently radicalized peasantry. ?]
+
+@urban_success
+on-arrival: workers_nsdap += 3; rural_nsdap -= 3;
+
+Unexpectedly, workers alienated by the traditional socialist parties have been won over by the NSDAP, alarming left-wing parties and forcing them to reconsider their strategies. Meanwhile, Gregor Strasser has successfully pushed Hitler to restore the "socialist" elements of the 25-Point Program. Strasser declared this a "victory of National Socialism over reactionary bourgeois elements within the NSDAP," thwarting those who wished to pivot toward wealthy industrialists.

@@ -4,7 +4,7 @@ tags: event
 new-page: true
 max-visits: 1
 view-if: new_middle_consciousness_progress >= 5
-on-arrival: new_middle_conscious = 1; new_middle_spd += 20
+on-arrival: new_middle_conscious = 1; new_middle_spd += 10
 
 = Neu-mittelstand reaches class consciousness!
 
