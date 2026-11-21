@@ -82,18 +82,6 @@ window.colorizePartyNames = function(text) {
     });
 };
 
-    ideologies.forEach(function(ideology) {
-        var regex = new RegExp('\\b(' + esc(ideology) + ')\\b', 'g');
-        text = text.replace(regex, function(match) {
-            return '<span class="ideology-highlight" style="color:#2E8B57;font-weight:bold;cursor:pointer;border-bottom: 1px dotted #2E8B57;" ' +
-                   'onclick="window.showIdeologyTooltip(event, \'' + ideology + '\')">' +
-                   match + '</span>';
-        });
-    });
-
-    return text;
-};
-
 window.showPartyTooltip = function(evt, party) {
     evt.stopPropagation();
     window.hidePartyTooltip();
