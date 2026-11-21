@@ -745,8 +745,8 @@ function applyEvents() {
 
         Q.workers_cnblp += 0;
         Q.new_middle_cnblp += 0;
-        Q.old_middle_cnblp += 2;
-        Q.rural_cnblp += 7;
+        Q.old_middle_cnblp += 9;
+        Q.rural_cnblp += 20;
         Q.unemployed_cnblp += 1;
         Q.catholics_cnblp += 0;
 
