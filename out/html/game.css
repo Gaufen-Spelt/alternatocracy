@@ -234,7 +234,7 @@ body.dark-mode .tools  { border-style: double; border-width: 4px; border-color: 
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
-
+   
 #stats_sidebar .tab_container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(5.5em, 1fr));
