@@ -91,8 +91,6 @@ max-cards: 4
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
-[? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
-
 - @party
 - @govt
 - @regt 
@@ -208,8 +206,6 @@ max-cards: 6
 = [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
-
-[? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
 
 - @party
 - @govt
@@ -345,8 +341,6 @@ max-cards: 2
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
-[? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
-
 - @party
 - @govt
 - @regt 
@@ -476,8 +470,6 @@ max-cards: 3
 = [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
-
-[? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
 
 - @party
 - @govt

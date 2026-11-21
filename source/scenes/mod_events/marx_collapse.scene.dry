@@ -1,0 +1,10 @@
+title: Marx cabinet collapses.
+tags: event
+view-if: year == 1928 and month == 2
+new-page: true
+max-visits: 1
+onArrival: next_election_month = 5; next_election_year = 1928; next_election_time = time + 6; marx_cabinet_collapsed_1 = 1
+
+= Mar cabinet collapse shibs
+
+skill issue Zentrum
