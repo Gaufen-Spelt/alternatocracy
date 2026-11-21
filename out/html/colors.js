@@ -58,26 +58,29 @@ window.ideologyInfo = {
 };
 
 window.colorizePartyNames = function(text) {
-    var parties = Object.keys(window.partyColors);
-    var ideologies = Object.keys(window.ideologyInfo);
-
-    parties.sort(function(a, b) { return b.length - a.length; });
-    ideologies.sort(function(a, b) { return b.length - a.length; });
-
     var esc = function(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); };
 
-    // Single pass over all party names (longest first)
-    var partyRegex = new RegExp('\\b(' + parties.map(esc).join('|') + ')\\b', 'g');
-    text = text.replace(partyRegex, function(match) {
-        var color = window.partyColors[match];
-        return '<span class="party-highlight" style="color:' + color +
-               ';font-weight:bold;cursor:pointer;" ' +
-               'onclick="window.showPartyTooltip(event, \'' + match + '\')">' +
-               '<img class="party-icon" src="img/logo/' + encodeURIComponent(match.toLowerCase()) + '.jpg" alt="" ' +
-               'style="height:1em;width:auto;vertical-align:-0.15em;margin-right:0.25em;" ' +
-               'onerror="this.style.display=\'none\'">' +
+    var tokens = Object.keys(window.partyColors).concat(Object.keys(window.ideologyInfo));
+    tokens.sort(function(a, b) { return b.length - a.length; });
+
+    var regex = new RegExp('(^|\\W)(' + tokens.map(esc).join('|') + ')(?!\\w)', 'g');
+
+    return text.replace(regex, function(full, prefix, match) {
+        if (window.partyColors.hasOwnProperty(match)) {
+            var color = window.partyColors[match];
+            return prefix + '<span class="party-highlight" style="color:' + color +
+                   ';font-weight:bold;cursor:pointer;" ' +
+                   'onclick="window.showPartyTooltip(event, \'' + match + '\')">' +
+                   '<img class="party-icon" src="img/logo/' + encodeURIComponent(match.toLowerCase()) + '.jpg" alt="" ' +
+                   'style="height:1em;width:auto;vertical-align:-0.15em;margin-right:0.25em;" ' +
+                   'onerror="this.style.display=\'none\'">' +
+                   match + '</span>';
+        }
+        return prefix + '<span class="ideology-highlight" style="color:#2E8B57;font-weight:bold;cursor:pointer;border-bottom: 1px dotted #2E8B57;" ' +
+               'onclick="window.showIdeologyTooltip(event, \'' + match + '\')">' +
                match + '</span>';
     });
+};
 
     ideologies.forEach(function(ideology) {
         var regex = new RegExp('\\b(' + esc(ideology) + ')\\b', 'g');

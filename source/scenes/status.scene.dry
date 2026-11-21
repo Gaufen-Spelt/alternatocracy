@@ -79,7 +79,7 @@ Q.cabinet_table_display = html;
 
 [? if hitler_rubicon != 1: Next election: [+ next_election_month : month +] [+ next_election_year +] ?]
 
-[? if hitler_rubicon != 1: Next presidential election: [+ next_presidential_election_month : month +] [+ next_presidential_election_year +] ?]
+[? if hitler_rubicon != 1: Next presidential election: [+ presidential_election_month : month +] [+ presidential_election_year +] ?]
 
 [? if hitler_rubicon == 1: **Elections are suspended**. ?]
 
