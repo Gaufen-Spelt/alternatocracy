@@ -1,7 +1,7 @@
 title: The Death of Hindenburg
 subtitle: The President has died...
 new-page: true
-view-if: (year = 1934 and month >= 7 and president = "Hindenburg") or (month = presidential_election_month and year >= presidential_election_year) or (year > presidential_election_year)
+view-if: (president = "Hindenburg" and (year > 1934 or (year = 1934 and month >= 7))) or (year > presidential_election_year or (year = presidential_election_year and month >= presidential_election_month))
 on-arrival: round = 0; hindenburg_dead = 1; president = "Bumke (acting)"; president = "Großmann (acting)" if judicial_reform >= 4; spd_candidate = "Eckener"; kpd_candidate = "Thälmann"; kpd_candidate = "Münzenberg" if kpd_party_leader = "Conciliators"; z_candidate = "Adenauer"; ddp_candidate = "Gessler"; bvp_candidate = "Adenauer"; nsdap_candidate = "Hitler"; nsdap_candidate = "Göring" if hitler_deported; dnvp_candidate = "Seldte"; dvp_candidate = "Gessler"; other_candidate = "Seldte"; is_unity_candidate = 0; sapd_candidate = kpd_candidate;
 face-image: img/Hindenburg_head.jpg
 tags: event
@@ -357,7 +357,7 @@ The KPD now endorses [+ spd_candidate +] in the presidential election! We ask th
 title: Convince the DVP to support [+ spd_candidate +].
 unavailable-subtitle: The DVP is not willing to support our candidate.
 view-if: spd_candidate = "Braun" or spd_candidate = "Schumacher" or spd_candidate = "Juchacz" or is_cultural_candidate
-choose-if: (dvp_relation >= 50 and candidate != "Juchacz") or (dvp_relation >= 60 and candidate = "Juchacz")
+choose-if: (dvp_relation >= 50 and spd_candidate != "Juchacz") or (dvp_relation >= 60 and spd_candidate = "Juchacz")
 on-arrival: dvp_candidate = spd_candidate
 go-to: r1_menu if round = 0; r2_campaigning if round > 0
 max-visits: 1
@@ -469,7 +469,7 @@ Election results:
 [? if Einstein_running : Einstein - [+ Einstein_votes_disp +]% ?]
 [? if Ossietzky_running : Ossietzky - [+ Ossietzky_votes_disp +]% ?]
 [? if Mann_running : Mann - [+ Mann_votes_disp +]% ?]
-[? if Mierendorff_running: Mierendorff - [+ Mierendordf_votes_disp +]% ?]
+[? if Mierendorff_running: Mierendorff - [+ Mierendorff_votes_disp +]% ?]
 
 @r2_start
 on-arrival: {!

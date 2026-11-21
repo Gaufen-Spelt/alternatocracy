@@ -936,6 +936,8 @@ if (Q.reaction_activated !== 1) {
     if (Q.organized_capitalism > 0) Q.reaction_progress += Q.organized_capitalism / 2;
 }
 
+Q.pp_active = (Q.spd_centrist == 0 && ((Q.neorevisionism > 0 && Q.peoples_party_support >= 6 && Q.peoples_party == 0 && Q.peoples_party_timer == 0) || (Q.peoples_party == 1 && Q.sandbox == 1 && Q.peoples_party_timer == 0) || (Q.peoples_party == 1 && Q.ideology == "left" && Q.peoples_party_timer == 0)))
+
 Q.junker_land_reform_enabled = (
     Q.socialism >= 100 ||
     Q.rural_spd >= 40 ||
