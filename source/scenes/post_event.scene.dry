@@ -458,9 +458,13 @@ function applyYearlyShifts() {
         if (Q.dbp_empowered) Q.rural_dbp += 4/12;
         if (Q.dbp_empowered) Q.old_middle_dbp += 1/12;
         if (Q.dbp_empowered) Q.rural_ddp -= 2/12;
-        if (Q.landvolkbewegung && !Q.urban_plan) Q.rural_farmers_nsdap += 2/12
+        if (Q.landvolkbewegung && !Q.urban_plan) Q.rural_farmers_nsdap += 6/12
         if (Q.landvolkbewegung) Q.rural_farmers_other += 8/12;
         if (Q.landvolkbewegung) Q.rural_agri_spd += 1/12;
+        if (Q.cnblp_formed) Q.rural_cnblp += 2/12;
+        if (Q.cnblp_formed) Q.rural_other -= 1/12;
+        if (Q.landvolkbewegung && Q.cnblp_formed) Q.rural_cnblp += 4/12;
+        if (Q.landvolkbewegung && Q.cnblp_formed) Q.rural_agri_cnblp -= 4/12;
         Q.rural_dbp += 2/12;
         Q.workers_z -= 1/12;
         if (!Q.urban_plan) Q.workers_nsdap -= 3/12;
@@ -474,7 +478,7 @@ function applyYearlyShifts() {
         Q.old_middle_other += 9/12;
         Q.new_middle_other += 9/12;
         Q.old_middle_dvp -= 8/12;
-        Q.new_middle_dvp -= 8/12;
+        Q.new_middle_dvp -= 12/12;
         Q.old_middle_ddp -= 6/12;
         Q.new_middle_ddp -= 4/12;
         Q.workers_kpd += 2/12;
@@ -689,6 +693,10 @@ function applyNsdapDecay() {
 
 function applyEvents() {
     if (Q.year == 1928 && Q.month == 2 && Q.dbp_formed != 1) {
+        ['workers', 'unemployed', 'rural', 'catholics', 'new_middle', 'old_middle'].forEach(group => {
+            Q[group + '_dbp'] = Q[group + '_dbp'] || 0;
+        });
+
         Q.dbp_points = 
             (Q.rural_ddp <= 4.5) + 
             (Q.landvolkbewegung == 1) + 
@@ -704,27 +712,47 @@ function applyEvents() {
             Q.dbp_flavor = 1;
         }
 
-            Q.dbp_formed = 1;
-            Q.parties.push('dbp');
+        Q.dbp_formed = 1;
+        Q.parties.push('dbp');
 
-            Q.dbp_name = "DBP";
-            Q.dbp_party_leader = "Fehr";               
-            Q.dbp_ideology = "Liberal Agrarianism";
+        Q.dbp_name = "DBP";
+        Q.dbp_party_leader = "Fehr";               
+        Q.dbp_ideology = "Liberal Agrarianism";
 
-            ['workers', 'unemployed', 'rural', 'catholics', 'new_middle', 'old_middle'].forEach(group => {
-                Q[group + '_dbp'] = Q[group + '_dbp'] || 0;
-            });
+        Q.workers_dbp += 0;
+        Q.new_middle_dbp += 3;
+        Q.old_middle_dbp += 1;
+        Q.rural_dbp += 5;
+        Q.unemployed_dbp += 1;
+        Q.catholics_dbp += 1;
 
-            Q.workers_dbp += 0;
-            Q.new_middle_dbp += 3;
-            Q.old_middle_dbp += 1;
-            Q.rural_dbp += 5;
-            Q.unemployed_dbp += 1;
-            Q.catholics_dbp += 1;
+        Q.dbp_r = Q.old_dbp_r = 0;
+        
+        Q.election_records.concat(Q.party_support_records).forEach(r => r['dbp'] = 0);
+    }
 
-            Q.dbp_r = Q.old_dbp_r = 0;
-            
-            Q.election_records.concat(Q.party_support_records).forEach(r => r['dbp'] = 0);
+    if (Q.year == 1928 && Q.month == 3 && Q.cnblp_formed != 1) {
+        ['workers', 'unemployed', 'rural', 'catholics', 'new_middle', 'old_middle'].forEach(group => {
+            Q[group + '_cnblp'] = Q[group + '_cnblp'] || 0;
+        });
+
+        Q.cnblp_formed = 1;
+        Q.parties.push('cnblp');
+
+        Q.cnblp_name = "CNBLP";
+        Q.cnblp_party_leader = "Hepp";
+        Q.cnblp_ideology = "Conservative Agrarianism";
+
+        Q.workers_cnblp += 0;
+        Q.new_middle_cnblp += 0;
+        Q.old_middle_cnblp += 2;
+        Q.rural_cnblp += 7;
+        Q.unemployed_cnblp += 1;
+        Q.catholics_cnblp += 0;
+
+        Q.cnblp_r = Q.old_cnblp_r = 0;
+
+        Q.election_records.concat(Q.party_support_records).forEach(r => r['cnblp'] = 0);
     }
 }
 

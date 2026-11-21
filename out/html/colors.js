@@ -35,9 +35,9 @@ window.partyInfo = {
   'WP': 'Reich Party of the German Middle Class',
   'BVP': 'Bavarian People\'s Party',
   'NSDAP': 'National Socialist German Workers\' Party',
-  'CNBLP': 'Christian-National Peasants\' and Farmers\' Party',
   'DBP': 'German Farmers\' Party (Deutsches Bauernpartei). A center-right agrarian party advocating for rural interests, agricultural protectionism, and cooperation with democratic coalition governments.',
   'VRP': 'Reich Party for Civil Rights and Deflation',
+  'CNBLP': 'Christian-National Peasants\' and Farmers\' Party (Christlich-Nationale Bauern- und Landvolkpartei). A conservative agrarian party representing rural interests, agricultural protectionism, and opposition to the Republic\'s parliamentary compromises.',
   'SRPD': 'Social Republican Party of Germany. A breakaway party of the SPD\'s neorevisionists, committed to the militant defense of the republic.',
   'SD': 'Social Party of Germany. A breakaway party of the SPD\'s reformists, favoring gradual reform and governing beyond the working class.',
   'VSRPD': 'United Social-Republican Party of Germany. A merger of the reformists and neorevisionists who left the SPD.',
@@ -47,14 +47,14 @@ window.partyInfo = {
 // Tooltip content for political ideologies.
 
 window.ideologyInfo = {
-  'Social Democracy': 'One of the two mainstream pillars of the Marxist movement, standing on the right of the movement and advocating for the radical transformation of the economy through peaceful means.',
   'Social Democracy (Revolutionary)': 'Leftist Social Democracy representing anti-Bolshevik radical socialists and democratic socialists who advocate for immediate revolutionary acts and class war against the bourgeois establishment.',
   'Social Democracy (Center Marxist)': 'Kautskist Social Democracy representing center-aligned Marxists who believe that systemic transition may happen only under revolutionary conditions without adventurism or capitalist concessions.',
   'Laborism': 'Defenders of workers and their trade union gains against capitalism\'s invasive nature, organized largely through the ADGB umbrella without an active agenda for socialist economic transformation.',
   'Social Democracy (Reformist)': 'Bernsteinian Social Democrats standing on the right of the party, supporting reconciliation with the bourgeois establishment to advance socialist policies through gradual legislative reforms.',
   'Social Republicanism': 'A branch of the social democratic movement rejecting orthodox socialism in favor of a militant commitment to the republican order, state economic intervention, welfare expansion, and breaking up Junker estates.',
   'Ethical Socialism': 'A moral and philosophical approach to socialism rooted in ethical, humanitarian, and democratic principles rather than strict historical materialism.',
-  'Socialist Patriotism': 'A break-off from the social republican movement emphasizing national-statist language, antimaterialism, patriotism, youth expansion, and the Volksgemeinschaft concept of cross-class German unity.'
+  'Socialist Patriotism': 'A break-off from the social republican movement emphasizing national-statist language, antimaterialism, patriotism, youth expansion, and the Volksgemeinschaft concept of cross-class German unity.',
+  'Social Democracy': 'One of the two mainstream pillars of the Marxist movement, standing on the right of the movement and advocating for the radical transformation of the economy through peaceful means.'
 };
 
 window.colorizePartyNames = function(text) {

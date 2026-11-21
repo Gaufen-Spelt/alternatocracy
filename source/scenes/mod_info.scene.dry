@@ -15,24 +15,13 @@ go-to: mod_info
 
 Version 0.0.1.
 
-Added:
-
-Party actions.
-
-Reformist, left and center paths were added.
-
-Substantial nerfs to lot of actions.
-
-Time is twice as slower.
-
-Party congresses. Shuffle leadership is removed.
-
-DNVP and DVP congresses.
-
-New factions. 
-
-Reaction from establishment.
-
-Lot of QOL and balance changes.
-
-Consistency update. Now normal difficulty can drop cards without month going forward.
+<h3>Added:</h3>
+<ul>
+  <li><strong>Party Actions:</strong> Added Reformist, Left, and Center paths, alongside substantial nerfs to many actions.</li>
+  <li><strong>Pacing:</strong> Time now passes twice as slowly.</li>
+  <li><strong>Party Congresses:</strong> Added party congresses; <em>Shuffle Leadership</em> has been removed.</li>
+  <li><strong>Other Parties:</strong> Added DNVP and DVP congresses.</li>
+  <li><strong>Internal &amp; External Politics:</strong> Added new factions and establishment reactions.</li>
+  <li><strong>Consistency Update:</strong> Normal difficulty can now drop cards without advancing the month.</li>
+  <li><strong>QOL &amp; Balance:</strong> Added numerous quality-of-life and balance changes.</li>
+</ul>
