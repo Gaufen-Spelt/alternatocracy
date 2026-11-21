@@ -149,7 +149,7 @@ body.focus-mode-expanded #content {
    ===================================================================== */
 #page {
   display: grid;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: minmax(0, 1fr) 260px;
   grid-template-areas: "main sidebar";
   gap: 20px;
   max-width: 1150px;
@@ -189,9 +189,10 @@ body.focus-mode-expanded #content {
 
 .tools {
   grid-area: sidebar;
-  width: 260px;
-  min-width: 260px;
-  max-width: 260px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 0;
   color: var(--text-color);
   font-family: "Crimson Text", Georgia, serif;
@@ -233,6 +234,31 @@ body.dark-mode .tools  { border-style: double; border-width: 4px; border-color: 
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
+
+#stats_sidebar .tab_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5em, 1fr));
+  flex: 0 0 auto;
+}
+#stats_sidebar .tab_button {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.2;
+  padding: 0.6em 0.3em;
+  font-size: 0.75em;
+}
+
+#qualities * { max-width: 100%; box-sizing: border-box; }
+#qualities button {
+  display: inline-block;
+  white-space: normal;
+  margin: 0.15em 0;
+  line-height: 1.2;
+}
+#qualities table { table-layout: fixed; min-width: 0; width: 100%; }
+#qualities td, #qualities th { word-wrap: break-word; overflow-wrap: anywhere; }
+#qualities svg, #qualities img, #qualities canvas { max-width: 100%; height: auto; }
 
 #qualities::-webkit-scrollbar       { width: 4px; }
 #qualities::-webkit-scrollbar-track { background: var(--tab-bg-color); }
@@ -1103,13 +1129,13 @@ body.dark-mode tr.row-neutral   { background-color: rgba(120, 120, 120, 0.10); }
    ===================================================================== */
 @media screen and (max-width: 1200px) {
   #page {
-    grid-template-columns: 1fr 220px;
+    grid-template-columns: minmax(0, 1fr) 220px;
     gap: 15px;
   }
   .tools {
-    width: 220px;
-    min-width: 220px;
-    max-width: 220px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
   #content { padding: 1em 1.2em; }
 }
