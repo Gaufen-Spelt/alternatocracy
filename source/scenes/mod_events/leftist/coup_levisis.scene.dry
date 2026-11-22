@@ -1,0 +1,14 @@
+title: Old Guard coups us...
+subtitle: Paul Levi falls...
+tags: event
+view-if: spd_left_win = 1 and year == 1928 and ((center_dissent + reformist_dissent + labor_dissent > 120) or (labor_strength + center_strength + reformist_strength > 50))
+max-visits: 1
+new-page: true
+face-image: img/portraits/LeviPaul.jpg
+on-arrival: {!
+window.SidebarRemoval() 
+!}
+
+Left Social Democrat leadership of Paul Levi falls under the attack of old guard consisting of reformists, right wing center marxists and ADGB, pissed off at Levi's recent actions. Perhaps, Levi could survive if he played his cards correctly?
+
+- @game_over: Sleep, leftist experiment.
