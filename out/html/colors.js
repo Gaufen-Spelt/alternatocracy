@@ -111,13 +111,29 @@ window.showPartyTooltip = function(evt, party) {
     tooltip.style.left = Math.min(x, maxX) + 'px';
     tooltip.style.top = Math.min(y, maxY) + 'px';
 
-    var title = document.createElement('div');
+        var title = document.createElement('div');
     title.style.fontWeight = 'bold';
     title.style.color = color;
     title.style.marginBottom = '8px';
     title.style.borderBottom = '1px solid #ccc';
     title.style.paddingBottom = '4px';
-    title.textContent = party;
+    title.style.display = 'flex';
+    title.style.alignItems = 'center';
+    title.style.paddingRight = '20px'; // keeps the name clear of the ✕ button
+
+    var logo = document.createElement('img');
+    logo.src = 'img/logo/' + encodeURIComponent(party.toLowerCase()) + '.jpg';
+    logo.alt = '';
+    logo.style.height = '1.6em';
+    logo.style.width = 'auto';
+    logo.style.marginRight = '8px';
+    logo.onerror = function() { this.style.display = 'none'; };
+
+    var name = document.createElement('span');
+    name.textContent = party;
+
+    title.appendChild(logo);
+    title.appendChild(name);
 
     var body = document.createElement('div');
     body.textContent = info;
