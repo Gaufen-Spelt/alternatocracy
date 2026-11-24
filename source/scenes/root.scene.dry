@@ -658,7 +658,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             // states
             'saxony',
             // menace events
-            'hunger', 'funds', 'snap_election'
+            'hunger', 'funds', 'snap_election',
             // events
             'emergency_cuts', 'unemployment_insurance',
             'sa_ban', 'sh_ban', 'papen_chancellor', 'reaction',
