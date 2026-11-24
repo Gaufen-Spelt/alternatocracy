@@ -9,6 +9,7 @@ view-if: spd_in_government and chancellor_party == "SPD"
 Call?
 
 - @snap_election
+- @root: Back
 
 @snap_election
 title: Snap Election

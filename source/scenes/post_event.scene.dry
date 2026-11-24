@@ -708,7 +708,7 @@ function applyEvents() {
 
         if (Q.dbp_points >= 3) {
             Q.dbp_empowered = 1;
-            Q.rural_dbp += 15;
+            Q.rural_dbp += 5;
             Q.dbp_flavor = 1;
         }
 
@@ -722,7 +722,7 @@ function applyEvents() {
         Q.workers_dbp += 0;
         Q.new_middle_dbp += 3;
         Q.old_middle_dbp += 1;
-        Q.rural_dbp += 5;
+        Q.rural_dbp += 3;
         Q.unemployed_dbp += 1;
         Q.catholics_dbp += 1;
 
