@@ -18,7 +18,7 @@ permissions:
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   # Single deploy job since we're just deploying
@@ -29,21 +29,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: setup node
-        uses: actions/setup-node@v4
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
         with:
-          node-version: 16
+          node-version: 20
+
       - name: Install
         run: npm install
+
       - name: Build game
         run: npm run dendrynexus make-html -- --pretty
+
       - name: Copy game.json to output
         run: cp out/game.json out/html/
+
+      - name: Debug output folder
+        run: ls -la out/html
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: 'out/html'
+          path: out/html
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
