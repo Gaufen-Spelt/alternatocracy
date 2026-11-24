@@ -2,5 +2,19 @@ title: Executive
 new-page: true
 is-pinned-card: true
 card-image: img/weimar.jpg
+view-if: spd_in_government and chancellor_party == "SPD"
 
-Lamos
+= Executive
+
+Call?
+
+- @snap_election
+
+@snap_election
+title: Snap Election
+subtitle: Call a snap election.
+unavailable-subtitle: [? if snap_election_timer > 0 : [+ snap_election_timer +] turns before next advisor action. ?] [? if presidential_powers : We have removed this power from the president with a constitutional reform. ?]
+choose-if: snap_election_timer <= 0 and not presidential_powers
+on-arrival: snap_election_timer = 96; next_election_time = time + 3 if next_election_time > time+3; next_election_month = month + 3 if next_election_time >= time+3; next_election_year = year if next_election_time >= time+3; next_election_year += 1 if next_election_month > 12; next_election_month -= 12 if next_election_month > 12; 
+
+We have called for new elections, set for [+ next_election_month : month +] [+ next_election_year +].

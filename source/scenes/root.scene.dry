@@ -658,7 +658,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             // states
             'saxony',
             // menace events
-            'hunger', 'funds',
+            'hunger', 'funds', 'snap_election'
             // events
             'emergency_cuts', 'unemployment_insurance',
             'sa_ban', 'sh_ban', 'papen_chancellor', 'reaction',
@@ -670,6 +670,7 @@ Q.advisor_action_timer = 0;
 Q.business_confidence_timer = 0;
 Q.capital_strike_timer = 0;
 Q.saxony_timer = 0;
+Q.snap_election_timer = 0;
 // party affairs timers
 Q.ideologimus_timer = 0;
 Q.union_party_affairs_timer = 0;
