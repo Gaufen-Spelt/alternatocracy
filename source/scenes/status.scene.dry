@@ -667,7 +667,7 @@ function buildUnemployedSection() {
     return out + "<br>";
 }
 
-Q.classes_breakdown_display = buildUnemployedSection() + buildClassSection(Q.classes);
+Q.classes_breakdown_display = buildClassSection(Q.classes) + buildUnemployedSection();
 
 !}
 
