@@ -6,6 +6,9 @@ on-arrival: {!
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
+(function tryShow(n) {
+    if (!window.showFocuses() && n > 0) setTimeout(function () { tryShow(n - 1); }, 50);
+})(20);
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -122,6 +125,9 @@ on-arrival: {!
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
+(function tryShow(n) {
+    if (!window.showFocuses() && n > 0) setTimeout(function () { tryShow(n - 1); }, 50);
+})(20);
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -256,6 +262,9 @@ on-arrival: {!
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
+(function tryShow(n) {
+    if (!window.showFocuses() && n > 0) setTimeout(function () { tryShow(n - 1); }, 50);
+})(20);
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -386,6 +395,9 @@ on-arrival: {!
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
+(function tryShow(n) {
+    if (!window.showFocuses() && n > 0) setTimeout(function () { tryShow(n - 1); }, 50);
+})(20);
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
