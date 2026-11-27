@@ -1,0 +1,10 @@
+title: Socialist victory...
+subtitle: We finally have overthrown bourgeois system.
+tags: event
+view-if: civil_war_socialist_victory == 1
+max-visits: 1
+new-page: true
+set-bg: img/kpd_rubicon.jpg
+on-arrival: kpd_rubicon = 1
+
+Are we cooking?
