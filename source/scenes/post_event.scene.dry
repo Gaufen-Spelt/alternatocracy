@@ -1523,7 +1523,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => scaledWeight(2.50, Q.budget, 5),
         desc: ', at the Finance Ministry, has pushed through higher income and property taxes on the wealthy.',
         eligible: () => Q.upper_tax_rates <= 5,
-        effects: { upper_tax_rates: 1, budget: 2, capital_strike_progress: 1, inflation: -0.6, economic_growth: -0.4, unemployed: 1 },
+        effects: { upper_tax_rates: 1, budget: 1, capital_strike_progress: 1, inflation: -0.6, economic_growth: -0.4, unemployed: 1 },
         support: { workers: 3, old_middle: -3, new_middle: -3 }
     }),
  
@@ -1532,7 +1532,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => scaledWeight(2.20, Q.budget, 5),
         desc: ', at the Finance Ministry, has raised consumption taxes to plug the budget hole, a burden that falls hardest on workers.',
         eligible: () => Q.lower_tax_rates <= 5,
-        effects: { lower_tax_rates: 1, budget: 2, inflation: -0.4 },
+        effects: { lower_tax_rates: 1, budget: 1, inflation: -0.4 },
         support: { workers: -4, unemployed: -3 }
     }),
  
@@ -1541,7 +1541,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => scaledWeight(2.30, Q.budget, 4),
         desc: ', at the Finance Ministry, has called for "shared sacrifice" and raised taxes across the board.',
         eligible: () => Q.upper_tax_rates <= 5 && Q.lower_tax_rates <= 5,
-        effects: { upper_tax_rates: 1, lower_tax_rates: 1, budget: 3, unemployed: 2, inflation: -1.1, economic_growth: -0.6 },
+        effects: { upper_tax_rates: 1, lower_tax_rates: 1, budget: 2, unemployed: 2, inflation: -1.1, economic_growth: -0.6 },
         support: { workers: -3, old_middle: -3, new_middle: -3 }
     }),
  
@@ -1552,7 +1552,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => linearWeight(2.40, Q.budget, 8),
         desc: ', at the Finance Ministry, has cut income and property taxes on business and the propertied classes.',
         eligible: () => Q.budget >= 2 && Q.upper_tax_rates >= -5,
-        effects: { upper_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4, dvp_right: 5 },
+        effects: { upper_tax_rates: -1, budget: -1, inflation: 0.6, economic_growth: 0.4, dvp_right: 5 },
         support: { old_middle: 4, new_middle: 4, workers: -2 }
     }),
  
@@ -1561,7 +1561,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => linearWeight(2.30, Q.budget, 10),
         desc: ', at the Finance Ministry, has delivered a broad tax cut, drawing applause from business and the middle classes.',
         eligible: () => Q.budget >= 3 && Q.upper_tax_rates >= -5 && Q.lower_tax_rates >= -5,
-        effects: { upper_tax_rates: -1, lower_tax_rates: -1, budget: -3, inflation: 1, economic_growth: 0.6 },
+        effects: { upper_tax_rates: -1, lower_tax_rates: -1, budget: -2, inflation: 1, economic_growth: 0.6 },
         support: { new_middle: 4, old_middle: 4, workers: 3 }
     }),
  
@@ -1570,7 +1570,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => linearWeight(2.20, Q.budget, 8),
         desc: ', at the Finance Ministry, has trimmed consumption taxes to relieve working-class households.',
         eligible: () => Q.budget >= 2 && Q.lower_tax_rates >= -5,
-        effects: { lower_tax_rates: -1, budget: -2, inflation: 0.6, economic_growth: 0.4 },
+        effects: { lower_tax_rates: -1, budget: -1, inflation: 0.6, economic_growth: 0.4 },
         support: { workers: 5, unemployed: 3 }
     }),
  
@@ -1601,7 +1601,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => scaledWeight(2.00, Q.budget, 5) + linearWeight(0.30, Q.unemployed, 5, 3),
         desc: ', at the Finance Ministry, has raised import duties, shielding farmers and small producers while prices climb.',
         eligible: () => Q.tariffs < 5,
-        effects: { tariffs: 1, budget: 2, inflation: 0.7, unemployed: 1.5, economic_growth: -0.4, west_relation: -1, east_relation: -1, reparations_negotiation: -2 },
+        effects: { tariffs: 1, budget: 1, inflation: 0.7, unemployed: 1.5, economic_growth: -0.4, west_relation: -1, east_relation: -1, reparations_negotiation: -2 },
         support: { rural: 4, old_middle: 3, workers: -4, unemployed: -4 }
     }),
  
@@ -1610,7 +1610,7 @@ Q.GLOBAL_PARTY_GOVERNMENT_ACTIONS = {
         weight: () => linearWeight(1.80, Q.budget, 8) + linearWeight(0.30, Q.inflation, 3, 3),
         desc: ', at the Finance Ministry, has lowered import duties, cheapening basic goods and improving ties with trading partners.',
         eligible: () => Q.budget >= 2 && Q.tariffs > -5,
-        effects: { tariffs: -1, budget: -2, inflation: -0.5, economic_growth: 0.4, west_relation: 1, east_relation: 1 },
+        effects: { tariffs: -1, budget: -1, inflation: -0.5, economic_growth: 0.4, west_relation: 1, east_relation: 1 },
         support: { workers: 4, unemployed: 4, rural: -5, old_middle: -3 }
     }),
  
