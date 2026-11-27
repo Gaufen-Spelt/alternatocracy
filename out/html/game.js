@@ -850,11 +850,3 @@ window.showFocuses = function () {
     });
     return true;
 };
-
-if (!window.__focusObserver) {
-    window.__focusObserver = new MutationObserver(function () {
-        var bar = document.getElementById('focus-bar');
-        if (bar && bar.childElementCount === 0) window.showFocuses();
-    });
-    window.__focusObserver.observe(document.body, { childList: true, subtree: true });
-}

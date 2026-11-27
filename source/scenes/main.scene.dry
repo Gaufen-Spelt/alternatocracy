@@ -1,12 +1,12 @@
 title: Next month
 is-hand: true
 new-page: true
+on-display: {! window.showFocuses(); !}
 on-arrival: {!
 
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
-window.showFocuses();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -120,12 +120,12 @@ max-cards: 4
 title: Next month
 is-hand: true
 new-page: true
+on-display: {! window.showFocuses(); !}
 on-arrival: {!
 
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
-window.showFocuses();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -257,12 +257,12 @@ max-cards: 6
 title: Next month
 is-hand: true
 new-page: true
+on-display: {! window.showFocuses(); !}
 on-arrival: {!
 
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
-window.showFocuses();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
@@ -390,12 +390,12 @@ max-cards: 2
 title: Next month
 is-hand: true
 new-page: true
+on-display: {! window.showFocuses(); !}
 on-arrival: {!
 
 window.SidebarAdd()
 window.computePinnedDescription();
 window.updateLeaderImages();
-window.showFocuses();
 
 if (Q.hitler_rubicon >= 1) {
 if (!window.__reactionClockStarted) {
