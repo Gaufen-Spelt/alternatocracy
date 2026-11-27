@@ -1,0 +1,133 @@
+/* ==========================================================================
+   HITLER RUBICON  (body.ominous): slow, grey, apathetic, depressed
+   ========================================================================== */
+
+@keyframes resistance-blood-tide {
+  0%   { opacity: 0.45; transform: scale(0.92); box-shadow: 0 0 10px rgba(0, 0, 0, 0.9); }
+  50%  { opacity: 0.85; transform: scale(1.08); box-shadow: 0 0 25px rgba(139, 0, 0, 0.7); }
+  100% { opacity: 0.45; transform: scale(0.92); box-shadow: 0 0 10px rgba(0, 0, 0, 0.9); }
+}
+
+body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li a.card {
+  border: 2px solid #5a0d0d !important;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.9) !important;
+  background-color: #080808 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-img {
+  filter: grayscale(1) contrast(1.4) brightness(0.65) !important;
+  transition: filter 0.3s ease;
+}
+
+body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li a.card::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  right: -20%;
+  bottom: -20%;
+  background: radial-gradient(
+    circle at center,
+    transparent 30%,
+    rgba(90, 10, 10, 0.4) 65%,
+    rgba(15, 0, 0, 0.95) 90%
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: resistance-blood-tide 6s ease-in-out infinite;
+}
+
+body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li a.card:hover .card-img {
+  filter: grayscale(0.8) contrast(1.2) brightness(0.8) !important;
+}
+
+body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
+  color: #8f2b2b;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+
+/* ==========================================================================
+   KPD RUBICON  (body.paranoid): fast, red, jittery, watched
+   Hitler rubicon (body.ominous) = slow, grey, apathetic.
+   KPD rubicon = fast, red, jittery, watched.
+   ========================================================================== */
+
+@keyframes paranoid-alarm {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 30, 30, 0.45), inset 0 0 8px rgba(0, 0, 0, 0.8); }
+  50%      { box-shadow: 0 0 22px rgba(255, 30, 30, 0.9), inset 0 0 14px rgba(120, 0, 0, 0.6); }
+}
+@keyframes paranoid-twitch {
+  0%, 90%, 100% { transform: translate(0, 0); }
+  92%           { transform: translate(-1px, 1px); }
+  95%           { transform: translate(1px, -1px); }
+  97%           { transform: translate(-1px, 0); }
+}
+@keyframes paranoid-watch {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* Edges of the screen close in, as if watched. Purely visual, never blocks clicks. */
+body.paranoid::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(140, 0, 0, 0.38) 100%);
+  animation: paranoid-watch 2.4s ease-in-out infinite;
+}
+
+body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card {
+  border: 2px solid #c01818 !important;
+  background-color: #120303 !important;
+  position: relative;
+  overflow: hidden;
+  animation: paranoid-alarm 2.2s ease-in-out infinite, paranoid-twitch 7s steps(1) infinite;
+}
+
+/* Images stay readable but turn red, hard and suspicious */
+body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li .card-img {
+  filter: grayscale(0.55) sepia(0.5) hue-rotate(-35deg) saturate(2.4) contrast(1.35) brightness(0.8) !important;
+  transition: filter 0.2s ease;
+}
+body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card:hover .card-img {
+  filter: grayscale(0.2) sepia(0.4) hue-rotate(-35deg) saturate(3) contrast(1.2) brightness(1) !important;
+}
+
+/* Scanline sweep, like a surveillance feed */
+body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.18) 0 1px,
+    transparent 1px 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
+  color: #ff4a3d;
+  font-family: "Courier New", Courier, monospace;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-shadow: 1px 0 rgba(0, 229, 255, 0.35), -1px 0 rgba(255, 0, 0, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.paranoid::after,
+  body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card {
+    animation: none;
+  }
+}
