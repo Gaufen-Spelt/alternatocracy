@@ -814,54 +814,39 @@ window.updateSidebar = function() {
 
 window.showFocuses = function () {
     var bar = document.getElementById('focus-bar');
-    if (!bar) return false;          // placeholder not drawn yet / not on this scene
+    if (!bar) return false;
     bar.innerHTML = '';
 
     var focuses = [
-        { img: 'img/logo/focus/middle.jpg', name: 'Mittelstand Crisis', desc: 'Placeholder description for the Mittelstand Crisis.' },
-        { img: 'img/logo/focus/yogo.jpg',   name: 'Youth Crisis',       desc: 'Placeholder description for the Youth Crisis.' }
-        // add more here
+        { img: 'img/logo/focus/middle.jpg', name: 'Mittelstand Crisis', desc: 'Driven by despair and absence of adequate representation by parties of both left and right, the middle class is effectively abandoned, especially with foreign competition and much more efficient competition at home. The old middle is forced to borrow at a high rate and sell at a relatively low rate to feed themselves, while the new middle is facing a crisis of identity and division, despite their more organized and vocal nature.' },
+        { img: 'img/logo/focus/yogo.jpg',   name: 'Youth Crisis',       desc: 'With youth being the most neglected by a wide range of parties, young and first-time voters are defecting to special-interest populists or otherwise radical parties, who present no viable option for them beyond protesting against the nature of the Reichstag and republic in general.' }
     ];
-
-    // layout of the container itself (your inline style on the div still applies on top)
-    bar.style.display = 'flex';
-    bar.style.flexWrap = 'nowrap';
-    bar.style.justifyContent = 'center';
-    bar.style.gap = '10px';
 
     focuses.forEach(function (f) {
         var item = document.createElement('div');
-        item.style.cssText = 'position:relative;';
+        item.className = 'focus-item';
+        item.tabIndex = 0;                       
 
         var img = document.createElement('img');
+        img.className = 'focus-icon';
         img.src = f.img;
         img.alt = f.name;
-        img.style.cssText = 'width:48px; height:48px; border-radius:50%; object-fit:cover;' +
-            'border:2px solid #c9a227; box-shadow:0 0 6px rgba(0,0,0,0.6); display:block;';
 
         var tip = document.createElement('div');
-        tip.style.cssText = 'position:absolute; top:56px; left:50%; transform:translateX(-50%);' +
-            'width:220px; background:rgba(0,0,0,0.9); color:#fff; padding:8px 10px;' +
-            'border:1px solid #c9a227; border-radius:6px; font-size:0.8em; line-height:1.3;' +
-            'text-align:left; display:none; z-index:1000;';
+        tip.className = 'focus-tooltip';
 
         var title = document.createElement('div');
+        title.className = 'focus-tooltip-title';
         title.textContent = f.name;
-        title.style.cssText = 'font-weight:bold; color:#c9a227; margin-bottom:4px;';
 
         var desc = document.createElement('div');
         desc.textContent = f.desc;
 
         tip.appendChild(title);
         tip.appendChild(desc);
-
-        item.onmouseenter = function () { tip.style.display = 'block'; };
-        item.onmouseleave = function () { tip.style.display = 'none'; };
-
         item.appendChild(img);
         item.appendChild(tip);
         bar.appendChild(item);
     });
     return true;
 };
-

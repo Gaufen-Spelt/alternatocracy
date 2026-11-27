@@ -1671,6 +1671,89 @@ body.dark-mode tr.row-neutral   { background-color: rgba(120, 120, 120, 0.10); }
 
 
 
+/* =====================================================================
+   FOCUS ICONS (national focuses row)
+   ===================================================================== */
+#focus-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 1em;
+  margin: 0.5em 0 1em 0;
+}
+
+.focus-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  outline: none;
+}
+.focus-item:hover,
+.focus-item:focus { z-index: 20; }
+
+.focus-icon {
+  width: 56px;
+  height: 56px;
+  max-width: none;
+  max-height: none;               /* beats the global img rule */
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 4px solid var(--card-border-color);
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: help;
+}
+.focus-item:hover .focus-icon,
+.focus-item:focus .focus-icon {
+  box-shadow: 8px 8px 10px rgba(0,0,0,0.2);
+  transform: translate(-3px, -3px);
+  border-color: var(--link-color);
+}
+
+/* Tooltip, same look as .card-tooltip */
+.focus-tooltip {
+  position: absolute;
+  visibility: hidden;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  max-width: 70vw;
+  padding: 0.4em 0.6em;
+  font-size: 0.9em;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--text-color);
+  background-color: var(--content-bg-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.2);
+}
+body.dark-mode .focus-tooltip {
+  border-style: double;
+  border-width: 4px;
+  border-color: #888;
+}
+.focus-item:hover .focus-tooltip,
+.focus-item:focus .focus-tooltip { visibility: visible; }
+
+.focus-tooltip-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85em;
+  color: var(--link-color);
+  margin-bottom: 0.25em;
+}
+
+@media screen and (max-width: 560px) {
+  .focus-icon { width: 44px; height: 44px; border-width: 3px; }
+  #focus-bar { gap: 0.6em; }
+}
+
+
 
 
 
