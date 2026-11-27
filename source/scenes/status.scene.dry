@@ -18,6 +18,10 @@ if (Q.hitler_rubicon == 1) {
     Q.country_name = "Third German Empire"
 }
 
+if (Q.kpd_rubicon == 1) {
+    Q.country_name = "People's Republic of Germany"
+}
+
 Q.country_name_display = Q.country_name || "Weimar Republic";
 
 
@@ -26,7 +30,7 @@ var flagSlugMap = {
   "Weimar Republic": "weimar",
   "German Republic": "weimar_reformed",
   "German Council Republic": "council_republic",
-  "Communist Republic of Germany": "communist_republic",
+  "People's Republic of Germany": "communist_republic",
   "German National State": "national_state",
   "German Empire": "empire",
   "German State": "junta",
