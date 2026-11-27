@@ -53,55 +53,52 @@ body.ominous :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
 
 
 /* ==========================================================================
-   KPD RUBICON  (body.paranoid): fast, red, jittery, watched
-   Hitler rubicon (body.ominous) = slow, grey, apathetic.
-   KPD rubicon = fast, red, jittery, watched.
+   KPD RUBICON  (body.paranoid): subtle, red, jittery, watched
    ========================================================================== */
 
 @keyframes paranoid-alarm {
-  0%, 100% { box-shadow: 0 0 6px rgba(255, 30, 30, 0.45), inset 0 0 8px rgba(0, 0, 0, 0.8); }
-  50%      { box-shadow: 0 0 22px rgba(255, 30, 30, 0.9), inset 0 0 14px rgba(120, 0, 0, 0.6); }
+  0%, 100% { box-shadow: 0 0 4px rgba(220, 35, 35, 0.22), inset 0 0 5px rgba(0, 0, 0, 0.55); }
+  50%      { box-shadow: 0 0 11px rgba(220, 35, 35, 0.42), inset 0 0 8px rgba(100, 0, 0, 0.35); }
 }
 @keyframes paranoid-twitch {
-  0%, 90%, 100% { transform: translate(0, 0); }
-  92%           { transform: translate(-1px, 1px); }
-  95%           { transform: translate(1px, -1px); }
-  97%           { transform: translate(-1px, 0); }
+  0%, 94%, 100% { transform: translate(0, 0); }
+  95%           { transform: translate(-0.5px, 0.5px); }
+  97%           { transform: translate(0.5px, -0.5px); }
 }
 @keyframes paranoid-watch {
-  0%, 100% { opacity: 0.55; }
-  50%      { opacity: 1; }
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.6; }
 }
 
-/* Edges of the screen close in, as if watched. Purely visual, never blocks clicks. */
+/* Subtle edge vignette; never blocks clicks. */
 body.paranoid::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(140, 0, 0, 0.38) 100%);
-  animation: paranoid-watch 2.4s ease-in-out infinite;
+  background: radial-gradient(ellipse at center, transparent 62%, rgba(120, 0, 0, 0.18) 100%);
+  animation: paranoid-watch 3.2s ease-in-out infinite;
 }
 
 body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card {
-  border: 2px solid #c01818 !important;
-  background-color: #120303 !important;
+  border: 1.5px solid #961818 !important;
+  background-color: #100505 !important;
   position: relative;
   overflow: hidden;
-  animation: paranoid-alarm 2.2s ease-in-out infinite, paranoid-twitch 7s steps(1) infinite;
+  animation: paranoid-alarm 2.8s ease-in-out infinite, paranoid-twitch 9s steps(1) infinite;
 }
 
-/* Images stay readable but turn red, hard and suspicious */
+/* Muted red tint that keeps portraits natural and legible */
 body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li .card-img {
-  filter: grayscale(0.55) sepia(0.5) hue-rotate(-35deg) saturate(2.4) contrast(1.35) brightness(0.8) !important;
+  filter: grayscale(0.45) sepia(0.35) hue-rotate(-25deg) saturate(1.45) contrast(1.12) brightness(0.88) !important;
   transition: filter 0.2s ease;
 }
 body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card:hover .card-img {
-  filter: grayscale(0.2) sepia(0.4) hue-rotate(-35deg) saturate(3) contrast(1.2) brightness(1) !important;
+  filter: grayscale(0.25) sepia(0.3) hue-rotate(-25deg) saturate(1.7) contrast(1.08) brightness(0.98) !important;
 }
 
-/* Scanline sweep, like a surveillance feed */
+/* Faint scanline texture */
 body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card::before {
   content: "";
   position: absolute;
@@ -110,19 +107,19 @@ body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li a.card::before {
   z-index: 2;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.18) 0 1px,
+    rgba(0, 0, 0, 0.1) 0 1px,
     transparent 1px 3px
   );
   mix-blend-mode: multiply;
 }
 
 body.paranoid :is(ul.hand, ul.decks, ul.pinned-cards) li .card-caption {
-  color: #ff4a3d;
+  color: #d9534f;
   font-family: "Courier New", Courier, monospace;
   font-style: normal;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-shadow: 1px 0 rgba(0, 229, 255, 0.35), -1px 0 rgba(255, 0, 0, 0.6);
+  letter-spacing: 0.08em;
+  text-shadow: 0.5px 0 rgba(0, 229, 255, 0.16), -0.5px 0 rgba(255, 40, 40, 0.28);
 }
 
 @media (prefers-reduced-motion: reduce) {
