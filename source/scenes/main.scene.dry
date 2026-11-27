@@ -92,6 +92,8 @@ max-cards: 4
 
 = [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
 
+<div id="focus-bar"></div>
+
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
 - @party
@@ -210,6 +212,8 @@ if (!window.__reactionClockStarted) {
 max-cards: 6
 
 = [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
+
+<div id="focus-bar"></div>
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
@@ -348,6 +352,8 @@ max-cards: 2
 
 = [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
 
+<div id="focus-bar"></div>
+
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
 - @party
@@ -480,6 +486,8 @@ if (!window.__reactionClockStarted) {
 max-cards: 3
 
 = [? if hitler_rubicon >= 1: Day: [+ day +], ?] [? if hitler_rubicon >= 1: Week: [+ week +], ?] [+ weeks: monther +], [+ month : month +] [+ year +]
+
+<div id="focus-bar"></div>
 
 #Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
