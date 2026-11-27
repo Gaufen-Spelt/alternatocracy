@@ -1034,7 +1034,7 @@ if (Q.ideology == "Centrist") {
     Q.center_strength += 0.2;
 }
 
-if (Q.youth_crisis_spd >= 1) {
+if (Q.youth_crisis >= 1) {
     Q.workers_spd -= 0.1;
     Q.new_middle_spd -= 0.05;
     Q.unemployed_spd -= 0.05;
@@ -1044,7 +1044,7 @@ if (Q.youth_crisis_spd >= 1) {
 // ---- Flags -----------------------------------------------------------------
 
 Q.dvp_rightist = (Q.dvp_party_leader == "Scholz") ? 1 : 0;
-Q.youth_crisis_spd = (
+Q.youth_crisis = (
     (Q.new_middle_consciousness >= 1 || Q.iron_front_formed >= 1 || Q.peoples_party >= 1)
     && Q.young_socialists >= 2
 ) ? 0 : 1;

@@ -61,13 +61,16 @@ Q.spd_neorev_win = 0;
 Q.spd_reformist_win = 0;
 Q.spd_center_win = 0;
 
+Q.middle_crisis = 1;
+Q.youth_crisis = 1;
+
 
 
 Q.ideology = "Centrist";
 Q.spd_party_leader = "Collective";
 Q.spd_centrist = 1;
 Q.spd_world = 0;
-Q.youth_crisis_spd = 1;
+Q.youth_crisis = 1;
 Q.seed = 1;
 Q.presidential_election_year = 1942;
 Q.presidential_election_month = 7;

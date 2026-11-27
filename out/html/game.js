@@ -815,17 +815,41 @@ window.updateSidebar = function() {
 window.showFocuses = function () {
     var bar = document.getElementById('focus-bar');
     if (!bar) return false;
-    bar.innerHTML = '';
+
+    var Q = dendryUI.dendryEngine.state.qualities;
 
     var focuses = [
-        { img: 'img/logo/focus/middle.jpg', name: 'Mittelstand Crisis', desc: 'Driven by despair and absence of adequate representation by parties of both left and right, the middle class is effectively abandoned, especially with foreign competition and much more efficient competition at home. The old middle is forced to borrow at a high rate and sell at a relatively low rate to feed themselves, while the new middle is facing a crisis of identity and division, despite their more organized and vocal nature.' },
-        { img: 'img/logo/focus/yogo.jpg',   name: 'Youth Crisis',       desc: 'With youth being the most neglected by a wide range of parties, young and first-time voters are defecting to special-interest populists or otherwise radical parties, who present no viable option for them beyond protesting against the nature of the Reichstag and republic in general.' }
+        {
+            img: 'img/logo/focus/middle.jpg', name: 'Mittelstand Crisis',
+            when: function () { return Q.middle_crisis; },
+            desc: 'Driven by despair and absence of adequate representation by parties of both left and right, the middle class is effectively abandoned, especially with foreign competition and much more efficient competition at home. The old middle is forced to borrow at a high rate and sell at a relatively low rate to feed themselves, while the new middle is facing a crisis of identity and division, despite their more organized and vocal nature.'
+        },
+        {
+            img: 'img/logo/focus/yogo.jpg', name: 'Youth Crisis',
+            when: function () { return Q.youth_crisis; },
+            desc: 'With youth being the most neglected by a wide range of parties, young and first-time voters are defecting to special-interest populists or otherwise radical parties, who present no viable option for them beyond protesting against the nature of the Reichstag and republic in general.'
+        },
+        {
+            img: 'img/logo/focus/landvolkbewegung.jpg', name: 'Rural protests',
+            when: function () { return Q.landvolkbewegung; },
+            desc: 'With youth being the most neglected by a wide range of parties, young and first-time voters are defecting to special-interest populists or otherwise radical parties, who present no viable option for them beyond protesting against the nature of the Reichstag and republic in general.'
+        }
     ];
 
-    focuses.forEach(function (f) {
+    var visible = focuses.filter(function (f) { return f.when(); });
+
+    // Nothing changed since the last build: leave the DOM alone (no flicker)
+    var key = visible.map(function (f) { return f.name; }).join('|');
+    if (bar.dataset.key === key) return true;
+    bar.dataset.key = key;
+
+    bar.innerHTML = '';
+    bar.style.display = visible.length ? '' : 'none';   // collapse the reserved space when empty
+
+    visible.forEach(function (f) {
         var item = document.createElement('div');
         item.className = 'focus-item';
-        item.tabIndex = 0;                       
+        item.tabIndex = 0;
 
         var img = document.createElement('img');
         img.className = 'focus-icon';
