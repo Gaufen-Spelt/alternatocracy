@@ -20,12 +20,12 @@ With Saxonian SPD in critical condition between it's far left unwilling to ever 
 @negotiate_asdp
 choose-if: not spd_left and not spd_centrist
 unavailable-subtitle: Our stance is clearly unfavored by ASPD, reformist splinter.
-on-arrival: aspd_relation += 3; reformist_strength += 3; saxony_timer = 12; pro_republic += 1
+on-arrival: aspd_relation += 3; reformist_strength += 3; saxony_timer = 12; pro_republic += 1; month_actions += 1
 
 We attempted to negotiate with ASPD.
 
 @assault_aspd
 subtitle: ASPD is ridden by opportunists and national socialists.
-on-arrival: workers_spd += 2; workers_other -= 2; aspd_relation -= 7; saxony_timer = 9; left_strength += 3; socialism += 1
+on-arrival: workers_spd += 2; workers_other -= 2; aspd_relation -= 7; saxony_timer = 9; left_strength += 3; socialism += 1; month_actions += 1
 
 We attacked ASPD.

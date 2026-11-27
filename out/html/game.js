@@ -832,7 +832,7 @@ window.showFocuses = function () {
         {
             img: 'img/logo/focus/landvolkbewegung.jpg', name: 'Rural protests',
             when: function () { return Q.landvolkbewegung; },
-            desc: 'With youth being the most neglected by a wide range of parties, young and first-time voters are defecting to special-interest populists or otherwise radical parties, who present no viable option for them beyond protesting against the nature of the Reichstag and republic in general.'
+            desc: 'Intensified by the global collapse of prices for grain and insufficient levels of tariffs placed onto imported production, farmers have rallied against their authorities, banks, landowners and are even enacting bombings and boycotts against urbanity. Main driving force behind their radical and uncompromissive behavior is Landvolkbewegung, radical nationalist, anti-republican movement (with grassroots tied to RLB and NSDAP) led by Claus Heim and Wilhelm Hamkens, is especially prominent in Schleswig-Holstein, Pomerania and has caused shockwave beyond East Elbian areas, creating momentum for agrarian forces.'
         }
     ];
 
