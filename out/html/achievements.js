@@ -323,28 +323,117 @@
   }
 
   // ========================================================================
-  // 3. Popup registry (game.js Achievements.registry) from the same data
+  // 3. Popup (registry built from the same data as the hub pages)
   // ========================================================================
 
-  function mergeRegistry() {
-    var A = window.Achievements;
-    if (!A || !A.registry) { return; }
+  // Popup-only achievements (not listed on hub pages): [id, title, description]
+  var POPUP_ONLY = [
+    ['ruhrland', 'Rheinland in Fire', 'French reoccupy the Rheinland following catastrophe of Young Plan.'],
+    ['tyrole_danubia', 'Tyrol - Danubian Pact', 'Italy and Germany has signed non aggression treaty.'],
+    ['revolution_own', 'Revolution of Three Spears', 'SPD has launched the revolution.'],
+    ['popular_frontier', 'Popular Front', 'Popular Front theses has been established.'],
+    ['landlicher_zorn', 'Ländlicher Zorn', 'Rural wrath engulfes the Germany...'],
+    ['neue_generation', 'Neue Generation', 'Passing the mantle.'],
+    ['volksgemeinschaft', 'Volksgemeinschaft', 'All differences are none before Germany.'],
+    ['christian_revolution', 'Kreuz und Arbeit', 'Overcoming the German odds.'],
+    ['national_rejuvenation', 'Nationale Erneuerung', 'Three pillars, two faiths, one nation - elevated above all differences.']
+  ];
 
-    BASE_ACHIEVEMENTS.forEach(function (b) {
-      A.registry[b[0]] = {
-        title: b[1],
-        description: b[2],
-        icon: BASE_ICON_DIR ? BASE_ICON_DIR + b[0] + '.png' : null
-      };
-    });
-    MOD_ACHIEVEMENTS.concat(HORIZON_ACHIEVEMENTS).forEach(function (a) {
-      A.registry[a.id] = {
-        title: a.title,
-        description: a.desc,
-        icon: iconPath(a.icon)
-      };
-    });
+  var POPUP = {};
+  BASE_ACHIEVEMENTS.forEach(function (b) {
+    POPUP[b[0]] = { title: b[1], description: b[2],
+                    icon: BASE_ICON_DIR ? BASE_ICON_DIR + b[0] + '.png' : '' };
+  });
+  POPUP_ONLY.forEach(function (p) {
+    POPUP[p[0]] = { title: p[1], description: p[2], icon: ICON_DIR + p[0] + '.png' };
+  });
+  MOD_ACHIEVEMENTS.concat(HORIZON_ACHIEVEMENTS).forEach(function (a) {
+    POPUP[a.id] = { title: a.title, description: a.desc, icon: iconPath(a.icon) };
+  });
+
+  var _queue = [], _busy = false, _timer, _el;
+
+  function engine() { return window.dendryUI && window.dendryUI.dendryEngine; }
+
+  function unlockedMap() {
+    var e = engine();
+    return e ? (e.state.achievementsUnlocked = e.state.achievementsUnlocked || {}) : {};
   }
+
+  function popupEl() {
+    if (_el) { return _el; }
+    _el = document.createElement('div');
+    _el.id = 'achievement-popup';
+    _el.setAttribute('popover', 'manual');
+    _el.innerHTML =
+      '<div class="ap-icon"><img alt=""></div>' +
+      '<div><div class="ap-label">Achievement Unlocked</div>' +
+      '<div class="ap-title"></div><div class="ap-desc"></div></div>';
+    _el.querySelector('img').onerror = function () { this.hidden = true; };
+    _el.onclick = hidePopup;
+    document.body.appendChild(_el);
+    return _el;
+  }
+
+  function showNext() {
+    if (_busy || !_queue.length) { return; }
+    _busy = true;
+    var a = _queue.shift(), el = popupEl(), img = el.querySelector('img');
+    img.hidden = !a.icon;
+    if (a.icon) { img.src = a.icon; }
+    el.querySelector('.ap-title').textContent = a.title;
+    el.querySelector('.ap-desc').textContent = a.description;
+    el.showPopover();
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { el.classList.add('active'); });
+    });
+    _timer = setTimeout(hidePopup, 5000);
+  }
+
+  function hidePopup() {
+    if (!_el.classList.contains('active')) { return; }
+    clearTimeout(_timer);
+    _el.classList.remove('active');
+    setTimeout(function () {
+      _el.hidePopover();
+      _busy = false;
+      showNext();
+    }, 400);
+  }
+
+  function unlock(id) {
+    var u = unlockedMap();
+    if (u[id]) { return false; }
+    u[id] = true;
+    _queue.push(POPUP[id] || { title: id, description: '', icon: '' });
+    showNext();
+    return true;
+  }
+
+  window.Achievements = {
+    unlock: unlock,
+    registry: POPUP,
+    getAll: function () { return POPUP; },
+    isUnlocked: function (id) { return !!unlockedMap()[id]; },
+    getUnlockedList: function () {
+      var u = unlockedMap();
+      return Object.keys(POPUP).filter(function (id) { return u[id]; });
+    }
+  };
+
+  // Hook the engine's achieve() so popups fire automatically
+  var hook = setInterval(function () {
+    var e = engine();
+    if (!e || !e.achieve) { return; }
+    clearInterval(hook);
+    var original = e.achieve.bind(e);
+    e.achieve = function (name) {
+      var had = this.state.achievements && this.state.achievements[name];
+      var result = original(name);
+      if (!had) { unlock(name); }
+      return result;
+    };
+  }, 100);
 
   // ========================================================================
   // 4. Scan + start
@@ -367,7 +456,6 @@
   }
 
   function start() {
-    mergeRegistry();
     var content = document.getElementById('content');
     if (!content) { return; }
     new MutationObserver(scan).observe(content, { childList: true, subtree: true });
