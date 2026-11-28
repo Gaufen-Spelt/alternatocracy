@@ -6,7 +6,7 @@ view-if: (year = next_election_year and month >= next_election_month) or (year >
 on-departure: month_actions += 1; in_election = 0; next_election_year = next_election_year + 4; n_elections += 1; next_election_time = time + 48; papen_chancellor_timer = 4; hindenburg_dismissal_timer = 6;
 set-jump: post_election_1928
 face-image: img/Rothe_Wahlen_1903.jpg
-on-arrival: dvp_in_government = 0; spd_in_government = 0; z_in_government = 0; ddp_in_government = 0; bvp_in_government = 0; dnvp_in_government = 0; nsdap_in_government = 0; kpd_in_government = 0; hilferding_resign = 0; srpd_in_government = 0
+on-arrival: dvp_in_government = 0; spd_in_government = 0; z_in_government = 0; ddp_in_government = 0; bvp_in_government = 0; dnvp_in_government = 0; nsdap_in_government = 0; kpd_in_government = 0; wp_in_government = 0; vrp_in_government = 0; hilferding_resign = 0; srpd_in_government = 0
  
 # TODO: should there be an image?
  
@@ -121,17 +121,21 @@ var dbp_seat_share = (Q.dbp_formed && Q.dbp_seats) ? Q.dbp_seats : 0;
 
 var cnblp_share = (Q.cnblp_formed && Q.cnblp_r) ? Q.cnblp_r : 0;
 var cnblp_seat_share = (Q.cnblp_formed && Q.cnblp_seats) ? Q.cnblp_seats : 0;
+
+// WP and VRP count with Others in the coalition math below
+var minor_share = (Q.other_r || 0) + (Q.wp_r || 0) + (Q.vrp_r || 0);
+var minor_seat_share = (Q.other_seats || 0) + (Q.wp_seats || 0) + (Q.vrp_seats || 0);
  
 // ============================================================================
 // COALITIONS (vote share)
 // ============================================================================
 Q.weimar_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r;
 Q.grand_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r + Q.dvp_r + Q.bvp_r;
-Q.neo_weimar_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r;
+Q.neo_weimar_coalition = Q.spd_r + srpd_share + Q.ddp_r + Q.z_r + Q.dvp_r + minor_share + Q.bvp_r;
 Q.progressive_coalition = Q.spd_r + srpd_share + Q.kpd_r + Q.ddp_r + Q.sapd_r;
-Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r + Q.bvp_r + dbp_share;
-Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r + dbp_share + cnblp_share;
-Q.right_coalition = Q.z_r + Q.dvp_r + Q.other_r + Q.dnvp_r + Q.bvp_r + dbp_share + cnblp_share;
+Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + minor_share + Q.bvp_r + dbp_share;
+Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + minor_share + Q.dnvp_r + Q.bvp_r + dbp_share + cnblp_share;
+Q.right_coalition = Q.z_r + Q.dvp_r + minor_share + Q.dnvp_r + Q.bvp_r + dbp_share + cnblp_share;
 Q.far_right_coalition = Q.dnvp_r + Q.nsdap_r;
 Q.left_coalition = Q.spd_r + Q.kpd_r + Q.sapd_r;
 // this is an absurd concept lol
@@ -153,11 +157,11 @@ if (Q.kpd_relation >= 30) {
 // ============================================================================
 Q.weimar_seats         = Q.spd_seats + srpd_seat_share + Q.ddp_seats + Q.z_seats;
 Q.grand_seats          = Q.weimar_seats + Q.dvp_seats + Q.bvp_seats;
-Q.neo_weimar_seats      = Q.grand_seats + Q.other_seats;
+Q.neo_weimar_seats      = Q.grand_seats + minor_seat_share;
 Q.progressive_seats     = Q.spd_seats + srpd_seat_share + Q.kpd_seats + Q.ddp_seats + Q.sapd_seats;
-Q.bourgeois_seats       = Q.ddp_seats + Q.z_seats + Q.dvp_seats + Q.other_seats + Q.bvp_seats + dbp_seat_share;
+Q.bourgeois_seats       = Q.ddp_seats + Q.z_seats + Q.dvp_seats + minor_seat_share + Q.bvp_seats + dbp_seat_share;
 Q.center_right_seats    = Q.bourgeois_seats + Q.dnvp_seats + cnblp_seat_share;
-Q.right_seats           = Q.z_seats + Q.dvp_seats + Q.other_seats + Q.dnvp_seats + Q.bvp_seats + dbp_seat_share + cnblp_seat_share;
+Q.right_seats           = Q.z_seats + Q.dvp_seats + minor_seat_share + Q.dnvp_seats + Q.bvp_seats + dbp_seat_share + cnblp_seat_share;
 Q.far_right_seats       = Q.dnvp_seats + Q.nsdap_seats;
 Q.left_seats            = Q.spd_seats + Q.kpd_seats + Q.sapd_seats;
 Q.popular_front_seats   = Q.spd_seats + Q.kpd_seats + Q.z_seats + Q.ddp_seats + Q.sapd_seats;
@@ -322,6 +326,18 @@ data = data.concat([
         "seats": Q.dvp_seats,
     },
     {
+        "id": "wp",
+        "legend": "WP",
+        "name": "WP",
+        "seats": Q.wp_seats,
+    },
+    {
+        "id": "vrp",
+        "legend": "VRP",
+        "name": "VRP",
+        "seats": Q.vrp_seats,
+    },
+    {
         "id": "other",
         "legend": "Other",
         "name": "Other",
@@ -397,6 +413,8 @@ Q.partyData = Q.partyData.concat([
     { id: "z",     name: "Center",     seats: Q.z_seats,     color: "#111111", show: true },
     { id: "bvp",   name: "BVP",        seats: Q.bvp_seats,   color: "#69A2BE", show: true },
     { id: "dvp",   name: "DVP",        seats: Q.dvp_seats,   color: "#D5AC27", show: true },
+    { id: "wp",    name: "WP",         seats: Q.wp_seats,    color: "#8A6FB5", show: true },
+    { id: "vrp",   name: "VRP",        seats: Q.vrp_seats,   color: "#2FA4A4", show: true },
     { id: "other", name: "Other",      seats: Q.other_seats, color: "#a0a0a0", show: true },
     { id: "dnvp",  name: "DNVP",       seats: Q.dnvp_seats,  color: "#3F7BC1", show: true },
     { id: "nsdap", name: "NSDAP",      seats: Q.nsdap_seats, color: "#954B00", show: true },
@@ -443,6 +461,10 @@ go-to: coalition_menu
 {!<tr><td><div class="box" style='background-color:#69A2BE'> </div> !} BVP: {!</td><td>!} [+ bvp_r_disp +]% {!</td><td>!} [+ str_change_bvp +] {!</td><td>!} [+ bvp_seats +] {!</td></tr>!}
  
 {!<tr><td><div class="box" style='background-color:#D5AC27'> </div> !} DVP: {!</td><td>!} [+ dvp_r_disp +]% {!</td><td>!} [+ str_change_dvp +] {!</td><td>!} [+ dvp_seats +] {!</td></tr>!}
+ 
+{!<tr><td><div class="box" style='background-color:#8A6FB5'> </div> !} WP: {!</td><td>!} [+ wp_r_disp +]% {!</td><td>!} [+ str_change_wp +] {!</td><td>!} [+ wp_seats +] {!</td></tr>!}
+ 
+{!<tr><td><div class="box" style='background-color:#2FA4A4'> </div> !} VRP: {!</td><td>!} [+ vrp_r_disp +]% {!</td><td>!} [+ str_change_vrp +] {!</td><td>!} [+ vrp_seats +] {!</td></tr>!}
  
 {!<tr><td><div class="box" style='background-color:#a0a0a0'> </div> !} Others: {!</td><td>!} [+ other_r_disp +]% {!</td><td>!} [+ str_change_other +] {!</td><td>!} [+ other_seats +] {!</td></tr>!}
  

@@ -49,7 +49,7 @@ Q.srpd_name = "SRPD";
 Q.srpd_formed = 0;
 Q.sapd_banned = 0; Q.srpd_banned = 0; Q.spd_banned = 0;
 Q.ddp_banned = 0; Q.z_banned = 0; Q.bvp_banned = 0;
-Q.dvp_banned = 0; Q.dnvp_banned = 0;
+Q.dvp_banned = 0; Q.dnvp_banned = 0; Q.wp_banned = 0; Q.vrp_banned = 0;
 
 Q.adgb_strength = 4500;
 Q.afa_bund_strength = 450;
@@ -94,6 +94,8 @@ Q.bvp_ideology = "Bavarian Regionalism (Conservatism)";
 Q.dnvp_ideology = "National Conservatism";
 Q.nsdap_ideology = "National Socialism";
 Q.srpd_ideology = "Social Republicanism";
+Q.wp_ideology = "Middle-Class Interest Politics";
+Q.vrp_ideology = "Revaluation Populism";
 
 Q.bvp_party_leader = "Held";
 Q.bvp_relation = 25;
@@ -106,6 +108,8 @@ Q.ddp_in_government = 0;
 Q.spd_in_government = 0;
 Q.kpd_in_government = 0;
 Q.other_in_government = 0;
+Q.wp_in_government = 0;
+Q.vrp_in_government = 0;
 Q.nsdap_in_government = 0;
 
 
@@ -206,6 +210,8 @@ Q.ddp_party_leader = "Koch-Weser";
 Q.dvp_party_leader = "Stresemann";
 Q.srpd_leader = "Horsing";
 Q.sapd_leader = "Rosenfeld";
+Q.wp_party_leader = "Drewitz";
+Q.vrp_party_leader = "Bauser";
 
 // hmm... maybe we can play nice with Hindenburg???
 Q.hindenburg_relation = 25;
@@ -334,7 +340,7 @@ Q.unemployment_flat = 0;   // 1 = everyone gets exactly Q.unemployed %
 Q.sub_sync = {};
 Q.subclass_bias = {};
 
-Q.parties = ['kpd', 'spd', 'ddp', 'z', 'bvp', 'dvp', 'other', 'dnvp', 'nsdap'];
+Q.parties = ['kpd', 'spd', 'ddp', 'z', 'bvp', 'dvp', 'wp', 'vrp', 'other', 'dnvp', 'nsdap'];
 Q.sapd_formed = 0;
 
 // Estimated support by group (mid-1927 baseline)
@@ -348,7 +354,9 @@ Q.workers_prime_ddp = 1;
 Q.workers_prime_dvp = 1;
 Q.workers_prime_dnvp = 5;
 Q.workers_prime_nsdap = 1;
-Q.workers_prime_other = 8;
+Q.workers_prime_wp = 2.5;
+Q.workers_prime_vrp = 1;
+Q.workers_prime_other = 4.5;
 
 // ---- Workers: youth (30%) ----
 Q.workers_youth_spd = 40;
@@ -359,7 +367,9 @@ Q.workers_youth_ddp = 1;
 Q.workers_youth_dvp = 1;
 Q.workers_youth_dnvp = 5;
 Q.workers_youth_nsdap = 4;
-Q.workers_youth_other = 8;
+Q.workers_youth_wp = 1.5;
+Q.workers_youth_vrp = 0.5;
+Q.workers_youth_other = 6;
 
 // ---- Workers: pensioners (30%) ----
 Q.workers_pensioners_spd = 50;
@@ -370,7 +380,9 @@ Q.workers_pensioners_ddp = 1;
 Q.workers_pensioners_dvp = 1;
 Q.workers_pensioners_dnvp = 12;
 Q.workers_pensioners_nsdap = 1;
-Q.workers_pensioners_other = 8;
+Q.workers_pensioners_wp = 2;
+Q.workers_pensioners_vrp = 2;
+Q.workers_pensioners_other = 4;
 
 // ---- Middle: old (shopkeepers, artisans) ----
 Q.old_middle_spd = 5;
@@ -381,7 +393,9 @@ Q.old_middle_ddp = 13;
 Q.old_middle_dvp = 29;
 Q.old_middle_dnvp = 34;
 Q.old_middle_nsdap = 3;
-Q.old_middle_other = 8;
+Q.old_middle_wp = 6;
+Q.old_middle_vrp = 1.5;
+Q.old_middle_other = 0.5;
 
 // ---- Middle: new (white-collar, civil servants) ----
 Q.new_middle_spd = 7;
@@ -392,7 +406,9 @@ Q.new_middle_ddp = 29;
 Q.new_middle_dvp = 28;
 Q.new_middle_dnvp = 18;
 Q.new_middle_nsdap = 2;
-Q.new_middle_other = 2;
+Q.new_middle_wp = 1.3;
+Q.new_middle_vrp = 0.5;
+Q.new_middle_other = 0.2;
 
 // ---- Rural: agricultural workers (30%) ----
 Q.rural_agri_spd = 18;
@@ -403,7 +419,9 @@ Q.rural_agri_ddp = 10;
 Q.rural_agri_dvp = 8;
 Q.rural_agri_dnvp = 40;
 Q.rural_agri_nsdap = 3;
-Q.rural_agri_other = 13;
+Q.rural_agri_wp = 3;
+Q.rural_agri_vrp = 1.5;
+Q.rural_agri_other = 8.5;
 
 // ---- Rural: farmers (60%) ----
 Q.rural_farmers_spd = 5;
@@ -414,7 +432,9 @@ Q.rural_farmers_ddp = 5;
 Q.rural_farmers_dvp = 18;
 Q.rural_farmers_dnvp = 58;
 Q.rural_farmers_nsdap = 2;
-Q.rural_farmers_other = 2;
+Q.rural_farmers_wp = 1;
+Q.rural_farmers_vrp = 0.5;
+Q.rural_farmers_other = 0.5;
 
 // ---- Rural: landowners (10%) ----
 Q.rural_landowners_spd = 0;
@@ -425,7 +445,9 @@ Q.rural_landowners_ddp = 3;
 Q.rural_landowners_dvp = 22;
 Q.rural_landowners_dnvp = 66;
 Q.rural_landowners_nsdap = 2;
-Q.rural_landowners_other = 1;
+Q.rural_landowners_wp = 0.5;
+Q.rural_landowners_vrp = 0.2;
+Q.rural_landowners_other = 0.3;
 
 // ---- Unemployed bloc (votes this way for the unemployed share of every group) ----
 Q.unemployed_spd = 28;
@@ -436,7 +458,9 @@ Q.unemployed_ddp = 1;
 Q.unemployed_dvp = 1;
 Q.unemployed_dnvp = 6;
 Q.unemployed_nsdap = 6;
-Q.unemployed_other = 7;
+Q.unemployed_wp = 1.5;
+Q.unemployed_vrp = 1;
+Q.unemployed_other = 4.5;
 
 // ---- Catholics (no subclasses) ----
 Q.catholics_spd = 14;
@@ -447,7 +471,9 @@ Q.catholics_ddp = 1;
 Q.catholics_dvp = 4;
 Q.catholics_dnvp = 6;
 Q.catholics_nsdap = 1;
-Q.catholics_other = 14;
+Q.catholics_wp = 2;
+Q.catholics_vrp = 1;
+Q.catholics_other = 11;
 
 // Parent class values (workers_spd, rural_dnvp, middle_z ...) are derived from the subclasses above.
 for (var c in Q.subclasses) {
@@ -463,6 +489,29 @@ for (var c in Q.subclasses) {
 }
 
 
+// ---- Unemployed subclasses ----
+// Every group's unemployed are their own subclass with their own party support, independent of the parent group,
+// the employed part of the same group and the unemployed bloc above.
+// They start equal to the unemployed bloc above. Set any of them directly below, e.g. Q.workers_prime_unemployed_kpd = 60;
+// Naming: <group>_unemployed_<party>. The bloc values (unemployed_<party>) become the average of these, weighted by
+// each group's share of the unemployed. Changing unemployed_<party> still shifts all of them together.
+Q.unemployed_subclasses = [
+  {id:'workers_prime_unemployed',      leaf:'workers_prime'},
+  {id:'workers_youth_unemployed',      leaf:'workers_youth'},
+  {id:'workers_pensioners_unemployed', leaf:'workers_pensioners'},
+  {id:'old_middle_unemployed',         leaf:'old_middle'},
+  {id:'new_middle_unemployed',         leaf:'new_middle'},
+  {id:'rural_agri_unemployed',         leaf:'rural_agri'},
+  {id:'rural_farmers_unemployed',      leaf:'rural_farmers'},
+  {id:'rural_landowners_unemployed',   leaf:'rural_landowners'},
+  {id:'catholics_unemployed',          leaf:'catholics'}
+];
+for (var s of Q.unemployed_subclasses) {
+  for (var party of Q.parties) {
+    Q[s.id + '_' + party] = Q['unemployed_' + party] || 0;
+  }
+}
+
 // Actual Reichstag Composition in 1927 (Based on December 1924 Election)
 Q.spd_r = 26;   // 131 seats (26.0%)
 Q.kpd_r = 9;    // 45 seats (9.0%)
@@ -472,7 +521,9 @@ Q.ddp_r = 6;    // 32 seats (6.3%)
 Q.dvp_r = 10;   // 51 seats (10.1%)
 Q.dnvp_r = 20;  // 103 seats (20.5%)
 Q.nsdap_r = 3;  // 14 seats (3.0% - Völkisch-Sozialer Block)
-Q.other_r = 8;  // 33 seats (7.8% - Wirtschaftspartei, Rural lists)
+Q.wp_r = 3;     // 17 seats (3.3% - Wirtschaftspartei)
+Q.vrp_r = 0;    // founded 1926, no seats yet
+Q.other_r = 5;  // remaining minor lists (Rural lists, etc.)
 
 // Diff from previous election (May 1924 -> Dec 1924)
 Q.old_spd_r = 21;
@@ -483,7 +534,9 @@ Q.old_ddp_r = 6;
 Q.old_dvp_r = 9;
 Q.old_dnvp_r = 20;
 Q.old_nsdap_r = 7;
-Q.old_other_r = 8;
+Q.old_wp_r = 3;
+Q.old_vrp_r = 0;
+Q.old_other_r = 5;
 
 Q.partyData = [
     { id: "kpd",   name: "KPD",    seats: 45,  color: "#8B0000", show: true },
@@ -492,7 +545,9 @@ Q.partyData = [
     { id: "z",     name: "Center", seats: 70,  color: "#111111", show: true },
     { id: "bvp",   name: "BVP",    seats: 20,  color: "#69A2BE", show: true },
     { id: "dvp",   name: "DVP",    seats: 50,  color: "#D5AC27", show: true },
-    { id: "other", name: "Other",  seats: 40,  color: "#a0a0a0", show: true },
+    { id: "wp",    name: "WP",     seats: 15,  color: "#8A6FB5", show: true },
+    { id: "vrp",   name: "VRP",    seats: 0,   color: "#2FA4A4", show: true },
+    { id: "other", name: "Other",  seats: 25,  color: "#a0a0a0", show: true },
     { id: "dnvp",  name: "DNVP",   seats: 100, color: "#3F7BC1", show: true },
     { id: "nsdap", name: "NSDAP",  seats: 15,  color: "#954B00", show: true }
 ];

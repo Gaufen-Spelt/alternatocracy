@@ -522,8 +522,18 @@ window.renderHistoryMini = function() {
     var Q = window.dendryUI.dendryEngine.state.qualities;
     if (!window.d3 || !d3.linegraph) return;
 
-    var partyColors = {'spd': '#E3000F', 'kpd': '#8B0000', 'ddp': '#DCCA4A', 'z': '#000', 'dvp': '#D5AC27', 'dnvp': '#3f7bc1', 'nsdap': '#954B00', 'other': '#a0a0a0', 'sapd': '#c40000'};
-    var partyNames  = {'spd': 'SPD', 'kpd': 'KPD', 'ddp': Q.ddp_name || 'DDP', 'z': 'Z + BVP', 'dvp': 'DVP', 'dnvp': 'DNVP', 'nsdap': 'NSDAP', 'other': 'Others', 'sapd': 'SAPD'};
+    var partyColors = { 'other': '#a0a0a0', 'wp': '#8A6FB5', 'vrp': '#2FA4A4' };
+    var partyNames  = { 'other': 'Others', 'wp': 'WP', 'vrp': 'VRP' };
+
+    if (window.partyColors) {
+        Object.keys(window.partyColors).forEach(function(key) {
+            var lowerKey = key.toLowerCase();
+            partyColors[lowerKey] = window.partyColors[key];
+            partyNames[lowerKey]  = key;
+        });
+    }
+
+    partyNames['ddp'] = Q.ddp_name || partyNames['ddp'] || 'DDP';
 
     function sizeSvg(id, h) {
         var el = document.getElementById(id);
@@ -668,6 +678,14 @@ function buildUnemployedSection() {
             out += "&nbsp;&nbsp;- " + s.id + ": " + Q[s.id + '_unemp_share'] + "% (" + Q[s.id + '_unemp_pct'] + "% of the group)<br>";
         }
     }
+    out += "<br>";
+
+    // How each group's unemployed vote (independent subclasses)
+    for (var u of Q.unemployed_subclasses) {
+        var ub = breakdownFor(u.id);
+        Q[u.id + '_breakdown'] = ub;
+        out += "<b>" + u.id + "</b> (" + Q[u.leaf + '_unemp_share'] + "% of the unemployed):<br>" + ub + "<br>";
+    }
     return out + "<br>";
 }
 
@@ -719,6 +737,7 @@ Q.classes_breakdown_display = buildClassSection(Q.classes) + buildUnemployedSect
 [+ classes_breakdown_display +]
 
 <hr>
+
 
 
 

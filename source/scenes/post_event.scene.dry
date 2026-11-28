@@ -228,24 +228,35 @@ function applyUnemploymentExposure(leaves) {
 function syncSubclasses() {
     Q.sub_sync = Q.sub_sync || {};
     var mid = Q.old_middle + Q.new_middle;
-    for (var c in Q.subclasses) {
+
+    // The unemployed subclasses sync the same way as the employed ones
+    var groups = {};
+    for (var c in Q.subclasses) groups[c] = Q.subclasses[c];
+    groups.unemployed = Q.unemployed_subclasses;
+
+    for (var c in groups) {
+        var subs = groups[c];
+        var wsum = 0;
+        if (c === 'unemployed') for (var s of subs) wsum += Q[s.leaf + '_unemp_share'] || 0;
         for (var party of Q.parties) {
             var pk = c + '_' + party;
             var delta = (Q.sub_sync[pk] === undefined) ? 0 : (Q[pk] || 0) - Q.sub_sync[pk];
             var avg = 0;
-            for (var s of Q.subclasses[c]) {
+            for (var s of subs) {
                 var sk = s.id + '_' + party;
                 if (Q[sk] === undefined) Q[sk] = (Q[pk] || 0) + ((Q.subclass_bias[s.id] || {})[party] || 0);
                 else Q[sk] += delta;
                 Q[sk] = Math.max(0, Q[sk]);
-                avg += ((c === 'middle') ? (mid > 0 ? Q[s.id] / mid : 0) : s.share) * Q[sk];
+                var w = (c === 'middle')     ? (mid > 0 ? Q[s.id] / mid : 0)
+                      : (c === 'unemployed') ? (wsum > 0 ? (Q[s.leaf + '_unemp_share'] || 0) / wsum : 1 / subs.length)
+                      : s.share;
+                avg += w * Q[sk];
             }
             Q[pk] = avg;
             Q.sub_sync[pk] = avg;
         }
     }
 }
-
 
 
 
@@ -804,13 +815,13 @@ if (Q.unemployed < 1) Q.unemployed = 1;
 
 // Subclasses -> class
 Q.middle = Q.old_middle + Q.new_middle;
-syncSubclasses();
 var leaves = leafList();
 applyUnemploymentExposure(leaves);
+syncSubclasses();
 var sfx = Q.old_demographics ? '' : '_normalized';
 
 // Per-subclass (and unemployed bloc) shares
-for (var b of leaves.map(l => l.id).concat(['unemployed'])) {
+for (var b of leaves.map(l => l.id).concat(leaves.map(l => l.id + '_unemployed'))) {
     var bloc_votes = 0;
     for (var party of Q.parties) {
         var key = b + '_' + party;
@@ -823,6 +834,17 @@ for (var b of leaves.map(l => l.id).concat(['unemployed'])) {
         Q[key + '_normalized'] = share;
         Q[key + '_display'] = Math.round(decimal_factor * share) / decimal_factor;
     }
+}
+
+// Aggregate unemployed bloc (unemployed_<party>_normalized / _display): mix of the unemployed subclasses, weighted by headcount
+var unemployed_total = 0;
+for (var l of leaves) unemployed_total += l.n;
+for (var party of Q.parties) {
+    var share = 0;
+    for (var l of leaves) share += l.n * Q[l.id + '_unemployed_' + party + '_normalized'];
+    share = unemployed_total > 0 ? share / unemployed_total : 0;
+    Q['unemployed_' + party + '_normalized'] = share;
+    Q['unemployed_' + party + '_display'] = Math.round(decimal_factor * share) / decimal_factor;
 }
 
 // Class shares = employed part of its subclasses
@@ -838,13 +860,13 @@ for (var c of Q.classes) {
     }
 }
 
-// National support: employed share votes with its subclass, unemployed share with the unemployed bloc
+// National support: employed share votes with its subclass, unemployed share with that subclass's unemployed
 var total_support = 0;
 for (var party of Q.parties) {
     var party_support = 0;
     for (var l of leaves) {
         party_support += l.pop * ((1 - l.u) * Q[l.id + '_' + party + sfx]
-                                + l.u * Q['unemployed_' + party + sfx]);
+                                + l.u * Q[l.id + '_unemployed_' + party + sfx]);
     }
     Q[party + '_support'] = party_support;
     total_support += party_support;
