@@ -4,6 +4,76 @@ is-special: true
 on-arrival: {!
 
 
+var partyList = Q.parties || [];
+if (typeof partyList === "string") partyList = partyList.split(/\s*,\s*/);
+
+var govKeys = [], govNames = [];
+for (var g = 0; g < partyList.length; g++) {
+  var key = String(partyList[g]).toLowerCase();
+  if (Q[key + "_in_government"] >= 1) {
+    govKeys.push(key);
+    // use <key>_name if it exists (srpd_name, ddp_name...), else uppercase key
+    govNames.push(Q[key + "_name"] || key.toUpperCase());
+  }
+}
+
+
+//parties in govt
+Q.government_parties = govNames.length ? govNames.join(" + ") : "—";
+
+
+
+var hasP = function(k) { return govKeys.indexOf(k) >= 0; };
+var matches = function(required, optional) {
+  optional = optional || [];
+  for (var i = 0; i < required.length; i++) if (!hasP(required[i])) return false;
+  for (var j = 0; j < govKeys.length; j++) {
+    if (required.indexOf(govKeys[j]) < 0 && optional.indexOf(govKeys[j]) < 0) return false;
+  }
+  return true;
+};
+
+var coalitionName;
+if (govKeys.length === 0) {
+  coalitionName = "No governing coalition";
+} else if (Q.in_emergency_government) {
+  coalitionName = "Emergency government";
+} else if (Q.in_popular_front) {
+  coalitionName = "Popular Front";
+} else if (Q.in_left_front) {
+  coalitionName = "Left Front";
+} else if (Q.in_spd_majority) {
+  coalitionName = "SPD majority";
+} else if (matches(["spd","z","bvp","ddp","dvp"], ["srpd"])) {
+  coalitionName = "Grand Coalition";
+} else if (matches(["spd","z","ddp"], ["srpd"])) {
+  coalitionName = "Weimar Coalition";
+} else if (matches(["srpd","z","bvp","ddp"], ["dvp"])) {
+  coalitionName = "Republican Concentration";
+} else if (matches(["z","bvp","dvp","dnvp"], ["dbp","cnblp"]) && !hasP("ddp")) {
+  coalitionName = "Right-wing Coalition";
+} else if (matches(["z","ddp","dvp","dnvp","bvp"], ["dbp","cnblp"])) {
+  coalitionName = "Center-Right Coalition";
+} else if (matches(["z","bvp","ddp","dvp"], ["dbp"])) {
+  coalitionName = "Bourgeois Coalition";
+} else if (govKeys.length === 1) {
+  coalitionName = govNames[0] + " government";
+} else if (Q.in_minority_government) {
+  coalitionName = "Minority government";
+} else {
+  coalitionName = "Coalition government";
+}
+Q.coalition_name = coalitionName;
+
+
+
+
+
+
+
+
+
+
 if (Q.peoples_party >= 1) {
     Q.spd_status = "People's Party";
 } else {
@@ -95,6 +165,10 @@ President: [+ president +] ([+ president_party +])
 
 Chancellor: [+ chancellor +] ([+ chancellor_party +])
 
+Governing parties: [+ government_parties +]
+
+Coalition: [+ coalition_name +]
+
 [? if spd_in_government and not in_spd_majority and not in_left_front : Coalition dissent: [+ coalition_dissent : coalition_dissent +] ?]
 
 [? if spd_in_government and (in_left_front or in_popular_front): KPD coalition dissent: [+ kpd_coalition_dissent : coalition_dissent +] ?]
@@ -120,7 +194,6 @@ Budget: [+ budget +]
 SPD Leadership: [+ spd_party_leader +]
 
 SPD position: [? if spd_toleration : toleration ?][? if spd_in_government : in government - ?][? if spd_toleration == 0 and spd_in_government == 0 and spd_caretaker == 0 : opposition ?][? if spd_caretaker : caretaker government ?]
-[? if in_weimar_coalition and spd_in_government: Weimar Coalition ?][? if in_grand_coalition and spd_in_government: Grand Coalition ?][? if in_popular_front and spd_in_government: Popular Front ?][? if in_left_front and spd_in_government: Left Front ?][? if in_spd_majority and spd_in_government: SPD majority ?][? if in_minority_government and spd_in_government: minority government ?][? if in_emergency_government and spd_in_government: emergency government ?]
 
 SPD's stance: [+ spd_status +]
 <br> SPD's ideology: [+ spd_ideology +]
